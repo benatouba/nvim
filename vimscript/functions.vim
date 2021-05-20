@@ -37,10 +37,10 @@ command! DebugGetSession lua require'dap'.session()
 
 " Available Debug Adapters:
 "   https://microsoft.github.io/debug-adapter-protocol/implementors/adapters/
-" 
+"
 " Adapter configuration and installation instructions:
 "   https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
-" 
+"
 " Debug Adapter protocol:
 "   https://microsoft.github.io/debug-adapter-protocol/
 
@@ -57,9 +57,28 @@ command! DebugGetSession lua require'dap'.session()
 
 " autocmd! User GoyoEnter lua require('gitsigns').toggle_signs()
 " autocmd! User GoyoLeave lua require('gitsigns').toggle_signs()
-" 
-" autocmd User GoyoEnter set laststatus=0 
+"
+" autocmd User GoyoEnter set laststatus=0
 " autocmd User GoyoLeave set laststatus=2
 
 " autocmd! User GoyoEnter lua require('galaxyline').disable_galaxyline()
 " autocmd! User GoyoLeave lua require('galaxyline').galaxyline_augroup()
+
+if has('persistent_undo')
+    " let &undodir=$HOME . '/.undodir'
+    set undofile
+endif
+
+" Update Plugins
+function! UpdatePlugins()
+    PackerSync
+    sleep 4
+    UpdateRemotePlugins
+endfunction
+
+" Trim Whitespaces
+function! TrimWhitespace()
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+endfunction

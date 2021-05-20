@@ -21,9 +21,11 @@ utils.define_augroups({
         {'TextYankPost', '*', 'lua require(\'vim.highlight\').on_yank({higroup = \'Search\', timeout = 200})'},
         {'BufWinEnter', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
         {'BufRead', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
-        {'BufWinEnter', '*_p3d*', 'setfiletype fortran'},
+        {'BufWinEnter,BufRead,BufNewFile', '*_p3d*', 'setfiletype fortran'},
+        {'BufWinEnter,BufRead,BufNewFile', '*.pro', 'setfiletype idlang'},
+        {'BufWinEnter,BufRead,BufNewFile', '.bash*', 'setfiletype bash'},
         {'BufRead', '*_p3d*', 'setfiletype fortran'},
-	    {'BufWritePre', '*', ':%s/\\s\\+$//'},
+	    {'BufWritePre', '*', 'call TrimWhitespace()'},
         {'BufNewFile', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
         {'VimLeavePre', '*', 'set title set titleold='}
     },

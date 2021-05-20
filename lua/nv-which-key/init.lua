@@ -78,6 +78,7 @@ local mappings = {
         n = {"<cmd>set nonumber<cr>!", "line-numbers"},
         s = {"<cmd>s/\\%V\\(.*\\)\\%V/'\\1'/<cr>", "surround"},
         r = {"<cmd>set norelativenumber!<cr>", "relative line nums"},
+		w = {"<cmd>call TrimWhitespace()<cr>", "trim Whitespaces"}
         -- t = {"<cmd>TSHighlightCapturesUnderCursor<cr>", "treesitter highlight"},
     },
 
@@ -132,6 +133,7 @@ local mappings = {
         f = {"<cmd>Telescope find_files<cr>", "Find File"},
         m = {"<cmd>Telescope marks<cr>", "Marks"},
         M = {"<cmd>Telescope man_pages<cr>", "Man Pages"},
+        p = {"<cmd>Telescope project<cr>", "Projects"},
         r = {"<cmd>Telescope oldfiles<cr>", "Open Recent File"},
         R = {"<cmd>Telescope registers<cr>", "Registers"},
         t = {"<cmd>Telescope live_grep<cr>", "Text"}
