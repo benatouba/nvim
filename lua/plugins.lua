@@ -48,6 +48,12 @@ return require('packer').startup(function(use)
     use {"nvim-lua/popup.nvim", opt = true}
     use {"nvim-lua/plenary.nvim", opt = true}
     use {"nvim-telescope/telescope.nvim", opt = true}
+    use "nvim-telescope/telescope-project.nvim"
+    use "nvim-telescope/telescope-arecibo.nvim"
+    use "nvim-telescope/telescope-fzy-native.nvim"
+    use "nvim-telescope/telescope-fzf-writer.nvim"
+    use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+    use "oberblastmeister/rooter.nvim"
 
 	-- Autocomplete/snippets
 	use {"hrsh7th/nvim-compe", opt = true}
@@ -84,12 +90,11 @@ return require('packer').startup(function(use)
     use 'MattesGroeger/vim-bookmarks'
     use 'numToStr/Navigator.nvim'
 
+    -- Git (helpers)
     use {'tpope/vim-surround', opt = true}
     use {'tpope/vim-fugitive', opt = true}
     use {'TimUntersberger/neogit', requires = {'sindrets/diffview.nvim'}}
     use {'lewis6991/gitsigns.nvim', opt = true}
-    use {'Shougo/context_filetype.vim', opt = true }
-
 
     require_plugin("nvim-lspconfig")
     require_plugin("lspsaga.nvim")
@@ -115,7 +120,6 @@ return require('packer').startup(function(use)
     require_plugin('hop.nvim')
     require_plugin('vim-bookmarks')
     require_plugin('nvim-colorizer.lua')
-    require_plugin('context_filetype.vim')
     require_plugin('vim-surround')
     require_plugin('vim-fugitive')
     require_plugin('gitsigns.nvim')

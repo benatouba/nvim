@@ -1,4 +1,6 @@
 local actions = require('telescope.actions')
+local sorters = require('telescope.sorters')
+require('telescope').load_extension('project')
 -- Global remapping
 ------------------------------
 -- '--color=never',
@@ -15,7 +17,8 @@ require('telescope').setup {
         sorting_strategy = "descending",
         layout_strategy = "horizontal",
         layout_defaults = {horizontal = {mirror = false}, vertical = {mirror = false}},
-        file_sorter = require'telescope.sorters'.get_fuzzy_file,
+        file_sorter = sorters.get_fzy_sorter,
+		file_ignore_patterns = { 'parser.c' },
         file_ignore_patterns = {},
         generic_sorter = require'telescope.sorters'.get_generic_fuzzy_sorter,
         shorten_path = true,
@@ -61,6 +64,55 @@ require('telescope').setup {
                 -- ["<C-i>"] = my_cool_custom_action,
             }
         }
-    }
+    },
+    extensions = {
+        project = {
+            display_type = "full"
+        },
+		fzy_native = {
+		  override_generic_sorter = true,
+		  override_file_sorter = true,
+		},
+		fzf_writer = {
+		  use_highlighter = false,
+		  minimum_grep_characters = 6,
+		},
+		frecency = {
+			workspaces = {
+				["conf"] = "/root/.config/nvim/",
+				["nvim"] = "/root/src/neovim",
+			},
+		},
+		fzf = {
+		  override_generic_sorter = false, -- override the generic sorter
+		  override_file_sorter = true,     -- override the file sorter
+		  case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+										   -- the default case_mode is "smart_case"
+		}
+	}
 }
+require('telescope').load_extension("fzy_native")
+require('telescope').load_extension("fzf_writer")
+require('telescope').load_extension("arecibo")
+require('telescope').load_extension("fzf")
 
+local M = {}
+function M.oldfiles()
+  if true then require('telescope').extensions.frecency.frecency() end
+  if pcall(require('telescope').load_extension, 'frecency') then
+  else
+    require('telescope.builtin').oldfiles { layout_strategy = 'vertical' }
+  end
+end
+
+return setmetatable({}, {
+  __index = function(_, k)
+    reloader()
+
+    if M[k] then
+      return M[k]
+    else
+      return require('telescope.builtin')[k]
+    end
+  end
+})
