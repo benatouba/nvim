@@ -80,11 +80,6 @@ _G.packer_plugins = {
     needs_bufread = false,
     path = "/root/.local/share/nvim/site/pack/packer/opt/barbar.nvim"
   },
-  ["context_filetype.vim"] = {
-    loaded = false,
-    needs_bufread = false,
-    path = "/root/.local/share/nvim/site/pack/packer/opt/context_filetype.vim"
-  },
   ["dial.nvim"] = {
     loaded = true,
     path = "/root/.local/share/nvim/site/pack/packer/start/dial.nvim"
@@ -189,6 +184,30 @@ _G.packer_plugins = {
     loaded = false,
     needs_bufread = false,
     path = "/root/.local/share/nvim/site/pack/packer/opt/popup.nvim"
+  },
+  ["rooter.nvim"] = {
+    loaded = true,
+    path = "/root/.local/share/nvim/site/pack/packer/start/rooter.nvim"
+  },
+  ["telescope-arecibo.nvim"] = {
+    loaded = true,
+    path = "/root/.local/share/nvim/site/pack/packer/start/telescope-arecibo.nvim"
+  },
+  ["telescope-fzf-native.nvim"] = {
+    loaded = true,
+    path = "/root/.local/share/nvim/site/pack/packer/start/telescope-fzf-native.nvim"
+  },
+  ["telescope-fzf-writer.nvim"] = {
+    loaded = true,
+    path = "/root/.local/share/nvim/site/pack/packer/start/telescope-fzf-writer.nvim"
+  },
+  ["telescope-fzy-native.nvim"] = {
+    loaded = true,
+    path = "/root/.local/share/nvim/site/pack/packer/start/telescope-fzy-native.nvim"
+  },
+  ["telescope-project.nvim"] = {
+    loaded = true,
+    path = "/root/.local/share/nvim/site/pack/packer/start/telescope-project.nvim"
   },
   ["telescope.nvim"] = {
     loaded = false,
