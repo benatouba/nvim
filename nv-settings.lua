@@ -27,7 +27,7 @@ O.clang.diagnostics.underline = false
 -- add things like O.python.formatter.yapf.exec_path
 -- add things like O.python.linter.flake8.exec_path
 -- add things like O.python.formatter.isort.exec_path
-vim.cmd("let g:python3_host_prog = '~/.venv/neovim/bin/python3'")
+vim.cmd("let g:python3_host_prog = '~/.venv/nvim/bin/python3'")
 O.python.formatter = 'yapf'
 -- O.python.linter = 'flake8'
 O.python.isort = true
