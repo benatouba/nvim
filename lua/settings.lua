@@ -40,8 +40,8 @@ vim.o.timeoutlen = 500 -- By default timeoutlen is 1000 ms
 
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
 vim.o.smartcase = true -- smartcase makes it so that searching becomes case sensitive if you use a capital letter
-vim.o.backupdir = vim.fn.stdpath('data') .. '/backup' -- set backup directory to be a subdirectory of data to ensure that backups are not written to git repos
 vim.cmd('silent! [ -d ' .. vim.fn.stdpath('data') .. '/backup ] && mkdir ' .. vim.fn.stdpath('data') .. '/backup')
+vim.o.backupdir = vim.fn.stdpath('data') .. '/backup' -- set backup directory to be a subdirectory of data to ensure that backups are not written to git repos
 -- vim.o.undodir = vim.fn.stdpath('data') .. '/undo'        -- set undodir to ensure that the undofiles are not saved to git repos.
 -- vim.o.undofile = true                                    -- enable persistent undo (meaning if you quit Neovim and come back to a file and want to undo previous changes you can)
 -- vim.o.directory = vim.fn.stdpath('data') .. '/directory' -- Configure 'directory' to ensure that Neovim swap files are not written to repos.
