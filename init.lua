@@ -18,6 +18,7 @@ require('nv-which-key')
 require('nv-dial')
 require('nv-rooter')
 require('nv-neogit')
+require('nv-gitsigns')
 
 vim.cmd('source ~/.config/nvim/vimscript/functions.vim')
 
