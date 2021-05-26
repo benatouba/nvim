@@ -1,9 +1,11 @@
+local nv_utils = require 'nv-utils'
 vim.cmd('set iskeyword+=-') -- treat dash separated words as a word text object"
 vim.cmd('set shortmess+=c') -- Don't pass messages to |ins-completion-menu|.
 vim.cmd('set inccommand=split') -- Make substitution work in realtime
 vim.o.hidden = O.hidden_files -- Required to keep multiple buffers open multiple buffers
 vim.o.title = true
 TERMINAL = vim.fn.expand('$TERMINAL')
+-- DATA_PATH = vim.fn.stdpath('data')
 vim.cmd('let &titleold="'..TERMINAL..'"')
 vim.o.titlestring="%<%F%=%l/%L - nvim"
 vim.wo.wrap = O.wrap_lines -- Display long lines as just one line
@@ -40,8 +42,11 @@ vim.o.timeoutlen = 500 -- By default timeoutlen is 1000 ms
 
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
 vim.o.smartcase = true -- smartcase makes it so that searching becomes case sensitive if you use a capital letter
-vim.cmd('silent! [ -d ' .. vim.fn.stdpath('data') .. '/backup ] && mkdir ' .. vim.fn.stdpath('data') .. '/backup')
-vim.o.backupdir = vim.fn.stdpath('data') .. '/backup' -- set backup directory to be a subdirectory of data to ensure that backups are not written to git repos
+if not isdir(DATA_PATH .. '/backup') then
+    os.execute('mkdir ' .. DATA_PATH .. '/backup')
+end
+-- vim.cmd('![ ! -d ' .. DATA_PATH .. '/backup ] && mkdir ' .. DATA_PATH .. '/backup')
+vim.o.backupdir = DATA_PATH .. '/backup' -- set backup directory to be a subdirectory of data to ensure that backups are not written to git repos
 -- vim.o.undodir = vim.fn.stdpath('data') .. '/undo'        -- set undodir to ensure that the undofiles are not saved to git repos.
 -- vim.o.undofile = true                                    -- enable persistent undo (meaning if you quit Neovim and come back to a file and want to undo previous changes you can)
 -- vim.o.directory = vim.fn.stdpath('data') .. '/directory' -- Configure 'directory' to ensure that Neovim swap files are not written to repos.
