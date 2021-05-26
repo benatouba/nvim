@@ -47,32 +47,23 @@ local opts = {
 vim.api.nvim_set_keymap("n", "<Space>", "<NOP>", {noremap = true, silent = true})
 vim.g.mapleader = " "
 
--- toggle highlight search
-vim.api.nvim_set_keymap("n", "<Leader>h", ":set hlsearch!<CR>", {noremap = true, silent = true})
-
 -- Comments
-vim.api.nvim_set_keymap("n", "<leader>/", ":CommentToggle<CR>", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("v", "<leader>/", ":CommentToggle<CR>", {noremap = true, silent = true})
-
--- close buffer
-vim.api.nvim_set_keymap("n", "<leader>c", ":BufferClose<CR>", {noremap = true, silent = true})
-
--- extra movement
-vim.api.nvim_set_keymap('n', 's', ":HopChar2<cr>", {silent = true})
-vim.api.nvim_set_keymap('n', 'S', ":HopWord<cr>", {silent = true})
 
 -- TODO create entire treesitter section
 
 local mappings = {
-    ["/"] = "Comment",
-    ["c"] = "Close Buffer",
-    ["h"] = "No Highlight",
+    ["/"] = {":CommentToggle<CR>", "Comment"},
+    ["c"] = {":BufferClose<CR>", "Close Buffer"},
+	["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
+	["H"] = {":HopWord<cr>", "hop to word"},
 
     -- a is for actions
     a = {
         name = "+Actions",
         -- c = {"<cmd>ColorizerToggle<cr>", "colorizer"},
-        h = {"<cmd>let @/ = ''<cr>", "remove search highlight"},
+        h = {"<cmd>let @/ = ''<cr>", "remove highlighted"},
+		H = {":set hlsearch!<CR>", "turn off highlight"},
         -- i = {"<cmd>IndentBlanklineToggle<cr>", "toggle indent lines"},
         -- m = {"<cmd>MaximizerToggle<cr>", "maximize"},
         n = {"<cmd>set nonumber<cr>!", "line-numbers"},
@@ -94,11 +85,16 @@ local mappings = {
 
     g = {
         name = "+Git",
+		a = {"<cmd>Git add %<cr>", "Add File"},
+		c = {"<cmd>Git commit %<cr>", "Commit File"},
+		C = {"<cmd>Git commit<cr>", "Commit staged"},
 		g = {"<cmd>G<cr>", "Fugitive"},
+		l = {"<cmd>Git log<cr>", "Log"},
 		n = {"<cmd>Neogit<cr>", "Neogit"},
         j = {"<cmd>NextHunk<cr>", "Next Hunk"},
         k = {"<cmd>PrevHunk<cr>", "Prev Hunk"},
         p = {"<cmd>PreviewHunk<cr>", "Preview Hunk"},
+        P = {"<cmd>Git push<cr>", "Preview Hunk"},
         r = {"<cmd>ResetHunk<cr>", "Reset Hunk"},
         R = {"<cmd>ResetBuffer<cr>", "Reset Buffer"},
         s = {"<cmd>StageHunk<cr>", "Stage Hunk"},
@@ -133,8 +129,9 @@ local mappings = {
         f = {"<cmd>Telescope find_files<cr>", "Find File"},
         m = {"<cmd>Telescope marks<cr>", "Marks"},
         M = {"<cmd>Telescope man_pages<cr>", "Man Pages"},
+        o = {"<cmd>Telescope oldfiles<cr>", "Open Recent File"},
         p = {"<cmd>Telescope project<cr>", "Projects"},
-        r = {"<cmd>Telescope oldfiles<cr>", "Open Recent File"},
+        r = {"<cmd>Telescope frecency<cr>", "Frecency"},
         R = {"<cmd>Telescope registers<cr>", "Registers"},
         t = {"<cmd>Telescope live_grep<cr>", "Text"}
     },
