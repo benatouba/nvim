@@ -120,6 +120,17 @@ local mappings = {
     --     S = {"<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols"}
     -- },
 
+    p = {
+        name = "+Packer",
+        c = {"<cmd>PackerClean<cr>", 					"Clean" 					},
+        C = {"<cmd>PackerCompile profile=true<cr>", 	"Compile" 					},
+        i = {"<cmd>PackerInstall<cr>", 					"Install" 			 		},
+        l = {"<cmd>PackerLoad ", 						"Load <plugin>" 		 	},
+        s = {"<cmd>PackerSync<cr>", 					"Sync" 	 					},
+        S = {"<cmd>PackerStatus<cr>", 					"Status" 	 				},
+        u = {"<cmd>PackerUpdate<cr>", 					"Update" 					},
+    },
+
     s = {
         name = "+Search",
         b = {"<cmd>Telescope git_branches<cr>", "Branches"},
