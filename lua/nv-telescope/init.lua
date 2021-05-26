@@ -1,6 +1,5 @@
 local actions = require('telescope.actions')
 local sorters = require('telescope.sorters')
-require('telescope').load_extension('project')
 -- Global remapping
 ------------------------------
 -- '--color=never',
@@ -101,6 +100,7 @@ require('telescope').load_extension("fzy_native")
 require('telescope').load_extension("fzf_writer")
 -- require('telescope').load_extension("arecibo")
 require('telescope').load_extension("fzf")
+require('telescope').load_extension('project')
 require('telescope').load_extension("frecency")
 require('telescope').load_extension("cheat")
 

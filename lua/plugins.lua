@@ -54,12 +54,12 @@ return require('packer').startup(function(use)
     use "nvim-telescope/telescope-fzy-native.nvim"
     use "nvim-telescope/telescope-fzf-writer.nvim"
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-    use "nvim-telescope/telescope-frecency.nvim"
+    use {"nvim-telescope/telescope-frecency.nvim", requires = "tami5/sql.nvim"}
     use "nvim-telescope/telescope-cheat.nvim"
     use "oberblastmeister/rooter.nvim"
 
-	-- Autocomplete/snippets
-	use {"hrsh7th/nvim-compe", opt = true}
+    -- Autocomplete/snippets
+    use {"hrsh7th/nvim-compe", opt = true}
     use {'hrsh7th/vim-vsnip', opt = true}
     use {"rafamadriz/friendly-snippets", opt = true}
 
@@ -126,5 +126,6 @@ return require('packer').startup(function(use)
     require_plugin('vim-surround')
     require_plugin('vim-fugitive')
     require_plugin('gitsigns.nvim')
+	require_plugin('telescope-frecency.nvim')
 end
 )
