@@ -25,6 +25,7 @@ utils.define_augroups({
         {'BufWinEnter,BufRead,BufNewFile', '*.pro', 'setfiletype idlang'},
         {'BufWinEnter,BufRead,BufNewFile', '.bash*', 'setfiletype bash'},
         {'BufRead', '*_p3d*', 'setfiletype fortran'},
+        {'BufRead', '*.sls*', 'setfiletype conf'},
 	    {'BufWritePre', '*', 'call TrimWhitespace()'},
         {'BufNewFile', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
         {'VimLeavePre', '*', 'set title set titleold='}
