@@ -49,10 +49,13 @@ return require('packer').startup(function(use)
     use {"nvim-lua/plenary.nvim", opt = true}
     use {"nvim-telescope/telescope.nvim", opt = true}
     use "nvim-telescope/telescope-project.nvim"
-    use "nvim-telescope/telescope-arecibo.nvim"
+	-- only needed if web browser can be opened
+    -- use {"nvim-telescope/telescope-arecibo.nvim", rocks = {"openssl", "lua-http-parser"}}
     use "nvim-telescope/telescope-fzy-native.nvim"
     use "nvim-telescope/telescope-fzf-writer.nvim"
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+    use "nvim-telescope/telescope-frecency.nvim"
+    use "nvim-telescope/telescope-cheat.nvim"
     use "oberblastmeister/rooter.nvim"
 
 	-- Autocomplete/snippets
@@ -77,7 +80,7 @@ return require('packer').startup(function(use)
 	-- Status Line and Bufferline
     use {"glepnir/galaxyline.nvim", opt = true}
     use {"romgrk/barbar.nvim", opt = true}
-    
+
     -- manipulation
     use 'monaqa/dial.nvim' -- increment/decrement basically everything
     use {'lukas-reineke/indent-blankline.nvim', branch = 'lua'}

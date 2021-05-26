@@ -78,9 +78,15 @@ require('telescope').setup {
 		  minimum_grep_characters = 6,
 		},
 		frecency = {
+			show_scores = true,
+			show_unindexed = false,
+			ignore_patterns = {"*.git/*", "*/tmp/*", "*.svn/*"},
 			workspaces = {
-				["conf"] = "/root/.config/nvim/",
-				["nvim"] = "/root/src/neovim",
+				["conf"] = vim.fn.environ()["HOME"] .. "/.config/nvim/",
+				["nvim"] = vim.fn.environ()["HOME"] .. "/.config/nvim",
+				["palm_mpich"] = "/sim/palm/mpich",
+				["palm_intel"] = "/sim/palm/intel",
+				["salt"] = "/srv",
 			},
 		},
 		fzf = {
@@ -93,8 +99,10 @@ require('telescope').setup {
 }
 require('telescope').load_extension("fzy_native")
 require('telescope').load_extension("fzf_writer")
-require('telescope').load_extension("arecibo")
+-- require('telescope').load_extension("arecibo")
 require('telescope').load_extension("fzf")
+require('telescope').load_extension("frecency")
+require('telescope').load_extension("cheat")
 
 local M = {}
 function M.oldfiles()
