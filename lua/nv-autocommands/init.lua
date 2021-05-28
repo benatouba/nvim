@@ -26,7 +26,7 @@ utils.define_augroups({
         {'BufWinEnter,BufRead,BufNewFile', '.bash*', 'setfiletype bash'},
         {'BufRead', '*_p3d*', 'setfiletype fortran'},
         {'BufRead', '*.sls*', 'setfiletype conf'},
-	    {'BufWritePre', '*', 'call TrimWhitespace()'},
+	{'BufWritePre', '*', 'call TrimWhitespace()'},
         {'BufNewFile', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
         {'VimLeavePre', '*', 'set title set titleold='}
     },
@@ -36,6 +36,7 @@ utils.define_augroups({
         {'FileType', 'lspinfo', 'nnoremap <silent> <buffer> q :q<CR>'},
         {'FileType', 'floaterm', 'nnoremap <silent> <buffer> q :q<CR>'},
         {'FileType', 'fugitive', 'nnoremap <silent> <buffer> q :q<CR>'},
+        {'FileType', 'help', 'nnoremap <silent> <buffer> q :q<CR>'},
     },
     _auto_formatters = auto_formatters
 })
