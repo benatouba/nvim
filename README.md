@@ -27,18 +27,27 @@ config is based on LunarVim but extremely modified and refactored
 - and other stuff (check lua/plugins.lua for a list)
 
 ### If you want more functionality checkout
-- LSP support (nvim-lspconfig, lspsaga and nvim-compe)
-- debugging (nvim-dap in lua or vimspector in vimL)
-- ranger file browser (rnvimr)
-- testing (vim-ultest)
+- LSP support (nvim-lspconfig, lspsaga, lspinstall and nvim-compe, requires various languages to install the servers)
+- debugging (nvim-dap in lua or vimspector in vimL, requires debuggers)
+- ranger file browser (rnvimr, requires ranger (and Ueberzug for media file rendering))
+- testing (vim-ultest, requires test libraries)
 - efficiency stuff (anything by tpope)
 - visual/UI stuff (anything by folke)
 
-### (Optional) Requirements
-- A patched font (best just install NerdFonts)
-- fzf
-- rg
-- sqlite3
+### Dependencies
+- neovim >=0.5 (nightly) and its install requirements (check neovim build instructions)
 - git (if it is an old version you may need to tweak packer.nvim config, check their GH)
-- neovims base requirements (check neovim build instructions)
 
+#### Optional:
+- A patched font on the machine that is rendering your output (best just install NerdFonts)
+- fzf (for good fuzzy file finding)
+- rg (for text matching, requires rust)
+- sqlite3 (for database conns and frecency)
+- python3 with pynvim package
+
+## TODO:
+- find best, minimal setup
+- ship some patched fonts
+- handle installation of dependencies
+- figure out simple installation (via saltstack)
+- figure out how to ship globally
