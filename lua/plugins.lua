@@ -80,6 +80,7 @@ return require('packer').startup(function(use)
         -- Status Line and Bufferline
     use {"glepnir/galaxyline.nvim", opt = true}
     use {"romgrk/barbar.nvim", opt = true}
+    use "kyazdani42/nvim-tree.lua"
 
     -- manipulation
     use 'monaqa/dial.nvim' -- increment/decrement basically everything
@@ -97,8 +98,7 @@ return require('packer').startup(function(use)
     use {'tpope/vim-surround', opt = true}
     use {'tpope/vim-fugitive', opt = true}
     use {'TimUntersberger/neogit', requires = {'sindrets/diffview.nvim'}}
-    use {'lewis6991/gitsigns.nvim', opt = true}
-
+    use {'lewis6991/gitsigns.nvim', config = function() require('gitsigns').setup() end}
     -- language specific
         -- salt
     -- use {'saltstack/salt-vim', ft = {'saltfile', 'salt', 'sls'}}
@@ -128,6 +128,6 @@ return require('packer').startup(function(use)
     require_plugin('vim-fugitive')
     require_plugin('sql.nvim')
     require_plugin('telescope-frecency.nvim')
-    require_plugin('gitsigns.nvim')
+    require_plugin('nvim-tree.lua')
 end
 )

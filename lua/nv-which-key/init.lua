@@ -57,6 +57,7 @@ local mappings = {
     ["c"] = {":BufferClose<CR>", "Close Buffer"},
 	["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
 	["H"] = {":HopWord<cr>", "hop to word"},
+    ["e"] = {":NvimTreeToggle<cr>", "Explorer"},
 
     -- a is for actions
     a = {

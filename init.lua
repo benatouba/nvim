@@ -23,6 +23,7 @@ require('nv-gitsigns')
 vim.cmd('source ~/.config/nvim/vimscript/functions.vim')
 require('nv-lspinstall')
 require('nv-floaterm')
+require('nv-nvim-tree')
 
 -- LSP
 require('lsp')
