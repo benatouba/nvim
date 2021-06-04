@@ -57,12 +57,15 @@ return require('packer').startup(function(use)
     use "oberblastmeister/rooter.nvim"
 
     -- Autocomplete/snippets
-    -- use {"hrsh7th/nvim-compe", opt = true}
-    -- use {'hrsh7th/vim-vsnip', opt = true}
+    use {"hrsh7th/nvim-compe", opt = true}
+    use {'hrsh7th/vim-vsnip', opt = true}
+    use 'voldikss/vim-floaterm'
 
     -- Treesitter
     use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
     use {"windwp/nvim-ts-autotag", opt = true}
+    --- polyglot as fallback if treesitter does not know the language
+    use 'sheerun/vim-polyglot'
 
     -- help me find my way  around
     use {"folke/which-key.nvim", opt = true}
@@ -96,9 +99,18 @@ return require('packer').startup(function(use)
     use {'TimUntersberger/neogit', requires = {'sindrets/diffview.nvim'}}
     use {'lewis6991/gitsigns.nvim', opt = true}
 
+    -- language specific
+        -- salt
+    -- use {'saltstack/salt-vim', ft = {'saltfile', 'salt', 'sls'}}
+    -- use {'Glench/Vim-Jinja2-Syntax', ft = {'saltfile', 'salt', 'sls', 'jinja', 'jinja2'}}
+    use {'saltstack/salt-vim', config = {function() require('nv-salt-vim') end}}
+    use 'Glench/Vim-Jinja2-Syntax'
+
     require_plugin("nvim-lspconfig")
     require_plugin("telescope.nvim")
-    -- require_plugin("vim-vsnip")
+    require_plugin("vim-vsnip")
+    require_plugin("nvim-compe")
+    require_plugin("lspsaga")
     require_plugin("nvim-treesitter")
     require_plugin("nvim-ts-autotag")
     require_plugin("which-key.nvim")
