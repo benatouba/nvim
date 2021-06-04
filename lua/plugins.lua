@@ -1,4 +1,3 @@
-local execute = vim.api.nvim_command
 local fn = vim.fn
 
 local install_path = fn.stdpath('data') .. '/site/pack/packer/opt/packer.nvim'
@@ -41,8 +40,8 @@ return require('packer').startup(function(use)
     use {'wbthomason/packer.nvim', opt = true}
 
     use {"neovim/nvim-lspconfig", opt = true}
-    -- use {"glepnir/lspsaga.nvim", opt = true}
-    -- use {"kabouzeid/nvim-lspinstall", opt = true}
+    use {"glepnir/lspsaga.nvim", opt = true}
+    use "kabouzeid/nvim-lspinstall"
 
     -- Telescope
     use "nvim-lua/popup.nvim"
@@ -69,7 +68,7 @@ return require('packer').startup(function(use)
     use {"folke/which-key.nvim", opt = true}
 
     -- Color
-    use {"christianchiarulli/nvcode-color-schemes.vim", opt = true}
+   use {"christianchiarulli/nvcode-color-schemes.vim", opt = true}
     use {'norcalli/nvim-colorizer.lua', opt = true}
 
     -- Icons
