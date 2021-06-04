@@ -61,6 +61,7 @@ return require('packer').startup(function(use)
     -- use {"hrsh7th/nvim-compe", opt = true}
     -- use {'hrsh7th/vim-vsnip', opt = true}
 
+    use "voldikss/vim-floaterm"
     -- Treesitter
     use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
     use {"windwp/nvim-ts-autotag", opt = true}
