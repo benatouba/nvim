@@ -22,17 +22,20 @@ require('nv-gitsigns')
 
 vim.cmd('source ~/.config/nvim/vimscript/functions.vim')
 require('nv-lspinstall')
+require('nv-floaterm')
 
 -- LSP
 require('lsp')
-require('lsp.lua-ls')
-require('lsp.json-ls')
 require('lsp.bash-ls')
 require('lsp.clangd')
 require('lsp.css-ls')
-require('lsp.python-ls')
 require('lsp.docker-ls')
 require('lsp.js-ts-ls')
+require('lsp.json-ls')
+require('lsp.lua-ls')
+require('lsp.python-ls')
+-- TODO: fix setup
+-- require('lsp.salt-ls')
 require('lsp.vim-ls')
 require('lsp.vue-ls')
 require('lsp.yaml-ls')
