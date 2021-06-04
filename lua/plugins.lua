@@ -98,6 +98,13 @@ return require('packer').startup(function(use)
     use {'TimUntersberger/neogit', requires = {'sindrets/diffview.nvim'}}
     use {'lewis6991/gitsigns.nvim', opt = true}
 
+    -- language specific
+        -- salt
+    -- use {'saltstack/salt-vim', ft = {'saltfile', 'salt', 'sls'}}
+    -- use {'Glench/Vim-Jinja2-Syntax', ft = {'saltfile', 'salt', 'sls', 'jinja', 'jinja2'}}
+    use {'saltstack/salt-vim', config = {function() require('nv-salt-vim') end}}
+    use 'Glench/Vim-Jinja2-Syntax'
+
     require_plugin("nvim-lspconfig")
     require_plugin("telescope.nvim")
     -- require_plugin("vim-vsnip")
