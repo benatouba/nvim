@@ -50,7 +50,7 @@ return require('packer').startup(function(use)
     use "nvim-telescope/telescope-project.nvim"
         -- only needed if web browser can be opened
     -- use {"nvim-telescope/telescope-arecibo.nvim", rocks = {"openssl", "lua-http-parser"}}
-    use "nvim-telescope/telescope-fzy-native.nvim"
+    -- use "nvim-telescope/telescope-fzy-native.nvim"
     use "nvim-telescope/telescope-fzf-writer.nvim"
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use {"nvim-telescope/telescope-frecency.nvim", requires = "tami5/sql.nvim"}

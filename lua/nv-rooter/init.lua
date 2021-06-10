@@ -1,6 +1,6 @@
 -- these are all of the default values
 require'rooter'.setup {
-    manual = false, -- weather to setup autocommand to root every time a file is opened
+    manual = true, -- wether to setup autocommand to root every time a file is opened
     echo = true, -- echo every time rooter is triggered
     patterns = { -- the patterns to find
         '.git', -- same as patterns passed to nvim_lsp.util.root_pattern(patterns...)
