@@ -98,7 +98,7 @@ return require('packer').startup(function(use)
     use {'tpope/vim-surround', opt = true}
     use {'tpope/vim-fugitive', opt = true}
     use {'TimUntersberger/neogit', requires = {'sindrets/diffview.nvim'}}
-    use {'lewis6991/gitsigns.nvim', config = function() require('gitsigns').setup() end}
+    use {'lewis6991/gitsigns.nvim', disable = true, config = {function() require"nv-gitsigns" end}}-- fails on startup. TODO: activate when #205 is fixed
     -- language specific
         -- salt
     -- use {'saltstack/salt-vim', ft = {'saltfile', 'salt', 'sls'}}
