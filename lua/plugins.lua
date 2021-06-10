@@ -1,4 +1,3 @@
-local execute = vim.api.nvim_command
 local fn = vim.fn
 
 local install_path = fn.stdpath('data') .. '/site/pack/packer/opt/packer.nvim'
@@ -41,8 +40,8 @@ return require('packer').startup(function(use)
     use {'wbthomason/packer.nvim', opt = true}
 
     use {"neovim/nvim-lspconfig", opt = true}
-    -- use {"glepnir/lspsaga.nvim", opt = true}
-    -- use {"kabouzeid/nvim-lspinstall", opt = true}
+    use {"glepnir/lspsaga.nvim", opt = true}
+    use "kabouzeid/nvim-lspinstall"
 
     -- Telescope
     use "nvim-lua/popup.nvim"
@@ -58,19 +57,21 @@ return require('packer').startup(function(use)
     use "oberblastmeister/rooter.nvim"
 
     -- Autocomplete/snippets
-    -- use {"hrsh7th/nvim-compe", opt = true}
-    -- use {'hrsh7th/vim-vsnip', opt = true}
+    use {"hrsh7th/nvim-compe", opt = true}
+    use {'hrsh7th/vim-vsnip', opt = true}
+    use 'voldikss/vim-floaterm'
 
-    use "voldikss/vim-floaterm"
     -- Treesitter
     use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
     use {"windwp/nvim-ts-autotag", opt = true}
+    --- polyglot as fallback if treesitter does not know the language
+    use 'sheerun/vim-polyglot'
 
     -- help me find my way  around
     use {"folke/which-key.nvim", opt = true}
 
     -- Color
-    use {"christianchiarulli/nvcode-color-schemes.vim", opt = true}
+   use {"christianchiarulli/nvcode-color-schemes.vim", opt = true}
     use {'norcalli/nvim-colorizer.lua', opt = true}
 
     -- Icons
@@ -79,6 +80,7 @@ return require('packer').startup(function(use)
         -- Status Line and Bufferline
     use {"glepnir/galaxyline.nvim", opt = true}
     use {"romgrk/barbar.nvim", opt = true}
+    use "kyazdani42/nvim-tree.lua"
 
     -- manipulation
     use 'monaqa/dial.nvim' -- increment/decrement basically everything
@@ -96,8 +98,7 @@ return require('packer').startup(function(use)
     use {'tpope/vim-surround', opt = true}
     use {'tpope/vim-fugitive', opt = true}
     use {'TimUntersberger/neogit', requires = {'sindrets/diffview.nvim'}}
-    use {'lewis6991/gitsigns.nvim', opt = true}
-
+    use {'lewis6991/gitsigns.nvim', disable = true, config = {function() require"nv-gitsigns" end}}-- fails on startup. TODO: activate when #205 is fixed
     -- language specific
         -- salt
     -- use {'saltstack/salt-vim', ft = {'saltfile', 'salt', 'sls'}}
@@ -107,7 +108,9 @@ return require('packer').startup(function(use)
 
     require_plugin("nvim-lspconfig")
     require_plugin("telescope.nvim")
-    -- require_plugin("vim-vsnip")
+    require_plugin("vim-vsnip")
+    require_plugin("nvim-compe")
+    require_plugin("lspsaga")
     require_plugin("nvim-treesitter")
     require_plugin("nvim-ts-autotag")
     require_plugin("which-key.nvim")
@@ -125,6 +128,6 @@ return require('packer').startup(function(use)
     require_plugin('vim-fugitive')
     require_plugin('sql.nvim')
     require_plugin('telescope-frecency.nvim')
-    require_plugin('gitsigns.nvim')
+    require_plugin('nvim-tree.lua')
 end
 )
