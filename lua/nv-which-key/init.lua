@@ -68,7 +68,8 @@ local mappings = {
         -- m = {"<cmd>MaximizerToggle<cr>", "maximize"},
         n = {"<cmd>set nonumber<cr>!", "line-numbers"},
         s = {"<cmd>s/\\%V\\(.*\\)\\%V/'\\1'/<cr>", "surround"},
-        r = {"<cmd>set norelativenumber!<cr>", "relative line nums"},
+        r = {"<cmd>Root<cr>", "root working dir"},
+        R = {"<cmd>set norelativenumber!<cr>", "relative line nums"},
 		w = {"<cmd>call TrimWhitespace()<cr>", "trim Whitespaces"}
         -- t = {"<cmd>TSHighlightCapturesUnderCursor<cr>", "treesitter highlight"},
     },
