@@ -102,7 +102,7 @@ require('telescope').load_extension("fzf_writer")
 require('telescope').load_extension("fzf")
 require('telescope').load_extension('project')
 require('telescope').load_extension("frecency")
-require('telescope').load_extension("cheat")
+-- require('telescope').load_extension("cheat")
 
 local M = {}
 function M.oldfiles()

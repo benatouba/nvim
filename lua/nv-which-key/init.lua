@@ -147,6 +147,19 @@ local mappings = {
         t = {"<cmd>Telescope live_grep<cr>", "Text"}
     },
 
+    t = {
+        name = "+Terminal",
+        h = {"<cmd>FloatermFirst<cr>", "First"},
+        H = {"<cmd>FloatermHide<cr>", "Hide"},
+        j = {"<cmd>FloatermNext<cr>", "Next"},
+        k = {"<cmd>FloatermPrev<cr>", "Previous"},
+        K = {"<cmd>FloatermKill<cr>", "Kill"},
+        l = {"<cmd>FloatermLast<cr>", "Last"},
+        n = {"<cmd>FloatermNew<cr>", "New"},
+        s = {"<cmd>FloatermSend<cr>", "Send"},
+        t = {"<cmd>FloatermToggle<cr>", "Toggle"}
+    },
+
     -- S = {name = "+Session", s = {"<cmd>SessionSave<cr>", "Save Session"}, l = {"<cmd>SessionLoad<cr>", "Load Session"}}
 }
 

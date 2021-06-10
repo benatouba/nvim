@@ -41,33 +41,32 @@ return require('packer').startup(function(use)
     use {'wbthomason/packer.nvim', opt = true}
 
     use {"neovim/nvim-lspconfig", opt = true}
-    use {"glepnir/lspsaga.nvim", opt = true}
-    use {"kabouzeid/nvim-lspinstall", opt = true}
+    -- use {"glepnir/lspsaga.nvim", opt = true}
+    -- use {"kabouzeid/nvim-lspinstall", opt = true}
 
     -- Telescope
-    use {"nvim-lua/popup.nvim", opt = true}
-    use {"nvim-lua/plenary.nvim", opt = true}
+    use "nvim-lua/popup.nvim"
+    use "nvim-lua/plenary.nvim"
     use {"nvim-telescope/telescope.nvim", opt = true}
     use "nvim-telescope/telescope-project.nvim"
-	-- only needed if web browser can be opened
+        -- only needed if web browser can be opened
     -- use {"nvim-telescope/telescope-arecibo.nvim", rocks = {"openssl", "lua-http-parser"}}
     use "nvim-telescope/telescope-fzy-native.nvim"
     use "nvim-telescope/telescope-fzf-writer.nvim"
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use {"nvim-telescope/telescope-frecency.nvim", requires = "tami5/sql.nvim"}
-    use "nvim-telescope/telescope-cheat.nvim"
     use "oberblastmeister/rooter.nvim"
 
     -- Autocomplete/snippets
-    use {"hrsh7th/nvim-compe", opt = true}
-    use {'hrsh7th/vim-vsnip', opt = true}
-    use {"rafamadriz/friendly-snippets", opt = true}
+    -- use {"hrsh7th/nvim-compe", opt = true}
+    -- use {'hrsh7th/vim-vsnip', opt = true}
 
-	-- Treesitter
+    use "voldikss/vim-floaterm"
+    -- Treesitter
     use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
     use {"windwp/nvim-ts-autotag", opt = true}
 
-	-- help me find my way  around
+    -- help me find my way  around
     use {"folke/which-key.nvim", opt = true}
 
     -- Color
@@ -75,9 +74,9 @@ return require('packer').startup(function(use)
     use {'norcalli/nvim-colorizer.lua', opt = true}
 
     -- Icons
-    use {"kyazdani42/nvim-web-devicons", opt = true}
+    use "kyazdani42/nvim-web-devicons"
 
-	-- Status Line and Bufferline
+        -- Status Line and Bufferline
     use {"glepnir/galaxyline.nvim", opt = true}
     use {"romgrk/barbar.nvim", opt = true}
 
@@ -99,22 +98,21 @@ return require('packer').startup(function(use)
     use {'TimUntersberger/neogit', requires = {'sindrets/diffview.nvim'}}
     use {'lewis6991/gitsigns.nvim', opt = true}
 
+    -- language specific
+        -- salt
+    -- use {'saltstack/salt-vim', ft = {'saltfile', 'salt', 'sls'}}
+    -- use {'Glench/Vim-Jinja2-Syntax', ft = {'saltfile', 'salt', 'sls', 'jinja', 'jinja2'}}
+    use {'saltstack/salt-vim', config = {function() require('nv-salt-vim') end}}
+    use 'Glench/Vim-Jinja2-Syntax'
+
     require_plugin("nvim-lspconfig")
-    require_plugin("lspsaga.nvim")
-    require_plugin("nvim-lspinstall")
-    require_plugin("popup.nvim")
-    require_plugin("plenary.nvim")
     require_plugin("telescope.nvim")
-    require_plugin("nvim-compe")
-    require_plugin("vim-vsnip")
-    require_plugin("friendly-snippets")
+    -- require_plugin("vim-vsnip")
     require_plugin("nvim-treesitter")
     require_plugin("nvim-ts-autotag")
     require_plugin("which-key.nvim")
     require_plugin("nvim-autopairs")
     require_plugin("nvim-comment")
-    require_plugin("nvcode-color-schemes.vim")
-    require_plugin("nvim-web-devicons")
     require_plugin("galaxyline.nvim")
     require_plugin("barbar.nvim")
     require_plugin('dial.nvim')
@@ -125,7 +123,8 @@ return require('packer').startup(function(use)
     require_plugin('nvim-colorizer.lua')
     require_plugin('vim-surround')
     require_plugin('vim-fugitive')
+    require_plugin('sql.nvim')
+    require_plugin('telescope-frecency.nvim')
     require_plugin('gitsigns.nvim')
-	require_plugin('telescope-frecency.nvim')
 end
 )
