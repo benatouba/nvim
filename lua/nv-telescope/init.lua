@@ -17,8 +17,7 @@ require('telescope').setup {
         layout_strategy = "horizontal",
         layout_defaults = {horizontal = {mirror = false}, vertical = {mirror = false}},
         file_sorter = sorters.get_fzy_sorter,
-		file_ignore_patterns = { 'parser.c' },
-        file_ignore_patterns = {},
+        file_ignore_patterns = { 'parser.c' },
         generic_sorter = require'telescope.sorters'.get_generic_fuzzy_sorter,
         shorten_path = true,
         winblend = 0,
@@ -76,7 +75,7 @@ require('telescope').setup {
 		  use_highlighter = false,
 		  minimum_grep_characters = 6,
 		},
-		frecency = {
+        frecency = {
 			show_scores = true,
 			show_unindexed = false,
 			ignore_patterns = {"*.git/*", "*/tmp/*", "*.svn/*"},

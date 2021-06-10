@@ -135,6 +135,7 @@ local mappings = {
     s = {
         name = "+Search",
         b = {"<cmd>Telescope git_branches<cr>", "Branches"},
+        B = {"<cmd>Telescope file_browser<cr>", "Browser"},
         c = {"<cmd>Telescope colorscheme<cr>", "Colorscheme"},
         d = {"<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics"},
         D = {"<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics"},
@@ -143,9 +144,13 @@ local mappings = {
         M = {"<cmd>Telescope man_pages<cr>", "Man Pages"},
         o = {"<cmd>Telescope oldfiles<cr>", "Open Recent File"},
         p = {"<cmd>Telescope project<cr>", "Projects"},
+        q = {"<cmd>Telescope quickfix<cr>", "Quickfix List"},
         r = {"<cmd>Telescope frecency<cr>", "Frecency"},
         R = {"<cmd>Telescope registers<cr>", "Registers"},
-        t = {"<cmd>Telescope live_grep<cr>", "Text"}
+        s = {"<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols (LSP)"},
+        S = {"<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols (LSP)"},
+        t = {"<cmd>Telescope live_grep<cr>", "Text"},
+        T = {"<cmd>Telescope treesitter<cr>", "Treesitter Symbols"},
     },
 
     t = {
