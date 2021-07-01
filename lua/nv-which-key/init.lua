@@ -110,6 +110,7 @@ local mappings = {
         d = {"<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics"},
         D = {"<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics"},
         f = {"<cmd>LspFormatting<cr>", "Format"},
+        h = {'<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', "Find definition"},
         i = {"<cmd>LspInfo<cr>", "Info"},
         l = {"<cmd>Lspsaga lsp_finder<cr>", "LSP Finder"},
         L = {"<cmd>Lspsaga show_line_diagnostics<cr>", "Line Diagnostics"},
@@ -164,7 +165,7 @@ local mappings = {
         l = {"<cmd>FloatermLast<cr>", "Last"},
         n = {"<cmd>FloatermNew<cr>", "New"},
         s = {"<cmd>FloatermSend<cr>", "Send"},
-        t = {"<cmd>FloatermToggle<cr>", "Toggle"}
+        t = {"<cmd>lua require('lspsaga.floaterm').open_float_terminal()<cr>", "Toggle"}
     },
 
     -- S = {name = "+Session", s = {"<cmd>SessionSave<cr>", "Save Session"}, l = {"<cmd>SessionLoad<cr>", "Load Session"}}

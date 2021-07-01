@@ -22,20 +22,22 @@ map('n', '<C-h>', '<C-w>h', {silent = true})
 map('n', '<C-j>', '<C-w>j', {silent = true})
 map('n', '<C-k>', '<C-w>k', {silent = true})
 map('n', '<C-l>', '<C-w>l', {silent = true})
+map('n', 'gh', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', defaultOpts)
 map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', defaultOpts)
 map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', defaultOpts)
 map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', defaultOpts)
 map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', defaultOpts)
 map('n', 'gds', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
 map('n', 'gds', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
-map('n', 'ca', ':Lspsaga code_action<CR>')
+map('n', 'ca', '<cmd>lua require"lspsaga.codeaction".code_action()<CR>')
 map('n', 'K', ':Lspsaga hover_doc<CR>')
 map('n', '<C-p>', ':Lspsaga diagnostic_jump_prev<CR>')
 map('n', '<C-n>', ':Lspsaga diagnostic_jump_next<CR>')
-map('n', '<C-f>', '<cmd>lua require(\'lspsaga.action\').smart_scroll_with_saga(1)<CR>')
-map('n', '<C-b>', '<cmd>lua require(\'lspsaga.action\').smart_scroll_with_saga(-1)<CR>')
+map('n', '<C-f>', '<cmd>lua require"lspsaga.action".smart_scroll_with_saga(1)<CR>')
+map('n', '<C-b>', '<cmd>lua require"lspsaga.action".smart_scroll_with_saga(-1)<CR>')
 map('n', '[g', '<cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false }<cr>')
 map('n', ']g', '<cmd>lua vim.lsp.diagnostic.goto_next { wrap = false }<cr>')
+map('t', '<leader>tt', '<cmd>lua require("lspsaga.floaterm").close_float_terminal()<CR>')
 
 -- map('n', '<leader>d', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>')
 -- map('n', '<leader>ln', '<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>')
@@ -69,8 +71,11 @@ map('x', 'J', ':move \'>+1<CR>gv-gv\'<ESC>')
 -- TAB completion
 map('i', '<C-TAB>', 'compe#complete()')
 
+-- Redraw and fix everything
+map('n', '<C-l>', ':nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>', defaultOpts)
+
 vim.cmd([[
-	cnoreabbrev W w
+    cnoreabbrev W w
     cnoreabbrev W! w!
     cnoreabbrev Wq wq
     cnoreabbrev wQ wq
