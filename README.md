@@ -62,6 +62,7 @@ Neovim hyperextensible Vim-based text editor. It has lua built-in functionality 
 
 # How to start using it
 - The entry barrier can be quite high. If you are new to Vim, I recommend start you start with the vimtutor. Open neovim ``` nvim ``` and type ``` :Tutor ```.
+- Once you are familiar with vim movements and basic editing commands, you NEED to read [vim-galore](https://github.com/mhinz/vim-galore)
 - Start by only using it for basic tasks. Once you can move around, explore more functionality. Plugins are listed in [plugins.lua](lua/plugins.lua)
 - Have a look at the [command list](lua/nv-which-key/init.lua) and implement nvim-telescope to find and open files. Once that is implemented, move on.
 - Explore the config and feel free to add/remove/change anything you want.
