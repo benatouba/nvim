@@ -1,10 +1,12 @@
+local execute = vim.api.nvim_command
 local fn = vim.fn
 
-local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 
 if fn.empty(fn.glob(install_path)) > 0 then
-    execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
-    execute 'packadd packer.nvim'
+  fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
+  execute 'packadd packer.nvim'
+  execute 'PackerSync'
 end
 
 local packer_ok, _ = pcall(require, "packer")
@@ -23,11 +25,11 @@ return require('packer').startup(function(use)
     use "tjdevries/astronauta.nvim"  -- better plugin config loading
 
     -- Telescope
-    use "nvim-telescope/telescope.nvim"
     use "nvim-telescope/telescope-project.nvim"
     use "nvim-telescope/telescope-fzf-writer.nvim"
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use {"nvim-telescope/telescope-frecency.nvim", requires = "tami5/sql.nvim"}
+    use "nvim-telescope/telescope.nvim"
     use {"oberblastmeister/rooter.nvim", opt = true, cond = not O.lsp, config = function() require('base.rooter') end}
 
     -- help me find my way  around
@@ -86,8 +88,8 @@ return require('packer').startup(function(use)
       "typescript",
       "typescriptreact",
       "typescript.tsx",
-    },
-        use {
+    }}
+    use {
   "ahmedkhalf/lsp-rooter.nvim",
   config = function()
     require("lsp-rooter").setup {
@@ -96,11 +98,10 @@ return require('packer').startup(function(use)
       -- refer to the configuration section below
     }
   end
-},
+}
 use {
     "folke/trouble.nvim",
     cmd = "TroubleToggle",
-  }
   }
 
     end
