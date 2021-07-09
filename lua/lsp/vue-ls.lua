@@ -1,5 +1,6 @@
 
 local lsp = require'lspconfig'
 lsp.vuels.setup{
-root_dir = lsp.util.root_pattern(".git",".")
+    root_dir = lsp.util.root_pattern(".git","."),
+    on_attach = common_on_attach
 }

@@ -45,7 +45,7 @@ local opts = {
 
 -- Set leader
 vim.api.nvim_set_keymap("n", "<Space>", "<NOP>", {noremap = true, silent = true})
-vim.g.mapleader = " "
+vim.g.mapleader = O.mapleader
 
 -- Comments
 vim.api.nvim_set_keymap("v", "<leader>/", ":CommentToggle<CR>", {noremap = true, silent = true})
@@ -58,6 +58,7 @@ local mappings = {
 	["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
 	["H"] = {":HopWord<cr>", "hop to word"},
     ["e"] = {":NvimTreeToggle<cr>", "Explorer"},
+    ["u"] = {":UndotreeToggle<cr>", "Undotree"},
 
     -- a is for actions
     a = {
@@ -157,14 +158,6 @@ local mappings = {
 
     t = {
         name = "+Terminal",
-        h = {"<cmd>FloatermFirst<cr>", "First"},
-        H = {"<cmd>FloatermHide<cr>", "Hide"},
-        j = {"<cmd>FloatermNext<cr>", "Next"},
-        k = {"<cmd>FloatermPrev<cr>", "Previous"},
-        K = {"<cmd>FloatermKill<cr>", "Kill"},
-        l = {"<cmd>FloatermLast<cr>", "Last"},
-        n = {"<cmd>FloatermNew<cr>", "New"},
-        s = {"<cmd>FloatermSend<cr>", "Send"},
         t = {"<cmd>lua require('lspsaga.floaterm').open_float_terminal()<cr>", "Toggle"}
     },
 

@@ -1,4 +1,6 @@
 -- these are all of the default values
+local setup = function() 
+
 require'rooter'.setup {
     manual = true, -- wether to setup autocommand to root every time a file is opened
     echo = true, -- echo every time rooter is triggered
@@ -19,3 +21,4 @@ require'rooter'.setup {
         return vim.fn.expand [[%:p:h]]
     end
 }
+end

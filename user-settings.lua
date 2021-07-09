@@ -8,10 +8,17 @@ an executable
 ]]
 
 -- general
+O.lsp = false -- boolean, activates lsp packages
+O.language_parsing = false
+O.git = false
+
 O.auto_complete = true
 O.colorscheme = 'lunar'
 O.auto_close_tree = 0
 O.wrap_lines = true
+
+-- special keys
+O.mapleader = " "
 
 -- if you don't want all the parsers change this to a table of the ones you want
 O.treesitter.ensure_installed = "all"
@@ -24,7 +31,7 @@ O.clang.diagnostics.signs = false
 O.clang.diagnostics.underline = false
 
 -- python
-vim.cmd("let g:python3_host_prog = '~/.venv/nvim/bin/python3'")
+vim.cmd("let g:python3_host_prog = '/home/ben/.pyenv/shims/python3'")
 O.python.formatter = 'black'
 O.python.linter = 'flake8'
 O.python.isort = true

@@ -1,8 +1,6 @@
 local actions = require('telescope.actions')
 local sorters = require('telescope.sorters')
--- Global remapping
-------------------------------
--- '--color=never',
+local previewers = require'telescope.previewers'
 require('telescope').setup {
     defaults = {
         find_command = {'grep', '--line-number', '--column', '--ignore-case', '--color'},
@@ -17,7 +15,7 @@ require('telescope').setup {
         file_sorter = sorters.get_fzy_sorter,
 		file_ignore_patterns = { 'parser.c' },
         generic_sorter = require'telescope.sorters'.get_generic_fuzzy_sorter,
-        shorten_path = true,
+        path_display = "shorten",
         winblend = 0,
         layout_config = {
             width = 0.75,
@@ -31,12 +29,12 @@ require('telescope').setup {
         color_devicons = true,
         use_less = true,
         set_env = {['COLORTERM'] = 'truecolor'}, -- default = nil,
-        file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
-        grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
-        qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
+        file_previewer = previewers.vim_buffer_cat.new,
+        grep_previewer = previewers.vim_buffer_vimgrep.new,
+        qflist_previewer = previewers.vim_buffer_qflist.new,
 
         -- Developer configurations: Not meant for general override
-        buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker,
+        buffer_previewer_maker = previewers.buffer_previewer_maker,
         mappings = {
             i = {
                 ["<C-j>"] = actions.move_selection_next,
@@ -103,24 +101,3 @@ require('telescope').load_extension("fzf")
 require('telescope').load_extension('project')
 require('telescope').load_extension("frecency")
 -- require('telescope').load_extension("cheat")
-
-local M = {}
-function M.oldfiles()
-  if true then require('telescope').extensions.frecency.frecency() end
-  if pcall(require('telescope').load_extension, 'frecency') then
-  else
-    require('telescope.builtin').oldfiles { layout_strategy = 'vertical' }
-  end
-end
-
-return setmetatable({}, {
-  __index = function(_, k)
-    reloader()
-
-    if M[k] then
-      return M[k]
-    else
-      return require('telescope.builtin')[k]
-    end
-  end
-})
