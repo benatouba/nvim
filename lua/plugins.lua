@@ -29,8 +29,13 @@ return require('packer').startup(function(use)
     use "nvim-telescope/telescope-fzf-writer.nvim"
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use {"nvim-telescope/telescope-frecency.nvim", requires = "tami5/sql.nvim"}
-    use "nvim-telescope/telescope.nvim"
-    use {"oberblastmeister/rooter.nvim", opt = true, cond = not O.lsp, config = function() require('base.rooter') end}
+    use {"nvim-telescope/telescope.nvim", config = function() require('base.telescope') end, after = {
+      "telescope-frecency.nvim",
+      "telescope-fzf-native.nvim",
+      "telescope-fzf-writer.nvim",
+      "telescope-project.nvim"
+    }}
+    -- use {"oberblastmeister/rooter.nvim", opt = true, config = function() require('base.rooter') end, cond = (not O.lsp)}
 
     -- help me find my way  around
     use "folke/which-key.nvim"
