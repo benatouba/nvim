@@ -65,9 +65,9 @@ return require('packer').startup(function(use)
 
     if O.language_parsing then
         -- Treesitter
-        use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"}
-        use "nvim-treesitter/nvim-treesitter-refactor"
-        use "nvim-treesitter/nvim-treesitter-textobjects"
+        use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate", config = function() require("language_parsing.treesitter") end}
+        use {"nvim-treesitter/nvim-treesitter-refactor", after = "nvim-treesitter"}
+        use {"nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter"}
         use {"windwp/nvim-ts-autotag", opt = true, event = "InsertEnter", }
         use {"windwp/nvim-autopairs",
             opt = true,

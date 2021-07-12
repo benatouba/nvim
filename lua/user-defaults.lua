@@ -1,5 +1,5 @@
 O = {
-    language_parsing = false,
+    language_parsing = true,
     lsp = false,
     git = false,
     snippets = false,
@@ -38,7 +38,7 @@ O = {
         ignore_install = {"haskell"},
         highlight = {enabled = true},
         playground = {enabled = true},
-        rainbow = {enabled = false}
+        rainbow = {enabled = true}
     },
 
     -- database = {save_location = '~/.config/nvcode_db', auto_execute = 1},
