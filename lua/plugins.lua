@@ -45,7 +45,7 @@ return require('packer').startup(function(use)
 
     -- Color
     use {"christianchiarulli/nvcode-color-schemes.vim", opt = true}
-    use {'norcalli/nvim-colorizer.lua', opt = true}
+    use {'norcalli/nvim-colorizer.lua', config = function() require'colorizer'.setup() end, event = "BufEnter"}
     use 'sheerun/vim-polyglot'
 
     -- Icons and visuals
