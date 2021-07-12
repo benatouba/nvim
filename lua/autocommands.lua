@@ -1,4 +1,4 @@
-local utils = require('base.functions')
+local funcs = require('functions')
 
 local auto_formatters = {            }
 
@@ -15,8 +15,7 @@ if O.json.autoformat then table.insert(auto_formatters, json_format) end
 
 local ruby_format = {'BufWritePre', '*.rb', 'lua vim.lsp.buf.formatting_sync(nil,1000)'}
 if O.ruby.autoformat then table.insert(auto_formatters, ruby_format) end
-
-utils.define_augroups({
+funcs.define_augroups({
     _general_settings = {
         {'TextYankPost', '*', 'lua require(\'vim.highlight\').on_yank({higroup = \'Search\', timeout = 200})'},
         {'BufWinEnter', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
@@ -26,7 +25,7 @@ utils.define_augroups({
         {'BufWinEnter,BufRead,BufNewFile', '.bash*', 'setfiletype bash'},
         {'BufRead', '*_p3d*', 'setfiletype fortran'},
         -- {'BufRead', '*.sls*', 'setfiletype conf'},
-	{'BufWritePre', '*', 'call TrimWhitespace()'},
+	{'BufWritePre', '*', ':%s/\\s\\+$//e'},
         {'BufNewFile', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
         {'VimLeavePre', '*', 'set title set titleold='}
     },

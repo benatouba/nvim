@@ -6,6 +6,7 @@ require('settings')
 require('plugins')
 require('colorscheme')
 require('base')
+require('autocommands')
 -- if O.language_parsing then
 --   require('language_parsing')
 -- end
