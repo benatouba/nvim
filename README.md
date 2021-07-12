@@ -47,11 +47,11 @@ Neovim hyperextensible Vim-based text editor. It has lua built-in functionality 
 - ranger file browser (rnvimr, requires ranger (and Ueberzug for media file rendering))
 - testing (vim-ultest, requires test libraries)
 - efficiency stuff (anything by tpope)
-- visual/UI stuff (anything by folke)
+- visual/UI stuff (anything by [folke](https://github.com/folke))
 
 ### Dependencies
-- neovim >=0.5 (nightly) and its install requirements (check neovim build instructions)
-- git (if it is an old version you may need to tweak packer.nvim config, check their GH)
+- neovim >=0.5 and its install requirements (check neovim build instructions)
+- git (if it is an old version you may need to tweak [packer.nvim](https://github.com/wbthomason/packer.nvim) config, check their GH)
 
 #### Optional:
 - A patched font on the machine that is rendering your output (best just install NerdFonts)
@@ -64,12 +64,12 @@ Neovim hyperextensible Vim-based text editor. It has lua built-in functionality 
 - The entry barrier can be quite high. If you are new to Vim, I recommend start you start with the vimtutor. Open neovim ``` nvim ``` and type ``` :Tutor ```.
 - Once you are familiar with vim movements and basic editing commands, you NEED to read [vim-galore](https://github.com/mhinz/vim-galore)
 - Start by only using it for basic tasks. Once you can move around, explore more functionality. Plugins are listed in [plugins.lua](lua/plugins.lua)
-- Have a look at the [command list](lua/nv-which-key/init.lua) and implement nvim-telescope to find and open files. Once that is implemented, move on.
+- Have a look at the [command list](lua/base/which-key/init.lua) and implement nvim-telescope to find and open files. Once that is implemented, move on.
 - Explore the config and feel free to add/remove/change anything you want.
 
 # Some Keymaps
 - Get familiar with the usual vim keys.
-- Keymaps specific to this config can be found in [here](lua/nv-which-key/init.lua)
+- Keymaps specific to this config can be found in [here](lua/which-key/init.lua) and [here](lua/keymappings.lua).
 - The leader key (<space> for us) opens up a menu, that shows you some commands.
 - Some mappings are listed below but the source of truth will be the above mentioned file.
 
