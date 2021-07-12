@@ -1,4 +1,4 @@
-# Neovim configuration
+# [Neovim](https://github.com/neovim/neovim) configuration
 for an effective workflow on any machine (even headless)
 
 The configuration is written in Lua as are most of the used plugins.
@@ -20,33 +20,47 @@ Neovim hyperextensible Vim-based text editor. It has lua built-in functionality 
 
 # Setup
 ### Minimal setup includes
-- system-wide fuzzy file finding and grepping (nvim-telescope   the best plugin out there)
-    - uses fzf or fzy for file matching
-    - uses ripgrep (rg) for text matching
-- basic language specific features for ~60 languages (nvim-treesitter)
-    - highlighting
-    - tree structure
-    - indenting
-- git helper
-    - function wrapper (Neogit in lua, vim-fugitive in vimL)
-    - gutter (gitsigns.nvim)
-- status bar (galaxyline.nvim)
-- top bar (barbar.nvim)
-- highly customizable package management (packer.nvim)
-- incrementing/decrementing basically anything (dial.nvim)
-- key mappings helper (which-key.nvim)
-- snippets for most languages (vim-vsnip)
-- developer icons (nvim-web-devicons, based on vim-devicons)
-- database access (sql.nvim)
-- color schemes (nvcode-color-schemes)
-- and other stuff (check lua/plugins.lua for a list)
+- system-wide fuzzy file finding and grepping ([nvim-telescope](https://github.com/nvim-telescope/telescope.nvim)   the best plugin out there)
+    - uses [fzf](https://github.com/junegunn/fzf) for file matching
+    - uses ripgrep for text matching NEED [ripgrep](https://github.com/BurntSushi/ripgrep)
+- status bar ([galaxyline.nvim](https://github.com/glepnir/galaxyline.nvim))
+- top bar ([barbar.nvim](https://github.com/romgrk/barbar.nvim)
+- highly customizable package management ([packer.nvim](https://github.com/wbthomason/packer.nvim))
+- incrementing/decrementing/toggle basically anything ([dial.nvim](https://github.com/monaqa/dial.nvim))
+- key mappings helper ([which-key.nvim](https://github.com/folke/which-key.nvim))
+- syntax highlighting via regex ([vim-polyglot](https://github.com/sheerun/vim-polyglot))
+- developer icons ([nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons)) NEED ONE OR ALL [PATCHED FONTS](https://github.com/ryanoasis/nerd-fonts)!
+- database access ([sql.nvim](https://github.com/tami5/sql.nvim))
+- color schemes ([nvcode-color-schemes.vim](https://github.com/ChristianChiarulli/nvcode-color-schemes.vim))
+check [lua/plugins.lua](lua/plugins.lua) for the full list
 
 ### If you want more functionality checkout
-- LSP support (nvim-lspconfig, lspsaga, lspinstall and nvim-compe, requires various languages to install the servers)
-- debugging (nvim-dap in lua or vimspector in vimL, requires debuggers)
-- ranger file browser (rnvimr, requires ranger (and Ueberzug for media file rendering))
-- testing (vim-ultest, requires test libraries)
-- efficiency stuff (anything by tpope)
+- Language Servers (diagnostics, linting, formatting)
+    - [language server protocol](https://microsoft.github.io/language-server-protocol/) support ([nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+    - Server install helper ([nvim-lspinstall](https://github.com/kabouzeid/nvim-lspinstall), use ":LspInstall")
+    - Auto Completion engine ([nvim-compe](https://github.com/hrsh7th/nvim-compe))
+    - performant UI ([lspsaga](https://github.com/glepnir/lspsaga.nvim))
+    - TO ACTIVATE: enable lsp in [user-settings](user-settings.lua)
+- git helper
+    - function wrapper ([Neogit](https://github.com/TimUntersberger/neogit) in lua, [vim-fugitive](https://github.com/tpope/vim-fugitive) in vimL)
+    - gutter/git line info ([gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim))
+    - TO ACTIVATE: enable git in [user-settings](user-settings.lua)
+- language parsing features for ~60 languages ([nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter))
+    - highlighting
+    - syntax tree structure
+    - indenting
+    - refactoring
+    - scope
+    - textobjects
+    - colored parenthesis
+    - commenting
+    - TO ACTIVATE: enable language_parsing in [user-settings](user-settings.lua)
+- snippets for most languages ([vim-vsnip](https://github.com/hrsh7th/vim-vsnip) and [friendly-snippets](https://github.com/rafamadriz/friendly-snippets))
+    - TO ACTIVATE: enable snippets in [user-settings](user-settings.lua)
+- debugging ([nvim-dap](https://github.com/mfussenegger/nvim-dap) in lua or [vimspector](https://github.com/puremourning/vimspector) in vimL, requires debuggers) NOT YET IMPLEMENTED
+- ranger file browser ([rnvimr](https://github.com/kevinhwang91/rnvimr), requires [ranger](https://github.com/ranger/ranger) (and [Ueberzug](https://github.com/seebye/ueberzug) for media file rendering))
+- testing ([vim-ultest](https://github.com/rcarriga/vim-ultest), requires test libraries) NOT YET IMPLEMENTED
+- efficiency stuff (anything by [tpope](https://github.com/tpope))
 - visual/UI stuff (anything by [folke](https://github.com/folke))
 
 ### Dependencies
