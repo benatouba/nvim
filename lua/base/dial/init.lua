@@ -1,5 +1,7 @@
+local M = {}
 local dial = require("dial")
 
+M.config = function() 
 dial.augends["custom#boolean"] = dial.common.enum_cyclic{
     name = "boolean",
     strlist = {"true", "false"},
@@ -26,3 +28,7 @@ vmap <C-x> <Plug>(dial-decrement)
 vmap g<C-c> <Plug>(dial-increment-additional)
 vmap g<C-x> <Plug>(dial-decrement-additional)
   ]])
+
+end
+
+return M
