@@ -58,7 +58,7 @@ return require('packer').startup(function(use)
     use {"kyazdani42/nvim-tree.lua", opt = true, config = function() require("base.nvim-tree").config() end, cmd="NvimTreeToggle"}
 
     -- manipulation
-    use { "monaqa/dial.nvim", opt = true, config = function() require('base.dial').config() end, event = "InsertEnter", } -- increment/decrement basically everything
+    use { "monaqa/dial.nvim", opt = true, config = function() require('base.dial').config() end, event = "BufRead", } -- increment/decrement basically everything
     use { "terrortylor/nvim-comment", cmd = "CommentToggle", config = function() require("nvim_comment").setup() end, }
     use { "mbbill/undotree", opt = true, cmd = "UndotreeToggle" }
     use 'tpope/vim-surround'
