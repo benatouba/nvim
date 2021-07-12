@@ -61,6 +61,7 @@ return require('packer').startup(function(use)
     use { "monaqa/dial.nvim", opt = true, config = function() require('base.dial').config() end, event = "InsertEnter", } -- increment/decrement basically everything
     use { "terrortylor/nvim-comment", cmd = "CommentToggle", config = function() require("nvim_comment").setup() end, }
     use { "mbbill/undotree", opt = true, cmd = "UndotreeToggle" }
+    use 'tpope/vim-surround'
 
     if O.language_parsing then
         -- Treesitter
@@ -100,11 +101,9 @@ return require('packer').startup(function(use)
         use {'lewis6991/gitsigns.nvim', disable = true, config = function() require"nv-gitsigns" end}-- fails on startup. TODO: activate when #205 is fixed
     end
 
-    if O.misc then --miscellaneous stuff
-        use {'tpope/vim-surround', opt = true}
-        -- Autocomplete/snippets
-        use {'hrsh7th/vim-vsnip', opt = true}
-        use 'voldikss/vim-floaterm'
+    if O.snippets then --miscellaneous stuff
+        use 'hrsh7th/vim-vsnip'
+        use {'rafamadriz/friendly-snippets', opt = true}
     end
 
     -- language specific

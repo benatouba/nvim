@@ -2,6 +2,7 @@ O = {
     language_parsing = false,
     lsp = false,
     git = false,
+    snippets = false,
 
     auto_close_tree = 0,
     auto_complete = true,

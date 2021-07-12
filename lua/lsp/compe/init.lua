@@ -4,6 +4,30 @@ vim.o.completeopt = "menuone,noselect"
 
 M.config = function()
 
+    local source = {
+        path = {kind = "   (Path)"},
+        buffer = {kind = "   (Buffer)"},
+        calc = {kind = "   (Calc)"},
+        -- vsnip = {kind = "   (Snippet)"},
+        nvim_lsp = {kind = "   (LSP)"},
+        -- nvim_lua = {kind = "  "},
+        nvim_lua = true,
+        spell = {kind = "   (Spell)"},
+        tags = false,
+        -- vim_dadbod_completion = true,
+        -- snippets_nvim = {kind = "  "},
+        -- ultisnips = {kind = "  "},
+        treesitter = {kind = "  "},
+        emoji = {kind = " ﲃ  (Emoji)", filetypes={"markdown", "text"}}
+        -- for emoji press : (idk if that in compe tho)
+    }
+
+    if O.snippets then
+        table.insert(source, { vsnip = {kind = "   (Snippet)"}})
+    else
+        table.insert(source, { vsnip = false})
+    end
+
 -- require'compe'.setup {
     local opt = {
     enabled = O.auto_complete,
@@ -18,25 +42,9 @@ M.config = function()
     max_kind_width = 100,
     max_menu_width = 100,
     documentation = true,
-
-    source = {
-        path = {kind = "   (Path)"},
-        buffer = {kind = "   (Buffer)"},
-        calc = {kind = "   (Calc)"},
-        vsnip = {kind = "   (Snippet)"},
-        nvim_lsp = {kind = "   (LSP)"},
-        -- nvim_lua = {kind = "  "},
-		nvim_lua = false,
-        spell = {kind = "   (Spell)"},
-        tags = false,
-        -- vim_dadbod_completion = true,
-        -- snippets_nvim = {kind = "  "},
-        -- ultisnips = {kind = "  "},
-        treesitter = {kind = "  "},
-        emoji = {kind = " ﲃ  (Emoji)", filetypes={"markdown", "text"}}
-        -- for emoji press : (idk if that in compe tho)
+    source = source
     }
-}
+
   local status_ok, compe = pcall(require, "compe")
   if not status_ok then
     return
@@ -65,8 +73,8 @@ end
 _G.tab_complete = function()
     if vim.fn.pumvisible() == 1 then
         return t "<C-n>"
-    -- elseif vim.fn.call("vsnip#available", {1}) == 1 then
-    --     return t "<Plug>(vsnip-expand-or-jump)"
+    elseif vim.fn.call("vsnip#available", {1}) == 1 and vsnip then
+        return t "<Plug>(vsnip-expand-or-jump)"
     elseif check_back_space() then
         return t "<Tab>"
     else
@@ -76,8 +84,8 @@ end
 _G.s_tab_complete = function()
     if vim.fn.pumvisible() == 1 then
         return t "<C-p>"
-    -- elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 then
-    --     return t "<Plug>(vsnip-jump-prev)"
+    elseif vim.fn.call("vsnip#jumpable", {-1}) == 1 and vsnip then
+        return t "<Plug>(vsnip-jump-prev)"
     else
         return t "<S-Tab>"
     end
