@@ -29,13 +29,16 @@ return require('packer').startup(function(use)
     use "nvim-telescope/telescope-fzf-writer.nvim"
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use {"nvim-telescope/telescope-frecency.nvim", requires = "tami5/sql.nvim"}
-    use {"nvim-telescope/telescope.nvim", config = function() require('base.telescope') end, after = {
+    use {"nvim-telescope/telescope.nvim",
+      config = function() require('base.telescope') end,
+      cmd = "Telescope",
+      after = {
       "telescope-frecency.nvim",
       "telescope-fzf-native.nvim",
       "telescope-fzf-writer.nvim",
       "telescope-project.nvim"
     }}
-    -- use {"oberblastmeister/rooter.nvim", opt = true, config = function() require('base.rooter') end, cond = (not O.lsp)}
+    use {"oberblastmeister/rooter.nvim", opt = true, config = function() require('base.rooter') end, cond = function() return not O.lsp end}
 
     -- help me find my way  around
     use "folke/which-key.nvim"
@@ -55,7 +58,7 @@ return require('packer').startup(function(use)
     use {"kyazdani42/nvim-tree.lua", opt = true, config = function() require("base.nvim-tree").config() end, cmd="NvimTreeToggle"}
 
     -- manipulation
-    use { "monaqa/dial.nvim", opt = true, event = "InsertEnter", } -- increment/decrement basically everything
+    use { "monaqa/dial.nvim", opt = true, config = function() require('base.dial').config() end, event = "InsertEnter", } -- increment/decrement basically everything
     use { "terrortylor/nvim-comment", cmd = "CommentToggle", config = function() require("nvim_comment").setup() end, }
     use { "mbbill/undotree", opt = true, cmd = "UndotreeToggle" }
 
@@ -82,38 +85,18 @@ return require('packer').startup(function(use)
     if O.lsp then
         use {"neovim/nvim-lspconfig", config = function() require('lsp') end}
         use {"glepnir/lspsaga.nvim", opt = true, config = function() require('lspsaga').init_lsp_saga() end, event = "BufRead"}
-        use {"kabouzeid/nvim-lspinstall", opt = true, cmd = "LspInstall"}
+        use "kabouzeid/nvim-lspinstall"
         use { "hrsh7th/nvim-compe", event = "InsertEnter", config = function() require("lsp.compe").config() end, }
-          use {
-    "jose-elias-alvarez/nvim-lsp-ts-utils",
-    ft = {
-      "javascript",
-      "javascriptreact",
-      "javascript.jsx",
-      "typescript",
-      "typescriptreact",
-      "typescript.tsx",
-    }}
-    use {
-  "ahmedkhalf/lsp-rooter.nvim",
-  config = function()
-    require("lsp-rooter").setup {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    }
-  end
-}
-use {
-    "folke/trouble.nvim",
-    cmd = "TroubleToggle",
-  }
-
+        use { "jose-elias-alvarez/nvim-lsp-ts-utils",
+            ft = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" }
+        }
+        use { "ahmedkhalf/lsp-rooter.nvim", config = function() require("lsp-rooter").setup() end }
+        use { "folke/trouble.nvim", cmd = "TroubleToggle", }
     end
 
     if O.git then -- Git (helpers)
-        use {'tpope/vim-fugitive', opt = true}
-        use {'TimUntersberger/neogit', requires = {'sindrets/diffview.nvim'}}
+        use {'tpope/vim-fugitive', opt = true, cmd = "G"}
+        use {'TimUntersberger/neogit', requires = {'sindrets/diffview.nvim'}, cmd = "Neogit"}
         use {'lewis6991/gitsigns.nvim', disable = true, config = function() require"nv-gitsigns" end}-- fails on startup. TODO: activate when #205 is fixed
     end
 

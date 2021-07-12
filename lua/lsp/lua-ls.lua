@@ -14,7 +14,7 @@ require'lspconfig'.sumneko_lua.setup {
                 path = vim.split(package.path, ';')
             },
             diagnostics = {
-                globals = {'vim', 'execute'}
+                globals = {'vim', 'execute', 'common_on_attach'}
             },
             workspace = {
                 -- Make the server aware of Neovim runtime files
