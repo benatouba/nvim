@@ -12,10 +12,9 @@ map('n', 'Y', 'y$', defaultOpts) -- yank to end of line
 map('n', '<leader>u', ':call UpdatePlugins()<CR>', defaultOpts) -- update all plugins with packer
 map('', 'Q', '<Nop>', defaultOpts) -- no ex mode
 map('', 'q:', ':q', defaultOpts) -- fix my typing
-map('n', '<cr>', 'i<cr><esc>d0i', defaultOpts) -- split lines ()
 map('n', '<leader>br', ':syntax sync fromstart<cr>:redraw!<cr>', defaultOpts) -- treesitter fails sometimes
-map('n', 'n', 'nzzzv', defaultOpts) -- split lines ()
-map('n', 'N', 'Nzzzv', defaultOpts) -- split lines ()
+map('n', 'n', 'nzzzv', defaultOpts)
+map('n', 'N', 'Nzzzv', defaultOpts)
 
 -- better window movement
 -- map('n', '<C-h>', '<C-w>h', {silent = true})
