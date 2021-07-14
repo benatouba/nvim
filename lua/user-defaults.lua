@@ -3,6 +3,7 @@ O = {
     lsp = false,
     git = false,
     snippets = false,
+    dap = false,
     misc = false,
 
     auto_close_tree = 0,
