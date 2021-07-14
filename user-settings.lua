@@ -8,10 +8,11 @@ an executable
 ]]
 
 -- general
-O.lsp = false -- boolean, activates lsp packages
-O.language_parsing = false
-O.git = false
-O.snippets = false
+O.lsp = true -- boolean, activates lsp packages
+O.language_parsing = true
+O.git = true
+O.snippets = true
+O.misc = true
 
 O.auto_complete = true
 O.colorscheme = 'lunar'

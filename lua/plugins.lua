@@ -15,9 +15,9 @@ if not packer_ok then
     return
 end
 
-vim.cmd "autocmd BufWritePost plugins.lua PackerCompile"
+vim.cmd "autocmd BufWritePost plugins.lua PackerCompile profile=true"
 
-return require('packer').startup(function(use)
+return require('packer').startup({function(use)
     -- Packer can manage itself as an optional plugin
     use 'wbthomason/packer.nvim' -- plugin manager
     use "nvim-lua/popup.nvim"  -- handle popup (important)
@@ -54,7 +54,7 @@ return require('packer').startup(function(use)
 
     -- Status Line and Bufferline
     use {"glepnir/galaxyline.nvim", config = function() require('base.galaxyline') end}
-    use {"romgrk/barbar.nvim", config = function() require('base.barbar') end}
+    use "romgrk/barbar.nvim"
     use {"kyazdani42/nvim-tree.lua", opt = true, config = function() require("base.nvim-tree").config() end, cmd="NvimTreeToggle"}
 
     -- manipulation
@@ -63,9 +63,13 @@ return require('packer').startup(function(use)
     use { "mbbill/undotree", opt = true, cmd = "UndotreeToggle" }
     use 'tpope/vim-surround'
 
+    -- language specific
+    use {'saltstack/salt-vim', ft = {'saltfile', 'salt', 'sls', 'jinja', 'jinja2'}}
+    use {'Glench/Vim-Jinja2-Syntax', ft = {'saltfile', 'salt', 'sls', 'jinja', 'jinja2'}}
+
     if O.language_parsing then
         -- Treesitter
-        use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate", config = function() require("language_parsing.treesitter") end}
+        use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate", config = function() require("language_parsing.treesitter") end, event = "BufWinEnter"}
         use {"nvim-treesitter/nvim-treesitter-refactor", after = "nvim-treesitter"}
         use {"nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter"}
         use {"windwp/nvim-ts-autotag", opt = true, event = "InsertEnter", }
@@ -85,7 +89,6 @@ return require('packer').startup(function(use)
 
     if O.lsp then
         use {"neovim/nvim-lspconfig", config = function() require('lsp') end}
-        use {"glepnir/lspsaga.nvim", opt = true, config = function() require('lspsaga').init_lsp_saga() end, event = "BufRead"}
         use "kabouzeid/nvim-lspinstall"
         use { "hrsh7th/nvim-compe", event = "InsertEnter", config = function() require("lsp.compe").config() end, }
         use { "jose-elias-alvarez/nvim-lsp-ts-utils",
@@ -106,13 +109,14 @@ return require('packer').startup(function(use)
         use {'rafamadriz/friendly-snippets', opt = true}
     end
 
-    -- language specific
-    if O.ft_extras then
-        use {'saltstack/salt-vim',
-            config = function() require('salt-vim') end,
-            ft = {'saltfile', 'salt', 'sls', 'jinja', 'jinja2'}
-        }
-        use 'Glench/Vim-Jinja2-Syntax'
+    if O.misc then
+        use 'kevinhwang91/nvim-bqf'
+        use { "numtostr/FTerm.nvim", config = function() require("FTerm").setup() end }
     end
-end
+end,
+config = {
+  profile = {
+    enable = true,
+    threshold = 1 -- the amount in ms that a plugins load time must be over for it to be included in the profile
+  } } }
 )

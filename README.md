@@ -39,7 +39,6 @@ check [lua/plugins.lua](lua/plugins.lua) for the full list
     - [language server protocol](https://microsoft.github.io/language-server-protocol/) support ([nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
     - Server install helper ([nvim-lspinstall](https://github.com/kabouzeid/nvim-lspinstall), use ":LspInstall")
     - Auto Completion engine ([nvim-compe](https://github.com/hrsh7th/nvim-compe))
-    - performant UI ([lspsaga](https://github.com/glepnir/lspsaga.nvim))
     - TO ACTIVATE: enable lsp in [user-settings](user-settings.lua)
 - git helper
     - function wrapper ([Neogit](https://github.com/TimUntersberger/neogit) in lua, [vim-fugitive](https://github.com/tpope/vim-fugitive) in vimL)
