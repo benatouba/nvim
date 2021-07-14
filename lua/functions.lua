@@ -12,12 +12,10 @@ function funcs.define_augroups(definitions)
     for group_name, definition in pairs(definitions) do
         vim.cmd('augroup ' .. group_name)
         vim.cmd('autocmd!')
-
         for _, def in pairs(definition) do
             local command = table.concat(vim.tbl_flatten {'autocmd', def}, ' ')
             vim.cmd(command)
         end
-
         vim.cmd('augroup END')
     end
 end
@@ -38,6 +36,22 @@ function exists(file)
       end
    end
    return ok, err
+end
+
+-- print stuff
+P = function(v)
+    print(vim.inspect(v))
+    return v
+end
+
+-- reload modules
+if pcall(require, 'plenary') then
+    RELOAD = require('plenary.reload').reload_module
+
+    R = function(name)
+        RELOAD(name)
+        return require(name)
+    end
 end
 
 -- lsp

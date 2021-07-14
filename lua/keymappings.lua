@@ -39,7 +39,7 @@ vim.cmd('command! -nargs=0 LspVirtualTextToggle lua require("lsp/virtual_text").
 
 map('t', '<C-j>', '<C-\\><C-N><C-w>j', {noremap = true})
 map('t', '<C-k>', '<C-\\><C-N><C-w>k', {noremap = true})
--- map('t', '<Esc>', '<C-\\><C-n>', {noremap = true})
+map('t', '<Esc>', '<C-\\><C-n>', {noremap = true})
 
 map('n', '<C-Up>', ':resize +2<CR>')
 map('n', '<C-Down>', ':resize -2<CR>')

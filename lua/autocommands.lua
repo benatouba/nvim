@@ -24,6 +24,7 @@ funcs.define_augroups({
         {'BufWinEnter,BufRead,BufNewFile', '*.pro', 'setfiletype idlang'},
         {'BufWinEnter,BufRead,BufNewFile', '.bash*', 'setfiletype bash'},
         {'BufRead', '*_p3d*', 'setfiletype fortran'},
+        {"BufWritePost", "[init][plugins].lua", "lua reload_config()"},
         -- {'BufRead', '*.sls*', 'setfiletype conf'},
 	{'BufWritePre', '*', ':%s/\\s\\+$//e'},
         {'BufNewFile', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
@@ -35,6 +36,7 @@ funcs.define_augroups({
         {'FileType', 'lspinfo', 'nnoremap <silent> <buffer> q :q<CR>'},
         {'FileType', 'floaterm', 'nnoremap <silent> <buffer> q :q<CR>'},
         {'FileType', 'fugitive', 'nnoremap <silent> <buffer> q :q<CR>'},
+        {'FileType', 'qf', 'nnoremap <silent> <buffer> q :q<CR>'},
         {'FileType', 'help', 'nnoremap <silent> <buffer> q :q<CR>'},
     },
     _auto_formatters = auto_formatters
