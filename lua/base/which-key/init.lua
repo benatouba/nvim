@@ -55,8 +55,8 @@ vim.api.nvim_set_keymap("v", "<leader>/", ":CommentToggle<CR>", {noremap = true,
 local mappings = {
     ["/"] = {":CommentToggle<CR>", "Comment"},
     ["c"] = {":BufferClose<CR>", "Close Buffer"},
-	["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
-	["H"] = {":HopWord<cr>", "hop to word"},
+	-- ["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
+	-- ["H"] = {":HopWord<cr>", "hop to word"},
     ["e"] = {":NvimTreeToggle<cr>", "Explorer"},
     ["u"] = {":UndotreeToggle<cr>", "Undotree"},
 
@@ -74,54 +74,6 @@ local mappings = {
         R = {"<cmd>set norelativenumber!<cr>", "relative line nums"},
 		w = {"<cmd>call TrimWhitespace()<cr>", "trim Whitespaces"}
         -- t = {"<cmd>TSHighlightCapturesUnderCursor<cr>", "treesitter highlight"},
-    },
-
-    -- d = {
-    --     name = "+Debug",
-    --     b = {"<cmd>DebugToggleBreakpoint<cr>", "Toggle Breakpoint"},
-    --     c = {"<cmd>DebugContinue<cr>", "Continue"},
-    --     i = {"<cmd>DebugStepInto<cr>", "Step Into"},
-    --     o = {"<cmd>DebugStepOver<cr>", "Step Over"},
-    --     r = {"<cmd>DebugToggleRepl<cr>", "Toggle Repl"},
-    --     s = {"<cmd>DebugStart<cr>", "Start"}
-    -- },
-
-    g = {
-        name = "+Git",
-		a = {"<cmd>Git add %<cr>", "Add File"},
-		c = {"<cmd>Git commit %<cr>", "Commit File"},
-		C = {"<cmd>Git commit<cr>", "Commit staged"},
-		g = {"<cmd>G<cr>", "Fugitive"},
-		l = {"<cmd>Git log<cr>", "Log"},
-		n = {"<cmd>Neogit<cr>", "Neogit"},
-        j = {"<cmd>NextHunk<cr>", "Next Hunk"},
-        k = {"<cmd>PrevHunk<cr>", "Prev Hunk"},
-        p = {"<cmd>PreviewHunk<cr>", "Preview Hunk"},
-        P = {"<cmd>Git push<cr>", "Preview Hunk"},
-        r = {"<cmd>ResetHunk<cr>", "Reset Hunk"},
-        R = {"<cmd>ResetBuffer<cr>", "Reset Buffer"},
-        s = {"<cmd>StageHunk<cr>", "Stage Hunk"},
-        u = {"<cmd>UndoStageHunk<cr>", "Undo Stage Hunk"}
-    },
-
-    l = {
-        name = "+LSP",
-        a = {"<cmd>Lspsaga code_action<cr>", "Code Action"},
-        A = {"<cmd>Lspsaga range_code_action<cr>", "Selected Action"},
-        d = {"<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics"},
-        D = {"<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics"},
-        f = {"<cmd>LspFormatting<cr>", "Format"},
-        h = {'<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', "Find definition"},
-        i = {"<cmd>LspInfo<cr>", "Info"},
-        l = {"<cmd>Lspsaga lsp_finder<cr>", "LSP Finder"},
-        L = {"<cmd>Lspsaga show_line_diagnostics<cr>", "Line Diagnostics"},
-        p = {"<cmd>Lspsaga preview_definition<cr>", "Preview Definition"},
-        q = {"<cmd>Telescope quickfix<cr>", "Quickfix"},
-        r = {"<cmd>Lspsaga rename<cr>", "Rename"},
-        t = {"<cmd>LspTypeDefinition<cr>", "Type Definition"},
-        x = {"<cmd>cclose<cr>", "Close Quickfix"},
-        s = {"<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols"},
-        S = {"<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols"}
     },
 
     p = {
@@ -156,13 +108,70 @@ local mappings = {
         T = {"<cmd>Telescope treesitter<cr>", "Treesitter Symbols"},
     },
 
-    t = {
-        name = "+Terminal",
-        t = {"<cmd>lua require('lspsaga.floaterm').open_float_terminal()<cr>", "Toggle"}
-    },
-
     -- S = {name = "+Session", s = {"<cmd>SessionSave<cr>", "Save Session"}, l = {"<cmd>SessionLoad<cr>", "Load Session"}}
 }
+if O.lsp then
+    mappings["l"] = {
+        name = "+LSP",
+        a = {"<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action"},
+        A = {"<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action"},
+        d = {"<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics"},
+        D = {"<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics"},
+        f = {"<cmd>LspFormatting<cr>", "Format"},
+        h = {'<cmd>lua vim.lsp.buf.definition()<CR>', "Find definition"},
+        i = {"<cmd>LspInfo<cr>", "Info"},
+        j = {"<cmd>lua vim.lsp.diagnostic.goto_next({popup_opts = {border = O.lsp.popup_border}})<cr>", "Next Diagnostic"},
+        k = {"<cmd>lua vim.lsp.diagnostic.goto_prev({popup_opts = {border = O.lsp.popup_border}})<cr>", "Prev Diagnostic"},
+        q = {"<cmd>Telescope quickfix<cr>", "Quickfix"},
+        r = {"<cmd>lua vim.lsp.buf.rename()<cr>", "Rename"},
+        t = {"<cmd>LspTypeDefinition<cr>", "Type Definition"},
+        x = {"<cmd>cclose<cr>", "Close Quickfix"},
+        s = {"<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols"},
+        S = {"<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols"}
+    }
+end
+
+if O.git then
+    mappings["g"] = {
+        name = "+Git",
+		a = {"<cmd>Git add %<cr>", "Add File"},
+		c = {"<cmd>Git commit %<cr>", "Commit File"},
+		C = {"<cmd>Git commit<cr>", "Commit staged"},
+		g = {"<cmd>G<cr>", "Fugitive"},
+		l = {"<cmd>Git log<cr>", "Log"},
+		n = {"<cmd>Neogit<cr>", "Neogit"},
+        j = {"<cmd>NextHunk<cr>", "Next Hunk"},
+        k = {"<cmd>PrevHunk<cr>", "Prev Hunk"},
+        p = {"<cmd>PreviewHunk<cr>", "Preview Hunk"},
+        P = {"<cmd>Git push<cr>", "Preview Hunk"},
+        r = {"<cmd>ResetHunk<cr>", "Reset Hunk"},
+        R = {"<cmd>ResetBuffer<cr>", "Reset Buffer"},
+        s = {"<cmd>StageHunk<cr>", "Stage Hunk"},
+        u = {"<cmd>UndoStageHunk<cr>", "Undo Stage Hunk"}
+    }
+end
+
+if O.misc then
+    mappings["t"] = {"<cmd>lua require('FTerm').toggle()<cr>", "Terminal"}
+end
+
+if O.dap then
+    mappings["d"] = {
+        name = "+Debug",
+        b = {"<cmd>DebugToggleBreakpoint<cr>", "Toggle Breakpoint"},
+        c = {"<cmd>DebugContinue<cr>", "Continue"},
+        i = {"<cmd>DebugStepInto<cr>", "Step Into"},
+        o = {"<cmd>DebugStepOver<cr>", "Step Over"},
+        r = {"<cmd>DebugToggleRepl<cr>", "Toggle Repl"},
+        s = {"<cmd>DebugStart<cr>", "Start"}
+    }
+end
+
+if O.testing then
+    mappings["T"] = {
+        name = "+Tests",
+    }
+end
 
 local wk = require("which-key")
 wk.register(mappings, opts)
