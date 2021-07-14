@@ -32,6 +32,7 @@ return require('packer').startup({function(use)
     use {"nvim-telescope/telescope.nvim",
       config = function() require('base.telescope') end,
       cmd = "Telescope",
+      event = "InsertEnter",
       after = {
       "telescope-frecency.nvim",
       "telescope-fzf-native.nvim",
@@ -69,17 +70,18 @@ return require('packer').startup({function(use)
 
     if O.language_parsing then
         -- Treesitter
-        use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate", config = function() require("language_parsing.treesitter") end, event = "BufReadPost"}
+        use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate", config = function() require("language_parsing.treesitter") end}
         use {"nvim-treesitter/nvim-treesitter-refactor", after = "nvim-treesitter"}
         use {"nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter"}
-        use {"windwp/nvim-ts-autotag", opt = true, event = "InsertEnter", }
-        use {"windwp/nvim-autopairs", after ={ "telescope.nvim", "nvim-treesitter"}, config = function() require "language_parsing.autopairs" end}
-        use { "JoosepAlviste/nvim-ts-context-commentstring", after = "nvim-treesitter"}
+        use {"p00f/nvim-ts-rainbow", after = "nvim-treesitter"}
+        use {"windwp/nvim-ts-autotag", after = "nvim-treesitter"}
+        use {"windwp/nvim-autopairs", after = "nvim-treesitter", config = function() require "language_parsing.autopairs" end}
+        use {"JoosepAlviste/nvim-ts-context-commentstring", after = "nvim-treesitter"}
     end
 
     if O.lsp then
         use {"neovim/nvim-lspconfig", config = function() require('lsp') end, event = "BufReadPost", after = "nvim-lspinstall"}
-        use {"kabouzeid/nvim-lspinstall", opt = true, event = "BufReadPost"}
+        use {"kabouzeid/nvim-lspinstall", opt = true, event = "BufReadPre"}
         use { "hrsh7th/nvim-compe", event = "InsertEnter", config = function() require("lsp.compe").config() end, after = "nvim-lspconfig"}
         use { "jose-elias-alvarez/nvim-lsp-ts-utils", after = "nvim-lspconfig",
             ft = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" }
@@ -91,12 +93,18 @@ return require('packer').startup({function(use)
     if O.git then -- Git (helpers)
         use {'tpope/vim-fugitive', opt = true, cmd = "G"}
         use {'TimUntersberger/neogit', requires = {'sindrets/diffview.nvim'}, cmd = "Neogit"}
-        use {'lewis6991/gitsigns.nvim', disable = true, config = function() require"nv-gitsigns" end}-- fails on startup. TODO: activate when #205 is fixed
+        use {'lewis6991/gitsigns.nvim', config = function() require"git.gitsigns" end, event = "BufReadPost"}-- fails on startup. TODO: activate when #205 is fixed
     end
 
     if O.snippets then --miscellaneous stuff
         use 'hrsh7th/vim-vsnip'
         use {'rafamadriz/friendly-snippets', opt = true}
+    end
+
+    if O.dap then -- debug adapter protocol
+        use {"mfussenegger/nvim-dap", config = function () require("debug") end}
+        use {"rcarriga/nvim-dap-ui", after = "nvim-dap"}
+        use {"Pocco81/DAPInstall.nvim", after = "nvim-dap"}
     end
 
     if O.misc then
