@@ -38,19 +38,19 @@ return require('packer').startup({function(use)
       "telescope-fzf-writer.nvim",
       "telescope-project.nvim"
     }}
-    use {"oberblastmeister/rooter.nvim", opt = true, config = function() require('base.rooter') end, cond = function() return not O.lsp end}
+    use {"oberblastmeister/rooter.nvim", opt = true, config = function() require('base.rooter') end, disable = O.lsp}
 
     -- help me find my way  around
     use "folke/which-key.nvim"
 
     -- Color
     use {"christianchiarulli/nvcode-color-schemes.vim", opt = true}
-    use {'norcalli/nvim-colorizer.lua', config = function() require'colorizer'.setup() end, event = "BufEnter"}
+    use {'norcalli/nvim-colorizer.lua', config = function() require'colorizer'.setup() end, event = "BufReadPost"}
     use 'sheerun/vim-polyglot'
 
     -- Icons and visuals
     use "kyazdani42/nvim-web-devicons"
-    use {"lukas-reineke/indent-blankline.nvim", opt = true, event = "BufRead", }
+    use {"lukas-reineke/indent-blankline.nvim", opt = true, event = "BufReadPost", }
 
     -- Status Line and Bufferline
     use {"glepnir/galaxyline.nvim", config = function() require('base.galaxyline') end}
@@ -58,7 +58,7 @@ return require('packer').startup({function(use)
     use {"kyazdani42/nvim-tree.lua", opt = true, config = function() require("base.nvim-tree").config() end, cmd="NvimTreeToggle"}
 
     -- manipulation
-    use { "monaqa/dial.nvim", opt = true, config = function() require('base.dial').config() end, event = "BufRead", } -- increment/decrement basically everything
+    use { "monaqa/dial.nvim", opt = true, config = function() require('base.dial').config() end, event = "BufReadPost", } -- increment/decrement basically everything
     use { "terrortylor/nvim-comment", cmd = "CommentToggle", config = function() require("nvim_comment").setup() end, }
     use { "mbbill/undotree", opt = true, cmd = "UndotreeToggle" }
     use 'tpope/vim-surround'
@@ -69,32 +69,22 @@ return require('packer').startup({function(use)
 
     if O.language_parsing then
         -- Treesitter
-        use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate", config = function() require("language_parsing.treesitter") end, event = "BufWinEnter"}
+        use {"nvim-treesitter/nvim-treesitter", run = ":TSUpdate", config = function() require("language_parsing.treesitter") end, event = "BufReadPost"}
         use {"nvim-treesitter/nvim-treesitter-refactor", after = "nvim-treesitter"}
         use {"nvim-treesitter/nvim-treesitter-textobjects", after = "nvim-treesitter"}
         use {"windwp/nvim-ts-autotag", opt = true, event = "InsertEnter", }
-        use {"windwp/nvim-autopairs",
-            opt = true,
-            event = "InsertEnter",
-            after = "telescope.nvim",
-            config = function()
-              require "language_parsing.autopairs"
-            end,
-        }
-        use {
-            "JoosepAlviste/nvim-ts-context-commentstring",
-            event = "BufRead",
-        }
+        use {"windwp/nvim-autopairs", after ={ "telescope.nvim", "nvim-treesitter"}, config = function() require "language_parsing.autopairs" end}
+        use { "JoosepAlviste/nvim-ts-context-commentstring", after = "nvim-treesitter"}
     end
 
     if O.lsp then
-        use {"neovim/nvim-lspconfig", config = function() require('lsp') end}
-        use "kabouzeid/nvim-lspinstall"
-        use { "hrsh7th/nvim-compe", event = "InsertEnter", config = function() require("lsp.compe").config() end, }
-        use { "jose-elias-alvarez/nvim-lsp-ts-utils",
+        use {"neovim/nvim-lspconfig", config = function() require('lsp') end, event = "BufReadPost", after = "nvim-lspinstall"}
+        use {"kabouzeid/nvim-lspinstall", opt = true, event = "BufReadPost"}
+        use { "hrsh7th/nvim-compe", event = "InsertEnter", config = function() require("lsp.compe").config() end, after = "nvim-lspconfig"}
+        use { "jose-elias-alvarez/nvim-lsp-ts-utils", after = "nvim-lspconfig",
             ft = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" }
         }
-        use { "ahmedkhalf/lsp-rooter.nvim", config = function() require("lsp-rooter").setup() end }
+        use { "ahmedkhalf/lsp-rooter.nvim", config = function() require("lsp-rooter").setup() end, after = "nvim-lspconfig"}
         use { "folke/trouble.nvim", cmd = "TroubleToggle", }
     end
 
@@ -111,6 +101,7 @@ return require('packer').startup({function(use)
 
     if O.misc then
         use 'kevinhwang91/nvim-bqf'
+        use 'andymass/vim-matchup'
         use { "numtostr/FTerm.nvim", config = function() require("FTerm").setup() end }
     end
 end,
