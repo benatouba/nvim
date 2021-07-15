@@ -1,4 +1,9 @@
-require("which-key").setup {
+local isOk, which_key = pcall(require, "which-key")
+if not isOk then
+    return
+end
+
+which_key.setup {
     plugins = {
         marks = true, -- shows a list of your marks on " and `
         registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
@@ -182,5 +187,4 @@ if O.testing then
     }
 end
 
-local wk = require("which-key")
-wk.register(mappings, opts)
+which_key.register(mappings, opts)

@@ -3,16 +3,19 @@ local fn = vim.fn
 
 local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
 
+local packer_ok, _ = pcall(require, "packer")
 if fn.empty(fn.glob(install_path)) > 0 then
     fn.system({
         'git', 'clone', 'https://github.com/wbthomason/packer.nvim',
         install_path
     })
     execute 'packadd packer.nvim'
+    if not packer_ok then
+        return
+    end
     execute 'PackerSync'
 end
 
-local packer_ok, _ = pcall(require, "packer")
 if not packer_ok then
     print("Packer not okay")
     return
@@ -150,7 +153,7 @@ return require('packer').startup({
                 event = "BufReadPost",
                 after = "nvim-lspinstall"
             }
-            use {"kabouzeid/nvim-lspinstall", opt = true, event = "BufReadPre"}
+            use "kabouzeid/nvim-lspinstall"
             use {
                 "hrsh7th/nvim-compe",
                 event = "InsertEnter",
@@ -195,7 +198,7 @@ return require('packer').startup({
         if O.format then
             use {
                 "mhartington/formatter.nvim",
-                config = function() require('format') end
+                config = function() require('format.formatter').config() end
             }
         end
 
@@ -206,6 +209,10 @@ return require('packer').startup({
             }
             use {"rcarriga/nvim-dap-ui", after = "nvim-dap"}
             use {"Pocco81/DAPInstall.nvim", after = "nvim-dap"}
+        end
+
+        if O.project_management then
+            use {'kristijanhusak/orgmode.nvim', config = function() require('orgmode').setup{} end }
         end
 
         if O.misc then
