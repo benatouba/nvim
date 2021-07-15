@@ -12,6 +12,8 @@ O.lsp = false -- boolean, activates lsp packages
 O.language_parsing = false
 O.git = false
 O.snippets = false
+O.format = false
+O.dap = false -- debugging
 O.misc = false
 
 O.auto_complete = true
@@ -48,13 +50,12 @@ O.python.analysis.use_library_code_types = true
 -- lua
 -- TODO look into stylua
 O.lua.formatter = 'lua-format'
--- O.lua.formatter = 'lua-format'
 O.lua.autoformat = false
 
--- javascript
-O.tsserver.formatter = 'prettier'
-O.tsserver.linter = nil
-O.tsserver.autoformat = true
+-- javascript and typescript
+O.jsts.formatter = 'prettier'
+O.jsts.linter = nil
+O.jsts.autoformat = true
 
 -- json
 O.json.autoformat = true

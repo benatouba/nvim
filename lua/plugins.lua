@@ -101,6 +101,10 @@ return require('packer').startup({function(use)
         use {'rafamadriz/friendly-snippets', opt = true}
     end
 
+    if O.format then
+        use {"mhartington/formatter.nvim", config = function() require('format') end}
+    end
+
     if O.dap then -- debug adapter protocol
         use {"mfussenegger/nvim-dap", config = function () require("debug") end}
         use {"rcarriga/nvim-dap-ui", after = "nvim-dap"}

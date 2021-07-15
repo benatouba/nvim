@@ -74,9 +74,9 @@ local eslint = {
 
 local tsserver_args = {}
 
-if O.tsserver.formatter == 'prettier' then table.insert(tsserver_args, prettier) end
+if O.jsts.formatter == 'prettier' then table.insert(tsserver_args, prettier) end
 
-if O.tsserver.linter == 'eslint' then table.insert(tsserver_args, eslint) end
+if O.jsts.linter == 'eslint' then table.insert(tsserver_args, eslint) end
 
 -- local markdownlint = {
 --     -- TODO default to global lintrc

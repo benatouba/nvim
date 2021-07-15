@@ -3,6 +3,7 @@ O = {
     lsp = false,
     git = false,
     snippets = false,
+    format = false,
     dap = false,
     misc = false,
 
@@ -68,7 +69,7 @@ O = {
         autoformat = false,
         diagnostics = {virtual_text = true, signs = true, underline = true}
     },
-    tsserver = {
+    jsts = {
         -- @usage can be 'eslint'
         linter = '',
         -- @usage can be 'prettier'
@@ -77,6 +78,12 @@ O = {
         diagnostics = {virtual_text = true, signs = true, underline = true}
     },
     json = {
+        -- @usage can be 'prettier'
+        formatter = '',
+        autoformat = false,
+        diagnostics = {virtual_text = true, signs = true, underline = true}
+    },
+    rust = {
         -- @usage can be 'prettier'
         formatter = '',
         autoformat = false,
