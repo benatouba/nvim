@@ -1,7 +1,7 @@
 require('user-defaults')
 require('functions')
 require('keymappings')
-vim.cmd('luafile ~/.config/nvim/user-settings.lua')
+require('user-settings')
 require('settings')
 require('plugins')
 require('colorscheme')
@@ -10,7 +10,7 @@ require('autocommands')
 -- if O.language_parsing then
 --   require('language_parsing')
 -- end
--- 
+--
 -- if O.lsp then
 --   require('lsp')
 -- end
