@@ -24,8 +24,7 @@ funcs.define_augroups({
         {'BufWinEnter,BufRead,BufNewFile', '*.pro', 'setfiletype idlang'},
         {'BufWinEnter,BufRead,BufNewFile', '.bash*', 'setfiletype bash'},
         {'BufRead', '*_p3d*', 'setfiletype fortran'},
-        {"BufWritePost", "[init][plugins].lua", "lua reload_config()"},
-        -- {'BufRead', '*.sls*', 'setfiletype conf'},
+        {"BufWritePost", "[init|plugins].lua", "lua require('funcs').reload_config()"},
 	{'BufWritePre', '*', ':%s/\\s\\+$//e'},
         {'BufNewFile', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
         {'VimLeavePre', '*', 'set title set titleold='}

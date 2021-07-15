@@ -1,7 +1,21 @@
+local status_ok, _ = pcall(require, "formatter")
+if not status_ok then
+  print('formatter.nvim not okay')
+  return
+end
+
+
+vim.api.nvim_exec([[
+augroup FormatAutogroup
+  autocmd!
+  autocmd BufWritePost *.js,*.rs,*.py FormatWrite
+augroup END
+]], true)
+
 local settings = {}
 
 if O.jsts.formatter then
-settings.jsts = {
+settings["jsts"] = {
         -- prettier
        function()
           return {
@@ -14,7 +28,7 @@ settings.jsts = {
 end
 
 if O.rust.formatter then
-settings.rust = {
+settings["rust"] = {
       -- Rustfmt
       function()
         return {
@@ -26,20 +40,8 @@ settings.rust = {
     }
 end
 
-if O.lua.formatter then
-settings.lua = {
-        -- luafmt
-        function()
-          return {
-            exe = O.lua.formatter,
-            args = {"-i"},
-          }
-        end
-    }
-end
-
 if O.clang.formatter then
-  settings.cpp = {
+  settings["cpp"] = {
         -- clang-format
        function()
           return {
@@ -52,19 +54,26 @@ if O.clang.formatter then
     }
 end
 
-if O.python.formatter then
-  settings.python = {
+if O.python.formatter ~= '' then
+  settings["python"] = {
         -- black or yapf
             function ()
                 return {
                 exe = O.python.formatter,
-                args = {},
+                args = {"--stdin"},
                 stdin = true,
                     }
             end
         }
 end
 
-require('formatter').setup({
-  logging = true,
-  filetype = settings})
+local M = {}
+
+M.config = function ()
+  require('formatter.config').set_defaults({
+    logging = false,
+    filetype = settings})
+  print("Set up formatter")
+end
+
+return M

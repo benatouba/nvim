@@ -38,6 +38,11 @@ function exists(file)
    return ok, err
 end
 
+function funcs.reload_config()
+  vim.cmd "source ~/.config/nvim/init.lua"
+  vim.cmd ":PackerSync"
+end
+
 -- print stuff
 P = function(v)
     print(vim.inspect(v))
