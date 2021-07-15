@@ -69,11 +69,14 @@ local mappings = {
         -- i = {"<cmd>IndentBlanklineToggle<cr>", "toggle indent lines"},
         -- m = {"<cmd>MaximizerToggle<cr>", "maximize"},
         n = {"<cmd>set nonumber<cr>!", "line-numbers"},
+        N = {"<cmd>set norelativenumber!<cr>", "relative line nums"},
         s = {"<cmd>s/\\%V\\(.*\\)\\%V/'\\1'/<cr>", "surround"},
         r = {"<cmd>Root<cr>", "root working dir"},
-        R = {"<cmd>set norelativenumber!<cr>", "relative line nums"},
-		w = {"<cmd>call TrimWhitespace()<cr>", "trim Whitespaces"}
+		w = {"<cmd>call TrimWhitespace()<cr>", "trim Whitespaces"},
         -- t = {"<cmd>TSHighlightCapturesUnderCursor<cr>", "treesitter highlight"},
+        R = {':nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>', 'redraw'}
+
+
     },
 
     p = {

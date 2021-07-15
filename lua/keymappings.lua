@@ -60,9 +60,6 @@ map('x', 'J', ':move \'>+1<CR>gv-gv\'<ESC>')
 -- TAB completion
 map('i', '<C-TAB>', 'compe#complete()')
 
--- Redraw and fix everything
-map('n', '<C-l>', ':nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>', defaultOpts)
-
 vim.cmd([[
     cnoreabbrev W w
     cnoreabbrev W! w!
