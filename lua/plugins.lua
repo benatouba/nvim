@@ -11,6 +11,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
     })
     execute 'packadd packer.nvim'
     if not packer_ok then
+    print("Packer not okay")
         return
     end
     execute 'PackerSync'
@@ -32,22 +33,29 @@ return require('packer').startup({
         use "tjdevries/astronauta.nvim" -- better plugin config loading
 
         -- Telescope
-        use "nvim-telescope/telescope-project.nvim"
-        use "nvim-telescope/telescope-fzf-writer.nvim"
-        use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'}
-        use {
-            "nvim-telescope/telescope-frecency.nvim",
-            requires = "tami5/sql.nvim"
+        use {"nvim-telescope/telescope-project.nvim",
+            after = "telescope.nvim",
+            cmd = "Telescope project",
+            config = function() require('telescope').load_extension('project') end,
+        }
+        use {"nvim-telescope/telescope-fzf-writer.nvim",
+            after = "telescope.nvim",
+        }
+        use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make',
+            after = "telescope.nvim",
+            config = function() require('telescope').load_extension('fzf') end,
+        }
+        use { "nvim-telescope/telescope-frecency.nvim",
+            requires = "tami5/sql.nvim",
+            after = "telescope.nvim",
+            cmd = "Telescope frecency",
+            -- config = function() require('telescope').load_extension('frecency') end,
         }
         use {
             "nvim-telescope/telescope.nvim",
-            config = function() require('base.telescope') end,
+            config = function() require('base.telescope').config() end,
             cmd = "Telescope",
             event = "InsertEnter",
-            after = {
-                "telescope-frecency.nvim", "telescope-fzf-native.nvim",
-                "telescope-fzf-writer.nvim", "telescope-project.nvim"
-            }
         }
         use {
             "oberblastmeister/rooter.nvim",

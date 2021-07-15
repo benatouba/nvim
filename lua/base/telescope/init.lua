@@ -1,7 +1,15 @@
+local M = {}
+
+M.config = function()
+local telescope_ok, telescope = pcall(require, 'telescope')
+if not telescope_ok then
+    return
+end
+
 local actions = require('telescope.actions')
 local sorters = require('telescope.sorters')
 local previewers = require'telescope.previewers'
-require('telescope').setup {
+telescope.setup {
     defaults = {
         find_command = {'grep', '--line-number', '--column', '--ignore-case', '--color'},
         -- prompt_prefix = " ",
@@ -94,10 +102,7 @@ require('telescope').setup {
 		}
 	}
 }
--- require('telescope').load_extension("fzy_native")
-require('telescope').load_extension("fzf_writer")
--- require('telescope').load_extension("arecibo")
-require('telescope').load_extension("fzf")
-require('telescope').load_extension('project')
-require('telescope').load_extension("frecency")
--- require('telescope').load_extension("cheat")
+
+end
+
+return M
