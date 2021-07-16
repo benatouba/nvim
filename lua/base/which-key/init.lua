@@ -148,14 +148,14 @@ if O.git then
 		g = {"<cmd>G<cr>", "Fugitive"},
 		l = {"<cmd>Git log<cr>", "Log"},
 		n = {"<cmd>Neogit<cr>", "Neogit"},
-        j = {"<cmd>NextHunk<cr>", "Next Hunk"},
-        k = {"<cmd>PrevHunk<cr>", "Prev Hunk"},
-        p = {"<cmd>PreviewHunk<cr>", "Preview Hunk"},
-        P = {"<cmd>Git push<cr>", "Preview Hunk"},
-        r = {"<cmd>ResetHunk<cr>", "Reset Hunk"},
-        R = {"<cmd>ResetBuffer<cr>", "Reset Buffer"},
-        s = {"<cmd>StageHunk<cr>", "Stage Hunk"},
-        u = {"<cmd>UndoStageHunk<cr>", "Undo Stage Hunk"}
+        j = {"<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk"},
+        k = {"<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk"},
+        p = {"<cmd>lua require'gitsigns'.preview_hunk()<cr>", "Preview Hunk"},
+        P = {"<cmd>Git push<cr>", "Push"},
+        r = {"<cmd>lua require'gitsigns'.reset_hunk()<CR>',<cr>", "Reset Hunk"},
+        R = {"<cmd>lua require'gitsigns'.reset_buffer()<cr>", "Reset Buffer"},
+        s = {"<cmd>lua require'gitsigns'.stage_hunk()<cr>", "Stage Hunk"},
+        u = {"<cmd>lua require'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk"}
     }
 end
 
