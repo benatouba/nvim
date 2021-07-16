@@ -6,14 +6,14 @@ filled in as strings with either
 a global executable or a path to
 an executable
 ]] -- general
-O.lsp = false -- boolean, activates lsp packages
-O.language_parsing = false
-O.git = false
-O.snippets = false
-O.format = false
-O.dap = false -- debugging
-O.project_management = false
-O.misc = false
+O.lsp = true -- boolean, activates lsp packages
+O.language_parsing = true
+O.git = true
+O.snippets = true
+O.format = true
+O.dap = true -- debugging
+O.project_management = true
+O.misc = true
 
 O.auto_complete = true
 O.colorscheme = 'lunar'
@@ -32,15 +32,17 @@ O.clang.diagnostics.virtual_text = false
 O.clang.diagnostics.signs = false
 O.clang.diagnostics.underline = false
 
+-- lsp
+O.diagnostics.virtual_text.active = true
+O.diagnostics.signs = true
+O.diagnostics.underline = true
+
 -- python
 vim.cmd("let g:python3_host_prog = '/home/ben/.pyenv/shims/python3'")
 O.python.formatter = 'yapf'
 O.python.linter = 'flake8'
 O.python.isort = true
 O.python.autoformat = true
-O.python.diagnostics.virtual_text = true
-O.python.diagnostics.signs = true
-O.python.diagnostics.underline = true
 O.python.analysis.type_checking = "off"
 O.python.analysis.auto_search_paths = true
 O.python.analysis.use_library_code_types = true
