@@ -156,7 +156,9 @@ return require('packer').startup({
             use {
                 "neovim/nvim-lspconfig",
                 config = function() require('lsp') end,
-                event = "BufReadPost",
+                event = {"BufReadPost", "InsertEnter"},
+                fn = {"edit", "e"},
+                cmd = {"LspStart", "LspInfo", "TSUpdate"},
                 after = "nvim-lspinstall"
             }
             use "kabouzeid/nvim-lspinstall"

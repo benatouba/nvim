@@ -11,7 +11,7 @@ local config = {
     },
     cmd = {"jedi-language-server"},
     install_script = [[
-        ! pip3 install jedi-language-server || true
+        ! pip3 install --upgrade jedi-language-server || true
     ]],
     uninstall_script = [[
         ! pip3 uninstall jedi-language-server || true
