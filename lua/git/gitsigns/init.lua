@@ -1,4 +1,10 @@
-require('gitsigns').setup {
+local isOk, gitsigns = pcall(require, 'gitsigns')
+if not isOk then
+  print('Gitsigns not okay')
+  return
+end
+
+gitsigns.setup {
   signs = {
     -- TODO add hl to colorscheme
     add          = {hl = 'GitSignsAdd'   , text = '▎', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
