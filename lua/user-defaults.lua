@@ -4,6 +4,7 @@ O = {
     git = false,
     snippets = false,
     format = false,
+    test = false,
     dap = false,
     misc = false,
 

@@ -6,14 +6,15 @@ filled in as strings with either
 a global executable or a path to
 an executable
 ]] -- general
-O.lsp = true -- boolean, activates lsp packages
-O.language_parsing = true
-O.git = true
-O.snippets = true
-O.format = true
-O.dap = true -- debugging
-O.project_management = true
-O.misc = true
+O.lsp = false -- boolean, activates lsp packages
+O.language_parsing = false
+O.git = false
+O.snippets = false
+O.format = false
+O.test = false
+O.dap = false -- debugging
+O.project_management = false
+O.misc = false
 
 O.auto_complete = true
 O.colorscheme = 'lunar'

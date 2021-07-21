@@ -210,6 +210,10 @@ return require('packer').startup({
             }
         end
 
+        if O.test then
+            use { "rcarriga/vim-ultest", requires = {"vim-test/vim-test"}, run = ":UpdateRemotePlugins" }
+        end
+
         if O.dap then -- debug adapter protocol
             use {
                 "mfussenegger/nvim-dap",
