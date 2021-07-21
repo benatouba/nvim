@@ -1,4 +1,7 @@
-local neogit = require("neogit")
+local isOk, neogit = pcall(require, "neogit")
+if not isOk then
+    print('Neogit not okay')
+end
 
 neogit.setup {
     disable_signs = false,

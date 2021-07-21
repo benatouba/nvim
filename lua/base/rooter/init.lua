@@ -1,7 +1,11 @@
 -- these are all of the default values
-local setup = function() 
+local setup = function()
+local isOk, rooter = pcall(require, 'rooter')
+if not isOk then
+    print('Rooter not okay')
+end
 
-require'rooter'.setup {
+rooter.setup {
     manual = true, -- wether to setup autocommand to root every time a file is opened
     echo = true, -- echo every time rooter is triggered
     patterns = { -- the patterns to find

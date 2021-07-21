@@ -3,6 +3,7 @@
 -- end
 local status_ok, gl = pcall(require, "galaxyline")
 if not status_ok then
+  print("Galakyline not okay")
   return
 end
 

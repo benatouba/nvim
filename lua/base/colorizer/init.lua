@@ -1,3 +1,9 @@
+local isOk, colorizer = pcall(require, 'colorizer')
+if not isOk then
+  print('Colorizer not okay')
+  return
+end
+
 require('colorizer').setup(
   {'*';},
   {
