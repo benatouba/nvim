@@ -39,7 +39,6 @@ O.diagnostics.signs = true
 O.diagnostics.underline = true
 
 -- python
-vim.cmd("let g:python3_host_prog = '/home/ben/.pyenv/shims/python3'")
 O.python.formatter = 'yapf'
 O.python.linter = 'flake8'
 O.python.isort = true
