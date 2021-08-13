@@ -11,7 +11,7 @@ if fn.empty(fn.glob(install_path)) > 0 then
     })
     execute 'packadd packer.nvim'
     if not packer_ok then
-    print("Packer not okay")
+        print("Packer not okay")
         return
     end
     execute 'PackerSync'
@@ -33,27 +33,36 @@ return require('packer').startup({
         use "tjdevries/astronauta.nvim" -- better plugin config loading
 
         -- Telescope
-        use {"nvim-telescope/telescope-project.nvim",
+        use {
+            "nvim-telescope/telescope-project.nvim",
             after = "telescope.nvim",
-            config = function() require('telescope').load_extension('project') end,
+            config = function()
+                require('telescope').load_extension('project')
+            end
         }
-        use {"nvim-telescope/telescope-fzf-writer.nvim",
+        use {
+            "nvim-telescope/telescope-fzf-writer.nvim",
+            after = "telescope.nvim"
+        }
+        use {
+            'nvim-telescope/telescope-fzf-native.nvim',
+            run = 'make',
             after = "telescope.nvim",
+            config = function()
+                require('telescope').load_extension('fzf')
+            end
         }
-        use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make',
-            after = "telescope.nvim",
-            config = function() require('telescope').load_extension('fzf') end,
-        }
-        use { "nvim-telescope/telescope-frecency.nvim",
+        use {
+            "nvim-telescope/telescope-frecency.nvim",
             requires = "tami5/sql.nvim",
-            after = "telescope.nvim",
+            after = "telescope.nvim"
             -- config = function() require('telescope').load_extension('frecency') end,
         }
         use {
             "nvim-telescope/telescope.nvim",
             config = function() require('base.telescope').config() end,
             cmd = "Telescope",
-            event = "InsertEnter",
+            event = "InsertEnter"
         }
         use {
             "oberblastmeister/rooter.nvim",
@@ -111,14 +120,8 @@ return require('packer').startup({
         use 'tpope/vim-surround'
 
         -- language specific
-        use {
-            'saltstack/salt-vim',
-            ft = {'saltfile', 'salt', 'sls', 'jinja', 'jinja2'}
-        }
-        use {
-            'Glench/Vim-Jinja2-Syntax',
-            ft = {'saltfile', 'salt', 'sls', 'jinja', 'jinja2'}
-        }
+        use 'saltstack/salt-vim'
+        use 'Glench/Vim-Jinja2-Syntax'
 
         if O.language_parsing then
             -- Treesitter
@@ -194,7 +197,8 @@ return require('packer').startup({
             use {
                 'lewis6991/gitsigns.nvim',
                 config = function() require "git.gitsigns" end,
-                event = "BufReadPost"
+                event = "BufReadPost",
+                disable = true
             } -- fails on startup. TODO: activate when #205 is fixed
         end
 
@@ -206,12 +210,18 @@ return require('packer').startup({
         if O.format then
             use {
                 "mhartington/formatter.nvim",
-                config = function() require('format.formatter').config() end
+                config = function()
+                    require('format.formatter').config()
+                end
             }
         end
 
         if O.test then
-            use { "rcarriga/vim-ultest", requires = {"vim-test/vim-test"}, run = ":UpdateRemotePlugins" }
+            use {
+                "rcarriga/vim-ultest",
+                requires = {"vim-test/vim-test"},
+                run = ":UpdateRemotePlugins"
+            }
         end
 
         if O.dap then -- debug adapter protocol
@@ -224,7 +234,11 @@ return require('packer').startup({
         end
 
         if O.project_management then
-            use {'kristijanhusak/orgmode.nvim', config = function() require('orgmode').setup{} end }
+            use {
+                'kristijanhusak/orgmode.nvim',
+                keys = "<leader>o",
+                config = function() require('org').config() end
+            }
         end
 
         if O.misc then
