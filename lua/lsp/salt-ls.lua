@@ -1,30 +1,33 @@
-local folder = vim.fn.stdpath('data') .. "/lspinstall/salt/src/salt-lsp"
-local python_path = folder .. "/.venv/bin/python3"
-local lsp_path = folder .. "/salt_lsp/__main__.py"
 local util = require "lspconfig/util"
 
 local configs = require "lspconfig/configs"
 configs["salt"] = {
     default_config = {
-            cmd = {python_path .. " " .. lsp_path},
-            -- cmd = {python_path .. " -m salt_lsp --tcp"},
-            -- on_attach = common_on_attach,
-            filetypes = {"sls", "salt", "saltfile"},
-            root_dir = util.root_pattern(".git", "salt", vim.fn.getcwd())
-        },
+        cmd = { "python3", "-m", "salt_lsp" },
+        on_attach = common_on_attach,
+        filetypes = {"sls"},
+        root_dir = util.root_pattern("top.sls", ".git", vim.fn.getcwd())
+    },
     docs = {
-        package_json = "https://raw.githubusercontent.com/redhat-developer/vscode-yaml/master/package.json",
+        package_json = "https://github.com/dcermak/salt-lsp/tree/main",
         description = [[
-            https://github.com/redhat-developer/yaml-language-server
-            `yaml-language-server` can be installed via `npm`:
+            `salt-lsp` can be installed via `poetry` and `pip`:
             ```sh
-            npm install -g yaml-language-server
+            poetry install
+            poetry run dump_state_name_completions
+            poetry build
+
+            pip install --user --force-reinstall dist/salt_lsp-0.0.1*whl
             ```
         ]],
         default_config = {
-            root_dir = [[root_pattern(".git", "salt", vim.fn.getcwd())]],
-        },
-    },
+            root_dir = [[root_pattern("top.sls", ".git", vim.fn.getcwd())]]
+        }
+    }
 }
 
-require'lspconfig'.salt.setup{}
+
+require'lspconfig'.salt.setup {
+    -- cmd = {"/home/ben/.local/src/salt-lsp/.venv/bin/python3", "-m", "salt_lsp"},
+    -- on_attach = common_on_attach,
+}

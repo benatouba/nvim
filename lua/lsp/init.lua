@@ -14,7 +14,7 @@ require('lsp.lua-ls')
 -- require('lsp.python-ls')
 require('lsp.python-jedi-ls')
 -- TODO: fix setup
--- require('lsp.salt-ls')
+require('lsp.salt-ls')
 require('lsp.vim-ls')
 require('lsp.vue-ls')
 require('lsp.yaml-ls')
