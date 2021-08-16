@@ -26,6 +26,8 @@ M.config = function()
   g.nvim_tree_tab_open = 1 -- 0 by default, will open the tree when entering a new tab and the tree was previously open
   g.nvim_tree_width_allow_resize  = 1 -- 0 by default, will not resize the tree when opening a file
   g.nvim_tree_lsp_diagnostics = 1 -- 0 by default, will show lsp diagnostics in the signcolumn. See :help nvim_tree_lsp_diagnostics
+  g.nvim_tree_update_cwd = 1
+  g.nvim_tree_respect_buf_cwd = 1
 
     g.nvim_tree_show_icons = {
     git = 1,
