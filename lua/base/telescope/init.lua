@@ -74,33 +74,33 @@ telescope.setup {
         project = {
             display_type = "full"
         },
-		fzy_native = {
-		  override_generic_sorter = true,
-		  override_file_sorter = true,
-		},
-		fzf_writer = {
-		  use_highlighter = false,
-		  minimum_grep_characters = 6,
-		},
+        fzy_native = {
+            override_generic_sorter = true,
+            override_file_sorter = true,
+        },
+        fzf_writer = {
+            use_highlighter = false,
+            minimum_grep_characters = 6,
+        },
         frecency = {
-			show_scores = true,
-			show_unindexed = false,
-			ignore_patterns = {"*.git/*", "*/tmp/*", "*.svn/*"},
-			workspaces = {
-				["conf"] = vim.fn.environ()["HOME"] .. "/.config/nvim/",
-				["nvim"] = vim.fn.environ()["HOME"] .. "/.config/nvim",
-				["palm_mpich"] = "/sim/palm/mpich",
-				["palm_intel"] = "/sim/palm/intel",
-				["salt"] = "/srv",
-			},
-		},
-		fzf = {
-		  override_generic_sorter = false, -- override the generic sorter
-		  override_file_sorter = true,     -- override the file sorter
-		  case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-										   -- the default case_mode is "smart_case"
-		}
-	}
+            show_scores = true,
+            show_unindexed = false,
+            ignore_patterns = {"*.git/*", "*/tmp/*", "*.svn/*"},
+            workspaces = {
+                ["conf"] = vim.fn.environ()["HOME"] .. "/.config/nvim/",
+                ["nvim"] = vim.fn.environ()["HOME"] .. "/.config/nvim",
+                ["palm_mpich"] = "/sim/palm/mpich",
+                ["palm_intel"] = "/sim/palm/intel",
+                ["salt"] = "/srv",
+        },
+    },
+    fzf = {
+        override_generic_sorter = false, -- override the generic sorter
+        override_file_sorter = true,     -- override the file sorter
+        case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                        -- the default case_mode is "smart_case"
+        }
+    }
 }
 
 end
