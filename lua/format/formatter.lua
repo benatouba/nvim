@@ -73,7 +73,6 @@ M.config = function ()
   require('formatter.config').set_defaults({
     logging = false,
     filetype = settings})
-  print("Set up formatter")
 end
 
 return M
