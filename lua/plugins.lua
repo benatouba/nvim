@@ -64,11 +64,16 @@ return require('packer').startup({
             cmd = "Telescope",
             event = "InsertEnter"
         }
+        -- use {
+        --     "oberblastmeister/rooter.nvim",
+        --     opt = true,
+        --     config = function() require('base.rooter') end,
+        --     disable = O.lsp
+        -- }
         use {
-            "oberblastmeister/rooter.nvim",
-            opt = true,
-            config = function() require('base.rooter') end,
-            disable = O.lsp
+            "ahmedkhalf/project.nvim",
+            config = function() require("base.project").setup() end,
+            -- after = "nvim-lspconfig"
         }
 
         -- help me find my way  around
@@ -99,9 +104,9 @@ return require('packer').startup({
         use "romgrk/barbar.nvim"
         use {
             "kyazdani42/nvim-tree.lua",
-            opt = true,
+            -- opt = true,
             config = function() require("base.nvim-tree").config() end,
-            cmd = "NvimTreeToggle"
+            -- cmd = "NvimTreeToggle"
         }
 
         -- manipulation
@@ -178,11 +183,6 @@ return require('packer').startup({
                     "javascript", "javascriptreact", "javascript.jsx",
                     "typescript", "typescriptreact", "typescript.tsx"
                 }
-            }
-            use {
-                "ahmedkhalf/lsp-rooter.nvim",
-                config = function() require("lsp-rooter").setup() end,
-                after = "nvim-lspconfig"
             }
             use {"folke/trouble.nvim", cmd = "TroubleToggle"}
         end
