@@ -3,7 +3,9 @@ local util = require "lspconfig/util"
 local configs = require "lspconfig/configs"
 configs["salt"] = {
     default_config = {
-        cmd = { "python3", "-m", "salt_lsp" },
+        cmd = {
+            "/home/ben/.local/src/salt-lsp/.venv/bin/python3", "-m", "salt_lsp"
+        },
         on_attach = common_on_attach,
         filetypes = {"sls"},
         root_dir = util.root_pattern("top.sls", ".git", vim.fn.getcwd())

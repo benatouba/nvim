@@ -106,7 +106,7 @@ local mappings = {
         m = {"<cmd>Telescope marks<cr>", "Marks"},
         M = {"<cmd>Telescope man_pages<cr>", "Man Pages"},
         o = {"<cmd>Telescope oldfiles<cr>", "Open Recent File"},
-        p = {"<cmd>Telescope project<cr>", "Projects"},
+        p = {"<cmd>Telescope projects<cr>", "Projects"},
         q = {"<cmd>Telescope quickfix<cr>", "Quickfix List"},
         r = {"<cmd>Telescope frecency<cr>", "Frecency"},
         R = {"<cmd>Telescope registers<cr>", "Registers"},
@@ -125,7 +125,6 @@ if O.lsp then
         A = {"<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action"},
         d = {"<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics"},
         D = {"<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics"},
-        f = {"<cmd>LspFormatting<cr>", "Format"},
         h = {'<cmd>lua vim.lsp.buf.definition()<CR>', "Find definition"},
         i = {"<cmd>LspInfo<cr>", "Info"},
         j = {"<cmd>lua vim.lsp.diagnostic.goto_next({popup_opts = {border = O.lsp.popup_border}})<cr>", "Next Diagnostic"},
@@ -161,6 +160,13 @@ end
 
 if O.misc then
     mappings["t"] = {"<cmd>lua require('FTerm').toggle()<cr>", "Terminal"}
+    mappings["n"] = {
+        name = "+Generate Annotations",
+        n = {"<cmd>lua require('neogen').generate()<CR>", "Auto"},
+        c = {"<cmd>lua require('neogen').generate({ type = 'class'})<CR>", "Class"},
+        f = {"<cmd>lua require('neogen').generate({ type = 'func'})<CR>", "Function"},
+        t = {"<cmd>lua require('neogen').generate({ type = 'type'})<CR>", "Type"},
+    }
 end
 
 if O.dap then
@@ -187,4 +193,15 @@ if O.testing then
     }
 end
 
+if O.format then
+    mappings["f"] = {"<cmd>Format<cr>", "Format"}
+end
+
+if O.project_management then
+    mappings["o"] = {
+        name = "+Organisation",
+        a = { "<cmd>lua require('orgmode').action('agenda.prompt')<CR>", "Agenda"},
+        c = { "<cmd>lua require('orgmode').action('capture.prompt')<CR>", "Capture"},
+        }
+end
 which_key.register(mappings, opts)

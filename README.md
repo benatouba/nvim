@@ -9,7 +9,7 @@ config is based on LunarVim but extended, modified and refactored
 
 # What is Neo(vim)
 
-Neovim hyperextensible Vim-based text editor. It has lua built-in functionality and 30% less source-code than Vim. This enables features on the command line that definitely improve your workflow on the command line and save you a ton of time. No other editor can compare. No, Emacs can't compete.
+Neovim hyperextensible Vim-based text editor. It has lua built-in functionality and 30% less source-code than Vim. This enables features on the command line that definitely improve your workflow on the command line and save you a ton of time. No other editor can compare.
 
 # Why should I use it?
 1. Vim is a good, fast text editor.
@@ -38,7 +38,7 @@ check [lua/plugins.lua](lua/plugins.lua) for the full list
 - Language Servers (diagnostics, linting, formatting)
     - [language server protocol](https://microsoft.github.io/language-server-protocol/) support ([nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
     - Server install helper ([nvim-lspinstall](https://github.com/kabouzeid/nvim-lspinstall), use ":LspInstall")
-    - Auto Completion engine ([nvim-compe](https://github.com/hrsh7th/nvim-compe))
+    - Auto Completion engine ([nvim-cmp](https://github.com/hrsh7th/nvim-cmp))
     - TO ACTIVATE: enable lsp in [user-settings](user-settings.lua)
 - git helper
     - function wrapper ([Neogit](https://github.com/TimUntersberger/neogit) in lua, [vim-fugitive](https://github.com/tpope/vim-fugitive) in vimL)

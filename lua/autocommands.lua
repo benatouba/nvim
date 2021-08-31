@@ -1,21 +1,21 @@
-local funcs = require('functions')
-
-local auto_formatters = {            }
-
-local python_autoformat = {'BufWritePre', '*.py', 'lua vim.lsp.buf.formatting_sync(nil, 1000)'}
-if O.python.autoformat then table.insert(auto_formatters, python_autoformat) end
+local formatters = {}
 
 local javascript_autoformat = {'BufWritePre', '*.js', 'lua vim.lsp.buf.formatting_sync(nil, 1000)'}
+if O.jsts.format.auto then table.insert(formatters, javascript_autoformat) end
 
-local lua_format = {'BufWritePre', '*.lua', 'lua vim.lsp.buf.formatting_sync(nil, 1000)'}
-if O.lua.autoformat then table.insert(auto_formatters, lua_format) end
+local python_autocommands = {'BufWritePre', '*.py', 'Format'}
+if O.python.format.auto then table.insert(formatters, python_autocommands) end
+
+local lua_format = {'BufWritePre', '*.lua', 'Format'}
+if O.lua.format.auto then table.insert(formatters, lua_format) end
 
 local json_format = {'BufWritePre', '*.json', 'lua vim.lsp.buf.formatting_sync(nil, 1000)'}
-if O.json.autoformat then table.insert(auto_formatters, json_format) end
+if O.json.format.auto then table.insert(formatters, json_format) end
 
 local ruby_format = {'BufWritePre', '*.rb', 'lua vim.lsp.buf.formatting_sync(nil,1000)'}
-if O.ruby.autoformat then table.insert(auto_formatters, ruby_format) end
-funcs.define_augroups({
+if O.ruby.format.auto then table.insert(formatters, ruby_format) end
+
+AddAutocommands({
     _general_settings = {
         {'TextYankPost', '*', 'lua require(\'vim.highlight\').on_yank({higroup = \'Search\', timeout = 200})'},
         {'BufWinEnter', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
@@ -24,8 +24,9 @@ funcs.define_augroups({
         {'BufWinEnter,BufRead,BufNewFile', '*.pro', 'setfiletype idlang'},
         {'BufWinEnter,BufRead,BufNewFile', '.bash*', 'setfiletype bash'},
         {'BufRead', '*_p3d*', 'setfiletype fortran'},
-        {"BufWritePost", "[init|plugins].lua", "lua require('funcs').reload_config()"},
-	{'BufWritePre', '*', ':%s/\\s\\+$//e'},
+        {"BufWritePost", "plugins.lua", "lua R('plugins')"},
+        {"BufWritePost", "~/.config/nvim/init.lua", "lua require('functions').reload_config()"},
+        {'BufWritePre', '*', ':%s/\\s\\+$//e'},
         {'BufNewFile', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
         {'VimLeavePre', '*', 'set title set titleold='}
     },
@@ -38,5 +39,5 @@ funcs.define_augroups({
         {'FileType', 'qf', 'nnoremap <silent> <buffer> q :q<CR>'},
         {'FileType', 'help', 'nnoremap <silent> <buffer> q :q<CR>'},
     },
-    _auto_formatters = auto_formatters
+    _auto_formatters = formatters,
 })

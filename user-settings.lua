@@ -6,15 +6,15 @@ filled in as strings with either
 a global executable or a path to
 an executable
 ]] -- general
-O.lsp = false -- boolean, activates lsp packages
-O.language_parsing = false
-O.git = false
-O.snippets = false
-O.format = false
-O.test = false
-O.dap = false -- debugging
-O.project_management = false
-O.misc = false
+O.lsp = true -- boolean, activates lsp packages
+O.language_parsing = true
+O.git = true
+O.snippets = true
+O.format = true
+O.test = true
+O.dap = true -- debugging
+O.project_management = true
+O.misc = true
 
 O.auto_complete = true
 O.colorscheme = 'lunar'
@@ -39,30 +39,50 @@ O.diagnostics.signs = true
 O.diagnostics.underline = true
 
 -- python
-O.python.formatter = 'yapf'
+vim.cmd("let g:python3_host_prog = '/home/ben/.pyenv/shims/python3'")
+O.python.format.auto = false
+O.python.format.exe = 'black'
+O.python.format.args = {'-l 120'}
+O.python.format.cwd = vim.fn.getcwd()
+O.python.format.stdin = false
+O.python.format.isort = true
 O.python.linter = 'flake8'
-O.python.isort = true
-O.python.autoformat = true
 O.python.analysis.type_checking = "off"
 O.python.analysis.auto_search_paths = true
 O.python.analysis.use_library_code_types = true
 
 -- lua
 -- TODO look into stylua
+O.lua.format.auto = false
 O.lua.format.exe = 'lua-format'
 O.lua.format.args = {'-i'}
 O.lua.format.stdin = false
 O.lua.format.cwd = false
-O.lua.format.autoformat = false
 
 -- javascript and typescript
-O.jsts.formatter = 'prettier'
+O.jsts.format.auto = false
+O.jsts.format.exe = 'prettier'
+O.jsts.format.args = {}
+O.jsts.format.stdin = false
+O.jsts.format.cwd = false
 O.jsts.linter = nil
-O.jsts.autoformat = true
 
 -- json
-O.json.autoformat = true
+O.json.format.auto = false
+O.json.format.exe = 'prettier'
+O.json.format.args = {}
+O.json.format.stdin = false
+O.json.format.cwd = false
 
 -- ruby
-O.ruby.autoformat = true
+O.ruby.format.auto = false
+O.ruby.format.exe = ''
+O.ruby.format.args = {}
+O.ruby.format.stdin = false
+O.ruby.format.cwd = false
+
 -- create custom autocommand field (This would be easy with lua)
+
+-- org-mode
+O.org.agenda_files = {'~/Documents/org/*'}
+O.org.default_notes_file = '~/Documents/org/refile.org'

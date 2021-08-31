@@ -33,13 +33,13 @@ return require('packer').startup({
         use "tjdevries/astronauta.nvim" -- better plugin config loading
 
         -- Telescope
-        use {
-            "nvim-telescope/telescope-project.nvim",
-            after = "telescope.nvim",
-            config = function()
-                require('telescope').load_extension('project')
-            end
-        }
+        -- use {
+        --     "nvim-telescope/telescope-project.nvim",
+        --     after = "telescope.nvim",
+        --     config = function()
+        --         require('telescope').load_extension('project')
+        --     end
+        -- }
         use {
             "nvim-telescope/telescope-fzf-writer.nvim",
             after = "telescope.nvim"
@@ -73,7 +73,7 @@ return require('packer').startup({
         use {
             "ahmedkhalf/project.nvim",
             config = function() require("base.project").setup() end,
-            -- after = "nvim-lspconfig"
+            after = "telescope.nvim"
         }
 
         -- help me find my way  around
@@ -171,10 +171,22 @@ return require('packer').startup({
             }
             use "kabouzeid/nvim-lspinstall"
             use {
-                "hrsh7th/nvim-compe",
-                event = "InsertEnter",
-                config = function() require("lsp.compe").config() end,
-                after = "nvim-lspconfig"
+                "hrsh7th/nvim-cmp",
+                -- event = "InsertEnter",
+                requires = {
+                    "hrsh7th/cmp-buffer",
+                    "hrsh7th/cmp-nvim-lsp",
+                    "hrsh7th/cmp-path",
+                    "hrsh7th/cmp-nvim-lua",
+                    "hrsh7th/cmp-calc",
+                    "hrsh7th/cmp-emoji",
+                    "kdheepak/cmp-latex-symbols",
+                    "f3fora/cmp-spell",
+                    "quangnguyen30192/cmp-nvim-tags",
+                    "octaltree/cmp-look",
+                },
+                config = function() require("lsp.cmp").config() end,
+                -- after = "nvim-lspconfig"
             }
             use {
                 "jose-elias-alvarez/nvim-lsp-ts-utils",
@@ -247,6 +259,13 @@ return require('packer').startup({
             use {
                 "numtostr/FTerm.nvim",
                 config = function() require("FTerm").setup() end
+            }
+            use {
+                "danymat/neogen",
+                config = function()
+                    require("misc.neogen")
+                end,
+                requires = "nvim-treesitter/nvim-treesitter"
             }
         end
     end,

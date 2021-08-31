@@ -18,22 +18,22 @@ O = {
     shell = 'bash',
     mapleader = " ",
     galaxyline = {
-      colors = {
-        alt_bg = "#2E2E2E",
-        grey = "#858585",
-        blue = "#569CD6",
-        green = "#608B4E",
-        yellow = "#DCDCAA",
-        orange = "#FF8800",
-        purple = "#C586C0",
-        magenta = "#D16D9E",
-        cyan = "#4EC9B0",
-        red = "#D16969",
-        error_red = "#F44747",
-        warning_orange = "#FF8800",
-        info_yellow = "#FFCC66",
-        hint_blue = "#9CDCFE",
-      },
+        colors = {
+            alt_bg = "#2E2E2E",
+            grey = "#858585",
+            blue = "#569CD6",
+            green = "#608B4E",
+            yellow = "#DCDCAA",
+            orange = "#FF8800",
+            purple = "#C586C0",
+            magenta = "#D16D9E",
+            cyan = "#4EC9B0",
+            red = "#D16969",
+            error_red = "#F44747",
+            warning_orange = "#FF8800",
+            info_yellow = "#FFCC66",
+            hint_blue = "#9CDCFE"
+        }
     },
 
     -- @usage pass a table with your desired languages
@@ -54,73 +54,137 @@ O = {
     python = {
         linter = '',
         -- @usage can be 'yapf', 'black'
-        formatter = '',
-        autoformat = false,
-        isort = false,
-		analysis = {type_checking = "basic", auto_search_paths = true, use_library_code_types = true}
+        format = {
+            auto = false,
+            exe = '',
+            args = {},
+            stdin = false,
+            cwd = vim.fn.getcwd(),
+            isort = false
+        },
+        analysis = {
+            type_checking = "basic",
+            auto_search_paths = true,
+            use_library_code_types = true
+        }
     },
     -- dart = {sdk_path = '/usr/lib/dart/bin/snapshots/analysis_server.dart.snapshot'},
     lua = {
-        -- @usage can be 'lua-format'
         format = {
-            formatter = '',
+            -- @usage can be 'lua-format'
+            exe = '',
+            -- @usage table, additional arguments to pass to formatter (not stdin arg)
             args = {},
+            -- @usage boolean, pass file as stdin?
             stdin = false,
+            -- @usage string, path from where to start looking for formatters config files
             cwd = false,
-            autoformat = false,
-        },
+            -- @usage boolean, autoformat on save?
+            auto = false
+        }
     },
     sh = {
         -- @usage can be 'shellcheck'
         linter = '',
-        -- @usage can be 'shfmt'
-        formatter = '',
-        autoformat = false,
+        format = {
+            -- @usage can be 'shfmt'
+            exe = '',
+            -- @usage table, additional arguments to pass to formatter (not stdin arg)
+            args = {},
+            -- @usage boolean, pass file as stdin?
+            stdin = false,
+            -- @usage string, path from where to start looking for formatters config files
+            cwd = false,
+            -- @usage boolean, autoformat on save?
+            auto = false
+        },
         diagnostics = {virtual_text = true, signs = true, underline = true}
     },
     jsts = {
         -- @usage can be 'eslint'
         linter = '',
-        -- @usage can be 'prettier'
-        formatter = '',
-        autoformat = false,
+        format = {
+            -- @usage can be 'prettier'
+            exe = '',
+            -- @usage table, additional arguments to pass to formatter (not stdin arg)
+            args = {},
+            -- @usage boolean, pass file as stdin?
+            stdin = false,
+            -- @usage string, path from where to start looking for formatters config files
+            cwd = false,
+            -- @usage boolean, autoformat on save?
+            auto = false
+        },
         diagnostics = {virtual_text = true, signs = true, underline = true}
     },
     json = {
-        -- @usage can be 'prettier'
-        formatter = '',
-        autoformat = false,
+        format = {
+            -- @usage can be 'prettier'
+            exe = '',
+            -- @usage table, additional arguments to pass to formatter (not stdin arg)
+            args = {},
+            -- @usage boolean, pass file as stdin?
+            stdin = false,
+            -- @usage string, path from where to start looking for formatters config files
+            cwd = false,
+            -- @usage boolean, autoformat on save?
+            auto = false
+        },
+        diagnostics = {virtual_text = true, signs = true, underline = true}
+    },
+    ruby = {
+        format = {
+            -- @usage string, your preferred ruby formatter
+            exe = '',
+            -- @usage table, additional arguments to pass to formatter (not stdin arg)
+            args = {},
+            -- @usage boolean, pass file as stdin?
+            stdin = false,
+            -- @usage string, path from where to start looking for formatters config files
+            cwd = false,
+            -- @usage boolean, autoformat on save?
+            auto = false
+        },
         diagnostics = {virtual_text = true, signs = true, underline = true}
     },
     rust = {
-        -- @usage can be 'prettier'
-        formatter = '',
-        autoformat = false,
+        format = {
+            -- @usage can be 'rustfmt'
+            exe = '',
+            -- @usage table, additional arguments to pass to formatter (not stdin arg)
+            args = {},
+            -- @usage boolean, pass file as stdin?
+            stdin = false,
+            -- @usage string, path from where to start looking for formatters config files
+            cwd = false,
+            -- @usage boolean, autoformat on save?
+            auto = false
+        },
         diagnostics = {virtual_text = true, signs = true, underline = true}
     },
     -- tailwindls = {filetypes = {'html', 'css', 'scss', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact'}},
-    clang = {diagnostics = {virtual_text = true, signs = true, underline = true}},
-	ruby = {
-		diagnostics = {virtualtext = true, signs = true, underline = true},
-		filetypes = {'rb', 'erb', 'rakefile'}
-	}
-    -- css = {formatter = '', autoformat = false, virtual_text = true},
-    -- json = {formatter = '', autoformat = false, virtual_text = true}
+    clang = {
+        diagnostics = {virtual_text = true, signs = true, underline = true}
+    },
+    org = {agenda_files = {}, default_notes_file = ''},
+    formatters = {}
 }
+-- css = {exe = '', autoformat = false, virtual_text = true},
+-- json = {exe = '', autoformat = false, virtual_text = true}
 
 DATA_PATH = vim.fn.stdpath('data')
 CACHE_PATH = vim.fn.stdpath('cache')
 
 P = function(v)
-  print(vim.inspect(v))
-  return v
+    print(vim.inspect(v))
+    return v
 end
 
 if pcall(require, "plenary") then
-  RELOAD = require("plenary.reload").reload_module
+    RELOAD = require("plenary.reload").reload_module
 
-  R = function(name)
-    RELOAD(name)
-    return require(name)
-  end
+    R = function(name)
+        RELOAD(name)
+        return require(name)
+    end
 end

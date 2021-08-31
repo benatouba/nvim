@@ -1,6 +1,5 @@
 local funcs = {}
-
-function funcs.define_augroups(definitions)
+AddAutocommands = function (definitions)
     -- Create autocommand groups based on the passed definitions
     --
     -- The key will be the name of the group, and each definition
@@ -20,14 +19,22 @@ function funcs.define_augroups(definitions)
     end
 end
 
+RegisterKeys = function (keys)
+local isOk, which_key = pcall(require, "which-key")
+if not isOk then
+    return
+end
+which_key.register(keys)
+end
+
 --- Check if a directory exists in this path
-function isdir(path)
+function IsDir(path)
    -- "/" works on both Unix and Windows
-   return exists(path.."/")
+   return Exists(path.."/")
 end
 
 --- Check if a file or directory exists in this path
-function exists(file)
+function Exists(file)
    local ok, err, code = os.rename(file, file)
    if not ok then
       if code == 13 then

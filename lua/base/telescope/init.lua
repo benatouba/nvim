@@ -71,8 +71,8 @@ telescope.setup {
         }
     },
     extensions = {
-        project = {
-            display_type = "full"
+        projects = {
+            detection_methods = { "lsp", "pattern", ".git", "Makefile", "*.sln", "build/env.sh" }
         },
         fzy_native = {
             override_generic_sorter = true,
