@@ -200,7 +200,7 @@ return require('packer').startup({
         end
 
         if O.git then -- Git (helpers)
-            use {'tpope/vim-fugitive', opt = true, cmd = "G"}
+            use {'tpope/vim-fugitive', opt = true, cmd = {"G", "Git push", "Git pull"}}
             use {
                 'TimUntersberger/neogit',
                 requires = {'sindrets/diffview.nvim'},
