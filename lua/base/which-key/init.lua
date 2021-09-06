@@ -48,6 +48,8 @@ local opts = {
     nowait = false -- use `nowait` when creating keymaps
 }
 
+local terminal_mappings = {}
+local terminal_opts = {mode = "t"}
 -- Set leader
 vim.api.nvim_set_keymap("n", "<Space>", "<NOP>", {noremap = true, silent = true})
 vim.g.mapleader = O.mapleader
@@ -159,7 +161,9 @@ if O.git then
 end
 
 if O.misc then
-    mappings["t"] = {"<cmd>lua require('FTerm').toggle()<cr>", "Terminal"}
+    mappings["t"] = {"<cmd>lua require('FTerm').open()<cr>", "Terminal"}
+    terminal_mappings["<esc>"] = {"<C-n><cmd>lua require('FTerm').close()<cr>", "Close Terminal"}
+    terminal_mappings["<c-q>"] = {"<C-n><cmd>lua require('FTerm').exit()<cr>", "Close Terminal"}
     mappings["n"] = {
         name = "+Generate Annotations",
         n = {"<cmd>lua require('neogen').generate()<CR>", "Auto"},
@@ -205,3 +209,4 @@ if O.project_management then
         }
 end
 which_key.register(mappings, opts)
+which_key.register(terminal_mappings, terminal_opts)
