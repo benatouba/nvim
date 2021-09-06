@@ -31,6 +31,7 @@ return require('packer').startup({
         use "nvim-lua/popup.nvim" -- handle popup (important)
         use "nvim-lua/plenary.nvim" -- most important functions (very important)
         use "tjdevries/astronauta.nvim" -- better plugin config loading
+        use "lewis6991/impatient.nvim"
 
         -- Telescope
         -- use {
@@ -258,7 +259,7 @@ return require('packer').startup({
             use 'andymass/vim-matchup'
             use {
                 "numtostr/FTerm.nvim",
-                config = function() require("FTerm").setup() end
+                -- config = function() require("FTerm") end
             }
             use {
                 "danymat/neogen",
