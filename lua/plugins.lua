@@ -181,6 +181,8 @@ return require('packer').startup({
                     "hrsh7th/cmp-nvim-lua",
                     "hrsh7th/cmp-calc",
                     "hrsh7th/cmp-emoji",
+                    "L3MON4D3/LuaSnip",
+                    "saadparwaiz1/cmp_luasnip",
                     "kdheepak/cmp-latex-symbols",
                     "f3fora/cmp-spell",
                     "quangnguyen30192/cmp-nvim-tags",
@@ -189,6 +191,7 @@ return require('packer').startup({
                 config = function() require("lsp.cmp").config() end,
                 -- after = "nvim-lspconfig"
             }
+            use "rafamadriz/friendly-snippets"
             use {
                 "jose-elias-alvarez/nvim-lsp-ts-utils",
                 after = "nvim-lspconfig",
@@ -215,10 +218,10 @@ return require('packer').startup({
             } -- fails on startup. TODO: activate when #205 is fixed
         end
 
-        if O.snippets then -- miscellaneous stuff
-            use 'hrsh7th/vim-vsnip'
-            use {'rafamadriz/friendly-snippets', opt = true}
-        end
+        -- if O.snippets then -- miscellaneous stuff
+        --     use 'hrsh7th/vim-vsnip'
+        --     use 'rafamadriz/friendly-snippets'
+        -- end
 
         if O.format then
             use {
