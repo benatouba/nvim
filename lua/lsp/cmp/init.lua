@@ -2,7 +2,11 @@ local M ={}
 
 local check_back_space = function()
   local col = vim.fn.col('.') - 1
-  return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s')
+  if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+    return true
+  else
+    return false
+  end
 end
 
 local t = function(str)
@@ -11,15 +15,23 @@ end
 
 M.config = function()
   local neogen_ok, neogen = pcall(require, 'neogen')
-  local cmp = require'cmp'
+  local cmp_ok, cmp = pcall(require, 'cmp')
+  local snip_ok, snip = pcall(require, 'luasnip')
+  if not cmp_ok then
+    print('nvim-cmp not okay')
+    return
+  end
+  if not snip_ok then
+    print('luasnip not ok')
+  end
   cmp.setup {
     completion = {
-      completeopt = 'menu,menuone,noinsert',
+      completeopt = 'menu,noselect',
       -- autocomplete = false,
     },
     snippet = {
       expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body)
+        snip.lsp_expand(args.body)
       end,
     },
     -- preselect = false,
@@ -38,21 +50,32 @@ M.config = function()
       ['<C-h>'] = cmp.mapping.close(),
       ['<CR>'] = cmp.mapping.confirm({
         behavior = cmp.ConfirmBehavior.Replace,
-        select = true,
+        select = false,
       }),
-      ['<Tab>'] = function(fallback)
-        if vim.fn.pumvisible() == 1 then
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
+      ['<Tab>'] = cmp.mapping(function(fallback)
+        if snip.expand_or_jumpable() then
+          vim.fn.feedkeys(t('<Plug>luasnip-expand-or-jump'), '')
+        elseif vim.fn.pumvisible() == 1 then
+          vim.fn.feedkeys(t('<C-n>'), 'n')
+        elseif check_back_space() then
+          vim.fn.feedkeys(t('<Tab>'), 'n')
         elseif neogen.jumpable() and neogen_ok then
           vim.fn.feedkeys(t("<cmd>lua require('neogen').jump_next()<CR>"), "")
-        elseif check_back_space() then
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, true, true), 'n')
-        elseif vim.fn['vsnip#available']() == 1 then
-          vim.fn.feedkeys(vim.api.nvim_replace_termcodes('<Plug>(vsnip-expand-or-jump)', true, true, true), '')
         else
           fallback()
         end
-      end,
+      end, { "i", "s"}),
+      ['<S-Tab>'] = cmp.mapping(function(fallback)
+        if snip.jumpable(-1) then
+          vim.fn.feedkeys(t('<Plug>luasnip-jump-prev'), '')
+        elseif vim.fn.pumvisible() == 1 then
+          vim.fn.feedkeys(t('<up>'), 'n')
+        elseif neogen.jumpable() and neogen_ok then
+          vim.fn.feedkeys(t("<cmd>lua require('neogen').jump_prev()<CR>"), "")
+        else
+          fallback()
+        end
+      end, { "i", "s"})
     },
     -- vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
     -- vim.api.nvim_set_keymap("i", "<C-j>", "v:lua.tab_complete()", {expr = true})
@@ -81,7 +104,7 @@ M.config = function()
             { name = 'tmux' },
             { name = 'buffer' },
             { name = 'orgmode' },
-            { name = 'vsnip' },
+            { name = 'luasnip' },
             { name = 'calc' },
             { name = 'emoji' },
             { name = 'tags' },
@@ -183,7 +206,7 @@ M.config = function()
 -- vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
 -- vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 -- vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-
+require("luasnip/loaders/from_vscode").lazy_load()
 end
 
 return M

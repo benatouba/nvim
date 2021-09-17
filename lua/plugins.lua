@@ -189,6 +189,7 @@ return require('packer').startup({
                     "octaltree/cmp-look",
                 },
                 config = function() require("lsp.cmp").config() end,
+                -- run = function() if not vim.builtin.cmp then require("lsp.cmp").config() end end,
                 -- after = "nvim-lspconfig"
             }
             use "rafamadriz/friendly-snippets"
