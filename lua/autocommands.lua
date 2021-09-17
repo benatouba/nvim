@@ -22,14 +22,13 @@ AddAutocommands({
         {'BufRead', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
         {'BufWinEnter,BufRead,BufNewFile', '*_p3d*', 'setfiletype fortran'},
         {'BufWinEnter,BufRead,BufNewFile', '*.pro', 'setfiletype idlang'},
-        {'BufWinEnter,BufRead,BufNewFile', '.bash*', 'setfiletype bash'},
-        {'BufRead', '*_p3d*', 'setfiletype fortran'},
+        {'BufWinEnter,BufRead,BufNewFile', '*.bash*', 'setfiletype bash'},
         {"BufWritePost", "plugins.lua", "lua R('plugins')"},
         {"BufWritePost", "~/.config/nvim/init.lua", "lua require('functions').reload_config()"},
         {'BufWritePre', '*', ':%s/\\s\\+$//e'},
         {'BufNewFile', '*', 'setlocal formatoptions-=c formatoptions-=r formatoptions-=o'},
         {'VimLeavePre', '*', 'set title set titleold='},
-        {'BufRead', '*.sls', 'setf sls'}
+        {'BufWinEnter,BufRead,BufNewFile', '*.sls', 'setf sls'}
     },
     _markdown = {{'FileType', 'markdown', 'setlocal wrap'}},
     _buffer_bindings = {
