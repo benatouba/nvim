@@ -48,5 +48,6 @@ local ts_conds = require "nvim-autopairs.ts-conds"
 autopairs.add_rules {
     Rule("%", "%", "lua"):with_pair(ts_conds.is_ts_node {"string", "comment"}),
     Rule("$", "$", "lua"):with_pair(ts_conds.is_not_ts_node {"function"}),
-    Rule("$", "$",{"tex", "latex"})
+    Rule("$", "$",{"tex", "latex"}),
+    Rule("%", "%", "sls")
 }
