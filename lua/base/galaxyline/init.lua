@@ -310,7 +310,7 @@ table.insert(gls.right, {
     condition = condition.hide_in_width,
     separator = " ",
     separator_highlight = { "NONE", colors.alt_bg },
-    highlight = { require('galaxyline.provider_fileinfo').get_file_icon_color, colors.alt_bg },
+    highlight = { require('galaxyline.providers.fileinfo').get_file_icon_color, colors.alt_bg },
   },
 })
 
@@ -320,7 +320,7 @@ table.insert(gls.right, {
     separator = ' ',
     condition = condition.buffer_not_empty,
     separator_highlight = { "NONE" ,colors.alt_bg},
-    highlight = {require('galaxyline.provider_fileinfo').get_file_icon_color, colors.alt_bg}
+    highlight = {require('galaxyline.providers.fileinfo').get_file_icon_color, colors.alt_bg}
   }
 })
 
@@ -330,7 +330,7 @@ table.insert(gls.right, {
     separator = " ",
     separator_highlight = { "NONE", colors.alt_bg },
     condition = condition.buffer_not_empty,
-    highlight = {require('galaxyline.provider_fileinfo').get_file_icon_color, colors.alt_bg},
+    highlight = {require('galaxyline.providers.fileinfo').get_file_icon_color, colors.alt_bg},
   },
 })
 

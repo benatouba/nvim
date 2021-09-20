@@ -9,10 +9,9 @@ an executable
 O.lsp = true -- boolean, activates lsp packages
 O.language_parsing = true
 O.git = true
-O.snippets = true
 O.format = true
-O.test = true
-O.dap = true -- debugging
+O.test = false
+O.dap = false -- debugging
 O.project_management = true
 O.misc = true
 

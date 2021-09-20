@@ -99,7 +99,7 @@ return require('packer').startup({
 
         -- Status Line and Bufferline
         use {
-            "glepnir/galaxyline.nvim",
+            "NTBBloodbath/galaxyline.nvim",
             config = function() require('base.galaxyline') end
         }
         use "romgrk/barbar.nvim"
@@ -258,9 +258,21 @@ return require('packer').startup({
             }
         end
 
+        -- TODO: test todo-comments with sidebar
         if O.misc then
             use 'kevinhwang91/nvim-bqf'
             use 'andymass/vim-matchup'
+            use {'GustavoKatel/sidebar.nvim', config = function()
+                require('sidebar-nvim').setup({
+                    bindings = {
+                        ["q"] = function ()
+                            require('sidebar-nvim').close()
+                        end
+                    }})
+            end}
+            use {'folke/todo-comments.nvim', config = function ()
+                require('todo-comments').setup()
+            end}
             use {
                 "numtostr/FTerm.nvim",
                 -- config = function() require("FTerm") end

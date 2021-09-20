@@ -23,7 +23,7 @@ Neovim hyperextensible Vim-based text editor. It has lua built-in functionality 
 - system-wide fuzzy file finding and grepping ([nvim-telescope](https://github.com/nvim-telescope/telescope.nvim)   the best plugin out there)
     - uses [fzf](https://github.com/junegunn/fzf) for file matching
     - uses ripgrep for text matching NEED [ripgrep](https://github.com/BurntSushi/ripgrep)
-- status bar ([galaxyline.nvim](https://github.com/glepnir/galaxyline.nvim))
+- status bar ([galaxyline.nvim](https://github.com/NTBBloodbath/galaxyline.nvim))
 - top bar ([barbar.nvim](https://github.com/romgrk/barbar.nvim)
 - highly customizable package management ([packer.nvim](https://github.com/wbthomason/packer.nvim))
 - incrementing/decrementing/toggle basically anything ([dial.nvim](https://github.com/monaqa/dial.nvim))
@@ -42,7 +42,7 @@ check [lua/plugins.lua](lua/plugins.lua) for the full list
     - TO ACTIVATE: enable lsp in [user-settings](user-settings.lua)
 - git helper
     - function wrapper ([Neogit](https://github.com/TimUntersberger/neogit) in lua, [vim-fugitive](https://github.com/tpope/vim-fugitive) in vimL)
-    - gutter/git line info ([gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim))
+    - gutter/git line info ([gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)) NOTE: deactivate if it causes problems (seems to be an issue with older git versions)
     - TO ACTIVATE: enable git in [user-settings](user-settings.lua)
 - language parsing features for ~60 languages ([nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter))
     - highlighting
@@ -54,10 +54,10 @@ check [lua/plugins.lua](lua/plugins.lua) for the full list
     - colored parenthesis
     - commenting
     - TO ACTIVATE: enable language_parsing in [user-settings](user-settings.lua)
-- snippets for most languages ([vim-vsnip](https://github.com/hrsh7th/vim-vsnip) and [friendly-snippets](https://github.com/rafamadriz/friendly-snippets))
-    - TO ACTIVATE: enable snippets in [user-settings](user-settings.lua)
+- snippets for most languages ([LuaSnip](https://github.com/L3MON4D3/LuaSnip) and [friendly-snippets](https://github.com/rafamadriz/friendly-snippets))
+    - TO ACTIVATE: enable language_parsing in [user-settings](user-settings.lua)
 - debugging ([nvim-dap](https://github.com/mfussenegger/nvim-dap) in lua or [vimspector](https://github.com/puremourning/vimspector) in vimL, requires debuggers) NOT YET IMPLEMENTED
-- ranger file browser ([rnvimr](https://github.com/kevinhwang91/rnvimr), requires [ranger](https://github.com/ranger/ranger) (and [Ueberzug](https://github.com/seebye/ueberzug) for media file rendering))
+- Not installed: ranger file browser ([rnvimr](https://github.com/kevinhwang91/rnvimr), requires [ranger](https://github.com/ranger/ranger) (and [Ueberzug](https://github.com/seebye/ueberzug) for media file rendering))
 - testing ([vim-ultest](https://github.com/rcarriga/vim-ultest), requires test libraries) NOT YET IMPLEMENTED
 - efficiency stuff (anything by [tpope](https://github.com/tpope))
 - visual/UI stuff (anything by [folke](https://github.com/folke))
