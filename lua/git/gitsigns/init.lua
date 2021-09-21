@@ -26,5 +26,4 @@ gitsigns.setup {
   sign_priority = 6,
   update_debounce = 200,
   status_formatter = nil, -- Use default
-  use_decoration_api = false
 }
