@@ -38,7 +38,7 @@ O.diagnostics.signs = true
 O.diagnostics.underline = true
 
 -- python
-vim.cmd("let g:python3_host_prog = '/home/ben/.pyenv/shims/python3'")
+-- vim.cmd("let g:python3_host_prog = '/home/ben/.pyenv/shims/python3'")
 O.python.format.auto = false
 O.python.format.exe = 'black'
 O.python.format.args = {'-l 120'}

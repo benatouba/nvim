@@ -8,6 +8,7 @@ require('plugins')
 require('colorscheme')
 require('base')
 require('autocommands')
+require('packer_compiled')
 -- if O.language_parsing then
 --   require('language_parsing')
 -- end
