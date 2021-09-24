@@ -31,7 +31,7 @@ return require('packer').startup({
         use "nvim-lua/popup.nvim" -- handle popup (important)
         use "nvim-lua/plenary.nvim" -- most important functions (very important)
         use "tjdevries/astronauta.nvim" -- better plugin config loading
-        use {"lewis6991/impatient.nvim", config = function() require('impatient').enable_profile() end}
+        use {"lewis6991/impatient.nvim", config = function() require('impatient') end}
 
         -- Telescope
         -- use {
@@ -171,7 +171,8 @@ return require('packer').startup({
                 -- after = "nvim-lspinstall"
             }
             -- use {"kabouzeid/nvim-lspinstall", event = "CmdlineEnter", config = function() require('lsp.lspinstall') end }
-            use {"williamboman/nvim-lsp-installer", event = "CmdlineEnter", config = function() require('lsp.lsp_installer') end }
+            use {"williamboman/nvim-lsp-installer", event = {"CmdlineEnter", "InsertEnter"}, config = function() require('lsp.lsp_installer') end}
+            -- use "williamboman/nvim-lsp-installer"
             use {
                 "hrsh7th/nvim-cmp",
                 -- event = "InsertEnter",
@@ -216,7 +217,7 @@ return require('packer').startup({
                 'lewis6991/gitsigns.nvim',
                 config = function() require "git.gitsigns" end,
                 event = "BufReadPost",
-                -- disable = true
+                disable = true
             } -- fails on startup. TODO: activate when #205 is fixed
         end
 

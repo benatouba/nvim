@@ -42,11 +42,11 @@ local installer_chain = {
     -- std.git_clone("https://github.com/dcermak/salt-lsp.git"),
     shell.polyshell("cd " .. root_dir .. " && git clone https://github.com/dcermak/salt-lsp.git ."),
     shell.polyshell("cd " .. root_dir .. " && poetry install && poetry run dump_state_name_completions && poetry build"),
-    shell.polyshell("cd " .. root_dir .. " && python3.9 -m venv venv" ),
+    shell.polyshell("cd " .. root_dir .. " && python3.8 -m venv venv" ),
     shell.polyshell("cd " .. root_dir .. " && ./venv/bin/pip3 install --force-reinstall dist/salt_lsp-0.0.1-py3-none-any.whl")
 }
 
-local salt = server_module.Server:new {
+local salt_ls = server_module.Server:new {
     name = server_name,
     root_dir = root_dir,
     installer = installer_chain,
@@ -55,4 +55,4 @@ local salt = server_module.Server:new {
     },
 }
 
-servers.register(salt)
+servers.register(salt_ls)

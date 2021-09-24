@@ -1,16 +1,24 @@
-local lsp_installer = require("nvim-lsp-installer")
+-- local M ={}
 
-lsp_installer.on_server_ready(function(server)
-    local opts = {}
+-- M.config = function()
+    local lsp_installer = require("nvim-lsp-installer")
 
-    -- (optional) Customize the options passed to the server
-    -- if server.name == "tsserver" then
-    --     opts.root_dir = function() ... end
-    -- end
+    lsp_installer.on_server_ready(function(server)
+        local opts = {}
 
-    -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
-    server:setup(opts)
-    vim.cmd [[ do User LspAttachBuffers ]]
-end)
+        -- (optional) Customize the options passed to the server
+        -- if server.name == "tsserver" then
+        --     opts.root_dir = function() ... end
+        -- end
 
-require('lsp.salt-ls')
+        -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
+        server:setup(opts)
+        vim.cmd [[ do User LspAttachBuffers ]]
+    end)
+-- end
+--
+require("lsp.salt-ls")
+-- local servers = require("nvim-lsp-installer.servers")
+-- servers.register(salt_ls)
+
+return M

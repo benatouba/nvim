@@ -10,7 +10,7 @@
 -- require('lsp.js-ts-ls')
 -- require('lsp.json-ls')
 -- require('lsp.latex-ls')
--- require('lsp.lua-ls')
+require('lsp.lua-ls')
 -- require('lsp.python-ls')
 -- require('lsp.python-jedi-ls')
 -- TODO: fix setup
