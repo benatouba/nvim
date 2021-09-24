@@ -31,7 +31,7 @@ return require('packer').startup({
         use "nvim-lua/popup.nvim" -- handle popup (important)
         use "nvim-lua/plenary.nvim" -- most important functions (very important)
         use "tjdevries/astronauta.nvim" -- better plugin config loading
-        use "lewis6991/impatient.nvim"
+        use {"lewis6991/impatient.nvim", config = function() require('impatient').enable_profile() end}
 
         -- Telescope
         -- use {
@@ -168,9 +168,10 @@ return require('packer').startup({
                 event = {"BufReadPost", "InsertEnter"},
                 fn = {"edit", "e"},
                 cmd = {"LspStart", "LspInfo", "TSUpdate"},
-                after = "nvim-lspinstall"
+                -- after = "nvim-lspinstall"
             }
-            use "kabouzeid/nvim-lspinstall"
+            -- use {"kabouzeid/nvim-lspinstall", event = "CmdlineEnter", config = function() require('lsp.lspinstall') end }
+            use {"williamboman/nvim-lsp-installer", event = "CmdlineEnter", config = function() require('lsp.lsp_installer') end }
             use {
                 "hrsh7th/nvim-cmp",
                 -- event = "InsertEnter",
@@ -183,7 +184,7 @@ return require('packer').startup({
                     "hrsh7th/cmp-emoji",
                     "L3MON4D3/LuaSnip",
                     "saadparwaiz1/cmp_luasnip",
-                    "kdheepak/cmp-latex-symbols",
+                    {"kdheepak/cmp-latex-symbols", ft='latex'},
                     "f3fora/cmp-spell",
                     "quangnguyen30192/cmp-nvim-tags",
                     "octaltree/cmp-look",
@@ -215,7 +216,7 @@ return require('packer').startup({
                 'lewis6991/gitsigns.nvim',
                 config = function() require "git.gitsigns" end,
                 event = "BufReadPost",
-                disable = true
+                -- disable = true
             } -- fails on startup. TODO: activate when #205 is fixed
         end
 
@@ -289,7 +290,8 @@ return require('packer').startup({
     config = {
         profile = {
             enable = true,
-            threshold = 1 -- the amount in ms that a plugins load time must be over for it to be included in the profile
-        }
+            threshold = 1, -- the amount in ms that a plugins load time must be over for it to be included in the profile
+        },
+        compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua'
     }
 })

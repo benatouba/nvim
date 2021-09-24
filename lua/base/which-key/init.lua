@@ -140,6 +140,12 @@ if O.lsp then
     }
 end
 
+mappings["L"] = {
+    name = "+Logs",
+    c = {"<cmd>LuaCacheProfile<cr>", "CacheProfile"},
+    p = {"<cmd>PackerProfile<cr>", "PackerProfile"},
+}
+
 if O.git then
     mappings["g"] = {
         name = "+Git",
