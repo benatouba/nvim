@@ -4,7 +4,7 @@ if not isOk then
   return
 end
 
-require('colorizer').setup(
+colorizer.setup(
   {'*';},
   {
     RGB      = true;         -- #RGB hex codes

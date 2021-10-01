@@ -23,7 +23,7 @@ local config = {
             update_in_insert = true,
         })
     },
-    cmd = {vim.fn.stdpath('data') .. "/lspinstall/python_jedi/venv/bin/jedi-language-server"},
+    cmd = {vim.fn.stdpath('data') .. "/lsp_servers/jedi_language_server/venv/bin/jedi-language-server"},
     install_script = [[
         ! pip3 install --upgrade jedi-language-server || true
     ]],
@@ -33,4 +33,3 @@ local config = {
 }
 
 require'lspconfig'.jedi_language_server.setup {config}
-require'lspinstall/servers'.python_jedi = config

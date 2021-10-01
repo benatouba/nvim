@@ -3,20 +3,18 @@ local configs = require "lspconfig/configs"
 local servers = require "nvim-lsp-installer.servers"
 local server_module = require "nvim-lsp-installer.server"
 local path = require "nvim-lsp-installer.path"
-local installers = require "nvim-lsp-installer.installers"
+-- local installers = require "nvim-lsp-installer.installers"
 local shell = require "nvim-lsp-installer.installers.shell"
 -- local pip3 = require "nvim-lsp-installer.installers.pip3"
-local std = require "nvim-lsp-installer.installers.std"
-local process = require "nvim-lsp-installer.process"
-local platform = require "nvim-lsp-installer.platform"
+-- local std = require "nvim-lsp-installer.installers.std"
+-- local process = require "nvim-lsp-installer.process"
+-- local platform = require "nvim-lsp-installer.platform"
 local server_name = "salt"
 local root_dir = server_module.get_server_root_path(server_name)
 
 configs[server_name] = {
     default_config = {
-        cmd = {
-            root_dir .. "venv/bin/python3", "-m", "salt_lsp"
-        },
+        cmd = { root_dir .. "/venv/bin/python3", "-m", "salt_lsp"},
         filetypes = {"sls"},
         root_dir = util.root_pattern("top.sls", ".git", vim.fn.getcwd())
     },
@@ -42,7 +40,7 @@ local installer_chain = {
     -- std.git_clone("https://github.com/dcermak/salt-lsp.git"),
     shell.polyshell("cd " .. root_dir .. " && git clone https://github.com/dcermak/salt-lsp.git ."),
     shell.polyshell("cd " .. root_dir .. " && poetry install && poetry run dump_state_name_completions && poetry build"),
-    shell.polyshell("cd " .. root_dir .. " && python3.8 -m venv venv" ),
+    shell.polyshell("cd " .. root_dir .. " && python3 -m venv venv" ),
     shell.polyshell("cd " .. root_dir .. " && ./venv/bin/pip3 install --force-reinstall dist/salt_lsp-0.0.1-py3-none-any.whl")
 }
 
@@ -55,4 +53,6 @@ local salt_ls = server_module.Server:new {
     },
 }
 
+local lspconfig = require('lspconfig')
+lspconfig['salt'].setup({})
 servers.register(salt_ls)

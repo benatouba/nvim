@@ -168,10 +168,9 @@ return require('packer').startup({
                 event = {"BufReadPost", "InsertEnter"},
                 fn = {"edit", "e"},
                 cmd = {"LspStart", "LspInfo", "TSUpdate"},
-                -- after = "nvim-lspinstall"
+                after = "nvim-lsp-installer"
             }
-            -- use {"kabouzeid/nvim-lspinstall", event = "CmdlineEnter", config = function() require('lsp.lspinstall') end }
-            use {"williamboman/nvim-lsp-installer", event = {"CmdlineEnter", "InsertEnter"}, config = function() require('lsp.lsp_installer') end}
+            use {"williamboman/nvim-lsp-installer", event = {"CmdlineEnter", "InsertEnter"}, config = function() require('lsp.lsp_installer').config() end}
             -- use "williamboman/nvim-lsp-installer"
             use {
                 "hrsh7th/nvim-cmp",
@@ -191,8 +190,7 @@ return require('packer').startup({
                     "octaltree/cmp-look",
                 },
                 config = function() require("lsp.cmp").config() end,
-                -- run = function() if not vim.builtin.cmp then require("lsp.cmp").config() end end,
-                -- after = "nvim-lspconfig"
+                -- disable = true,
             }
             use "rafamadriz/friendly-snippets"
             use {
@@ -217,7 +215,7 @@ return require('packer').startup({
                 'lewis6991/gitsigns.nvim',
                 config = function() require "git.gitsigns" end,
                 event = "BufReadPost",
-                disable = true
+                -- disable = true
             } -- fails on startup. TODO: activate when #205 is fixed
         end
 
@@ -248,8 +246,17 @@ return require('packer').startup({
                 "mfussenegger/nvim-dap",
                 config = function() require("debug") end
             }
-            use {"rcarriga/nvim-dap-ui", after = "nvim-dap"}
+            use {"rcarriga/nvim-dap-ui", after = "nvim-dap", config = function ()
+                require('dapui').setup()
+            end}
             use {"Pocco81/DAPInstall.nvim", after = "nvim-dap"}
+            use {'jbyuki/one-small-step-for-vimkind',
+                after = 'nvim-dap',
+                ft = 'lua',
+                config = function()
+                    require('debug.one_small_step_for_vimkind').config()
+                end
+            }
         end
 
         if O.project_management then
@@ -287,6 +294,7 @@ return require('packer').startup({
                 requires = "nvim-treesitter/nvim-treesitter"
             }
         end
+        use "wuelnerdotexe/vim-enfocado"
     end,
     config = {
         profile = {

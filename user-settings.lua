@@ -11,7 +11,7 @@ O.language_parsing = true
 O.git = true
 O.format = true
 O.test = false
-O.dap = false -- debugging
+O.dap = true -- debugging
 O.project_management = true
 O.misc = true
 
