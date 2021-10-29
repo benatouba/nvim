@@ -60,7 +60,15 @@ M.config = function()
   local tree_cb = require'nvim-tree.config'.nvim_tree_callback
 
   nvim_tree.setup({
-    lsp_diagnostics = true,
+    diagnostics = {
+      enable = true,
+      icons = {
+        hint = "",
+        info = "",
+        warning = "",
+        error = "",
+      }
+    },
     open_on_tab = true,
     open_on_setup = true,
     ignore_ft_on_setup = {

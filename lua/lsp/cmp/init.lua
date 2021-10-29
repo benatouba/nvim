@@ -39,7 +39,16 @@ M.config = function()
     -- },
     sorting = {
       priority_weight = 2.,
-      comparators = {},
+      comparators = {
+        cmp.config.compare.offset,
+            cmp.config.compare.exact,
+            cmp.config.compare.score,
+            require "cmp-under-comparator".under,
+            cmp.config.compare.kind,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
+      },
     },
     mapping = {
       ['<C-d>'] = cmp.mapping.scroll_docs(-4),
@@ -100,18 +109,21 @@ M.config = function()
     sources = {
         { name = 'nvim_lua' },
         { name = 'path' },
+            { name = 'cmp_git' },
             { name = 'nvim_lsp' },
             { name = 'tmux' },
-            { name = 'buffer' },
             { name = 'orgmode' },
             { name = 'luasnip' },
+            { name = 'zsh' },
             { name = 'calc' },
             { name = 'emoji' },
             { name = 'tags' },
             { name = 'look' },
-            { name = 'vim-dadbod-completion' }
+            { name = 'vim-dadbod-completion' },
+            { name = 'buffer' }
         },
   }
+
 --     local source = {
 --         path = {kind = "   (Path)"},
 --         buffer = {kind = "   (Buffer)"},
@@ -209,5 +221,28 @@ M.config = function()
 require("luasnip/loaders/from_vscode").lazy_load({paths={vim.fn.stdpath('config') .. "/snippets"}})
 require("luasnip/loaders/from_vscode").lazy_load()
 end
+require("cmp_git").setup({
+    -- defaults
+    filetypes = { "gitcommit" },
+    github = {
+        issues = {
+            filter = "all", -- assigned, created, mentioned, subscribed, all, repos
+            limit = 100,
+            state = "open", -- open, closed, all
+        },
+        mentions = {
+            limit = 100,
+        },
+    },
+    gitlab = {
+        issues = {
+            limit = 100,
+            state = "opened", -- opened, closed, all
+        },
+        mentions = {
+            limit = 100,
+        },
+    },
+})
 
 return M
