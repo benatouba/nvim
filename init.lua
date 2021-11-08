@@ -3,12 +3,14 @@ require('functions')
 require('keymappings')
 require('user-settings')
 require('settings')
-require('impatient')
+pcall(require, 'impatient')
 require('plugins')
 require('colorscheme')
 require('base')
 require('autocommands')
-require('packer_compiled')
+if Exists(O.packer_compile_path) then
+  require('packer_compiled')
+end
 -- if O.language_parsing then
 --   require('language_parsing')
 -- end

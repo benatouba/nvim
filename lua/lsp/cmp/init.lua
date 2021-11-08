@@ -220,6 +220,11 @@ M.config = function()
 -- vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 require("luasnip/loaders/from_vscode").lazy_load({paths={vim.fn.stdpath('config') .. "/snippets"}})
 require("luasnip/loaders/from_vscode").lazy_load()
+
+local cmp_git_ok, cmp_git = pcall(require, 'cmp_git')
+if not cmp_git_ok then
+  print('cmp_git not okay')
+  return
 end
 require("cmp_git").setup({
     -- defaults
@@ -245,4 +250,5 @@ require("cmp_git").setup({
     },
 })
 
+end
 return M
