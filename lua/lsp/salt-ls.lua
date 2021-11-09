@@ -12,11 +12,14 @@ local shell = require "nvim-lsp-installer.installers.shell"
 local server_name = "salt"
 local root_dir = server_module.get_server_root_path(server_name)
 
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
 configs[server_name] = {
     default_config = {
         cmd = { root_dir .. "/venv/bin/python3", "-m", "salt_lsp"},
         filetypes = {"sls"},
-        root_dir = util.root_pattern("top.sls", ".git", vim.fn.getcwd())
+        root_dir = util.root_pattern("top.sls", ".git", vim.fn.getcwd()),
+        capabilities = capabilities
     },
     docs = {
         package_json = "https://github.com/dcermak/salt-lsp/tree/main",

@@ -195,7 +195,8 @@ return require('packer').startup({
                     "f3fora/cmp-spell",
                     "quangnguyen30192/cmp-nvim-tags",
                     "octaltree/cmp-look",
-                    "tamago324/cmp-zsh"
+                    "tamago324/cmp-zsh",
+                    "onsails/lspkind-nvim"
                 },
                 config = function() require("lsp.cmp").config() end,
                 -- disable = true,
