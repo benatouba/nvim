@@ -37,7 +37,9 @@ AddAutocommands({
         {'FileType', 'floaterm', 'nnoremap <silent> <buffer> q :q<CR>'},
         {'FileType', 'fugitive', 'nnoremap <silent> <buffer> q :q<CR>'},
         {'FileType', 'qf', 'nnoremap <silent> <buffer> q :q<CR>'},
-        {'FileType', 'help', 'nnoremap <silent> <buffer> q :q<CR>'},
+        {'FileType', 'help,lsp-installer,qf,fugitive,lspinfo,dashboard', 'nnoremap <silent> <buffer> q :q<CR>'},
+        {'FileType', 'help,lsp-installer,qf,fugitive,lspinfo,dashboard', 'nnoremap <silent> <buffer> <esc> :q<CR>'},
+        -- {'buftype', 'nofile', 'nnoremap <silent> <buffer> q :q<CR>'},
     },
     _auto_formatters = formatters,
 })
