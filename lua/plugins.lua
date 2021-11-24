@@ -210,6 +210,12 @@ return require('packer').startup({
                 }
             }
             use {"folke/trouble.nvim", cmd = "TroubleToggle"}
+            use {"jose-elias-alvarez/null-ls.nvim",
+                event = {"BufReadPost", "InsertEnter"},
+                fn = {"edit", "e"},
+                cmd = {"LspStart", "LspInfo", "TSUpdate"},
+                after = "nvim-lspconfig",
+                config = function() require("lsp.null-ls").config() end}
         end
 
         if O.git then -- Git (helpers)
@@ -232,14 +238,14 @@ return require('packer').startup({
         --     use 'rafamadriz/friendly-snippets'
         -- end
 
-        if O.format then
-            use {
-                "mhartington/formatter.nvim",
-                config = function()
-                    require('format.formatter').config()
-                end
-            }
-        end
+        -- if O.format then
+        --     use {
+        --         "mhartington/formatter.nvim",
+        --         config = function()
+        --             require('format.formatter').config()
+        --         end
+        --     }
+        -- end
 
         if O.test then
             use {

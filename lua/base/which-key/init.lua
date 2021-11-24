@@ -55,10 +55,13 @@ vim.api.nvim_set_keymap("n", "<Space>", "<NOP>", {noremap = true, silent = true}
 vim.g.mapleader = O.mapleader
 
 -- Comments
-vim.api.nvim_set_keymap("v", "<leader>/", ":CommentToggle<CR>", {noremap = true, silent = true})
+-- vim.api.nvim_set_keymap("v", "<leader>/", ":CommentToggle<CR>", {noremap = true, silent = true})
 
 -- TODO create entire treesitter section
 
+local visual_mappings = {
+    ["/"] = {":CommentToggle<CR>", "Comment"}
+}
 local mappings = {
     ["/"] = {":CommentToggle<CR>", "Comment"},
     ["c"] = {":BufferClose<CR>", "Close Buffer"},
@@ -127,8 +130,10 @@ if O.lsp then
         A = {"<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action"},
         d = {"<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics"},
         D = {"<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics"},
+        f = {"<cmd>lua vim.lsp.buf.formatting()<CR>", "Format Document"},
         h = {'<cmd>lua vim.lsp.buf.definition()<CR>', "Find definition"},
         i = {"<cmd>LspInfo<cr>", "Info"},
+        I = {"<cmd>LspInstallInfo<cr>", "Install Info"},
         j = {"<cmd>lua vim.lsp.diagnostic.goto_next({popup_opts = {border = O.lsp.popup_border}})<cr>", "Next Diagnostic"},
         k = {"<cmd>lua vim.lsp.diagnostic.goto_prev({popup_opts = {border = O.lsp.popup_border}})<cr>", "Prev Diagnostic"},
         q = {"<cmd>Telescope quickfix<cr>", "Quickfix"},
@@ -138,6 +143,7 @@ if O.lsp then
         s = {"<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols"},
         S = {"<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols"}
     }
+    visual_mappings["f"] = {"<cmd>lua vim.lsp.buf.range_formatting()<CR>", "Format"}
 end
 
 mappings["L"] = {
@@ -215,4 +221,5 @@ if O.project_management then
         }
 end
 which_key.register(mappings, opts)
+which_key.register(visual_mappings, {mode = "v", prefix = "<leader>"})
 which_key.register(terminal_mappings, terminal_opts)
