@@ -33,14 +33,6 @@ return require('packer').startup({
         use "tjdevries/astronauta.nvim" -- better plugin config loading
         use {"lewis6991/impatient.nvim", config = function() require('impatient') end}
 
-        -- Telescope
-        -- use {
-        --     "nvim-telescope/telescope-project.nvim",
-        --     after = "telescope.nvim",
-        --     config = function()
-        --         require('telescope').load_extension('project')
-        --     end
-        -- }
         use {
             "nvim-telescope/telescope-fzf-writer.nvim",
             after = "telescope.nvim"
@@ -65,12 +57,6 @@ return require('packer').startup({
             cmd = "Telescope",
             event = "InsertEnter"
         }
-        -- use {
-        --     "oberblastmeister/rooter.nvim",
-        --     opt = true,
-        --     config = function() require('base.rooter') end,
-        --     disable = O.lsp
-        -- }
         use {
             "ahmedkhalf/project.nvim",
             config = function() require("base.project").setup() end,
@@ -195,7 +181,8 @@ return require('packer').startup({
                     "f3fora/cmp-spell",
                     "quangnguyen30192/cmp-nvim-tags",
                     "octaltree/cmp-look",
-                    "tamago324/cmp-zsh"
+                    "tamago324/cmp-zsh",
+                    "onsails/lspkind-nvim"
                 },
                 config = function() require("lsp.cmp").config() end,
                 -- disable = true,
@@ -219,7 +206,10 @@ return require('packer').startup({
         end
 
         if O.git then -- Git (helpers)
-            use {'tpope/vim-fugitive', opt = true, cmd = {"G", "Git push", "Git pull"}}
+            use {'tpope/vim-fugitive',
+                opt = false,
+                cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"}
+            }
             use {
                 'TimUntersberger/neogit',
                 requires = {'sindrets/diffview.nvim'},
@@ -309,12 +299,13 @@ return require('packer').startup({
             }
         end
         use "wuelnerdotexe/vim-enfocado"
+        use "folke/tokyonight.nvim"
     end,
     config = {
         profile = {
             enable = true,
             threshold = 1, -- the amount in ms that a plugins load time must be over for it to be included in the profile
         },
-        compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua'
+        compile_path = packer_compile_path
     }
 })

@@ -16,12 +16,15 @@ O.project_management = true
 O.misc = true
 
 O.auto_complete = true
-O.colorscheme = 'lunar'
+O.colorscheme = 'tokyonight'
 O.auto_close_tree = 0
 O.wrap_lines = true
 
 -- special keys
 O.mapleader = " "
+
+-- paths
+O.packer_compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua'
 
 -- if you don't want all the parsers change this to a table of the ones you want
 O.treesitter.ensure_installed = "all"

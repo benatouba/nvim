@@ -49,3 +49,9 @@ vim.o.undofile = true                                    -- enable persistent un
 if not IsDir(DATA_PATH .. '/directory') then os.execute('mkdir ' .. DATA_PATH .. '/directory') end
 vim.o.directory = vim.fn.stdpath('data') .. '/directory' -- Configure 'directory' to ensure that Neovim swap files are not written to repos.
 vim.o.conceallevel = 0 -- Every character can be seen
+
+-- Settings for folkes tokyo night colorscheme
+vim.g.tokynight_style = "night"
+vim.g.tokyonight_transparent = true
+vim.g.tokyonight_sidebars = {"terminal", "packer", "qf", "nvimtree"}
+vim.g.tokyonight_colors = { hint = "orange", error = "#ff0000" }

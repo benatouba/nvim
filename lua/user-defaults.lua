@@ -17,6 +17,7 @@ O = {
     relative_number = true,
     shell = 'bash',
     mapleader = " ",
+    packer_compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua',
     galaxyline = {
         colors = {
             alt_bg = "#2E2E2E",

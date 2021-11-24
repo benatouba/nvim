@@ -34,6 +34,9 @@ M.config = function()
         snip.lsp_expand(args.body)
       end,
     },
+    formatting = {
+      format = require("lspkind").cmp_format({with_text = true, maxwidth = 50})
+    },
     -- preselect = false,
     -- documentation = {
     -- },
@@ -107,20 +110,20 @@ M.config = function()
     -- --                 ﬘    m    
 
     sources = {
-        { name = 'nvim_lua' },
-        { name = 'path' },
-            { name = 'cmp_git' },
-            { name = 'nvim_lsp' },
-            { name = 'tmux' },
-            { name = 'orgmode' },
-            { name = 'luasnip' },
-            { name = 'zsh' },
-            { name = 'calc' },
-            { name = 'emoji' },
-            { name = 'tags' },
-            { name = 'look' },
-            { name = 'vim-dadbod-completion' },
-            { name = 'buffer' }
+        { name = 'nvim_lsp', max_item_count = 10  },
+        { name = 'nvim_lua', max_item_count = 10  },
+        { name = 'path', max_item_count = 10  },
+        { name = 'cmp_git', max_item_count = 10  },
+        { name = 'tmux', max_item_count = 10  },
+        { name = 'orgmode', max_item_count = 10  },
+        { name = 'luasnip', max_item_count = 10  },
+        { name = 'zsh', max_item_count = 10  },
+        { name = 'calc', max_item_count = 10  },
+        { name = 'emoji', max_item_count = 10  },
+        { name = 'tags', max_item_count = 10  },
+        { name = 'look', max_item_count = 10  },
+        { name = 'vim-dadbod-completion', max_item_count = 10  },
+        { name = 'buffer', keyword_length = 6, max_item_count = 10 }
         },
   }
 
@@ -218,10 +221,29 @@ M.config = function()
 -- vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
 -- vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 -- vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-require("luasnip/loaders/from_vscode").lazy_load({paths={vim.fn.stdpath('config') .. "/snippets"}})
+cmp.setup.cmdline(':', {
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
+
+cmp.setup.cmdline('/', {
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+-- require("luasnip/loaders/from_vscode").lazy_load({paths={vim.fn.stdpath('config') .. "/snippets"}})
 require("luasnip/loaders/from_vscode").lazy_load()
+
+local cmp_git_ok, cmp_git = pcall(require, 'cmp_git')
+if not cmp_git_ok then
+  print('cmp_git not okay')
+  return
 end
-require("cmp_git").setup({
+cmp_git.setup({
     -- defaults
     filetypes = { "gitcommit" },
     github = {
@@ -245,4 +267,5 @@ require("cmp_git").setup({
     },
 })
 
+end
 return M
