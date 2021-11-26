@@ -63,20 +63,6 @@ local config = {
 
     },
 
-    formatters = {
-
-      shfmt = {
-        command = "shfmt",
-        args = {"-i", "2", "-bn", "-ci", "-sr"}
-      },
-
-      prettier = {
-        command = "prettier",
-        args = {"--stdin-filepath", "%filepath"},
-      }
-
-    },
-
     filetypes = {
       haskell = "hlint",
       lua = { "luacheck", "selene" },

@@ -12,7 +12,15 @@ local sources = {
     null_ls.builtins.formatting.stylua,
     null_ls.builtins.completion.spell,
     null_ls.builtins.diagnostics.proselint,
-    null_ls.builtins.hover.dictionary
+    null_ls.builtins.hover.dictionary,
+    null_ls.builtins.formatting.black.with({
+        method = null_ls.methods.FORMAT_ON_SAVE,
+        filetypes = { "python" }
+    }),
+    null_ls.builtins.formatting.isort,
+    -- null_ls.builtins.diagnostics.flake8,
+    -- null_ls.builtins.diagnostics.pylint,
+    -- null_ls.builtins.code_actions.refactoring
 }
 
 -- local markdownlint = {
@@ -52,7 +60,11 @@ M.config = function()
                 sources = sources,
     })
     require("lspconfig")["null-ls"].setup({
-        on_attach = common_on_attach,
+        on_attach = function(client)
+            if client.resolved_capabilities.document_formatting then
+                vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+            end
+        end,
     })
 end
 

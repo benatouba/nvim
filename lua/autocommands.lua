@@ -1,20 +1,3 @@
-local formatters = {}
-
-local javascript_autoformat = {'BufWritePre', '*.js', 'lua vim.lsp.buf.formatting_sync(nil, 1000)'}
-if O.jsts.format.auto then table.insert(formatters, javascript_autoformat) end
-
-local python_autocommands = {'BufWritePre', '*.py', 'Format'}
-if O.python.format.auto then table.insert(formatters, python_autocommands) end
-
-local lua_format = {'BufWritePre', '*.lua', 'Format'}
-if O.lua.format.auto then table.insert(formatters, lua_format) end
-
-local json_format = {'BufWritePre', '*.json', 'lua vim.lsp.buf.formatting_sync(nil, 1000)'}
-if O.json.format.auto then table.insert(formatters, json_format) end
-
-local ruby_format = {'BufWritePre', '*.rb', 'lua vim.lsp.buf.formatting_sync(nil,1000)'}
-if O.ruby.format.auto then table.insert(formatters, ruby_format) end
-
 AddAutocommands({
     _general_settings = {
         {'TextYankPost', '*', 'lua require(\'vim.highlight\').on_yank({higroup = \'Search\', timeout = 200})'},
@@ -45,5 +28,4 @@ AddAutocommands({
         {'FileType', 'help,lsp-installer,qf,fugitive,lspinfo,dashboard', 'nnoremap <silent> <buffer> <esc> :q<CR>'},
         -- {'buftype', 'nofile', 'nnoremap <silent> <buffer> q :q<CR>'},
     },
-    _auto_formatters = formatters,
 })

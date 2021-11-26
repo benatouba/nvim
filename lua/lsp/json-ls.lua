@@ -4,8 +4,6 @@ require'lspconfig'.jsonls.setup {
         "node", DATA_PATH .. "/lsp_servers/json/vscode-json/json-language-features/server/dist/node/jsonServerMain.js",
         "--stdio"
     },
-    on_attach = common_on_attach,
-
     commands = {
         Format = {
             function()

@@ -50,7 +50,7 @@ telescope.setup {
                 ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
                 -- To disable a keymap, put [map] = false
                 -- So, to not map "<C-n>", just put
-                -- ["<c-x>"] = false,
+                ["<c-h>"] = actions.which_key,
                 ["<esc>"] = actions.close,
 
                 -- Otherwise, just set the mapping to the function that you want it to be.

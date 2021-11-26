@@ -223,20 +223,6 @@ return require('packer').startup({
             } -- fails on startup. TODO: activate when #205 is fixed
         end
 
-        -- if O.snippets then -- miscellaneous stuff
-        --     use 'hrsh7th/vim-vsnip'
-        --     use 'rafamadriz/friendly-snippets'
-        -- end
-
-        -- if O.format then
-        --     use {
-        --         "mhartington/formatter.nvim",
-        --         config = function()
-        --             require('format.formatter').config()
-        --         end
-        --     }
-        -- end
-
         if O.test then
             use {
                 "rcarriga/vim-ultest",
