@@ -3,7 +3,6 @@ O = {
     lsp = false,
     git = false,
     snippets = false,
-    format = false,
     test = false,
     dap = false,
     misc = false,
@@ -51,127 +50,9 @@ O = {
         underline = true
     },
 
-    -- database = {save_location = '~/.config/nvcode_db', auto_execute = 1},
-    python = {
-        linter = '',
-        -- @usage can be 'yapf', 'black'
-        format = {
-            auto = false,
-            exe = '',
-            args = {},
-            stdin = false,
-            cwd = vim.fn.getcwd(),
-            isort = false
-        },
-        analysis = {
-            type_checking = "basic",
-            auto_search_paths = true,
-            use_library_code_types = true
-        }
-    },
-    -- dart = {sdk_path = '/usr/lib/dart/bin/snapshots/analysis_server.dart.snapshot'},
-    lua = {
-        format = {
-            -- @usage can be 'lua-format'
-            exe = '',
-            -- @usage table, additional arguments to pass to formatter (not stdin arg)
-            args = {},
-            -- @usage boolean, pass file as stdin?
-            stdin = false,
-            -- @usage string, path from where to start looking for formatters config files
-            cwd = false,
-            -- @usage boolean, autoformat on save?
-            auto = false
-        }
-    },
-    sh = {
-        -- @usage can be 'shellcheck'
-        linter = '',
-        format = {
-            -- @usage can be 'shfmt'
-            exe = '',
-            -- @usage table, additional arguments to pass to formatter (not stdin arg)
-            args = {},
-            -- @usage boolean, pass file as stdin?
-            stdin = false,
-            -- @usage string, path from where to start looking for formatters config files
-            cwd = false,
-            -- @usage boolean, autoformat on save?
-            auto = false
-        },
-        diagnostics = {virtual_text = true, signs = true, underline = true}
-    },
-    jsts = {
-        -- @usage can be 'eslint'
-        linter = '',
-        format = {
-            -- @usage can be 'prettier'
-            exe = '',
-            -- @usage table, additional arguments to pass to formatter (not stdin arg)
-            args = {},
-            -- @usage boolean, pass file as stdin?
-            stdin = false,
-            -- @usage string, path from where to start looking for formatters config files
-            cwd = false,
-            -- @usage boolean, autoformat on save?
-            auto = false
-        },
-        diagnostics = {virtual_text = true, signs = true, underline = true}
-    },
-    json = {
-        format = {
-            -- @usage can be 'prettier'
-            exe = '',
-            -- @usage table, additional arguments to pass to formatter (not stdin arg)
-            args = {},
-            -- @usage boolean, pass file as stdin?
-            stdin = false,
-            -- @usage string, path from where to start looking for formatters config files
-            cwd = false,
-            -- @usage boolean, autoformat on save?
-            auto = false
-        },
-        diagnostics = {virtual_text = true, signs = true, underline = true}
-    },
-    ruby = {
-        format = {
-            -- @usage string, your preferred ruby formatter
-            exe = '',
-            -- @usage table, additional arguments to pass to formatter (not stdin arg)
-            args = {},
-            -- @usage boolean, pass file as stdin?
-            stdin = false,
-            -- @usage string, path from where to start looking for formatters config files
-            cwd = false,
-            -- @usage boolean, autoformat on save?
-            auto = false
-        },
-        diagnostics = {virtual_text = true, signs = true, underline = true}
-    },
-    rust = {
-        format = {
-            -- @usage can be 'rustfmt'
-            exe = '',
-            -- @usage table, additional arguments to pass to formatter (not stdin arg)
-            args = {},
-            -- @usage boolean, pass file as stdin?
-            stdin = false,
-            -- @usage string, path from where to start looking for formatters config files
-            cwd = false,
-            -- @usage boolean, autoformat on save?
-            auto = false
-        },
-        diagnostics = {virtual_text = true, signs = true, underline = true}
-    },
-    -- tailwindls = {filetypes = {'html', 'css', 'scss', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact'}},
-    clang = {
-        diagnostics = {virtual_text = true, signs = true, underline = true}
-    },
     org = {agenda_files = {}, default_notes_file = ''},
     formatters = {}
 }
--- css = {exe = '', autoformat = false, virtual_text = true},
--- json = {exe = '', autoformat = false, virtual_text = true}
 
 DATA_PATH = vim.fn.stdpath('data')
 CACHE_PATH = vim.fn.stdpath('cache')

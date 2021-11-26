@@ -209,10 +209,6 @@ if O.testing then
     }
 end
 
-if O.format then
-    mappings["f"] = {"<cmd>Format<cr>", "Format"}
-end
-
 if O.project_management then
     mappings["o"] = {
         name = "+Organisation",
