@@ -208,7 +208,7 @@ return require('packer').startup({
         if O.git then -- Git (helpers)
             use {'tpope/vim-fugitive',
                 opt = false,
-                cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"}
+                -- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"}
             }
             use {
                 'TimUntersberger/neogit',

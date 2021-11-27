@@ -216,6 +216,17 @@ if O.project_management then
         c = { "<cmd>lua require('orgmode').action('capture.prompt')<CR>", "Capture"},
         }
 end
+local diffmaps = {
+    ["dr"] = {":diffget RE<CR>", "Diffget remote"},
+    ["dl"] = {":diffget LO<CR>", "Diffget local"},
+    ["db"] = {":diffget BA<CR>", "Diffget base"},
+}
 which_key.register(mappings, opts)
-which_key.register(visual_mappings, {mode = "v", prefix = "<leader>"})
+which_key.register(diffmaps, {
+    mode = "n", -- NORMAL mode
+    -- buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+    silent = true, -- use `silent` when creating keymaps
+    noremap = true, -- use `noremap` when creating keymaps
+    nowait = false -- use `nowait` when creating keymaps
+})
 which_key.register(terminal_mappings, terminal_opts)
