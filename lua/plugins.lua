@@ -154,10 +154,13 @@ return require('packer').startup({
                 event = {"BufReadPost", "InsertEnter"},
                 fn = {"edit", "e"},
                 cmd = {"LspStart", "LspInfo", "TSUpdate"},
-                after = "nvim-lsp-installer"
+                -- after = "nvim-lsp-installer"
             }
-            use {"williamboman/nvim-lsp-installer", event = {"CmdlineEnter", "InsertEnter"}, config = function() require('lsp.lsp_installer').config() end}
-            -- use "williamboman/nvim-lsp-installer"
+            use {"williamboman/nvim-lsp-installer",
+                event = {"CmdlineEnter", "InsertEnter"},
+                before = {"nvim-lspconfig"},
+                setup = function() require('lsp.lsp_installer').setup() end}
+
             use {
                 "hrsh7th/nvim-cmp",
                 -- event = "InsertEnter",

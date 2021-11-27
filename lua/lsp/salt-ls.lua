@@ -1,61 +1,46 @@
-local util = require "lspconfig/util"
-local configs = require "lspconfig/configs"
-local servers = require "nvim-lsp-installer.servers"
-local server_module = require "nvim-lsp-installer.server"
-local path = require "nvim-lsp-installer.path"
--- local installers = require "nvim-lsp-installer.installers"
-local shell = require "nvim-lsp-installer.installers.shell"
--- local pip3 = require "nvim-lsp-installer.installers.pip3"
--- local std = require "nvim-lsp-installer.installers.std"
--- local process = require "nvim-lsp-installer.process"
--- local platform = require "nvim-lsp-installer.platform"
-local server_name = "salt"
-local root_dir = server_module.get_server_root_path(server_name)
-
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-configs[server_name] = {
-    default_config = {
-        cmd = { root_dir .. "/venv/bin/python3", "-m", "salt_lsp"},
-        filetypes = {"sls"},
-        root_dir = util.root_pattern("top.sls", ".git", vim.fn.getcwd()),
-        capabilities = capabilities
-    },
-    docs = {
-        package_json = "https://github.com/dcermak/salt-lsp/tree/main",
-        description = [[
-            `salt-lsp` can be installed via `poetry` and `pip`:
-            ```sh
-            poetry install
-            poetry run dump_state_name_completions
-            poetry build
-
-            pip install --user --force-reinstall dist/salt_lsp-0.0.1*whl
-            ```
-        ]],
-        default_config = {
-            root_dir = [[root_pattern("top.sls", ".git", vim.fn.getcwd())]]
-        }
-    }
-}
-
-local installer_chain = {
-    -- std.git_clone("https://github.com/dcermak/salt-lsp.git"),
-    shell.polyshell("cd " .. root_dir .. " && git clone https://github.com/dcermak/salt-lsp.git ."),
-    shell.polyshell("cd " .. root_dir .. " && poetry install && poetry run dump_state_name_completions && poetry build"),
-    shell.polyshell("cd " .. root_dir .. " && python3 -m venv venv" ),
-    shell.polyshell("cd " .. root_dir .. " && ./venv/bin/pip3 install --force-reinstall dist/salt_lsp-0.0.1-py3-none-any.whl")
-}
-
-local salt_ls = server_module.Server:new {
-    name = server_name,
-    root_dir = root_dir,
-    installer = installer_chain,
-    default_options = {
-        cmd = { path.concat { root_dir, "venv", "bin", "python3" }, "-m", "salt_lsp" },
-    },
-}
-
 local lspconfig = require('lspconfig')
-lspconfig['salt'].setup({})
-servers.register(salt_ls)
+local configs = require "lspconfig/configs"
+
+local root_dir = vim.fn.stdpath("data") .. "/lsp_servers/salt"
+
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+
+configs["salt"] = {
+  default_config = {
+    cmd = { root_dir .. "/venv/bin/python3", "-m", "salt_lsp" },
+    filetypes = {"sls"},
+    root_dir = lspconfig.util.root_pattern("top.sls", ".git", vim.fn.getcwd()),
+    settings = {}
+  },
+--   docs = {
+--       package_json = "https://github.com/dcermak/salt-lsp/tree/main",
+--       description = [[
+--           `salt-lsp` can be installed via `poetry` and `pip`:
+--           ```sh
+--           poetry install
+--           poetry run dump_state_name_completions
+--           poetry build
+--
+--           pip install --user --force-reinstall dist/salt_lsp-0.0.1*whl
+--           ```
+--       ]],
+--       default_config = {
+--           root_dir = [[root_pattern("top.sls", ".git", vim.fn.getcwd())]]
+--       }
+--   }
+}
+
+-- lspconfig.salt.setup{
+--   on_attach = function(client, bufnr)
+--       local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+--       local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+--       buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+--       local opts = { noremap=true, silent=true }
+--       buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+--     end,
+--     capabilities = capabilities,
+--     flags = {
+--       debounce_text_changes = 150,
+--     }
+-- }
