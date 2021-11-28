@@ -11,7 +11,6 @@ M.config = function()
 
   vim.o.termguicolors = true
   g.nvim_tree_width = 40 -- 30 by default
-  g.nvim_tree_gitignore = 1 -- 0 by default
   -- g.nvim_tree_auto_open = 1 -- 0 by default, opens the tree when typing `vim $DIR` or `vim`
   -- g.nvim_tree_auto_close = 1 -- 0 by default, closes the tree when it's the last window
   g.nvim_tree_auto_ignore_ft = { 'startify', 'dashboard' } -- empty by default, don't auto open tree on specific filetypes.
@@ -67,6 +66,7 @@ M.config = function()
         error = "",
       }
     },
+    nvim_tree_gitignore = true,
     nvim_tree_hide_dotfiles = false,
     open_on_tab = true,
     open_on_setup = true,
