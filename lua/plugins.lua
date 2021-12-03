@@ -174,10 +174,10 @@ return require("packer").startup({
 				config = function()
 					require("lsp")
 				end,
-				event = { "BufReadPost", "InsertEnter" },
-				fn = { "edit", "e" },
-				cmd = { "LspStart", "LspInfo", "TSUpdate" },
-				-- after = "nvim-lsp-installer"
+				-- event = { "BufReadPost", "InsertEnter" },
+				-- fn = { "edit", "e" },
+				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
+				before = "nvim-lsp-installer"
 			})
 			use({
 				"williamboman/nvim-lsp-installer",

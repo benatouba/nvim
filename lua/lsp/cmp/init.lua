@@ -35,7 +35,34 @@ M.config = function()
       end,
     },
     formatting = {
-      format = require("lspkind").cmp_format({with_text = true, maxwidth = 50})
+      format = require("lspkind").cmp_format({
+        with_text = false,
+        maxwidth = 50,
+        menu = ({
+          buffer = "[Buf]",
+          nvim_lsp = "[LSP]",
+          luasnip = "[Snip]",
+          nvim_lua = "[Lua]",
+          latex_symbols = "[Latex]",
+          tmux = "[tmux]",
+          cmp_git = "[Git]",
+          orgmode = "[Org]",
+          zsh = "[Zsh]",
+          path = "[Path]",
+          calc = "[Calc]",
+          emoji = "[Emoji]",
+          tags = "[Tag]",
+          look = "[Look]",
+          vim_dadbod_completion = "[DB]",
+        })
+      })
+    },
+    experimental = {
+      -- I like the new menu better! Nice work hrsh7th
+      native_menu = false,
+
+      -- Let's play with this for a day or two
+      ghost_text = false,
     },
     -- preselect = false,
     -- documentation = {
@@ -110,18 +137,18 @@ M.config = function()
     -- --                 ﬘    m    
 
     sources = {
-        { name = 'nvim_lsp', max_item_count = 10  },
+        { name = 'nvim_lsp', max_item_count = 20  },
         { name = 'nvim_lua', max_item_count = 10  },
         { name = 'path', max_item_count = 10  },
         { name = 'cmp_git', max_item_count = 10  },
         { name = 'tmux', max_item_count = 10  },
         { name = 'orgmode', max_item_count = 10  },
         { name = 'luasnip', max_item_count = 10  },
-        { name = 'zsh', max_item_count = 10  },
+        -- { name = 'zsh', max_item_count = 10  },
         { name = 'calc', max_item_count = 10  },
         { name = 'emoji', max_item_count = 10  },
         { name = 'tags', max_item_count = 10  },
-        { name = 'look', max_item_count = 10  },
+        { name = 'look', keyword_length = 4, max_item_count = 10  },
         { name = 'vim-dadbod-completion', max_item_count = 10  },
         { name = 'buffer', keyword_length = 6, max_item_count = 10 }
         },
@@ -223,7 +250,7 @@ M.config = function()
 -- vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 cmp.setup.cmdline(':', {
   sources = cmp.config.sources({
-    { name = 'path' }
+    { name = 'path' },
   }, {
     { name = 'cmdline' }
   })
@@ -231,7 +258,8 @@ cmp.setup.cmdline(':', {
 
 cmp.setup.cmdline('/', {
   sources = {
-    { name = 'buffer' }
+    { name = 'buffer' },
+    { name = "nvim_lsp_document_symbol"}
   }
 })
 
@@ -267,5 +295,18 @@ cmp_git.setup({
     },
 })
 
+_ = vim.cmd [[
+  augroup DadbodSql
+    au!
+    autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer { sources = { { name = 'vim-dadbod-completion' } } }
+  augroup END
+]]
+
+_ = vim.cmd [[
+  augroup CmpZsh
+    au!
+    autocmd Filetype zsh lua require'cmp'.setup.buffer { sources = { { name = "zsh" }, } }
+  augroup END
+]]
 end
 return M

@@ -1,16 +1,16 @@
-local lspconfig = require("lspconfig")
-local configs = require("lspconfig/configs")
+local configs = require("lspconfig.configs")
+local util = require("lspconfig/util")
 
 local root_dir = vim.fn.stdpath("data") .. "/lsp_servers/salt"
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
 
 configs["salt"] = {
 	default_config = {
 		cmd = { root_dir .. "/venv/bin/python3", "-m", "salt_lsp" },
 		filetypes = { "sls" },
-		root_dir = lspconfig.util.root_pattern("top.sls", ".git", vim.fn.getcwd()),
+		root_dir = util.root_pattern("top.sls", ".git", vim.fn.getcwd()),
 		settings = {},
 	},
 	--   docs = {
@@ -31,7 +31,7 @@ configs["salt"] = {
 	--   }
 }
 
-lspconfig.salt.setup({
+require "lspconfig".salt.setup({
 	on_attach = function(client, bufnr)
 		local function buf_set_keymap(...)
 			vim.api.nvim_buf_set_keymap(bufnr, ...)
