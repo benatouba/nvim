@@ -63,7 +63,7 @@ local visual_mappings = {
     ["/"] = {":CommentToggle<CR>", "Comment"}
 }
 local mappings = {
-    ["/"] = {":CommentToggle<CR>", "Comment"},
+    -- ["/"] = {":CommentToggle<CR>", "Comment"},
     ["c"] = {":BufferClose<CR>", "Close Buffer"},
 	-- ["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
 	-- ["H"] = {":HopWord<cr>", "hop to word"},

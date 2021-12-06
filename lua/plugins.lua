@@ -124,11 +124,18 @@ return require("packer").startup({
 		}) -- increment/decrement basically everything
 		use({
 			"terrortylor/nvim-comment",
+			disable = true,
 			cmd = "CommentToggle",
 			config = function()
 				require("nvim_comment").setup()
 			end,
 		})
+		use {
+				'numToStr/Comment.nvim',
+				config = function()
+						require('base.comment_nvim').config()
+				end
+		}
 		use({ "mbbill/undotree", opt = true, cmd = "UndotreeToggle" })
 		use("tpope/vim-surround")
 
