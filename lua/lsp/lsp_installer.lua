@@ -3,12 +3,13 @@ if not lspi_ok then
 	print("nvim-lsp-installer not okay")
 	return
 end
-local servers = require("nvim-lsp-installer.servers")
-local path = require("nvim-lsp-installer.path")
-local shell = require("nvim-lsp-installer.installers.shell")
-local server = require("nvim-lsp-installer.server")
-local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
 
+-- local servers = require("nvim-lsp-installer.servers")
+-- local path = require("nvim-lsp-installer.path")
+-- local shell = require("nvim-lsp-installer.installers.shell")
+-- local server = require("nvim-lsp-installer.server")
+-- local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
+--
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 
@@ -55,19 +56,23 @@ M.setup = function()
 		local opts = {}
 		opts.capabilities = capabilities
 		if serv.name == "sumneko_lua" then
+			local runtime_path = vim.split(package.path, ';')
+			table.insert(runtime_path, "lua/?.lua")
+			table.insert(runtime_path, "lua/?/init.lua")
 			opts.settings = {
 				Lua = {
 					runtime = {
 						version = "LuaJIT",
-						path = vim.split(package.path, ";"),
+						path = runtime_path,
 					},
 					diagnostics = {
 						globals = { "vim", "execute" },
 					},
 					workspace = {
 						library = {
-							[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-							[vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+							-- [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+							vim.api.nvim_get_runtime_file("", true),
+							-- [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
 						},
 						maxPreload = 10000,
 						preloadFileSize = 1000,
@@ -75,7 +80,7 @@ M.setup = function()
 				},
 			}
 		end
-		opts.workspace = serv:setup({ opts, capabilities = capabilities })
+		opts.workspace = serv:setup(opts)
 		vim.cmd([[ do User LspAttachBuffers ]])
 	end)
 end
