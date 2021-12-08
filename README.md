@@ -28,11 +28,12 @@ Neovim hyperextensible Vim-based text editor. It has lua built-in functionality 
 - highly customizable package management ([packer.nvim](https://github.com/wbthomason/packer.nvim))
 - incrementing/decrementing/toggle basically anything ([dial.nvim](https://github.com/monaqa/dial.nvim))
 - key mappings helper ([which-key.nvim](https://github.com/folke/which-key.nvim))
-- syntax highlighting via regex ([vim-polyglot](https://github.com/sheerun/vim-polyglot))
+- syntax highlighting via regex for languages without [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) ([vim-polyglot](https://github.com/sheerun/vim-polyglot))
 - developer icons ([nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons)) NEED ONE OR ALL [PATCHED FONTS](https://github.com/ryanoasis/nerd-fonts)!
 - database access ([sql.nvim](https://github.com/tami5/sql.nvim))
 - color schemes ([nvcode-color-schemes.vim](https://github.com/ChristianChiarulli/nvcode-color-schemes.vim))
 check [lua/plugins.lua](lua/plugins.lua) for the full list
+- commenting via [Comment.nvim](https://github.com/numToStr/Comment.nvim)
 
 ### If you want more functionality checkout
 - Language Servers (diagnostics, linting, formatting)

@@ -130,12 +130,12 @@ return require("packer").startup({
 				require("nvim_comment").setup()
 			end,
 		})
-		use {
-				'numToStr/Comment.nvim',
-				config = function()
-						require('base.comment_nvim').config()
-				end
-		}
+		use({
+			"numToStr/Comment.nvim",
+			config = function()
+				require("base.comment_nvim").config()
+			end,
+		})
 		use({ "mbbill/undotree", opt = true, cmd = "UndotreeToggle" })
 		use("tpope/vim-surround")
 
@@ -184,7 +184,7 @@ return require("packer").startup({
 				-- event = { "BufReadPost", "InsertEnter" },
 				-- fn = { "edit", "e" },
 				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
-				before = "nvim-lsp-installer"
+				before = "nvim-lsp-installer",
 			})
 			use({
 				"williamboman/nvim-lsp-installer",
@@ -286,14 +286,21 @@ return require("packer").startup({
 			use({
 				"mfussenegger/nvim-dap",
 				config = function()
-					require("debug")
+					require("debug.dap").config()
+				end,
+			})
+			use({
+				"mfussenegger/nvim-dap-python",
+				ft = "python",
+				config = function()
+					require("debug.dap_python").config()
 				end,
 			})
 			use({
 				"rcarriga/nvim-dap-ui",
 				after = "nvim-dap",
 				config = function()
-					require("dapui").setup()
+					require("debug.dapui").config()
 				end,
 			})
 			use({ "Pocco81/DAPInstall.nvim", after = "nvim-dap" })
@@ -309,10 +316,10 @@ return require("packer").startup({
 
 		if O.project_management then
 			use({
-				"kristijanhusak/orgmode.nvim",
-				keys = "<leader>o",
+				"nvim-orgmode/orgmode.nvim",
+				-- keys = "<leader>o",
 				config = function()
-					require("org").config()
+					require("management.orgmode")
 				end,
 			})
 		end
@@ -353,6 +360,18 @@ return require("packer").startup({
 		end
 		use("wuelnerdotexe/vim-enfocado")
 		use("folke/tokyonight.nvim")
+		use({
+			"ThePrimeagen/refactoring.nvim",
+			requires = {
+				{ "nvim-lua/plenary.nvim" },
+				{ "nvim-treesitter/nvim-treesitter" },
+			},
+			config = function()
+				require("misc.refactoring")
+			end,
+		})
+		use({ "ellisonleao/glow.nvim", ft = { "markdown" } })
+		use({ "szw/vim-maximizer" })
 	end,
 	config = {
 		profile = {
