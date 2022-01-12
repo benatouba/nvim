@@ -37,7 +37,7 @@ mappings["d"] = {
 	o = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
 	O = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
 	p = { "<cmd>lua require'dap'.pause.toggle()<cr>", "Pause" },
-	q = { "<cmd>lua require'dap'.stop()<cr>", "Quit" },
+	q = { "<cmd>lua require'dap'.close()<cr>", "Quit" },
 	r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Toggle Repl" },
 	s = { "<cmd>lua require'dap'.step_back()<cr>", "Step Back" },
 }
