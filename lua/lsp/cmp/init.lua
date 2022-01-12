@@ -116,28 +116,12 @@ M.config = function()
 				end
 			end, { "i", "s" }),
 		},
-		-- vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-		-- vim.api.nvim_set_keymap("i", "<C-j>", "v:lua.tab_complete()", {expr = true})
-		-- vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-		-- vim.api.nvim_set_keymap("s", "<C-j>", "v:lua.tab_complete()", {expr = true})
-		-- vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-		-- vim.api.nvim_set_keymap("s", "<C-k>", "v:lua.s_tab_complete()", {expr = true})
-		-- vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-		-- vim.api.nvim_set_keymap("s", "<C-k>", "v:lua.s_tab_complete()", {expr = true})
-		-- vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-		--
-		-- vim.api.nvim_set_keymap("i", "<C-Space>", "cmp#complete()", { noremap = true, silent = true, expr = true })
-		-- vim.api.nvim_set_keymap("i", "<CR>", "cmp#confirm({ 'keys': '<CR>', 'select': v:true })", { noremap = true, silent = true, expr = true })
-		-- vim.api.nvim_set_keymap("i", "<C-h>", "cmp#close('<C-h>')", { noremap = true, silent = true, expr = true })
-		-- vim.api.nvim_set_keymap("i", "<C-e>", "cmp#close('<C-e>')", { noremap = true, silent = true, expr = true })
-		-- -- vim.api.nvim_set_keymap("i", "<ESC>", "cmp#close('<ESC>')", { noremap = true, silent = true, expr = true })
-		-- vim.api.nvim_set_keymap("i", "<C-f>", "cmp#scroll({ 'delta': +4 })", { noremap = true, silent = true, expr = true })
-		-- vim.api.nvim_set_keymap("i", "<C-d>", "cmp#scroll({ 'delta': -4 })", { noremap = true, silent = true, expr = true })
-
 		-- --                 ﬘    m    
 
 		sources = {
 			{ name = "nvim_lsp", max_item_count = 20 },
+			{ name = "nvim_lsp_document_symbol", max_item_count = 10},
+			{ name = 'treesitter', max_item_count = 10, keyword_length = 3},
 			{ name = "nvim_lua", max_item_count = 10 },
 			{ name = "path" },
 			{ name = "cmp_git", max_item_count = 10 },
@@ -244,10 +228,6 @@ M.config = function()
 	--     end
 	-- end
 
-	-- vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", {expr = true})
-	-- vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", {expr = true})
-	-- vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
-	-- vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", {expr = true})
 	cmp.setup.cmdline(":", {
 		sources = cmp.config.sources({
 			{ name = "path" },

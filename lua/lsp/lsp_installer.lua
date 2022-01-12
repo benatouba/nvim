@@ -4,13 +4,18 @@ if not lspi_ok then
 	return
 end
 
+local lsp_status_ok, lsp_status = pcall(require, "lsp-status")
+if not lsp_status_ok then
+	print("lsp-status not okay in lsp_installer")
+end
+
 -- local servers = require("nvim-lsp-installer.servers")
 -- local path = require("nvim-lsp-installer.path")
 -- local shell = require("nvim-lsp-installer.installers.shell")
 -- local server = require("nvim-lsp-installer.server")
 -- local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
 --
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = function() return require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) end
 
 
 -- local register_salt_ls = function()
@@ -52,9 +57,11 @@ M.setup = function()
 	-- else
 	-- 	P("lspconfig not okay")
 	-- end
+	lsp_status.register_progress()
 	lsp_installer.on_server_ready(function(serv)
 		local opts = {}
-		opts.capabilities = capabilities
+		opts.capabilities = capabilities()
+		opts.on_attach = lsp_status.on_attach
 		if serv.name == "sumneko_lua" then
 			local runtime_path = vim.split(package.path, ';')
 			table.insert(runtime_path, "lua/?.lua")
@@ -80,9 +87,10 @@ M.setup = function()
 				},
 			}
 		end
-		opts.workspace = serv:setup(opts)
+		serv:setup(opts)
 		vim.cmd([[ do User LspAttachBuffers ]])
 	end)
 end
+
 
 return M
