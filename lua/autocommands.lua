@@ -15,7 +15,7 @@ AddAutocommands({
 		{ "BufWritePost", "~/.config/nvim/init.lua", "lua require('functions').reload_config()" },
 		{ "BufWritePre", "*", ":%s/\\s\\+$//e" },
 		{ "BufNewFile", "*", "setlocal formatoptions-=c formatoptions-=r formatoptions-=o" },
-		{ "VimLeavePre", "*", "set title set titleold=" },
+		-- { "VimLeavePre", "*", "set title set titleold=" },
 		{ "BufWinEnter,BufRead,BufNewFile", "*.sls", "setf sls" },
 	},
 	_markdown = { { "FileType", "markdown", "setlocal wrap" } },
