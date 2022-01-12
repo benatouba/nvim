@@ -10,31 +10,22 @@ local opts = {
 	prefix = "<leader>",
 	-- buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
 	silent = true, -- use `silent` when creating keymaps
-	noremap = true, -- use `noremap` when creating keymaps
+  noremap = true, -- use `remap` when creating keymaps
 	nowait = false, -- use `nowait` when creating keymaps
 }
 
 local terminal_mappings = {}
 local terminal_opts = { mode = "t" }
 -- Set leader
-vim.api.nvim_set_keymap("n", "<Space>", "<NOP>", { noremap = true, silent = true })
-vim.g.mapleader = O.mapleader
+-- vim.keymap.del("n", " ")
+vim.g.mapleader = " "
 
--- Comments
--- vim.api.nvim_set_keymap("v", "<leader>/", ":CommentToggle<CR>", {noremap = true, silent = true})
-
--- TODO create entire treesitter section
-
-local visual_mappings = {
-	["/"] = { ":CommentToggle<CR>", "Comment" },
-}
 local mappings = {
-	-- ["/"] = {":CommentToggle<CR>", "Comment"},
-	["m"] = { ":MaximizerToggle", "Maximize/Minimize" },
+	["m"] = { ":MaximizerToggle<CR>", "Maximize/Minimize" },
 	["c"] = { ":BufferClose<CR>", "Close Buffer" },
 	-- ["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
 	-- ["H"] = {":HopWord<cr>", "hop to word"},
-	["e"] = { ":NvimTreeToggle<cr>", "Explorer" },
+	["e"] = { ":CHADopen<cr>", "Explorer" },
 	["u"] = { ":UndotreeToggle<cr>", "Undotree" },
 
 	-- a is for actions
@@ -69,8 +60,8 @@ local mappings = {
 		b = { "<cmd>Telescope git_branches<cr>", "Branches" },
 		B = { "<cmd>Telescope file_browser<cr>", "Browser" },
 		c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-		d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics" },
-		D = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
+		d = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
+		D = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
 		f = { "<cmd>Telescope find_files<cr>", "Find File" },
 		g = { "<cmd>Telescope git_files<cr>", "Git Files" },
 		m = { "<cmd>Telescope marks<cr>", "Marks" },
@@ -98,13 +89,14 @@ if O.lsp then
 		f = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format Document" },
 		h = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Find definition" },
 		i = { "<cmd>LspInfo<cr>", "Info" },
+		n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
 		I = { "<cmd>LspInstallInfo<cr>", "Install Info" },
 		j = {
-			"<cmd>lua vim.lsp.diagnostic.goto_next({popup_opts = {border = O.lsp.popup_border}})<cr>",
+			"<cmd>lua vim.diagnostic.goto_next({popup_opts = {border = O.lsp.popup_border}})<cr>",
 			"Next Diagnostic",
 		},
 		k = {
-			"<cmd>lua vim.lsp.diagnostic.goto_prev({popup_opts = {border = O.lsp.popup_border}})<cr>",
+			"<cmd>lua vim.diagnostic.goto_prev({popup_opts = {border = O.lsp.popup_border}})<cr>",
 			"Prev Diagnostic",
 		},
 		q = { "<cmd>Telescope quickfix<cr>", "Quickfix" },
@@ -114,7 +106,6 @@ if O.lsp then
 		s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
 		S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols" },
 	}
-	visual_mappings["f"] = { "<cmd>lua vim.lsp.buf.range_formatting()<CR>", "Format" }
 end
 
 mappings["L"] = {
@@ -178,8 +169,5 @@ which_key.register(mappings, opts)
 which_key.register(diffmaps, {
 	mode = "n", -- NORMAL mode
 	-- buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-	silent = true, -- use `silent` when creating keymaps
-	noremap = true, -- use `noremap` when creating keymaps
-	nowait = false, -- use `nowait` when creating keymaps
 })
 which_key.register(terminal_mappings, terminal_opts)
