@@ -1,24 +1,28 @@
 local comment_ok, comment = pcall(require, "Comment")
-local tsc_ok, tsc = pcall(require, "ts_context_commentstring.utils")
+-- local tsc_ok, tsc = pcall(require, "ts_context_commentstring.utils")
 if not comment_ok then
-    P("Comment.nvim not ok")
-    return
+	P("Comment.nvim not ok")
+	return
 end
-local wk = require('which-key')
+local wk = require("which-key")
 
 local M = {}
 
 local mappings_n = {
-    ["/"] = {"<cmd>lua require('Comment.api').toggle()<CR>", "Comment Line"},
+	["/"] = { "<cmd>lua require('Comment.api').toggle()<CR>", "Comment Line" },
 }
 local mappings = {
-    ["gc"] = {
-        name = '+Comment',
-        c = "Line Comment",
-        o = "Comment New Line",
-        O = "Comment New Line Above Cursor",
-        A = "Comment at End of Line"
-    }
+	["c"] = {
+		name = "+Comment",
+		c = "Line Comment",
+		o = "Comment New Line",
+		O = "Comment New Line Above Cursor",
+		A = "Comment at End of Line",
+	},
+	["b"] = {
+		name = "+Block Comment",
+		c = "Comment",
+	},
 }
 
 local opts = {}
@@ -50,10 +54,9 @@ local opts = {}
 end ]]
 
 M.config = function()
-    comment.setup(opts)
-    wk.register(mappings, {prefix = ""})
-    wk.register(mappings_n, {prefix = '<leader>'})
+	comment.setup(opts)
+	wk.register(mappings, { prefix = "g" })
+	wk.register(mappings_n, { prefix = "<leader>" })
 end
-
 
 return M

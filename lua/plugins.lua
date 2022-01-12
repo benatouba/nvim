@@ -32,7 +32,6 @@ return require("packer").startup({
 		use("wbthomason/packer.nvim") -- plugin manager
 		use("nvim-lua/popup.nvim") -- handle popup (important)
 		use("nvim-lua/plenary.nvim") -- most important functions (very important)
-		use("tjdevries/astronauta.nvim") -- better plugin config loading
 		use({
 			"lewis6991/impatient.nvim",
 			config = function()
@@ -97,21 +96,33 @@ return require("packer").startup({
 		})
 
 		-- Status Line and Bufferline
-		use({
+		--[[ use({
 			"NTBBloodbath/galaxyline.nvim",
 			config = function()
 				require("base.galaxyline")
 			end,
+		}) ]]
+		use({
+			"nvim-lualine/lualine.nvim",
+			requires = {
+				{ "kyazdani42/nvim-web-devicons", opt = true },
+				"nvim-lua/lsp-status.nvim",
+				"arkav/lualine-lsp-progress",
+			},
+			config = function()
+				require('base.lualine').config()
+			end,
 		})
 		use("romgrk/barbar.nvim")
-		use({
-			"kyazdani42/nvim-tree.lua",
-			-- opt = true,
-			config = function()
-				require("base.nvim-tree").config()
-			end,
-			-- cmd = "NvimTreeToggle"
-		})
+		-- use({
+		-- 	"kyazdani42/nvim-tree.lua",
+		-- 	-- opt = true,
+		-- 	config = function()
+		-- 		require("base.nvim-tree").config()
+		-- 	end,
+		-- 	-- cmd = "NvimTreeToggle"
+		-- })
+		use({ "ms-jpq/chadtree", branch = "chad", run = ":CHADdeps" })
 
 		-- manipulation
 		use({
@@ -186,6 +197,9 @@ return require("packer").startup({
 				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
 				before = "nvim-lsp-installer",
 			})
+			use {
+				"ray-x/lsp_signature.nvim",
+			}
 			use({
 				"williamboman/nvim-lsp-installer",
 				-- disable = true,
@@ -202,7 +216,8 @@ return require("packer").startup({
 				requires = {
 					"hrsh7th/cmp-buffer",
 					"hrsh7th/cmp-nvim-lsp",
-					"hrsh7th/cmp-path",
+					"hrsh7th/cmp-nvim-lsp-document-symbol",
+          "hrsh7th/cmp-path",
 					"hrsh7th/cmp-nvim-lua",
 					"hrsh7th/cmp-calc",
 					"hrsh7th/cmp-emoji",
@@ -243,11 +258,11 @@ return require("packer").startup({
 			use({ "folke/trouble.nvim", cmd = "TroubleToggle" })
 			use({
 				"jose-elias-alvarez/null-ls.nvim",
-				event = { "BufReadPost", "InsertEnter" },
-				fn = { "edit", "e" },
-				cmd = { "LspStart", "LspInfo", "TSUpdate" },
-				after = "nvim-lspconfig",
+				-- event = { "BufReadPost", "InsertEnter" },
+				-- fn = { "edit", "e" },
+				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
 				config = function()
+					-- require("null-ls").setup()
 					require("lsp.null-ls").config()
 				end,
 			})
@@ -342,6 +357,7 @@ return require("packer").startup({
 			})
 			use({
 				"folke/todo-comments.nvim",
+				disable = true,
 				config = function()
 					require("todo-comments").setup()
 				end,
@@ -370,7 +386,7 @@ return require("packer").startup({
 				require("misc.refactoring")
 			end,
 		})
-		use({ "ellisonleao/glow.nvim", ft = { "markdown" } })
+		use { "iamcco/markdown-preview.nvim", ft = "markdown", run = "cd app && yarn install" }
 		use({ "szw/vim-maximizer" })
 	end,
 	config = {
