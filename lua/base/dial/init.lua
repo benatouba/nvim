@@ -1,39 +1,47 @@
 local M = {}
-local dial = require("dial")
 
 M.config = function()
-dial.augends["custom#boolean"] = dial.common.enum_cyclic{
-    name = "boolean",
-    strlist = {"true", "false"},
-}
-table.insert(dial.config.searchlist.normal, "custom#boolean")
 
-dial.augends["custom#boolean_cap"] = dial.common.enum_cyclic{
-    name = "boolean_cap",
-    strlist = {"True", "False"},
-}
-table.insert(dial.config.searchlist.normal, "custom#boolean_cap")
+  local dial_ok, config = pcall(require, "dial.config")
+  if not dial_ok then
+      P("dial not okay")
+      return
+  end
 
-dial.augends["custom#boolean_allcaps"] = dial.common.enum_cyclic{
-    name = "boolean_allcaps",
-    strlist = {"TRUE", "FALSE"},
-}
-table.insert(dial.config.searchlist.normal, "custom#boolean_allcaps")
+  local augend = require("dial.augend")
 
-dial.augends["custom#fortran#boolean"] = dial.common.enum_cyclic{
-    name = "fortran-style boolean",
-    strlist = {"T", "F"},
-}
-table.insert(dial.config.searchlist.normal, "custom#fortran#boolean")
-table.insert(dial.config.searchlist.normal, "date#[%Y/%m/%d]")
+  config.augends:register_group{
+    default = {
+      augend.integer.alias.decimal,
+      augend.constant.alias.bool,
+      augend.date.alias["%m/%d"],
+      augend.date.alias["%Y/%m/%d"],
+      augend.constant.alias.alpha,
+    },
+    fortran = {
+      augend.constant.new{ elements = {"T", "F"} },
+    },
+    javascript = {
+      augend.constant.new{ elements = {"let", "const", "var"} },
+    },
+    python = {
+      augend.constant.new{ elements = {"def", "class"}}
+    }
+  }
 
-vim.cmd([[
-nmap <C-c> <Plug>(dial-increment)
-nmap <C-x> <Plug>(dial-decrement)
-vmap <C-c> <Plug>(dial-increment)
-vmap <C-x> <Plug>(dial-decrement)
-vmap g<C-c> <Plug>(dial-increment-additional)
-vmap g<C-x> <Plug>(dial-decrement-additional)
+  vim.cmd([[
+    nmap <C-c> <Plug>(dial-increment)
+    nmap <C-x> <Plug>(dial-decrement)
+    vmap <C-c> <Plug>(dial-increment)
+    vmap <C-x> <Plug>(dial-decrement)
+    vmap g<C-c> <Plug>(dial-increment-additional)
+    vmap g<C-x> <Plug>(dial-decrement-additional)
+    autocmd FileType javascript lua vim.api.nvim_buf_set_keymap(0, "n", "<C-a>", require("dial.map").inc_normal("javascript"), {noremap = true})
+    autocmd FileType javascript lua vim.api.nvim_buf_set_keymap(0, "n", "<C-x>", require("dial.map").dec_normal("javascript"), {noremap = true})
+    autocmd FileType fortran lua vim.api.nvim_buf_set_keymap(0, "n", "<C-a>", require("dial.map").inc_normal("fortran"), {noremap = true})
+    autocmd FileType fortran lua vim.api.nvim_buf_set_keymap(0, "n", "<C-x>", require("dial.map").dec_normal("fortran"), {noremap = true})
+    autocmd FileType python lua vim.api.nvim_buf_set_keymap(0, "n", "<C-a>", require("dial.map").inc_normal("python"), {noremap = true})
+    autocmd FileType python lua vim.api.nvim_buf_set_keymap(0, "n", "<C-x>", require("dial.map").dec_normal("python"), {noremap = true})
   ]])
 
 end

@@ -127,11 +127,9 @@ return require("packer").startup({
 		-- manipulation
 		use({
 			"monaqa/dial.nvim",
-			opt = true,
 			config = function()
 				require("base.dial").config()
 			end,
-			event = "BufReadPost",
 		}) -- increment/decrement basically everything
 		use({
 			"terrortylor/nvim-comment",

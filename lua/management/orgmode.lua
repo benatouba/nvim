@@ -31,4 +31,5 @@ require("nvim-treesitter.configs").setup({
 
 O.org.org_timestamp_up = "+"
 O.org.org_timestamp_down = "-"
+org.setup_ts_grammar()
 org.setup(O.org)
