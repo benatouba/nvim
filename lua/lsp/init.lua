@@ -15,7 +15,6 @@
 -- require('lsp.pylsp-ls')
 -- require('lsp.python-jedi-ls')
 -- require('lsp.r-ls')
-require('lsp.salt-ls')
 -- require('lsp.vim-ls')
 -- require('lsp.vue-ls')
 -- require('lsp.yaml-ls')

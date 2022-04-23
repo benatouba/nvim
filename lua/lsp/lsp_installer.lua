@@ -18,45 +18,9 @@ end
 local capabilities = function() return require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) end
 
 
--- local register_salt_ls = function()
--- local root_dir = server.get_server_root_path("salt")
--- local root_dir = vim.fn.stdpath("data") .. "/lsp_servers/salt"
--- local installer_chain = {
--- 	shell.polyshell("Not implemented. Install manually."),
--- shell.polyshell("mkdir -p " .. root_dir),
--- shell.polyshell("cd " .. root_dir .. " && git clone https://github.com/dcermak/salt-lsp.git ."),
--- shell.polyshell("cd " .. root_dir .. " && python3 -m venv venv"),
--- shell.polyshell("cd " .. root_dir .. " && ./venv/bin/pip3 install poetry"),
--- shell.polyshell("cd " .. root_dir .. " && git pull"),
--- shell.polyshell(
--- 	"cd "
--- 		.. root_dir
--- 		.. " && ./venv/bin/poetry install && ./venv/bin/poetry run dump_state_name_completions && ./venv/bin/poetry build"
--- ),
--- shell.polyshell(
--- 	"cd " .. root_dir .. " && ./venv/bin/pip3 install --force-reinstall dist/salt_lsp-0.0.1-py3-none-any.whl"
--- ),
--- }
-
--- 	local salt_ls = server.Server:new({
--- 		name = "salt",
--- 		root_dir = root_dir,
--- 		installer = installer_chain,
--- 		default_options = {
--- 			cmd = { root_dir .. "/venv/bin/python3", "-m", "salt_lsp" },
--- 		},
--- 	})
--- 	servers.register(salt_ls)
--- end
-
 local M = {}
 
 M.setup = function()
-	-- if lspconfig_ok then
-	-- 	register_salt_ls()
-	-- else
-	-- 	P("lspconfig not okay")
-	-- end
 	lsp_status.register_progress()
 	lsp_installer.on_server_ready(function(serv)
 		local opts = {}
