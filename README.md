@@ -99,5 +99,4 @@ The mnemomics for this config should extend that way of thinking. Say you want t
 - find best, minimal setup
 - ship some patched fonts
 - handle installation of dependencies
-- figure out simple installation (via saltstack)
 - figure out how to ship globally

@@ -36,7 +36,6 @@ vim.o.showmode = false -- We don't need to see things like -- INSERT -- anymore
 vim.o.backup = true -- backup files
 vim.o.writebackup = true -- backup files during writing
 vim.wo.signcolumn = "yes:1" -- Always show the signcolumn, otherwise it would shift the text each time
-vim.g.python3_host_prog = "/home/ben/.pyenv/versions/3.9.9/bin/python3"
 vim.o.updatetime = 500 -- Faster completion
 vim.o.timeoutlen = 500 -- By default timeoutlen is 1000 ms
 -- vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
