@@ -99,11 +99,11 @@ function funcs.document_symbol()
 end
 
 function funcs.formatting()
-	vim.lsp.buf.formatting()
+	vim.lsp.buf.format({ async = true })
 end
 
 function funcs.formatting_sync()
-	vim.lsp.buf.formatting_sync()
+	vim.lsp.buf.format()
 end
 
 function funcs.hover()

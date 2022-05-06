@@ -62,31 +62,31 @@ M.setup = function()
 		local opts = {}
 		opts.capabilities = capabilities()
 		opts.on_attach = lsp_status.on_attach
-		if serv.name == "sumneko_lua" then
-			local runtime_path = vim.split(package.path, ';')
-			table.insert(runtime_path, "lua/?.lua")
-			table.insert(runtime_path, "lua/?/init.lua")
-			opts.settings = {
-				Lua = {
-					runtime = {
-						version = "LuaJIT",
-						path = runtime_path,
-					},
-					diagnostics = {
-						globals = { "vim", "execute" },
-					},
-					workspace = {
-						library = {
-							-- [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-							vim.api.nvim_get_runtime_file("", true),
-							-- [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-						},
-						maxPreload = 10000,
-						preloadFileSize = 1000,
-					},
-				},
-			}
-		end
+		-- if serv.name == "sumneko_lua" then
+		-- 	local runtime_path = vim.split(package.path, ';')
+		-- 	table.insert(runtime_path, "lua/?.lua")
+		-- 	table.insert(runtime_path, "lua/?/init.lua")
+		-- 	opts.settings = {
+		-- 		Lua = {
+		-- 			runtime = {
+		-- 				version = "LuaJIT",
+		-- 				path = runtime_path,
+		-- 			},
+		-- 			diagnostics = {
+		-- 				globals = { "vim", "execute" },
+		-- 			},
+		-- 			workspace = {
+		-- 				library = {
+		-- 					-- [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+		-- 					vim.api.nvim_get_runtime_file("", true),
+		-- 					-- [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+		-- 				},
+		-- 				maxPreload = 10000,
+		-- 				preloadFileSize = 1000,
+		-- 			},
+		-- 		},
+		-- 	}
+		-- end
 		serv:setup(opts)
 		vim.cmd([[ do User LspAttachBuffers ]])
 	end)

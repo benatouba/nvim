@@ -40,6 +40,8 @@ vim.g.python3_host_prog = "/home/ben/.pyenv/versions/3.9.9/bin/python3"
 vim.o.updatetime = 500 -- Faster completion
 vim.o.timeoutlen = 500 -- By default timeoutlen is 1000 ms
 -- vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
+-- vim.cmd("set foldmethod=expr")
+-- vim.cmd("set foldexpr=nvim_treesitter#foldexpr()")
 
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
 vim.o.smartcase = true -- smartcase makes it so that searching becomes case sensitive if you use a capital letter
@@ -56,7 +58,7 @@ vim.o.directory = vim.fn.stdpath("data") .. "/directory" -- Configure 'directory
 vim.o.conceallevel = 0 -- Every character can be seen
 
 -- Settings for folkes tokyo night colorscheme
-vim.g.tokynight_style = "night"
-vim.g.tokyonight_transparent = true
+vim.g.tokynight_style = "storm"
+-- vim.g.tokyonight_transparent = true
 vim.g.tokyonight_sidebars = { "terminal", "packer", "qf", "nvimtree" }
-vim.g.tokyonight_colors = { hint = "orange", error = "#ff0000" }
+-- vim.g.tokyonight_colors = { hint = "orange", error = "#ff0000" }

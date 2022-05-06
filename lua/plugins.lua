@@ -156,10 +156,7 @@ return require("packer").startup({
 			-- Treesitter
 			use({
 				"nvim-treesitter/nvim-treesitter",
-				run = ":TSUpdate",
-				config = function()
-					require("language_parsing.treesitter")
-				end,
+				run = ":TSUpdate"
 			})
 			use({
 				"nvim-treesitter/nvim-treesitter-refactor",
@@ -215,7 +212,9 @@ return require("packer").startup({
 					"hrsh7th/cmp-buffer",
 					"hrsh7th/cmp-nvim-lsp",
 					"hrsh7th/cmp-nvim-lsp-document-symbol",
-          "hrsh7th/cmp-path",
+					"hrsh7th/cmp-nvim-lsp-signature-help",
+					"hrsh7th/cmp-copilot",
+					"hrsh7th/cmp-path",
 					"hrsh7th/cmp-nvim-lua",
 					"hrsh7th/cmp-calc",
 					"hrsh7th/cmp-emoji",
@@ -238,6 +237,7 @@ return require("packer").startup({
 				config = function()
 					require("lsp.cmp").config()
 				end,
+				before = "nvim-lsp-installer",
 				-- disable = true,
 			})
 			use("rafamadriz/friendly-snippets")
@@ -392,6 +392,6 @@ return require("packer").startup({
 			enable = true,
 			threshold = 1, -- the amount in ms that a plugins load time must be over for it to be included in the profile
 		},
-		compile_path = packer_compile_path,
+		compile_path = O.packer_compile_path,
 	},
 })

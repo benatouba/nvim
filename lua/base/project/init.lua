@@ -7,7 +7,11 @@ M.setup = function()
         print('Project.nvim not okay')
     end
 
-    project.setup { }
+    project.setup{
+        detection_methods = { "lsp", "pattern", "=src", ">projects", ">scripts", "pillar", ".git", "=nvim"},
+        ignore_lsp = { 'null-ls', "salt-lsp"},
+        exclude_dirs = { "*/node_modules/*" },
+    }
     require('telescope').load_extension('projects')
 end
 

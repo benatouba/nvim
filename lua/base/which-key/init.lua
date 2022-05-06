@@ -86,11 +86,11 @@ if O.lsp then
 		A = { "<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action" },
 		d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics" },
 		D = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
-		f = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format Document" },
+		f = { "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", "Format Document" },
 		h = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Find definition" },
-		i = { "<cmd>LspInfo<cr>", "Info" },
+		i = { "<cmd>LspInstallInfo<cr>", "Install Info" },
+		I = { "<cmd>LspInfo<cr>", "Info" },
 		n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
-		I = { "<cmd>LspInstallInfo<cr>", "Install Info" },
 		j = {
 			"<cmd>lua vim.diagnostic.goto_next({popup_opts = {border = O.lsp.popup_border}})<cr>",
 			"Next Diagnostic",
@@ -171,3 +171,11 @@ which_key.register(diffmaps, {
 	-- buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
 })
 which_key.register(terminal_mappings, terminal_opts)
+
+local gmaps = {
+	["rr"] = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "TS Rename" }
+}
+which_key.register(gmaps, {
+	mode = "n", -- NORMAL mode
+	prefix = "g"
+})

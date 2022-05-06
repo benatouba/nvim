@@ -1,11 +1,17 @@
 -- local M = {}
+--
 -- M.config = function()
-require("nvim-treesitter.configs").setup({
+local ts_ok, ts = pcall(require, "nvim-treesitter.configs")
+if not ts_ok then
+	P("Treesitter not okay")
+	return
+end
+ts.setup({
 	ensure_installed = O.treesitter.ensure_installed,
 	ignore_install = O.treesitter.ignore_install,
 	highlight = {
-		enable = O.treesitter.highlight.enabled, -- false will disable the whole extension
-		additional_vim_regex_highlighting = true,
+		enable = true,
+		additional_vim_regex_highlighting = false,
 		config = {
 			vue = {
 				style_element = "// %s",
@@ -13,14 +19,14 @@ require("nvim-treesitter.configs").setup({
 		},
 	},
 	incremental_selection = {
-    enable = true,
-    keymaps = {
-      init_selection = "<CR>",
-      scope_incremental = "<CR>",
-      node_incremental = "<TAB>",
-      node_decremental = "<S-TAB>",
-    },
-  },
+		enable = true,
+		keymaps = {
+			init_selection = "<CR>",
+			scope_incremental = "<CR>",
+			node_incremental = "<TAB>",
+			node_decremental = "<S-TAB>",
+		},
+	},
 	context_commentstring = { enable = true },
 	indent = {
 		enable = true,
@@ -29,14 +35,14 @@ require("nvim-treesitter.configs").setup({
 	matchup = { enable = true },
 	autopairs = { enable = true },
 	playground = {
-		enable = O.treesitter.playground.enabled,
+		enable = true,
 		disable = {},
 		updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
 		persist_queries = false, -- Whether the query persists across vim sessions
 	},
 	autotag = { enable = true },
 	rainbow = {
-		enable = O.treesitter.rainbow.enabled,
+		enable = true,
 		extended_mode = true, -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
 		max_file_lines = 1000, -- Do not enable for files with more than 1000 lines, int
 	},
@@ -97,12 +103,22 @@ require("nvim-treesitter.configs").setup({
 	},
 
 	refactor = {
-		highlight_definitions = { enable = true },
-		highlight_current_scope = { enable = true },
+		-- highlight_definitions = { enable = true },
+		-- highlight_current_scope = { enable = true },
+		navigation = {
+			enable = true,
+			keymaps = {
+				goto_definition_lsp_fallback = "gnd",
+				list_definitions = "gnD",
+				list_definitions_toc = "gO",
+				goto_next_usage = "<a-*>",
+				goto_previous_usage = "<a-#>",
+			},
+		},
 		smart_rename = {
 			enable = true,
 			keymaps = {
-				smart_rename = "grr",
+				smart_rename = "gr",
 			},
 		},
 	},
