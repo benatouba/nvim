@@ -13,48 +13,74 @@ end
 -- local path = require("nvim-lsp-installer.path")
 -- local shell = require("nvim-lsp-installer.installers.shell")
 -- local server = require("nvim-lsp-installer.server")
--- local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
---
-local capabilities = function() return require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) end
+local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
+if not lspconfig_ok then
+		print("lspconfig not okay in lsp_installer")
+	return
+end
 
+local capabilities = function() return require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) end
 
 local M = {}
 
 M.setup = function()
-	lsp_status.register_progress()
-	lsp_installer.on_server_ready(function(serv)
-		local opts = {}
-		opts.capabilities = capabilities()
-		opts.on_attach = lsp_status.on_attach
-		-- if serv.name == "sumneko_lua" then
-		-- 	local runtime_path = vim.split(package.path, ';')
-		-- 	table.insert(runtime_path, "lua/?.lua")
-		-- 	table.insert(runtime_path, "lua/?/init.lua")
-		-- 	opts.settings = {
-		-- 		Lua = {
-		-- 			runtime = {
-		-- 				version = "LuaJIT",
-		-- 				path = runtime_path,
-		-- 			},
-		-- 			diagnostics = {
-		-- 				globals = { "vim", "execute" },
-		-- 			},
-		-- 			workspace = {
-		-- 				library = {
-		-- 					-- [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-		-- 					vim.api.nvim_get_runtime_file("", true),
-		-- 					-- [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-		-- 				},
-		-- 				maxPreload = 10000,
-		-- 				preloadFileSize = 1000,
-		-- 			},
-		-- 		},
-		-- 	}
-		-- end
-		serv:setup(opts)
-		vim.cmd([[ do User LspAttachBuffers ]])
-	end)
-end
+	local opts = {}
+	opts.capabilities = capabilities()
+	opts.on_attach = lsp_status.on_attach
 
+	lsp_installer.setup {}
+	lsp_status.register_progress()
+
+	lspconfig.tsserver.setup {opts}
+	lspconfig.vimls.setup {opts}
+	lspconfig.sumneko_lua.setup {opts}
+	lspconfig.rls.setup {opts}
+	lspconfig.gopls.setup {opts}
+	lspconfig.pyright.setup {opts}
+  lspconfig.cssls.setup {opts}
+	lspconfig.rust_analyzer.setup {opts}
+	lspconfig.bashls.setup {opts}
+	lspconfig.jsonls.setup {opts}
+	lspconfig.html.setup {opts}
+  lspconfig.salt_ls.setup {opts}
+  lspconfig.clangd.setup {opts}
+  lspconfig.cmake.setup {opts}
+	lspconfig.dockerls.setup {opts}
+	lspconfig.fortls.setup {opts}
+  lspconfig.grammarly.setup {opts}
+	lspconfig.jedi_language_server.setup {opts}
+	lspconfig.vuels.setup {opts}
+	lspconfig.pyright.setup {opts}
+	lspconfig.texlab.setup {opts}
+	lspconfig.yamlls.setup {opts}
+
+
+	local runtime_path = vim.split(package.path, ';')
+	table.insert(runtime_path, "lua/?.lua")
+	table.insert(runtime_path, "lua/?/init.lua")
+	opts.settings = {
+		Lua = {
+			runtime = {
+				version = "LuaJIT",
+				path = runtime_path,
+			},
+			diagnostics = {
+				globals = { "vim", "execute" },
+			},
+			workspace = {
+				library = {
+					-- [vim.fn.expand("$VIMRUNTIME/lua")] = true,
+					vim.api.nvim_get_runtime_file("", true),
+					-- [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
+				},
+				maxPreload = 10000,
+				preloadFileSize = 1000,
+			},
+		},
+	}
+	lspconfig.sumneko_lua.setup {opts}
+
+	vim.cmd([[ do User LspAttachBuffers ]])
+end
 
 return M

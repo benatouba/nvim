@@ -192,9 +192,17 @@ return require("packer").startup({
 				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
 				before = "nvim-lsp-installer",
 			})
-			use {
-				"ray-x/lsp_signature.nvim",
-			}
+			-- use {
+			-- 	"ray-x/lsp_signature.nvim",
+			-- }
+			use {"github/copilot.vim"}
+			-- use {
+			-- 	"zbirenbaum/copilot.lua",
+			-- 	event = "InsertEnter",
+			-- 	config = function()
+			-- 		vim.schedule(function() require("lsp.copilot").config() end)
+			-- 	end,
+			-- }
 			use({
 				"williamboman/nvim-lsp-installer",
 				-- disable = true,
@@ -205,6 +213,10 @@ return require("packer").startup({
 				end,
 			})
 
+			-- use {
+			-- 	"zbirenbaum/copilot-cmp",
+			-- 	after = { "copilot.lua", "nvim-cmp" },
+			-- }
 			use({
 				"hrsh7th/nvim-cmp",
 				-- event = "InsertEnter",
