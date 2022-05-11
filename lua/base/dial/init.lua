@@ -17,6 +17,7 @@ M.config = function()
       augend.date.alias["%m/%d"],
       augend.date.alias["%Y/%m/%d"],
       augend.constant.alias.alpha,
+      augend.constant.new{ elements = {"yes", "no"} },
     },
     fortran = {
       augend.constant.new{ elements = {"T", "F"} },
@@ -30,6 +31,9 @@ M.config = function()
   }
 
   vim.cmd([[
+    imap <C-a> <esc>b<Plug>(dial-increment)a
+    imap <C-x> <esc>b<Plug>(dial-decrement)a
+    nmap <C-a> <Plug>(dial-increment)
     nmap <C-c> <Plug>(dial-increment)
     nmap <C-x> <Plug>(dial-decrement)
     vmap <C-c> <Plug>(dial-increment)
