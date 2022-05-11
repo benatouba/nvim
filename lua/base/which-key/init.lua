@@ -124,6 +124,7 @@ if O.git then
 		h = { "<cmd>lua require'gitsigns'.preview_hunk()<cr>", "preview Hunk" },
 		l = { "<cmd>Git log<cr>", "Log" },
 		n = { "<cmd>Neogit<cr>", "Neogit" },
+		N = { "<cmd>Neogit commit %<cr>", "(Neogit) Commit Menu" },
 		j = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
 		k = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
 		p = { "<cmd>Git pull<cr>", "pull" },
