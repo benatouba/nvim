@@ -1,107 +1,149 @@
--- Language server configs
--- require('lsp.bash-ls')
--- require('lsp.clangd')
--- require('lsp.css-ls')
--- require('lsp.docker-ls')
--- -- require('lsp.efm-general-ls')
--- require('lsp.emmet-ls')
--- require('lsp.fortran-ls')
--- require('lsp.html-ls')
--- require('lsp.js-ts-ls')
--- require('lsp.json-ls')
--- require('lsp.latex-ls')
--- require('lsp.lua-ls')
--- require('lsp.python-ls')
--- require('lsp.pylsp-ls')
--- require('lsp.python-jedi-ls')
--- require('lsp.r-ls')
--- require('lsp.salt-ls')
--- require('lsp.vim-ls')
--- require('lsp.vue-ls')
--- require('lsp.yaml-ls')
-
--- other stuff
--- TODO figure out why this don't work
--- vim.fn.sign_define(
---     "LspDiagnosticsSignError",
---     {texthl = "LspDiagnosticsSignError", text = "", numhl = "LspDiagnosticsSignError"}
--- )
--- vim.fn.sign_define(
---     "LspDiagnosticsSignWarning",
---     {texthl = "LspDiagnosticsSignWarning", text = "", numhl = "LspDiagnosticsSignWarning"}
--- )
--- vim.fn.sign_define(
---     "LspDiagnosticsSignHint",
---     {texthl = "LspDiagnosticsSignHint", text = "", numhl = "LspDiagnosticsSignHint"}
--- )
--- vim.fn.sign_define(
---     "LspDiagnosticsSignInformation",
---     {texthl = "LspDiagnosticsSignInformation", text = "", numhl = "LspDiagnosticsSignInformation"}
--- )
-
 -- vim.cmd('command! -nargs=0 LspVirtualTextToggle lua require("lsp/virtual_text").toggle()')
 
 -- symbols for autocomplete
 -- vim.lsp.protocol.CompletionItemKind = {
---     "   (Text) ",
---     "   (Method)",
---     "   (Function)",
---     "   (Constructor)",
---     " ﴲ  (Field)",
---     "[] (Variable)",
---     "   (Class)",
---     " ﰮ  (Interface)",
---     "   (Module)",
---     " 襁 (Property)",
---     "   (Unit)",
---     "   (Value)",
---     " 練 (Enum)",
---     "   (Keyword)",
---     "   (Snippet)",
---     "   (Color)",
---     "   (File)",
---     "   (Reference)",
---     "   (Folder)",
---     "   (EnumMember)",
---     " ﲀ  (Constant)",
---     " ﳤ  (Struct)",
---     "   (Event)",
---     "   (Operator)",
---     "   (TypeParameter)"
+--   "   (Text) ",
+--   "   (Method)",
+--   "   (Function)",
+--   "   (Constructor)",
+--   " ﴲ  (Field)",
+--   "[] (Variable)",
+--   "   (Class)",
+--   " ﰮ  (Interface)",
+--   "   (Module)",
+--   " 襁 (Property)",
+--   "   (Unit)",
+--   "   (Value)",
+--   " 練 (Enum)",
+--   "   (Keyword)",
+--   "   (Snippet)",
+--   "   (Color)",
+--   "   (File)",
+--   "   (Reference)",
+--   "   (Folder)",
+--   "   (EnumMember)",
+--   " ﲀ  (Constant)",
+--   " ﳤ  (Struct)",
+--   "   (Event)",
+--   "   (Operator)",
+--   "   (TypeParameter)"
 -- }
 
 -- LSP signs default
-vim.fn.sign_define(
-  "DiagnosticSignError",
-  { texthl = "DiagnosticSignError", text = "", numhl = "DiagnosticSignError" }
-)
-vim.fn.sign_define(
-  "DiagnosticSignWarning",
-  { texthl = "DiagnosticSignWarning", text = "", numhl = "DiagnosticSignWarning" }
-)
+vim.fn.sign_define( "DiagnosticSignError", { texthl = "DiagnosticSignError", text = "", numhl = "DiagnosticSignError" })
+vim.fn.sign_define( "DiagnosticSignWarning", { texthl = "DiagnosticSignWarning", text = "", numhl = "DiagnosticSignWarning" })
 vim.fn.sign_define("DiagnosticSignHint", { texthl = "DiagnosticSignHint", text = "", numhl = "DiagnosticSignHint" })
 vim.fn.sign_define("DiagnosticSignInfo", { texthl = "DiagnosticSignInfo", text = "", numhl = "DiagnosticSignInfo" })
 
 -- LSP Enable diagnostics
--- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
---   virtual_text = true,
---   underline = true,
---   signs = true,
---   update_in_insert = true,
---   severity_sort = true,
--- })
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+  virtual_text = false,
+  underline = true,
+  signs = true,
+  update_in_insert = true,
+  severity_sort = true,
+})
 
--- local border_style = {
---   { "╭", "FloatBorder" },
---   { "─", "FloatBorder" },
---   { "╮", "FloatBorder" },
---   { "│", "FloatBorder" },
---   { "╯", "FloatBorder" },
---   { "─", "FloatBorder" },
---   { "╰", "FloatBorder" },
---   { "│", "FloatBorder" },
--- }
---
--- local pop_opts = { border = border_style }
--- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, pop_opts)
--- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, pop_opts)
+local border_style = {
+  { "╭", "FloatBorder" },
+  { "─", "FloatBorder" },
+  { "╮", "FloatBorder" },
+  { "│", "FloatBorder" },
+  { "╯", "FloatBorder" },
+  { "─", "FloatBorder" },
+  { "╰", "FloatBorder" },
+  { "│", "FloatBorder" },
+}
+
+local pop_opts = { border = border_style }
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, pop_opts)
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, pop_opts)
+
+-- NOTE: Server Setup
+
+local lspi_ok, lsp_installer = pcall(require, "nvim-lsp-installer")
+if not lspi_ok then
+  P("nvim-lsp-installer not okay")
+  return
+end
+lsp_installer.setup {}
+
+local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
+if not lspconfig_ok then
+  P("lspconfig not okay in lsp_installer")
+  return
+end
+
+local lsp_status_ok, lsp_status = pcall(require, "lsp-status")
+if not lsp_status_ok then
+  P("lsp-status not okay in lsp_installer")
+end
+lsp_status.register_progress()
+
+local capabilities = function() return require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) end
+
+local opts = {}
+opts.capabilities = capabilities
+opts.on_attach = lsp_status.on_attach
+
+lspconfig.tsserver.setup { opts }
+lspconfig.vimls.setup { opts }
+lspconfig.rls.setup { opts }
+lspconfig.gopls.setup { opts }
+-- lspconfig.pyright.setup { opts }
+lspconfig.pylsp.setup { opts }
+lspconfig.cssls.setup { opts }
+lspconfig.rust_analyzer.setup { opts }
+lspconfig.bashls.setup { opts }
+lspconfig.jsonls.setup { opts }
+lspconfig.html.setup { opts }
+lspconfig.salt_ls.setup { opts }
+lspconfig.clangd.setup { opts }
+lspconfig.cmake.setup { opts }
+lspconfig.dockerls.setup { opts }
+lspconfig.fortls.setup { opts }
+lspconfig.grammarly.setup { opts }
+lspconfig.jedi_language_server.setup { opts }
+lspconfig.vuels.setup { opts }
+lspconfig.texlab.setup { opts }
+lspconfig.yamlls.setup { opts }
+
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+lspconfig.sumneko_lua.setup {
+  settings = {
+    Lua = {
+      runtime = {
+        version = "LuaJIT",
+        path = runtime_path,
+      },
+      diagnostics = {
+        globals = { "vim" },
+      },
+      workspace = {
+        library = {
+          vim.api.nvim_get_runtime_file("", true),
+        },
+        maxPreload = 10000,
+        preloadFileSize = 1000,
+      },
+      telemetry = {
+        enable = false
+      }
+    },
+  }
+}
+lspconfig.sourcery.setup {
+  filetypes = { "python" },
+  init_options = {
+    token = "user_re1CDsCNaWsCXRrWENblMoIhU8INKHMGuiqQDG1FG0CKWTC7Td_93Ilq7FA",
+    extension_version = "vim.lsp",
+    editor_version = "vim"
+  },
+  settings = {
+    sourcery = {
+      metricsEnabled = false
+    }
+  }
+}

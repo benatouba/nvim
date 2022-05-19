@@ -9,7 +9,7 @@ M.config = function()
 	vim.o.completeopt = 'menu,menuone'
 	-- local neogen_ok, neogen = pcall(require, "neogen")
 	local cmp_ok, cmp = pcall(require, "cmp")
-	local snip_ok, snip = pcall(require, "luasnip")
+	local snip_ok, _ = pcall(require, "luasnip")
 	if not cmp_ok then
 		print("nvim-cmp not okay")
 		return
@@ -25,38 +25,38 @@ M.config = function()
 			format = require("lspkind").cmp_format({
 				mode = 'symbol_text',
 				maxwidth = 50,
-				menu = {
-					buffer = "[Buf]",
-					nvim_lsp = "[LSP]",
-					luasnip = "[Snip]",
-					nvim_lua = "[Lua]",
-					latex_symbols = "[Latex]",
-					tmux = "[tmux]",
-					cmp_git = "[Git]",
-					orgmode = "[Org]",
-					zsh = "[Zsh]",
-					path = "[Path]",
-					calc = "[Calc]",
-					emoji = "[Emoji]",
-					tags = "[Tag]",
-					look = "[Look]",
-					vim_dadbod_completion = "[DB]",
-				},
+				-- menu = {
+				-- 	nvim_lsp = "[LSP]",
+				-- 	buffer = "[Buf]",
+				-- 	luasnip = "[Snip]",
+				-- 	nvim_lua = "[Lua]",
+				-- 	latex_symbols = "[Latex]",
+				-- 	tmux = "[tmux]",
+				-- 	cmp_git = "[Git]",
+				-- 	orgmode = "[Org]",
+				-- 	zsh = "[Zsh]",
+				-- 	path = "[Path]",
+				-- 	calc = "[Calc]",
+				-- 	emoji = "[Emoji]",
+				-- 	tags = "[Tag]",
+				-- 	look = "[Look]",
+				-- 	vim_dadbod_completion = "[DB]",
+				-- },
 			}),
 		},
-		-- sorting = {
-		-- 	priority_weight = 2.,
-		-- 	comparators = {
-		-- 		cmp.config.compare.offset,
-		-- 		cmp.config.compare.exact,
-		-- 		cmp.config.compare.score,
-		-- 		require("cmp-under-comparator").under,
-		-- 		cmp.config.compare.kind,
-		-- 		cmp.config.compare.sort_text,
-		-- 		cmp.config.compare.length,
-		-- 		cmp.config.compare.order,
-		-- 	},
-		-- },
+		sorting = {
+			priority_weight = 2.,
+			comparators = {
+				cmp.config.compare.offset,
+				cmp.config.compare.exact,
+				cmp.config.compare.score,
+				require("cmp-under-comparator").under,
+				cmp.config.compare.kind,
+				cmp.config.compare.sort_text,
+				cmp.config.compare.length,
+				cmp.config.compare.order,
+			},
+		},
 		mapping = {
 			["<C-d>"] = cmp.mapping.scroll_docs(-4),
 			["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -95,14 +95,14 @@ M.config = function()
 		-- --                 ﬘    m    
 
 		sources = {
-			{ name = 'copilot', group_index = 1, priority = 1 },
-			{ name = "nvim_lsp", group_index = 1 },
-			{ name = "nvim_lsp_document_symbol", group_index = 1, },
+			{ name = 'copilot', priority = 1 },
+			{ name = "nvim_lsp", },
+			{ name = "nvim_lsp_document_symbol", },
 			{ name = 'nvim_lsp_signature_help'},
 			{ name = 'treesitter', },
 			{ name = "nvim_lua", },
 			{ name = "path" },
-			{ name = "cmp_git", },
+			-- { name = "cmp_git", },
 			{ name = "tmux", },
 			{ name = "orgmode" },
 			{ name = "luasnip", },
@@ -112,7 +112,7 @@ M.config = function()
 			{ name = "tags", },
 			-- { name = "look", },
 			{ name = "vim-dadbod-completion", },
-			{ name = "buffer", group_index = 2},
+			{ name = "buffer"},
 		},
 	})
 

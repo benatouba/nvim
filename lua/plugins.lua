@@ -62,8 +62,8 @@ return require("packer").startup({
 			config = function()
 				require("base.telescope").config()
 			end,
-			cmd = "Telescope",
-			event = "InsertEnter",
+			-- cmd = "Telescope",
+			-- event = "InsertEnter",
 		})
 		use({
 			"ahmedkhalf/project.nvim",
@@ -182,20 +182,10 @@ return require("packer").startup({
 		end
 
 		if O.lsp then
-			use({
-				"neovim/nvim-lspconfig",
-				config = function()
-					require("lsp")
-				end,
-				-- event = { "BufReadPost", "InsertEnter" },
-				-- fn = { "edit", "e" },
-				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
-				before = "nvim-lsp-installer",
-			})
 			-- use {
 			-- 	"ray-x/lsp_signature.nvim",
 			-- }
-			use {"github/copilot.vim"}
+			use { "github/copilot.vim" }
 			-- use {
 			-- 	"zbirenbaum/copilot.lua",
 			-- 	event = "InsertEnter",
@@ -205,12 +195,14 @@ return require("packer").startup({
 			-- }
 			use({
 				"williamboman/nvim-lsp-installer",
-				-- disable = true,
-				event = { "CmdlineEnter", "InsertEnter" },
-				-- before = {"nvim-lspconfig"},
-				config = function()
-					require("lsp.lsp_installer").setup()
-				end,
+				{
+					"neovim/nvim-lspconfig",
+					config = function()
+						require("lsp")
+					end
+				},
+				opt = false,
+				-- event = { "CmdlineEnter", "InsertEnter" },
 			})
 
 			-- use {
