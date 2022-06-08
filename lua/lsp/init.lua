@@ -103,7 +103,7 @@ lspconfig.cmake.setup { opts }
 lspconfig.dockerls.setup { opts }
 lspconfig.fortls.setup { opts }
 lspconfig.grammarly.setup { opts }
-lspconfig.jedi_language_server.setup { opts }
+-- lspconfig.jedi_language_server.setup { opts }
 lspconfig.vuels.setup { opts }
 lspconfig.texlab.setup { opts }
 lspconfig.yamlls.setup { opts }
