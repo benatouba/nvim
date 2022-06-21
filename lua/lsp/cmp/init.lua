@@ -1,15 +1,15 @@
 local M = {}
 
 local has_words_before = function()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
 M.config = function()
 	vim.o.completeopt = 'menu,menuone'
 	-- local neogen_ok, neogen = pcall(require, "neogen")
 	local cmp_ok, cmp = pcall(require, "cmp")
-	local snip_ok, _ = pcall(require, "luasnip")
+	local snip_ok, luasnip = pcall(require, "luasnip")
 	if not cmp_ok then
 		print("nvim-cmp not okay")
 		return
@@ -19,34 +19,35 @@ M.config = function()
 	end
 	cmp.setup({
 		view = {
-			entries = { name = 'custom', selection_order = 'near_cursor'}
+			entries = { name = 'custom', selection_order = 'near_cursor' }
 		},
 		formatting = {
-			format = require("lspkind").cmp_format({
-				mode = 'symbol_text',
-				maxwidth = 50,
-				-- menu = {
-				-- 	nvim_lsp = "[LSP]",
-				-- 	buffer = "[Buf]",
-				-- 	luasnip = "[Snip]",
-				-- 	nvim_lua = "[Lua]",
-				-- 	latex_symbols = "[Latex]",
-				-- 	tmux = "[tmux]",
-				-- 	cmp_git = "[Git]",
-				-- 	orgmode = "[Org]",
-				-- 	zsh = "[Zsh]",
-				-- 	path = "[Path]",
-				-- 	calc = "[Calc]",
-				-- 	emoji = "[Emoji]",
-				-- 	tags = "[Tag]",
-				-- 	look = "[Look]",
-				-- 	vim_dadbod_completion = "[DB]",
-				-- },
-			}),
+			format = function(entry, vim_item)
+				if entry.source.name == "copilot" then
+					vim_item.kind = "[]"
+					vim_item.kind_hl_group = "CmpItemKindCopilot"
+					return vim_item
+				end
+				return require("lspkind").cmp_format({
+					mode = "symbol",
+					maxwidth = 50
+				})(entry, vim_item)
+			end
+		},
+		snippet = {
+			expand = function(args)
+				luasnip.lsp_expand(args.body)
+			end
+		},
+		window = {
+			completion = cmp.config.window.bordered(),
+			documentation = cmp.config.window.bordered(),
 		},
 		sorting = {
-			priority_weight = 2.,
+			priority_weight = 2,
 			comparators = {
+				require("copilot_cmp.comparators").prioritize,
+				require("copilot_cmp.comparators").score,
 				cmp.config.compare.offset,
 				cmp.config.compare.exact,
 				cmp.config.compare.score,
@@ -71,53 +72,59 @@ M.config = function()
 			["<C-n>"] = cmp.mapping.select_next_item(),
 			["<C-p>"] = cmp.mapping.select_prev_item(),
 			-- ["<Tab>"] = cmp.mapping(function(fallback)
-   --    if cmp.visible() then
-   --      cmp.select_next_item()
-   --    elseif snip.expand_or_jumpable() then
-   --      snip.expand_or_jump()
-   --    elseif has_words_before() then
-   --      cmp.complete()
-   --    else
-   --      fallback()
-   --    end
-   --  end, { "i", "s" }),
+			--    if cmp.visible() then
+			--      cmp.select_next_item()
+			--    elseif snip.expand_or_jumpable() then
+			--      snip.expand_or_jump()
+			--    elseif has_words_before() then
+			--      cmp.complete()
+			--    else
+			--      fallback()
+			--    end
+			--  end, { "i", "s" }),
 			--
-   --  ["<S-Tab>"] = cmp.mapping(function(fallback)
-   --    if cmp.visible() then
-   --      cmp.select_prev_item()
-   --    elseif snip.jumpable(-1) then
-   --      snip.jump(-1)
-   --    else
-   --      fallback()
-   --    end
-   --  end, { "i", "s" }),
+			--  ["<S-Tab>"] = cmp.mapping(function(fallback)
+			--    if cmp.visible() then
+			--      cmp.select_prev_item()
+			--    elseif snip.jumpable(-1) then
+			--      snip.jump(-1)
+			--    else
+			--      fallback()
+			--    end
+			--  end, { "i", "s" }),
 		},
 		-- --                 ﬘    m    
 
 		sources = {
-			{ name = 'copilot', priority = 1 },
-			{ name = "nvim_lsp", },
-			{ name = "nvim_lsp_document_symbol", },
-			{ name = 'nvim_lsp_signature_help'},
-			{ name = 'treesitter', },
+			{ name = "copilot", group_index = 2 },
+			{ name = "nvim_lsp", group_index = 2 },
+			{ name = "nvim_lsp_document_symbol", group_index = 2 },
+			{ name = 'nvim_lsp_signature_help', group_index = 2 },
+			{ name = 'treesitter', group_index = 2 },
 			{ name = "nvim_lua", },
-			{ name = "path" },
+			{ name = "path", group_index = 2 },
 			-- { name = "cmp_git", },
 			{ name = "tmux", },
 			{ name = "orgmode" },
-			{ name = "luasnip", },
+			{ name = "luasnip", group_index = 2 },
 			-- { name = 'zsh', },
 			{ name = "calc", },
 			{ name = "emoji", },
 			{ name = "tags", },
 			-- { name = "look", },
 			{ name = "vim-dadbod-completion", },
-			{ name = "buffer"},
+			{ name = "buffer" },
 		},
 	})
 
+  vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
+
 	cmp.setup.cmdline(":", {
 		mapping = cmp.mapping.preset.cmdline(),
+		window = {
+			-- completion = cmp.config.window.bordered(),
+			-- documentation = cmp.config.window.bordered(),
+		},
 		sources = cmp.config.sources({
 			{ name = "path" },
 		}, {
@@ -127,6 +134,10 @@ M.config = function()
 
 	cmp.setup.cmdline("/", {
 		mapping = cmp.mapping.preset.cmdline(),
+		window = {
+			-- completion = cmp.config.window.bordered(),
+			-- documentation = cmp.config.window.bordered(),
+		},
 		sources = {
 			{ name = "buffer" },
 			-- { name = "nvim_lsp_document_symbol" },
@@ -136,17 +147,17 @@ M.config = function()
 	-- require("luasnip/loaders/from_vscode").lazy_load({paths={vim.fn.stdpath('config') .. "/snippets"}})
 	require("luasnip/loaders/from_vscode").lazy_load()
 
-	local cmp_git_ok, cmp_git = pcall(require, "cmp_git")
+	local cmp_git_ok, _ = pcall(require, "cmp_git")
 	if not cmp_git_ok then
 		print("cmp_git not okay")
 		return
 	end
 	cmp.setup.filetype('gitcommit', {
 		sources = cmp.config.sources({
-      { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-    }, {
-      { name = 'buffer' },
-    }),
+			{ name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+		}, {
+			{ name = 'buffer' },
+		}),
 		github = {
 			issues = {
 				filter = "all", -- assigned, created, mentioned, subscribed, all, repos

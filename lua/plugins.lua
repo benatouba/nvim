@@ -33,6 +33,13 @@ return require("packer").startup({
 		use("nvim-lua/popup.nvim") -- handle popup (important)
 		use("nvim-lua/plenary.nvim") -- most important functions (very important)
 		use({
+			"Tastyep/structlog.nvim",
+			requires = "rcarriga/nvim-notify",
+			config = function()
+				require("base.structlog")
+			end
+		})
+		use({
 			"lewis6991/impatient.nvim",
 			config = function()
 				require("impatient")
@@ -182,17 +189,17 @@ return require("packer").startup({
 		end
 
 		if O.lsp then
-			-- use {
-			-- 	"ray-x/lsp_signature.nvim",
-			-- }
-			use { "github/copilot.vim" }
-			-- use {
-			-- 	"zbirenbaum/copilot.lua",
-			-- 	event = "InsertEnter",
-			-- 	config = function()
-			-- 		vim.schedule(function() require("lsp.copilot").config() end)
-			-- 	end,
-			-- }
+			use {
+				"ray-x/lsp_signature.nvim",
+			}
+			-- use { "github/copilot.vim" }
+			use {
+				"zbirenbaum/copilot.lua",
+				event = { "VimEnter" },
+				config = function()
+					require("lsp.copilot").config()
+				end,
+			}
 			use({
 				"williamboman/nvim-lsp-installer",
 				{
@@ -205,10 +212,11 @@ return require("packer").startup({
 				-- event = { "CmdlineEnter", "InsertEnter" },
 			})
 
-			-- use {
-			-- 	"zbirenbaum/copilot-cmp",
-			-- 	after = { "copilot.lua", "nvim-cmp" },
-			-- }
+			use {
+				"zbirenbaum/copilot-cmp",
+				after = { "copilot.lua", "nvim-cmp" },
+				module = "copilot_cmp",
+			}
 			use({
 				"hrsh7th/nvim-cmp",
 				-- event = "InsertEnter",
@@ -217,12 +225,13 @@ return require("packer").startup({
 					"hrsh7th/cmp-nvim-lsp",
 					"hrsh7th/cmp-nvim-lsp-document-symbol",
 					"hrsh7th/cmp-nvim-lsp-signature-help",
-					"hrsh7th/cmp-copilot",
+					-- "hrsh7th/cmp-copilot",
 					"hrsh7th/cmp-path",
 					"hrsh7th/cmp-nvim-lua",
 					"hrsh7th/cmp-calc",
 					"hrsh7th/cmp-emoji",
 					"hrsh7th/cmp-cmdline",
+					"rcarriga/cmp-dap",
 					"petertriho/cmp-git",
 					"andersevenrud/compe-tmux",
 					"ray-x/cmp-treesitter",
@@ -244,7 +253,8 @@ return require("packer").startup({
 				before = "nvim-lsp-installer",
 				-- disable = true,
 			})
-			use("rafamadriz/friendly-snippets")
+			use({ "rafamadriz/friendly-snippets", after = "LuaSnip",
+				config = function() require('luasnip').filetype_extend('vue', { 'html', 'javascript', 'pug', 'vue' }) end })
 			use({
 				"jose-elias-alvarez/nvim-lsp-ts-utils",
 				after = "nvim-lspconfig",
@@ -292,11 +302,20 @@ return require("packer").startup({
 		end
 
 		if O.test then
-			use({
-				"rcarriga/vim-ultest",
-				requires = { "vim-test/vim-test" },
-				run = ":UpdateRemotePlugins",
-			})
+			use {
+				"nvim-neotest/neotest",
+				requires = {
+					"nvim-neotest/neotest-python",
+					"nvim-neotest/neotest-vim-test",
+					"vim-test/vim-test",
+					"nvim-lua/plenary.nvim",
+					"nvim-treesitter/nvim-treesitter",
+					"antoinemadec/FixCursorHold.nvim"
+				},
+				config = function()
+					require("test.neotest")
+				end,
+			}
 		end
 
 		if O.dap then -- debug adapter protocol
@@ -385,7 +404,8 @@ return require("packer").startup({
 				{ "nvim-treesitter/nvim-treesitter" },
 			},
 			config = function()
-				require("misc.refactoring")
+				require("misc.refactoring").config()
+				require("misc.refactoring").maps()
 			end,
 		})
 		use { "iamcco/markdown-preview.nvim", ft = "markdown", run = "cd app && yarn install" }
