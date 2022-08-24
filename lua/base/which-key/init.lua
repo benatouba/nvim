@@ -21,7 +21,6 @@ local terminal_opts = { mode = "t" }
 vim.g.mapleader = " "
 
 local mappings = {
-	["m"] = { ":MaximizerToggle<CR>", "Maximize/Minimize" },
 	["c"] = { ":BufferClose<CR>", "Close Buffer" },
 	-- ["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
 	-- ["H"] = {":HopWord<cr>", "hop to word"},
@@ -38,6 +37,7 @@ local mappings = {
 		-- m = {"<cmd>MaximizerToggle<cr>", "maximize"},
 		n = { "<cmd>set nonumber<cr>!", "line-numbers" },
 		N = { "<cmd>set norelativenumber!<cr>", "relative line nums" },
+		m = { "<cmd>MaximizerToggle<cr>", "Maximize/Minimize" },
 		s = { "<cmd>s/\\%V\\(.*\\)\\%V/'\\1'/<cr>", "surround" },
 		r = { "<cmd>Root<cr>", "root working dir" },
 		w = { "<cmd>call TrimWhitespace()<cr>", "trim Whitespaces" },
@@ -88,8 +88,7 @@ if O.lsp then
 		D = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
 		f = { "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", "Format Document" },
 		h = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Find definition" },
-		i = { "<cmd>LspInstallInfo<cr>", "Install Info" },
-		I = { "<cmd>LspInfo<cr>", "Info" },
+		i = { "<cmd>LspInfo<cr>", "Info" },
 		n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
 		j = {
 			"<cmd>lua vim.diagnostic.goto_next({popup_opts = {border = O.lsp.popup_border}})<cr>",
@@ -105,6 +104,11 @@ if O.lsp then
 		x = { "<cmd>cclose<cr>", "Close Quickfix" },
 		s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
 		S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols" },
+	}
+	mappings["m"] = {
+		name = "+Mason",
+		m = { "<cmd>Mason<cr>", "Info" },
+		l = { "<cmd>MasonLog<cr>", "Log" },
 	}
 end
 

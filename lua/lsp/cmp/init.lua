@@ -23,11 +23,6 @@ M.config = function()
 		},
 		formatting = {
 			format = function(entry, vim_item)
-				if entry.source.name == "copilot" then
-					vim_item.kind = "[]"
-					vim_item.kind_hl_group = "CmpItemKindCopilot"
-					return vim_item
-				end
 				return require("lspkind").cmp_format({
 					mode = "symbol",
 					maxwidth = 50
@@ -46,8 +41,6 @@ M.config = function()
 		sorting = {
 			priority_weight = 2,
 			comparators = {
-				require("copilot_cmp.comparators").prioritize,
-				require("copilot_cmp.comparators").score,
 				cmp.config.compare.offset,
 				cmp.config.compare.exact,
 				cmp.config.compare.score,
@@ -96,7 +89,6 @@ M.config = function()
 		-- --                 ﬘    m    
 
 		sources = {
-			{ name = "copilot", group_index = 2 },
 			{ name = "nvim_lsp", group_index = 2 },
 			{ name = "nvim_lsp_document_symbol", group_index = 2 },
 			{ name = 'nvim_lsp_signature_help', group_index = 2 },
@@ -116,8 +108,6 @@ M.config = function()
 			{ name = "buffer" },
 		},
 	})
-
-  vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
 
 	cmp.setup.cmdline(":", {
 		mapping = cmp.mapping.preset.cmdline(),

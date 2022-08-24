@@ -50,6 +50,3 @@ log.configure({
   },
   -- other_logger = {...}
 })
-
-local logger = log.get_logger("name")
-logger:info("A log message")

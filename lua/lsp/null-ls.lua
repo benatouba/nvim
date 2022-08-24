@@ -6,8 +6,8 @@ end
 -- local helpers = require("null-ls.helpers")
 
 local sources = {
-	null_ls.builtins.diagnostics.eslint_d,
-	null_ls.builtins.formatting.eslint_d,
+	-- null_ls.builtins.diagnostics.eslint_d,
+	-- null_ls.builtins.formatting.eslint_d,
 	null_ls.builtins.code_actions.eslint_d,
 	-- Formatting prettier-style can be done by eslint_d with "eslint-plugin-prettier"
 	-- null_ls.builtins.formatting.prettier_d_slim,
