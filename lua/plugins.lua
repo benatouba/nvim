@@ -60,7 +60,10 @@ return require("packer").startup({
 		})
 		use({
 			"nvim-telescope/telescope-frecency.nvim",
-			requires = "tami5/sql.nvim",
+			requires = {
+				"tami5/sql.nvim",
+				{ "zane-/howdoi.nvim", config = function() require('telescope').load_extension('howdoi') end }
+			},
 			after = "telescope.nvim",
 			-- config = function() require('telescope').load_extension('frecency') end,
 		})
@@ -193,13 +196,13 @@ return require("packer").startup({
 				"ray-x/lsp_signature.nvim",
 			}
 			-- use { "github/copilot.vim" }
-			use {
-				"zbirenbaum/copilot.lua",
-				event = { "VimEnter" },
-				config = function()
-					require("lsp.copilot").config()
-				end,
-			}
+			-- use {
+			-- 	"zbirenbaum/copilot.lua",
+			-- 	event = { "VimEnter" },
+			-- 	config = function()
+			-- 		require("lsp.copilot").config()
+			-- 	end,
+			-- }
 			use({
 				"williamboman/nvim-lsp-installer",
 				{
@@ -212,11 +215,11 @@ return require("packer").startup({
 				-- event = { "CmdlineEnter", "InsertEnter" },
 			})
 
-			use {
-				"zbirenbaum/copilot-cmp",
-				after = { "copilot.lua", "nvim-cmp" },
-				module = "copilot_cmp",
-			}
+			-- use {
+			-- 	"zbirenbaum/copilot-cmp",
+			-- 	after = { "copilot.lua", "nvim-cmp" },
+			-- 	module = "copilot_cmp",
+			-- }
 			use({
 				"hrsh7th/nvim-cmp",
 				-- event = "InsertEnter",

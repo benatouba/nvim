@@ -6,7 +6,7 @@ if not ll_ok then
 
 local lsp_status_ok, lsp_status = pcall(require, "lsp-status")
 if not lsp_status_ok then
-	print("lsp-status not okay in lualine")
+	P("lsp-status not okay in lualine")
 end
 
 local lspstatus = function ()

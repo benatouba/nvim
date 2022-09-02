@@ -64,6 +64,7 @@ local mappings = {
 		D = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
 		f = { "<cmd>Telescope find_files<cr>", "Find File" },
 		g = { "<cmd>Telescope git_files<cr>", "Git Files" },
+		h = { "<cmd>Telescope howdoi<cr>", "How Do I .." },
 		m = { "<cmd>Telescope marks<cr>", "Marks" },
 		M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
 		o = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },

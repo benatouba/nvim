@@ -3,7 +3,7 @@ M = {}
 M.config = function()
 	local ref_ok, ref = pcall(require, "refactoring")
 	if not ref_ok then
-		print("Refactoring.nvim not okay")
+		P("Refactoring.nvim not okay")
 		return
 	end
 	ref.setup({})

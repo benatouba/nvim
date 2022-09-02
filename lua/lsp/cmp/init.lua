@@ -11,11 +11,11 @@ M.config = function()
 	local cmp_ok, cmp = pcall(require, "cmp")
 	local snip_ok, luasnip = pcall(require, "luasnip")
 	if not cmp_ok then
-		print("nvim-cmp not okay")
+		P("nvim-cmp not okay")
 		return
 	end
 	if not snip_ok then
-		print("luasnip not ok")
+		P("luasnip not ok")
 	end
 	cmp.setup({
 		view = {
@@ -23,11 +23,11 @@ M.config = function()
 		},
 		formatting = {
 			format = function(entry, vim_item)
-				if entry.source.name == "copilot" then
-					vim_item.kind = "[]"
-					vim_item.kind_hl_group = "CmpItemKindCopilot"
-					return vim_item
-				end
+				-- if entry.source.name == "copilot" then
+				-- 	vim_item.kind = "[]"
+				-- 	vim_item.kind_hl_group = "CmpItemKindCopilot"
+				-- 	return vim_item
+				-- end
 				return require("lspkind").cmp_format({
 					mode = "symbol",
 					maxwidth = 50
@@ -46,8 +46,8 @@ M.config = function()
 		sorting = {
 			priority_weight = 2,
 			comparators = {
-				require("copilot_cmp.comparators").prioritize,
-				require("copilot_cmp.comparators").score,
+				-- require("copilot_cmp.comparators").prioritize,
+				-- require("copilot_cmp.comparators").score,
 				cmp.config.compare.offset,
 				cmp.config.compare.exact,
 				cmp.config.compare.score,
@@ -96,7 +96,7 @@ M.config = function()
 		-- --                 ﬘    m    
 
 		sources = {
-			{ name = "copilot", group_index = 2 },
+			-- { name = "copilot", group_index = 2 },
 			{ name = "nvim_lsp", group_index = 2 },
 			{ name = "nvim_lsp_document_symbol", group_index = 2 },
 			{ name = 'nvim_lsp_signature_help', group_index = 2 },
@@ -117,7 +117,7 @@ M.config = function()
 		},
 	})
 
-  vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
+  -- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
 
 	cmp.setup.cmdline(":", {
 		mapping = cmp.mapping.preset.cmdline(),
@@ -149,7 +149,7 @@ M.config = function()
 
 	local cmp_git_ok, _ = pcall(require, "cmp_git")
 	if not cmp_git_ok then
-		print("cmp_git not okay")
+		P("cmp_git not okay")
 		return
 	end
 	cmp.setup.filetype('gitcommit', {
