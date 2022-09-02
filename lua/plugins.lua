@@ -32,13 +32,14 @@ return require("packer").startup({
 		use("wbthomason/packer.nvim") -- plugin manager
 		use("nvim-lua/popup.nvim") -- handle popup (important)
 		use("nvim-lua/plenary.nvim") -- most important functions (very important)
-		use({
-			"Tastyep/structlog.nvim",
-			requires = "rcarriga/nvim-notify",
-			config = function()
-				require("base.structlog")
-			end
-		})
+		-- use({
+		-- 	"Tastyep/structlog.nvim",
+		-- 	deactivate = true,
+		-- 	requires = "rcarriga/nvim-notify",
+		-- 	config = function()
+		-- 		require("base.structlog")
+		-- 	end
+		-- })
 		use({
 			"lewis6991/impatient.nvim",
 			config = function()
@@ -49,6 +50,10 @@ return require("packer").startup({
 		use({
 			"nvim-telescope/telescope-fzf-writer.nvim",
 			after = "telescope.nvim",
+		})
+		use({
+			"whiteinge/diffconflicts",
+			config = function() require("diffconflicts") end,
 		})
 		use({
 			"nvim-telescope/telescope-fzf-native.nvim",
@@ -120,7 +125,7 @@ return require("packer").startup({
 				"arkav/lualine-lsp-progress",
 			},
 			config = function()
-				require('base.lualine').config()
+				require("base.lualine").config()
 			end,
 		})
 		use("romgrk/barbar.nvim")
@@ -166,7 +171,7 @@ return require("packer").startup({
 			-- Treesitter
 			use({
 				"nvim-treesitter/nvim-treesitter",
-				run = ":TSUpdate"
+				run = ":TSUpdate",
 			})
 			use({
 				"nvim-treesitter/nvim-treesitter-refactor",
@@ -192,9 +197,9 @@ return require("packer").startup({
 		end
 
 		if O.lsp then
-			use {
+			use({
 				"ray-x/lsp_signature.nvim",
-			}
+			})
 			-- use { "github/copilot.vim" }
 			-- use {
 			-- 	"zbirenbaum/copilot.lua",
@@ -204,22 +209,17 @@ return require("packer").startup({
 			-- 	end,
 			-- }
 			use({
-				"williamboman/nvim-lsp-installer",
+				"williamboman/mason.nvim",
+				"williamboman/mason-lspconfig.nvim",
 				{
 					"neovim/nvim-lspconfig",
 					config = function()
 						require("lsp")
-					end
+					end,
 				},
-				opt = false,
 				-- event = { "CmdlineEnter", "InsertEnter" },
 			})
 
-			-- use {
-			-- 	"zbirenbaum/copilot-cmp",
-			-- 	after = { "copilot.lua", "nvim-cmp" },
-			-- 	module = "copilot_cmp",
-			-- }
 			use({
 				"hrsh7th/nvim-cmp",
 				-- event = "InsertEnter",
@@ -253,14 +253,17 @@ return require("packer").startup({
 				config = function()
 					require("lsp.cmp").config()
 				end,
-				before = "nvim-lsp-installer",
-				-- disable = true,
 			})
-			use({ "rafamadriz/friendly-snippets", after = "LuaSnip",
-				config = function() require('luasnip').filetype_extend('vue', { 'html', 'javascript', 'pug', 'vue' }) end })
+			use({
+				"rafamadriz/friendly-snippets",
+				after = "LuaSnip",
+				config = function()
+					require("luasnip").filetype_extend("vue", { "html", "javascript", "pug", "vue" })
+				end,
+			})
 			use({
 				"jose-elias-alvarez/nvim-lsp-ts-utils",
-				after = "nvim-lspconfig",
+				-- after = "nvim-lspconfig",
 				ft = {
 					"javascript",
 					"javascriptreact",
@@ -305,7 +308,7 @@ return require("packer").startup({
 		end
 
 		if O.test then
-			use {
+			use({
 				"nvim-neotest/neotest",
 				requires = {
 					"nvim-neotest/neotest-python",
@@ -313,12 +316,12 @@ return require("packer").startup({
 					"vim-test/vim-test",
 					"nvim-lua/plenary.nvim",
 					"nvim-treesitter/nvim-treesitter",
-					"antoinemadec/FixCursorHold.nvim"
+					"antoinemadec/FixCursorHold.nvim",
 				},
 				config = function()
 					require("test.neotest")
 				end,
-			}
+			})
 		end
 
 		if O.dap then -- debug adapter protocol
@@ -411,7 +414,7 @@ return require("packer").startup({
 				require("misc.refactoring").maps()
 			end,
 		})
-		use { "iamcco/markdown-preview.nvim", ft = "markdown", run = "cd app && yarn install" }
+		use({ "iamcco/markdown-preview.nvim", ft = "markdown", run = "cd app && yarn install" })
 		use({ "szw/vim-maximizer" })
 	end,
 	config = {

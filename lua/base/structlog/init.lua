@@ -20,4 +20,3 @@ log.configure({
   },
   -- other_logger = {...}
 })
-

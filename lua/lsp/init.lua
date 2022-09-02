@@ -60,23 +60,30 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, po
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, pop_opts)
 
 -- NOTE: Server Setup
-
-local lspi_ok, lsp_installer = pcall(require, "nvim-lsp-installer")
-if not lspi_ok then
-  P("nvim-lsp-installer not okay")
+local mason_ok, mason = pcall(require, "mason")
+if not mason_ok then
+  P("mason not okay in lspconfig")
   return
 end
-lsp_installer.setup {}
+mason.setup {}
+
+local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
+if not mason_lspconfig_ok then
+  P("mason-lspconfig not okay in lspconfig")
+  return
+end
+mason_lspconfig.setup {}
+
 
 local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
 if not lspconfig_ok then
-  P("lspconfig not okay in lsp_installer")
+  P("lspconfig not okay in lspconfig")
   return
 end
 
 local lsp_status_ok, lsp_status = pcall(require, "lsp-status")
 if not lsp_status_ok then
-  P("lsp-status not okay in lsp_installer")
+  P("lsp-status not okay in lspconfig")
 end
 lsp_status.register_progress()
 
@@ -102,8 +109,10 @@ lspconfig.clangd.setup { opts }
 lspconfig.cmake.setup { opts }
 lspconfig.dockerls.setup { opts }
 lspconfig.fortls.setup { opts }
-lspconfig.grammarly.setup { opts }
+-- lspconfig.grammarly.setup { opts }
 -- lspconfig.jedi_language_server.setup { opts }
+-- lspconfig.vuels.setup { opts }
+lspconfig.volar.setup { opts }
 lspconfig.texlab.setup { opts }
 lspconfig.volar.setup { opts }
 lspconfig.yamlls.setup { opts }
