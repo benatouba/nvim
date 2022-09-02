@@ -52,8 +52,7 @@ return require("packer").startup({
 			after = "telescope.nvim",
 		})
 		use({
-			"whiteinge/diffconflicts",
-			config = function() require("diffconflicts") end,
+			"whiteinge/diffconflicts"
 		})
 		use({
 			"nvim-telescope/telescope-fzf-native.nvim",
