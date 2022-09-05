@@ -58,8 +58,8 @@ DATA_PATH = vim.fn.stdpath('data')
 CACHE_PATH = vim.fn.stdpath('cache')
 
 P = function(v)
-    print(vim.inspect(v))
-    return v
+    local logger = require("structlog").get_logger("INFO:")
+    return logger:info(v)
 end
 
 if pcall(require, "plenary") then

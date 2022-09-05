@@ -1,6 +1,6 @@
 local neotest_ok, neotest = pcall(require, "neotest")
 if not neotest_ok then
-  print("Neotest not okay")
+  P("Neotest not okay")
   return
 end
 

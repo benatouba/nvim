@@ -114,7 +114,47 @@ lspconfig.fortls.setup { opts }
 -- lspconfig.vuels.setup { opts }
 lspconfig.volar.setup { opts }
 lspconfig.texlab.setup { opts }
+lspconfig.volar.setup { opts }
 lspconfig.yamlls.setup { opts }
+-- opts.init_options = {
+--   config = {
+--     css = {},
+--     emmet = {},
+--     html = {
+--       suggest = {}
+--     },
+--     javascript = {
+--       format = {}
+--     },
+--     stylusSupremacy = {},
+--     typescript = {
+--       format = {}
+--     },
+--     vetur = {
+--       completion = {
+--         autoImport = false,
+--         tagCasing = "kebab",
+--         useScaffoldSnippets = false
+--       },
+--       format = {
+--         defaultFormatter = {
+--           js = "prettier",
+--           ts = "none"
+--         },
+--         defaultFormatterOptions = {},
+--         scriptInitialIndent = false,
+--         styleInitialIndent = false
+--       },
+--       useWorkspaceDependencies = false,
+--       validation = {
+--         script = true,
+--         style = true,
+--         template = true
+--       }
+--     }
+--   }
+-- }
+-- lspconfig.vuels.setup { opts }
 
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")

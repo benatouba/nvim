@@ -52,6 +52,9 @@ return require("packer").startup({
 			after = "telescope.nvim",
 		})
 		use({
+			"whiteinge/diffconflicts"
+		})
+		use({
 			"nvim-telescope/telescope-fzf-native.nvim",
 			run = "make",
 			after = "telescope.nvim",
@@ -61,7 +64,10 @@ return require("packer").startup({
 		})
 		use({
 			"nvim-telescope/telescope-frecency.nvim",
-			requires = "tami5/sql.nvim",
+			requires = {
+				"tami5/sql.nvim",
+				{ "zane-/howdoi.nvim", config = function() require('telescope').load_extension('howdoi') end }
+			},
 			after = "telescope.nvim",
 			-- config = function() require('telescope').load_extension('frecency') end,
 		})
