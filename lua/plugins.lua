@@ -193,14 +193,6 @@ return require("packer").startup({
 			use({
 				"ray-x/lsp_signature.nvim",
 			})
-			-- use { "github/copilot.vim" }
-			-- use {
-			-- 	"zbirenbaum/copilot.lua",
-			-- 	event = { "VimEnter" },
-			-- 	config = function()
-			-- 		require("lsp.copilot").config()
-			-- 	end,
-			-- }
 			use({
 				"williamboman/mason.nvim",
 				"williamboman/mason-lspconfig.nvim",
@@ -221,7 +213,6 @@ return require("packer").startup({
 					"hrsh7th/cmp-nvim-lsp",
 					"hrsh7th/cmp-nvim-lsp-document-symbol",
 					"hrsh7th/cmp-nvim-lsp-signature-help",
-					-- "hrsh7th/cmp-copilot",
 					"hrsh7th/cmp-path",
 					"hrsh7th/cmp-nvim-lua",
 					"hrsh7th/cmp-calc",
