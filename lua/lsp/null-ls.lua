@@ -12,6 +12,8 @@ local sources = {
 	-- Formatting prettier-style can be done by eslint_d with "eslint-plugin-prettier"
 	-- null_ls.builtins.formatting.prettier_d_slim,
 	null_ls.builtins.formatting.stylua,
+	null_ls.builtins.code_actions.shellcheck,
+	null_ls.builtins.formatting.shfmt,
 	-- null_ls.builtins.completion.spell,
 	-- null_ls.builtins.diagnostics.proselint,
 	null_ls.builtins.hover.dictionary,
