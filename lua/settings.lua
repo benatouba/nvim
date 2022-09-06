@@ -34,6 +34,7 @@ vim.wo.cursorline = true -- Enable highlighting of the current line
 vim.o.showtabline = 2 -- Always show tabs
 vim.o.showmode = false -- We don't need to see things like -- INSERT -- anymore
 vim.o.backup = true -- backup files
+vim.g.cursorhold_updatetime = 100
 vim.o.writebackup = true -- backup files during writing
 vim.wo.signcolumn = "yes:1" -- Always show the signcolumn, otherwise it would shift the text each time
 vim.o.updatetime = 500 -- Faster completion
