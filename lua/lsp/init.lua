@@ -59,6 +59,8 @@ local pop_opts = { border = border_style }
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, pop_opts)
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, pop_opts)
 
+local capabilities = function() return require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) end
+
 -- NOTE: Server Setup
 local mason_ok, mason = pcall(require, "mason")
 if not mason_ok then
@@ -75,6 +77,18 @@ end
 mason_lspconfig.setup {}
 
 
+local lsp_defaults = {
+  flags = {
+    debounce_text_changes = 150,
+  },
+  capabilities = require('cmp_nvim_lsp').update_capabilities(
+    vim.lsp.protocol.make_client_capabilities()
+  ),
+  on_attach = function(client, bufnr)
+    vim.api.nvim_exec_autocmds('User', {pattern = 'LspAttached'})
+  end
+}
+
 local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
 if not lspconfig_ok then
   P("lspconfig not okay in lspconfig")
@@ -87,36 +101,40 @@ if not lsp_status_ok then
 end
 lsp_status.register_progress()
 
-local capabilities = function() return require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) end
+lspconfig.util.default_config = vim.tbl_deep_extend(
+  'force',
+  lspconfig.util.default_config,
+  lsp_defaults
+)
 
-local opts = {}
-opts.capabilities = capabilities
-opts.on_attach = lsp_status.on_attach
+-- local opts = {}
+-- opts.capabilities = capabilities
+-- opts.on_attach = lsp_status.on_attach
 
-lspconfig.tsserver.setup { opts }
-lspconfig.vimls.setup { opts }
-lspconfig.rls.setup { opts }
-lspconfig.gopls.setup { opts }
--- lspconfig.pyright.setup { opts }
-lspconfig.pylsp.setup { opts }
-lspconfig.cssls.setup { opts }
-lspconfig.rust_analyzer.setup { opts }
-lspconfig.bashls.setup { opts }
-lspconfig.jsonls.setup { opts }
-lspconfig.html.setup { opts }
-lspconfig.salt_ls.setup { opts }
-lspconfig.clangd.setup { opts }
-lspconfig.cmake.setup { opts }
-lspconfig.dockerls.setup { opts }
-lspconfig.fortls.setup { opts }
--- lspconfig.grammarly.setup { opts }
--- lspconfig.jedi_language_server.setup { opts }
--- lspconfig.vuels.setup { opts }
-lspconfig.volar.setup { opts }
-lspconfig.texlab.setup { opts }
-lspconfig.volar.setup { opts }
-lspconfig.yamlls.setup { opts }
--- opts.init_options = {
+lspconfig.tsserver.setup {  }
+lspconfig.vimls.setup {  }
+lspconfig.rls.setup {  }
+lspconfig.gopls.setup {  }
+-- lspconfig.pyright.setup {  }
+lspconfig.pylsp.setup {  }
+lspconfig.cssls.setup {  }
+lspconfig.rust_analyzer.setup {  }
+lspconfig.bashls.setup {  }
+lspconfig.jsonls.setup {  }
+lspconfig.html.setup {  }
+lspconfig.salt_ls.setup {  }
+lspconfig.clangd.setup {  }
+lspconfig.cmake.setup {  }
+lspconfig.dockerls.setup {  }
+lspconfig.fortls.setup {  }
+-- lspconfig.grammarly.setup {  }
+-- lspconfig.jedi_language_server.setup {  }
+-- lspconfig.vuels.setup {  }
+lspconfig.volar.setup {  }
+lspconfig.texlab.setup {  }
+lspconfig.volar.setup {  }
+lspconfig.yamlls.setup {  }
+-- .init_options = {
 --   config = {
 --     css = {},
 --     emmet = {},

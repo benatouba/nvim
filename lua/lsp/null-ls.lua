@@ -12,6 +12,18 @@ local sources = {
 	-- Formatting prettier-style can be done by eslint_d with "eslint-plugin-prettier"
 	-- null_ls.builtins.formatting.prettier_d_slim,
 	null_ls.builtins.formatting.stylua,
+	null_ls.builtins.code_actions.shellcheck,
+	null_ls.builtins.formatting.shfmt,
+	null_ls.builtins.formatting.shellharden,
+	null_ls.builtins.diagnostics.zsh,
+	null_ls.builtins.formatting.fixjson,
+	null_ls.builtins.formatting.djlint.with({
+			filetypes = { "django", "jinja.html", "htmldjango", "sls" }
+		}),
+	null_ls.builtins.diagnostics.djlint,
+	null_ls.builtins.diagnostics.curlylint.with({
+			filetypes = { "jinja.html", "htmldjango", "sls" }
+		}),
 	-- null_ls.builtins.completion.spell,
 	-- null_ls.builtins.diagnostics.proselint,
 	null_ls.builtins.hover.dictionary,
@@ -20,10 +32,12 @@ local sources = {
 		filetypes = { "python" },
 	}),
 	null_ls.builtins.formatting.isort,
+	null_ls.builtins.diagnostics.pydocstyle,
 	-- null_ls.builtins.diagnostics.flake8,
+	null_ls.builtins.diagnostics.pyproject_flake8,
 	null_ls.builtins.code_actions.gitsigns,
 	-- null_ls.builtins.diagnostics.pylint,
-	null_ls.builtins.code_actions.refactoring
+	null_ls.builtins.code_actions.refactoring,
 }
 
 local M = {}

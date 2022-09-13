@@ -6,7 +6,8 @@ local has_words_before = function()
 end
 
 M.config = function()
-	vim.o.completeopt = 'menu,menuone'
+	require("luasnip.loaders.from_vscode").lazy_load()
+	-- vim.o.completeopt = "menu,menuone"
 	-- local neogen_ok, neogen = pcall(require, "neogen")
 	local cmp_ok, cmp = pcall(require, "cmp")
 	local snip_ok, luasnip = pcall(require, "luasnip")
@@ -18,8 +19,11 @@ M.config = function()
 		P("luasnip not ok")
 	end
 	cmp.setup({
+		completion = {
+			autocomplete = true,
+		},
 		view = {
-			entries = { name = 'custom', selection_order = 'near_cursor' }
+			entries = { name = "native" },
 		},
 		formatting = {
 			format = function(entry, vim_item)
@@ -30,21 +34,22 @@ M.config = function()
 				-- end
 				return require("lspkind").cmp_format({
 					mode = "symbol",
-					maxwidth = 50
+					maxwidth = 50,
 				})(entry, vim_item)
-			end
+			end,
+			fields = { "menu", "abbr", "kind" },
 		},
 		snippet = {
 			expand = function(args)
 				luasnip.lsp_expand(args.body)
-			end
+			end,
 		},
 		window = {
 			completion = cmp.config.window.bordered(),
 			documentation = cmp.config.window.bordered(),
 		},
 		sorting = {
-			priority_weight = 2,
+			-- priority_weight = 2,
 			comparators = {
 				-- require("copilot_cmp.comparators").prioritize,
 				-- require("copilot_cmp.comparators").score,
@@ -60,7 +65,7 @@ M.config = function()
 		},
 		mapping = {
 			["<C-d>"] = cmp.mapping.scroll_docs(-4),
-			["<C-f>"] = cmp.mapping.scroll_docs(4),
+			-- ["<C-f>"] = cmp.mapping.scroll_docs(4),
 			["<C-u>"] = cmp.mapping.scroll_docs(4),
 			["<C-Space>"] = cmp.mapping.complete(),
 			["<C-e>"] = cmp.mapping.abort(),
@@ -69,60 +74,53 @@ M.config = function()
 				behavior = cmp.ConfirmBehavior.Replace,
 				select = false,
 			}),
-			["<C-n>"] = cmp.mapping.select_next_item(),
-			["<C-p>"] = cmp.mapping.select_prev_item(),
-			-- ["<Tab>"] = cmp.mapping(function(fallback)
-			--    if cmp.visible() then
-			--      cmp.select_next_item()
-			--    elseif snip.expand_or_jumpable() then
-			--      snip.expand_or_jump()
-			--    elseif has_words_before() then
-			--      cmp.complete()
-			--    else
-			--      fallback()
-			--    end
-			--  end, { "i", "s" }),
-			--
-			--  ["<S-Tab>"] = cmp.mapping(function(fallback)
-			--    if cmp.visible() then
-			--      cmp.select_prev_item()
-			--    elseif snip.jumpable(-1) then
-			--      snip.jump(-1)
-			--    else
-			--      fallback()
-			--    end
-			--  end, { "i", "s" }),
+			["<C-n>"] = cmp.mapping.select_next_item(select_opts),
+			["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
+			["<C-f>"] = cmp.mapping(function(fallback)
+				if luasnip.jumpable(1) then
+					luasnip.jump(1)
+				else
+					fallback()
+				end
+			end, { "i", "s" }),
+			["<C-b>"] = cmp.mapping(function(fallback)
+				if luasnip.jumpable(-1) then
+					luasnip.jump(-1)
+				else
+					fallback()
+				end
+			end, { "i", "s" }),
 		},
 		-- --                 ﬘    m    
 
 		sources = {
 			-- { name = "copilot", group_index = 2 },
-			{ name = "nvim_lsp", group_index = 2 },
-			{ name = "nvim_lsp_document_symbol", group_index = 2 },
-			{ name = 'nvim_lsp_signature_help', group_index = 2 },
-			{ name = 'treesitter', group_index = 2 },
-			{ name = "nvim_lua", },
-			{ name = "path", group_index = 2 },
+			{ name = "nvim_lsp", keyword_length = 1 },
+			{ name = "nvim_lsp_document_symbol", keyword_length = 4 },
+			{ name = "nvim_lsp_signature_help", keyword_length = 2 },
+			{ name = "luasnip", keyword_length = 2 },
+			{ name = "treesitter", keyword_length = 3 },
+			{ name = "nvim_lua", keyword_length = 3 },
+			{ name = "path", keyword_length = 2 },
 			-- { name = "cmp_git", },
-			{ name = "tmux", },
-			{ name = "orgmode" },
-			{ name = "luasnip", group_index = 2 },
+			-- { name = "tmux" },
+			-- { name = "orgmode" },
 			-- { name = 'zsh', },
-			{ name = "calc", },
-			{ name = "emoji", },
-			{ name = "tags", },
+			{ name = "calc" },
+			{ name = "emoji" },
+			-- { name = "tags" },
 			-- { name = "look", },
-			{ name = "vim-dadbod-completion", },
-			{ name = "buffer" },
+			-- { name = "vim-dadbod-completion" },
+			{ name = "buffer", keyword_length = 5 },
 		},
 	})
 
-  -- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
+	-- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
 
 	cmp.setup.cmdline(":", {
 		mapping = cmp.mapping.preset.cmdline(),
 		window = {
-			-- completion = cmp.config.window.bordered(),
+			completion = cmp.config.window.bordered(),
 			-- documentation = cmp.config.window.bordered(),
 		},
 		sources = cmp.config.sources({
@@ -145,18 +143,17 @@ M.config = function()
 	})
 
 	-- require("luasnip/loaders/from_vscode").lazy_load({paths={vim.fn.stdpath('config') .. "/snippets"}})
-	require("luasnip/loaders/from_vscode").lazy_load()
 
 	local cmp_git_ok, _ = pcall(require, "cmp_git")
 	if not cmp_git_ok then
 		P("cmp_git not okay")
 		return
 	end
-	cmp.setup.filetype('gitcommit', {
+	cmp.setup.filetype("gitcommit", {
 		sources = cmp.config.sources({
-			{ name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+			{ name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
 		}, {
-			{ name = 'buffer' },
+			{ name = "buffer" },
 		}),
 		github = {
 			issues = {
@@ -179,6 +176,20 @@ M.config = function()
 		},
 	})
 
+	local sign = function(opts)
+		vim.fn.sign_define(opts.name, {
+			texthl = opts.name,
+			text = opts.text,
+			numhl = "",
+		})
+	end
+
+	sign({ name = "DiagnosticSignError", text = "✘" })
+	sign({ name = "DiagnosticSignWarn", text = "▲" })
+	sign({ name = "DiagnosticSignHint", text = "⚑" })
+	sign({ name = "DiagnosticSignInfo", text = "" })
+
+
 	_ = vim.cmd([[
   augroup DadbodSql
     au!
@@ -192,6 +203,15 @@ M.config = function()
     autocmd Filetype zsh lua require'cmp'.setup.buffer { sources = { { name = "zsh" }, } }
   augroup END
 ]])
+	vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+  vim.lsp.handlers.hover,
+  {border = 'rounded'}
+)
+
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+  vim.lsp.handlers.signature_help,
+  {border = 'rounded'}
+)
 end
 
 return M
