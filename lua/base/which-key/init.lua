@@ -180,9 +180,13 @@ which_key.register(diffmaps, {
 which_key.register(terminal_mappings, terminal_opts)
 
 local gmaps = {
-	["rr"] = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "TS Rename" }
+	["r"] = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "TS Rename" },
+	["s"] = { "<cmd>vim.lsp.buf.signature_help()<cr>", "Signature Help" },
+	["h"] = { "<cmd>vim.lsp.buf.hover()<cr>", "Hover" },
+	["d"] = { "<cmd>vim.lsp.buf.definition()<cr>", "Definition" },
+	["D"] = { "<cmd>vim.lsp.declaration()<cr>", "Declaration" },
 }
 which_key.register(gmaps, {
 	mode = "n", -- NORMAL mode
-	prefix = "g"
+	prefix = "g",
 })
