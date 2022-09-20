@@ -88,7 +88,7 @@ if O.lsp then
 		d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics" },
 		D = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
 		f = { "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", "Format Document" },
-		h = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Find definition" },
+		h = { "<cmd>lua vim.lsp.definition()<CR>", "Find definition" },
 		i = { "<cmd>LspInfo<cr>", "Info" },
 		n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
 		j = {
@@ -181,10 +181,10 @@ which_key.register(terminal_mappings, terminal_opts)
 
 local gmaps = {
 	["r"] = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "TS Rename" },
-	["s"] = { "<cmd>vim.lsp.buf.signature_help()<cr>", "Signature Help" },
-	["h"] = { "<cmd>vim.lsp.buf.hover()<cr>", "Hover" },
-	["d"] = { "<cmd>vim.lsp.buf.definition()<cr>", "Definition" },
-	["D"] = { "<cmd>vim.lsp.declaration()<cr>", "Declaration" },
+	["s"] = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature Help" },
+	["h"] = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover" },
+	["d"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },
+	["D"] = { "<cmd>lua vim.lsp.declaration()<cr>", "Declaration" },
 }
 which_key.register(gmaps, {
 	mode = "n", -- NORMAL mode

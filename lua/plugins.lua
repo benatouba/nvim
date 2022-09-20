@@ -52,7 +52,7 @@ return require("packer").startup({
 			after = "telescope.nvim",
 		})
 		use({
-			"whiteinge/diffconflicts"
+			"whiteinge/diffconflicts",
 		})
 		use({
 			"nvim-telescope/telescope-fzf-native.nvim",
@@ -66,7 +66,12 @@ return require("packer").startup({
 			"nvim-telescope/telescope-frecency.nvim",
 			requires = {
 				"tami5/sql.nvim",
-				{ "zane-/howdoi.nvim", config = function() require('telescope').load_extension('howdoi') end }
+				{
+					"zane-/howdoi.nvim",
+					config = function()
+						require("telescope").load_extension("howdoi")
+					end,
+				},
 			},
 			after = "telescope.nvim",
 			-- config = function() require('telescope').load_extension('frecency') end,
@@ -93,7 +98,7 @@ return require("packer").startup({
 		-- Color
 		use({ "christianchiarulli/nvcode-color-schemes.vim", opt = true })
 		use({
-			"norcalli/nvim-colorizer.lua",
+			"nvchad/nvim-colorizer.lua",
 			config = function()
 				require("colorizer").setup()
 			end,
@@ -406,6 +411,19 @@ return require("packer").startup({
 		})
 		use({ "iamcco/markdown-preview.nvim", ft = "markdown", run = "cd app && yarn install" })
 		use({ "szw/vim-maximizer" })
+		use({
+			"anuvyklack/windows.nvim",
+			requires = {
+				"anuvyklack/middleclass",
+				-- "anuvyklack/animation.nvim",
+			},
+			config = function()
+				vim.o.winwidth = 10
+				vim.o.winminwidth = 10
+				vim.o.equalalways = false
+				require("windows").setup()
+			end,
+		})
 	end,
 	config = {
 		profile = {

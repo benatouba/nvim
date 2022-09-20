@@ -7,37 +7,82 @@ end
 
 M.config = function()
 	require("luasnip.loaders.from_vscode").lazy_load()
-	-- vim.o.completeopt = "menu,menuone"
+	vim.opt.completeopt = {"menu","menuone", "noselect"}
 	-- local neogen_ok, neogen = pcall(require, "neogen")
 	local cmp_ok, cmp = pcall(require, "cmp")
 	local snip_ok, luasnip = pcall(require, "luasnip")
+	local lspkind_ok, lspkind = pcall(require, "lspkind")
+	local types = require("cmp.types")
+	local str = require("cmp.utils.str")
 	if not cmp_ok then
 		P("nvim-cmp not okay")
 		return
 	end
+	if not lspkind_ok then
+		P("lspkind not ok")
+	end
 	if not snip_ok then
 		P("luasnip not ok")
 	end
+
+	luasnip.config.setup({
+		region_check_events = "CursorMoved",
+		delete_check_events = "TextChanged",
+	})
+
 	cmp.setup({
-		completion = {
-			autocomplete = true,
-		},
-		view = {
-			entries = { name = "native" },
-		},
+			enabled = function()
+      -- disable completion in comments
+      local context = require 'cmp.config.context'
+      -- keep command mode completion enabled when cursor is in a comment
+      if vim.api.nvim_get_mode().mode == 'c' then
+        return true
+      else
+        return not context.in_treesitter_capture("comment")
+          and not context.in_syntax_group("Comment")
+      end
+		end,
+		-- view = {
+		-- 	entries = { name = "native" },
+		-- },
 		formatting = {
-			format = function(entry, vim_item)
-				-- if entry.source.name == "copilot" then
-				-- 	vim_item.kind = "[]"
-				-- 	vim_item.kind_hl_group = "CmpItemKindCopilot"
-				-- 	return vim_item
-				-- end
-				return require("lspkind").cmp_format({
-					mode = "symbol",
-					maxwidth = 50,
-				})(entry, vim_item)
-			end,
-			fields = { "menu", "abbr", "kind" },
+			fields = {
+				cmp.ItemField.Kind,
+				cmp.ItemField.Abbr,
+				cmp.ItemField.Menu,
+			},
+			-- if entry.source.name == "copilot" then
+			-- 	vim_item.kind = "[]"
+			-- 	vim_item.kind_hl_group = "CmpItemKindCopilot"
+			-- 	return vim_item
+			-- end
+			format = lspkind.cmp_format({
+				with_text = false,
+				before = function(entry, vim_item)
+					-- Get the full snippet (and only keep first line)
+					local word = entry:get_insert_text()
+					if entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet then
+						word = vim.lsp.util.parse_snippet(word)
+					end
+					word = str.oneline(word)
+
+					-- concatenates the string
+					local max = 50
+					if string.len(word) >= max then
+						local before = string.sub(word, 1, math.floor((max - 3) / 2))
+						word = before .. "..."
+					end
+
+					if entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet
+							and string.sub(vim_item.abbr, -1, -1) == "~"
+					then
+						word = word .. "~"
+					end
+					vim_item.abbr = word
+
+					return vim_item
+				end,
+			}),
 		},
 		snippet = {
 			expand = function(args)
@@ -45,8 +90,16 @@ M.config = function()
 			end,
 		},
 		window = {
-			completion = cmp.config.window.bordered(),
-			documentation = cmp.config.window.bordered(),
+			completion = cmp.config.window.bordered({
+				autocomplete = true,
+				border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+				scrollbar = "║",
+			}),
+			documentation = cmp.config.window.bordered({
+				autocomplete = true,
+				border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+				scrollbar = "║",
+			}),
 		},
 		sorting = {
 			-- priority_weight = 2,
@@ -90,6 +143,27 @@ M.config = function()
 					fallback()
 				end
 			end, { "i", "s" }),
+		    ["<Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      elseif has_words_before() then
+        cmp.complete()
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
+
+    ["<S-Tab>"] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { "i", "s" }),
 		},
 		-- --                 ﬘    m    
 
@@ -97,21 +171,21 @@ M.config = function()
 			-- { name = "copilot", group_index = 2 },
 			{ name = "nvim_lsp", keyword_length = 1 },
 			{ name = "nvim_lsp_document_symbol", keyword_length = 4 },
-			{ name = "nvim_lsp_signature_help", keyword_length = 2 },
-			{ name = "luasnip", keyword_length = 2 },
+			{ name = "nvim_lsp_signature_help", keyword_length = 3 },
+			{ name = "luasnip", keyword_length = 3 },
 			{ name = "treesitter", keyword_length = 3 },
 			{ name = "nvim_lua", keyword_length = 3 },
-			{ name = "path", keyword_length = 2 },
+			{ name = "path", keyword_length = 3 },
 			-- { name = "cmp_git", },
 			-- { name = "tmux" },
 			-- { name = "orgmode" },
 			-- { name = 'zsh', },
 			{ name = "calc" },
 			{ name = "emoji" },
-			-- { name = "tags" },
+			{ name = "tags" , keyword_length = 5, max_item_count = 5 },
 			-- { name = "look", },
 			-- { name = "vim-dadbod-completion" },
-			{ name = "buffer", keyword_length = 5 },
+			{ name = "buffer", keyword_length = 5, max_item_count = 5 },
 		},
 	})
 
@@ -120,8 +194,7 @@ M.config = function()
 	cmp.setup.cmdline(":", {
 		mapping = cmp.mapping.preset.cmdline(),
 		window = {
-			completion = cmp.config.window.bordered(),
-			-- documentation = cmp.config.window.bordered(),
+			completion = cmp.config.window.bordered({ autocomplete = false }),
 		},
 		sources = cmp.config.sources({
 			{ name = "path" },
@@ -133,8 +206,7 @@ M.config = function()
 	cmp.setup.cmdline("/", {
 		mapping = cmp.mapping.preset.cmdline(),
 		window = {
-			-- completion = cmp.config.window.bordered(),
-			-- documentation = cmp.config.window.bordered(),
+			completion = cmp.config.window.bordered({ autocomplete = false }),
 		},
 		sources = {
 			{ name = "buffer" },
@@ -189,7 +261,6 @@ M.config = function()
 	sign({ name = "DiagnosticSignHint", text = "⚑" })
 	sign({ name = "DiagnosticSignInfo", text = "" })
 
-
 	_ = vim.cmd([[
   augroup DadbodSql
     au!
@@ -203,15 +274,10 @@ M.config = function()
     autocmd Filetype zsh lua require'cmp'.setup.buffer { sources = { { name = "zsh" }, } }
   augroup END
 ]])
-	vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-  vim.lsp.handlers.hover,
-  {border = 'rounded'}
-)
+	vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-  vim.lsp.handlers.signature_help,
-  {border = 'rounded'}
-)
+	vim.lsp.handlers["textDocument/signatureHelp"] =
+	vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 end
 
 return M
