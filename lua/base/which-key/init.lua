@@ -144,9 +144,6 @@ if O.git then
 end
 
 if O.misc then
-	mappings["t"] = { "<cmd>lua require('FTerm').open()<cr>", "Terminal" }
-	terminal_mappings["<esc>"] = { "<C-n><cmd>lua require('FTerm').close()<cr>", "Close Terminal" }
-	terminal_mappings["<c-q>"] = { "<C-n><cmd>lua require('FTerm').exit()<cr>", "Close Terminal" }
 	mappings["n"] = {
 		name = "+Generate Annotations",
 		n = { "<cmd>lua require('neogen').generate()<CR>", "Auto" },

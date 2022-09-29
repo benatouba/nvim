@@ -12,8 +12,8 @@ local mappings = {
 }
 
 M.config = function()
-	dap_py.setup(vim.fn.stdpath("data") .. "/dapinstall/python/bin/python")
-	dap_py.test_runner = "unittest"
+	dap_py.setup(vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python")
+	dap_py.test_runner = "pytest"
 	require("which-key").register(mappings, { mode = "n", prefix = "<leader>d" })
 	require("which-key").register({
 		["ds"] = { "<ESC><cmd>lua require('dap-python').debug_selection()<CR>", "Debug Selection" },
