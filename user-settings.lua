@@ -17,7 +17,7 @@ O.project_management = true
 O.misc = true
 
 O.auto_complete = true
-O.colorscheme = "tokyonight"
+O.colorscheme = "tokyonight-night"
 O.auto_close_tree = 0
 O.wrap_lines = true
 

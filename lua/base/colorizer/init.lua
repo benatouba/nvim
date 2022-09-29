@@ -21,7 +21,7 @@ colorizer.setup({
     -- True is same as normal
     tailwind = true, -- Enable tailwind colors
     -- parsers can contain values used in |user_default_options|
-    sass = { enable = true, parsers = { css } }, -- Enable sass colors
+    sass = { enable = true, parsers = { css = true } }, -- Enable sass colors
     virtualtext = "■",
   },
 })

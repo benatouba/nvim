@@ -151,21 +151,18 @@ return require("packer").startup({
 			end,
 		}) -- increment/decrement basically everything
 		use({
-			"terrortylor/nvim-comment",
-			disable = true,
-			cmd = "CommentToggle",
-			config = function()
-				require("nvim_comment").setup()
-			end,
-		})
-		use({
 			"numToStr/Comment.nvim",
 			config = function()
 				require("base.comment_nvim").config()
 			end,
 		})
 		use({ "mbbill/undotree", opt = true, cmd = "UndotreeToggle" })
-		use("tpope/vim-surround")
+		use({
+			"kylechui/nvim-surround",
+			config = function()
+				require("nvim-surround").setup({})
+			end,
+		})
 
 		-- language specific
 		use("saltstack/salt-vim")
@@ -386,7 +383,26 @@ return require("packer").startup({
 			})
 			use({
 				"numtostr/FTerm.nvim",
+				disable = true,
 				-- config = function() require("FTerm") end
+			})
+			use({
+				"akinsho/toggleterm.nvim",
+				tag = "*",
+				config = function()
+					require("toggleterm").setup({
+						open_mapping = [[<c-\>]],
+						direction = "float",
+						float_opts = {
+							border = 'single',
+							width = function()
+								return vim.o.columns * 0.8
+							end,
+							height = 30,
+							winblend = 3,
+						}
+						})
+					end
 			})
 			use({
 				"danymat/neogen",
@@ -424,6 +440,19 @@ return require("packer").startup({
 				require("windows").setup()
 			end,
 		})
+		use({
+			"jameshiew/nvim-magic",
+			config = function()
+				require("nvim-magic").setup({
+					use_default_keymap = false,
+				})
+			end,
+			requires = {
+				"nvim-lua/plenary.nvim",
+				"MunifTanjim/nui.nvim",
+			},
+		})
+	use({"dstein64/vim-startuptime"})
 	end,
 	config = {
 		profile = {

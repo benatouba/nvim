@@ -10,7 +10,7 @@ local opts = {
 	prefix = "<leader>",
 	-- buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
 	silent = true, -- use `silent` when creating keymaps
-  noremap = true, -- use `remap` when creating keymaps
+	noremap = true, -- use `remap` when creating keymaps
 	nowait = false, -- use `nowait` when creating keymaps
 }
 
@@ -60,8 +60,10 @@ local mappings = {
 		b = { "<cmd>Telescope git_branches<cr>", "Branches" },
 		B = { "<cmd>Telescope file_browser<cr>", "Browser" },
 		c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-		d = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
-		D = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
+		d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics" },
+		D = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
+		-- d = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
+		-- D = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
 		f = { "<cmd>Telescope find_files<cr>", "Find File" },
 		g = { "<cmd>Telescope git_files<cr>", "Git Files" },
 		h = { "<cmd>Telescope howdoi<cr>", "How Do I .." },
@@ -85,10 +87,11 @@ if O.lsp then
 		name = "+LSP",
 		a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
 		A = { "<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action" },
-		d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics" },
-		D = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
+		d = { "<cmd>lua vim.lsp.definition()<cr>", "Definition" },
+		D = { "<cmd>lua vim.lsp.declaration()<cr>", "Declaration" },
+		l = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Find definition" },
 		f = { "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", "Format Document" },
-		h = { "<cmd>lua vim.lsp.definition()<CR>", "Find definition" },
+		h = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover" },
 		i = { "<cmd>LspInfo<cr>", "Info" },
 		n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
 		j = {
@@ -103,8 +106,7 @@ if O.lsp then
 		r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
 		t = { "<cmd>LspTypeDefinition<cr>", "Type Definition" },
 		x = { "<cmd>cclose<cr>", "Close Quickfix" },
-		s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
-		S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols" },
+		s = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature Help" },
 	}
 	mappings["m"] = {
 		name = "+Mason",
@@ -181,12 +183,21 @@ which_key.register(terminal_mappings, terminal_opts)
 
 local gmaps = {
 	["r"] = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "TS Rename" },
-	["s"] = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature Help" },
-	["h"] = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover" },
-	["d"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },
-	["D"] = { "<cmd>lua vim.lsp.declaration()<cr>", "Declaration" },
 }
 which_key.register(gmaps, {
 	mode = "n", -- NORMAL mode
 	prefix = "g",
+})
+
+-- nvim-magic
+local magic_maps = {
+	name = "+magic",
+	a = { "<Plug>nvim-magic-suggest-alteration<CR>", "Alternate" },
+	c = { "<Plug>nvim-magic-append-completion<CR>", "Complete" },
+	d = { "<Plug>nvim-magic-suggest-docstring<CR>", "Docstring" },
+}
+
+which_key.register(magic_maps, {
+	mode = "v", -- NORMAL mode
+	prefix = "m",
 })

@@ -127,8 +127,8 @@ M.config = function()
 				behavior = cmp.ConfirmBehavior.Replace,
 				select = false,
 			}),
-			["<C-n>"] = cmp.mapping.select_next_item(select_opts),
-			["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
+			["<C-n>"] = cmp.mapping.select_next_item(),
+			["<C-p>"] = cmp.mapping.select_prev_item(),
 			["<C-f>"] = cmp.mapping(function(fallback)
 				if luasnip.jumpable(1) then
 					luasnip.jump(1)

@@ -59,7 +59,7 @@ M.maps = function()
 		["r"] = {
 			name = "+refactor",
 			b = { "<cmd>lua require('refactoring').refactor('Extract Block')<CR>", "Block" },
-			bf = { "<cmd>lua require('refactoring').refactor('Extract Block to File')<CR>", "block to File" },
+			f = { "<cmd>lua require('refactoring').refactor('Extract Block to File')<CR>", "block to File" },
 			i = { "<cmd>lua require('refactoring').refactor('Inline Variable')<CR>", "Inline variable" },
 		},
 	}

@@ -39,10 +39,10 @@ vim.o.writebackup = true -- backup files during writing
 vim.wo.signcolumn = "yes:1" -- Always show the signcolumn, otherwise it would shift the text each time
 vim.o.updatetime = 500 -- Faster completion
 vim.o.timeoutlen = 500 -- By default timeoutlen is 1000 ms
--- vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
+vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
 -- vim.cmd("set foldmethod=expr")
 -- vim.cmd("set foldexpr=nvim_treesitter#foldexpr()")
-vim.bo.ts_highlight_lua = true
+-- vim.bo.ts_highlight_lua = true
 
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
 vim.o.smartcase = true -- smartcase makes it so that searching becomes case sensitive if you use a capital letter

@@ -50,6 +50,7 @@ M.config = function()
   config.sections.lualine_c = {"filename", "lsp_progress"}
   config.sections.lualine_x = {{get_lsp_client}, 'encoding', 'fileformat', 'filetype'}
   config.options.extensions = { "quickfix", "fugitive",}
+  config.options.theme = 'tokyonight'
   ll.setup(config)
 end
 
