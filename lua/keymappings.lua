@@ -32,7 +32,6 @@ map("n", "<esc>", ":nohlsearch<CR>")
 -- map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev { wrap = false }<cr>')
 -- map('n', ']d', '<cmd>lua vim.diagnostic.goto_next { wrap = false }<cr>')
 
-P('test')
 local isOk, hlslens = pcall(require, "hlslens")
 if not isOk then
     vim.notify("hlslens not okay")
