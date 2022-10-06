@@ -8,19 +8,21 @@ which_key.setup()
 local opts = {
 	mode = "n", -- NORMAL mode
 	prefix = "<leader>",
-	-- buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+	-- buffer = nil, -- Global maps. Specify a buffer number for buffer local maps
 	silent = true, -- use `silent` when creating keymaps
 	noremap = true, -- use `remap` when creating keymaps
 	nowait = false, -- use `nowait` when creating keymaps
 }
 
-local terminal_mappings = {}
+local terminal_maps = {}
 local terminal_opts = { mode = "t" }
 -- Set leader
 -- vim.keymap.del("n", " ")
 vim.g.mapleader = " "
 
-local mappings = {
+local nmaps = {}
+
+local maps = {
 	["c"] = { ":BufferClose<CR>", "Close Buffer" },
 	-- ["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
 	-- ["H"] = {":HopWord<cr>", "hop to word"},
@@ -39,7 +41,7 @@ local mappings = {
 		N = { "<cmd>set norelativenumber!<cr>", "relative line nums" },
 		m = { "<cmd>MaximizerToggle<cr>", "Maximize/Minimize" },
 		s = { "<cmd>s/\\%V\\(.*\\)\\%V/'\\1'/<cr>", "surround" },
-		r = { "<cmd>Root<cr>", "root working dir" },
+		-- r = { "<cmd>Root<cr>", "root working dir" },
 		w = { "<cmd>call TrimWhitespace()<cr>", "trim Whitespaces" },
 		-- t = {"<cmd>TSHighlightCapturesUnderCursor<cr>", "treesitter highlight"},
 		R = { ":nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>", "redraw" },
@@ -69,6 +71,7 @@ local mappings = {
 		h = { "<cmd>Telescope howdoi<cr>", "How Do I .." },
 		m = { "<cmd>Telescope marks<cr>", "Marks" },
 		M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
+		n = { "<cmd>Telescope notify<cr>", "Notifications" },
 		o = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
 		p = { "<cmd>Telescope projects<cr>", "Projects" },
 		q = { "<cmd>Telescope quickfix<cr>", "Quickfix List" },
@@ -83,14 +86,16 @@ local mappings = {
 	-- S = {name = "+Session", s = {"<cmd>SessionSave<cr>", "Save Session"}, l = {"<cmd>SessionLoad<cr>", "Load Session"}}
 }
 if O.lsp then
-	mappings["l"] = {
+	maps["l"] = {
 		name = "+LSP",
 		a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
 		A = { "<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action" },
+		c = { "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>", "Server Capabilities" },
 		d = { "<cmd>lua vim.lsp.definition()<cr>", "Definition" },
 		D = { "<cmd>lua vim.lsp.declaration()<cr>", "Declaration" },
 		l = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Find definition" },
 		f = { "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", "Format Document" },
+		F = { "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", "Format Document (Sync)" },
 		h = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover" },
 		i = { "<cmd>LspInfo<cr>", "Info" },
 		n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
@@ -108,21 +113,21 @@ if O.lsp then
 		x = { "<cmd>cclose<cr>", "Close Quickfix" },
 		s = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature Help" },
 	}
-	mappings["m"] = {
+	maps["m"] = {
 		name = "+Mason",
 		m = { "<cmd>Mason<cr>", "Info" },
 		l = { "<cmd>MasonLog<cr>", "Log" },
 	}
 end
 
-mappings["L"] = {
+maps["L"] = {
 	name = "+Logs",
 	c = { "<cmd>LuaCacheProfile<cr>", "CacheProfile" },
 	p = { "<cmd>PackerProfile<cr>", "PackerProfile" },
 }
 
 if O.git then
-	mappings["g"] = {
+	maps["g"] = {
 		name = "+Git",
 		a = { "<cmd>Git add %<cr>", "Add/Stage File" },
 		c = { "<cmd>Git commit %<cr>", "Commit File" },
@@ -141,10 +146,20 @@ if O.git then
 		s = { "<cmd>lua require'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
 		u = { "<cmd>lua require'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk" },
 	}
+	nmaps["]"] = {
+		-- defined in gitsigns for now
+		-- g = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
+		d = { "<cmd>lua vim.diagnostic.goto_next { wrap = true }<cr>", "Next Diagnostic" },
+	}
+	nmaps["["] = {
+		-- defined in gitsigns for now
+		-- g = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
+		d = { "<cmd>lua vim.diagnostic.goto_next { wrap = true }<cr>", "Prev Diagnostic" },
+	}
 end
 
 if O.misc then
-	mappings["n"] = {
+	maps["n"] = {
 		name = "+Generate Annotations",
 		n = { "<cmd>lua require('neogen').generate()<CR>", "Auto" },
 		c = { "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", "Class" },
@@ -154,13 +169,13 @@ if O.misc then
 end
 
 if O.testing then
-	mappings["T"] = {
+	maps["T"] = {
 		name = "+Tests",
 	}
 end
 
 if O.project_management then
-	mappings["o"] = {
+	maps["o"] = {
 		name = "+Organisation",
 		a = { "<cmd>lua require('orgmode').action('agenda.prompt')<CR>", "Agenda" },
 		c = { "<cmd>lua require('orgmode').action('capture.prompt')<CR>", "Capture" },
@@ -171,12 +186,12 @@ local diffmaps = {
 	["dl"] = { ":diffget LO<CR>", "Diffget local" },
 	["db"] = { ":diffget BA<CR>", "Diffget base" },
 }
-which_key.register(mappings, opts)
+which_key.register(maps, opts)
 which_key.register(diffmaps, {
 	mode = "n", -- NORMAL mode
-	-- buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+	-- buffer = nil, -- Global maps. Specify a buffer number for buffer local maps
 })
-which_key.register(terminal_mappings, terminal_opts)
+which_key.register(terminal_maps, terminal_opts)
 
 local gmaps = {
 	["r"] = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "TS Rename" },
@@ -197,4 +212,9 @@ local magic_maps = {
 which_key.register(magic_maps, {
 	mode = "v", -- NORMAL mode
 	prefix = "m",
+})
+
+which_key.register(nmaps, {
+	mode = "n", -- NORMAL mode
+	prefix = "",
 })

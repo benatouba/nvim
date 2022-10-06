@@ -13,14 +13,14 @@ if fn.empty(fn.glob(install_path)) > 0 then
 	})
 	execute("packadd packer.nvim")
 	if not packer_ok then
-		print("Packer not okay")
+		vim.notify("Packer not okay")
 		return
 	end
 	execute("PackerSync")
 end
 
 if not packer_ok then
-	print("Packer not okay")
+	vim.notify("Packer not okay")
 	return
 end
 
@@ -32,14 +32,21 @@ return require("packer").startup({
 		use("wbthomason/packer.nvim") -- plugin manager
 		use("nvim-lua/popup.nvim") -- handle popup (important)
 		use("nvim-lua/plenary.nvim") -- most important functions (very important)
-		-- use({
-		-- 	"Tastyep/structlog.nvim",
-		-- 	deactivate = true,
-		-- 	requires = "rcarriga/nvim-notify",
-		-- 	config = function()
-		-- 		require("base.structlog")
-		-- 	end
-		-- })
+		use({"rcarriga/nvim-notify", config = function()
+			vim.notify = require("notify")
+			require("telescope").load_extension("notify")
+		end,
+		after = "telescope.nvim"
+	})
+		use({
+			"Tastyep/structlog.nvim",
+			deactivate = false,
+			requires = "rcarriga/nvim-notify",
+			after = "nvim-notify",
+			config = function()
+				require("base.structlog")
+			end
+		})
 		use({
 			"lewis6991/impatient.nvim",
 			config = function()
@@ -453,6 +460,10 @@ return require("packer").startup({
 			},
 		})
 	use({"dstein64/vim-startuptime"})
+		use({"kevinhwang91/nvim-hlslens", config = function() require('hlslens').setup({
+			calm_down = true,
+		})
+	end})
 	end,
 	config = {
 		profile = {

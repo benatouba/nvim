@@ -1,6 +1,6 @@
 local null_ls_ok, null_ls = pcall(require, "null-ls")
 if not null_ls_ok then
-	P("null-ls not okay")
+	vim.notify("null-ls not okay")
 	return
 end
 -- local helpers = require("null-ls.helpers")

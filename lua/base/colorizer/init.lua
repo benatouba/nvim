@@ -1,6 +1,6 @@
 local isOk, colorizer = pcall(require, "colorizer")
 if not isOk then
-  print("Colorizer not okay")
+  vim.notify("Colorizer not okay")
   return
 end
 

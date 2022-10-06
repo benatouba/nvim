@@ -2,7 +2,7 @@
 local setup = function()
 local isOk, rooter = pcall(require, 'rooter')
 if not isOk then
-    print('Rooter not okay')
+    vim.notify('Rooter not okay')
 end
 
 rooter.setup {

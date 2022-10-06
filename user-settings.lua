@@ -36,7 +36,3 @@ O.treesitter.highlight.enabled = true
 O.diagnostics.virtual_text.active = true
 O.diagnostics.signs = true
 O.diagnostics.underline = true
-
--- org-mode (for project management)
-O.org.agenda_files = { "~/Documents/vivere/calendar/daily/*", "~/Documents/org/*" }
-O.org.default_notes_file = "~/Documents/org/refile.org"

@@ -1,6 +1,6 @@
 local ok, dapui = pcall(require, "dapui")
 if not ok then
-	P("nvim-dap-ui not okay")
+	vim.notify("nvim-dap-ui not okay")
 	return
 end
 

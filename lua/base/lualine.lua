@@ -1,12 +1,12 @@
 local ll_ok, ll = pcall(require, "lualine")
 if not ll_ok then
-  P('lualine not okay')
+  vim.notify('lualine not okay')
   return
     end
 
 local lsp_status_ok, lsp_status = pcall(require, "lsp-status")
 if not lsp_status_ok then
-	P("lsp-status not okay in lualine")
+	vim.notify("lsp-status not okay in lualine")
 end
 
 local lspstatus = function ()

@@ -6,7 +6,7 @@ local M = {}
 M.config = function()
   local dial_ok, config = pcall(require, "dial.config")
   if not dial_ok then
-    P("dial not okay")
+    vim.notify("dial not okay")
     return
   end
 

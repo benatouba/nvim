@@ -1,6 +1,6 @@
 local isOk, neogit = pcall(require, "neogit")
 if not isOk then
-    print('Neogit not okay')
+    vim.notify('Neogit not okay')
 end
 
 neogit.setup {

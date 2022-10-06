@@ -3,7 +3,7 @@
 -- M.config = function()
 local ts_ok, ts = pcall(require, "nvim-treesitter.configs")
 if not ts_ok then
-	P("Treesitter not okay")
+	vim.notify("Treesitter not okay")
 	return
 end
 ts.setup({

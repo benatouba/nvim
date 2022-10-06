@@ -3,7 +3,7 @@ local M = {}
 M.config = function()
   local isOk, nvim_tree = pcall(require, 'nvim-tree')
   if not isOk then
-    print('Nvim-tree not okay')
+    vim.notify('Nvim-tree not okay')
     return
   end
 

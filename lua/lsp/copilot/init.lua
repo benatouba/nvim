@@ -1,7 +1,7 @@
 local M = {}
 local copilot_ok, copilot = pcall(require, 'copilot')
 if not copilot_ok then
-    P('copilot not okay')
+    vim.notify('copilot not okay')
     return
 end
 

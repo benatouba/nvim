@@ -3,7 +3,7 @@ local M = {}
 M.config = function()
     local telescope_ok, telescope = pcall(require, 'telescope')
     if not telescope_ok then
-        P("Telescope could not be initiated")
+        vim.notify("Telescope could not be initiated")
         return
     end
 

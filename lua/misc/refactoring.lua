@@ -3,7 +3,7 @@ M = {}
 M.config = function()
 	local ref_ok, ref = pcall(require, "refactoring")
 	if not ref_ok then
-		P("Refactoring.nvim not okay")
+		vim.notify("Refactoring.nvim not okay")
 		return
 	end
 	ref.setup({})
@@ -38,7 +38,7 @@ end
 M.maps = function()
 	local wk_ok, wk = pcall(require, "which-key")
 	if not wk_ok then
-		P("which-key not ok in refactoring.nvim")
+		vim.notify("which-key not ok in refactoring.nvim")
 		return
 	end
 

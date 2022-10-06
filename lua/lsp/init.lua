@@ -64,14 +64,14 @@ local capabilities = function() return require('cmp_nvim_lsp').update_capabiliti
 -- NOTE: Server Setup
 local mason_ok, mason = pcall(require, "mason")
 if not mason_ok then
-  P("mason not okay in lspconfig")
+  vim.notify("mason not okay in lspconfig")
   return
 end
 mason.setup {}
 
 local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
 if not mason_lspconfig_ok then
-  P("mason-lspconfig not okay in lspconfig")
+  vim.notify("mason-lspconfig not okay in lspconfig")
   return
 end
 mason_lspconfig.setup {}
@@ -91,13 +91,13 @@ local lsp_defaults = {
 
 local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
 if not lspconfig_ok then
-  P("lspconfig not okay in lspconfig")
+  vim.notify("lspconfig not okay in lspconfig")
   return
 end
 
 local lsp_status_ok, lsp_status = pcall(require, "lsp-status")
 if not lsp_status_ok then
-  P("lsp-status not okay in lspconfig")
+  vim.notify("lsp-status not okay in lspconfig")
 end
 lsp_status.register_progress()
 

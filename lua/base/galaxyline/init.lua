@@ -3,7 +3,7 @@
 -- end
 local status_ok, gl = pcall(require, "galaxyline")
 if not status_ok then
-  P("Galaxyline not okay")
+  vim.notify("Galaxyline not okay")
   return
 end
 
@@ -241,7 +241,7 @@ if O.lsp then
       if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
         -- print(client.name)
         if lsps == "" then
-          -- P("first", lsps)
+          -- vim.notify("first", lsps)
           lsps = client.name
         else
           if not string.find(lsps, client.name) then

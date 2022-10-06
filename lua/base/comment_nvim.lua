@@ -1,7 +1,7 @@
 local comment_ok, comment = pcall(require, "Comment")
 -- local tsc_ok, tsc = pcall(require, "ts_context_commentstring.utils")
 if not comment_ok then
-    P("Comment.nvim not ok")
+    vim.notify("Comment.nvim not ok")
     return
 end
 -- local wk = require("which-key")

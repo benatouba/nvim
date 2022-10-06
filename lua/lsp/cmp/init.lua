@@ -6,8 +6,8 @@ local has_words_before = function()
 end
 
 M.config = function()
-	require("luasnip.loaders.from_vscode").lazy_load()
-	vim.opt.completeopt = {"menu","menuone", "noselect"}
+	require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
+	vim.opt.completeopt = { "menu", "menuone", "noselect" }
 	-- local neogen_ok, neogen = pcall(require, "neogen")
 	local cmp_ok, cmp = pcall(require, "cmp")
 	local snip_ok, luasnip = pcall(require, "luasnip")
@@ -15,14 +15,14 @@ M.config = function()
 	local types = require("cmp.types")
 	local str = require("cmp.utils.str")
 	if not cmp_ok then
-		P("nvim-cmp not okay")
+		vim.notify("nvim-cmp not okay")
 		return
 	end
 	if not lspkind_ok then
-		P("lspkind not ok")
+		vim.notify("lspkind not ok")
 	end
 	if not snip_ok then
-		P("luasnip not ok")
+		vim.notify("luasnip not ok")
 	end
 
 	luasnip.config.setup({
@@ -31,16 +31,15 @@ M.config = function()
 	})
 
 	cmp.setup({
-			enabled = function()
-      -- disable completion in comments
-      local context = require 'cmp.config.context'
-      -- keep command mode completion enabled when cursor is in a comment
-      if vim.api.nvim_get_mode().mode == 'c' then
-        return true
-      else
-        return not context.in_treesitter_capture("comment")
-          and not context.in_syntax_group("Comment")
-      end
+		enabled = function()
+			-- disable completion in comments
+			local context = require("cmp.config.context")
+			-- keep command mode completion enabled when cursor is in a comment
+			if vim.api.nvim_get_mode().mode == "c" then
+				return true
+			else
+				return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
+			end
 		end,
 		-- view = {
 		-- 	entries = { name = "native" },
@@ -143,27 +142,27 @@ M.config = function()
 					fallback()
 				end
 			end, { "i", "s" }),
-		    ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      elseif has_words_before() then
-        cmp.complete()
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
+			["<Tab>"] = cmp.mapping(function(fallback)
+				if cmp.visible() then
+					cmp.select_next_item()
+				elseif luasnip.expand_or_jumpable() then
+					luasnip.expand_or_jump()
+				elseif has_words_before() then
+					cmp.complete()
+				else
+					fallback()
+				end
+			end, { "i", "s" }),
 
-    ["<S-Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { "i", "s" }),
+			["<S-Tab>"] = cmp.mapping(function(fallback)
+				if cmp.visible() then
+					cmp.select_prev_item()
+				elseif luasnip.jumpable(-1) then
+					luasnip.jump(-1)
+				else
+					fallback()
+				end
+			end, { "i", "s" }),
 		},
 		-- --                 ﬘    m    
 
@@ -172,17 +171,17 @@ M.config = function()
 			{ name = "nvim_lsp", keyword_length = 1 },
 			{ name = "nvim_lsp_document_symbol", keyword_length = 4 },
 			{ name = "nvim_lsp_signature_help", keyword_length = 3 },
-			{ name = "luasnip", keyword_length = 3 },
+			{ name = "luasnip", keyword_length = 2 },
 			{ name = "treesitter", keyword_length = 3 },
 			{ name = "nvim_lua", keyword_length = 3 },
 			{ name = "path", keyword_length = 3 },
-			-- { name = "cmp_git", },
+			{ name = "cmp_git" },
 			-- { name = "tmux" },
-			-- { name = "orgmode" },
+			{ name = "orgmode" },
 			-- { name = 'zsh', },
 			{ name = "calc" },
 			{ name = "emoji" },
-			{ name = "tags" , keyword_length = 5, max_item_count = 5 },
+			{ name = "tags", keyword_length = 5, max_item_count = 5 },
 			-- { name = "look", },
 			-- { name = "vim-dadbod-completion" },
 			{ name = "buffer", keyword_length = 5, max_item_count = 5 },
@@ -218,7 +217,7 @@ M.config = function()
 
 	local cmp_git_ok, _ = pcall(require, "cmp_git")
 	if not cmp_git_ok then
-		P("cmp_git not okay")
+		vim.notify("cmp_git not okay")
 		return
 	end
 	cmp.setup.filetype("gitcommit", {

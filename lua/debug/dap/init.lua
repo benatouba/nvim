@@ -1,6 +1,6 @@
 local status_ok, dap = pcall(require, "dap")
 if not status_ok then
-	P("nvim-dap not okay")
+	vim.notify("nvim-dap not okay")
 	return
 end
 
