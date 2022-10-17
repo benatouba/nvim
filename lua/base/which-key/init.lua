@@ -26,7 +26,7 @@ local maps = {
 	["c"] = { ":BufferClose<CR>", "Close Buffer" },
 	-- ["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
 	-- ["H"] = {":HopWord<cr>", "hop to word"},
-	["e"] = { ":CHADopen<cr>", "Explorer" },
+	["e"] = { ":NvimTreeToggle<cr>", "Explorer" },
 	["u"] = { ":UndotreeToggle<cr>", "Undotree" },
 
 	-- a is for actions
@@ -118,6 +118,16 @@ if O.lsp then
 		m = { "<cmd>Mason<cr>", "Info" },
 		l = { "<cmd>MasonLog<cr>", "Log" },
 	}
+	nmaps["]"] = {
+		-- defined in gitsigns for now
+		-- g = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
+		d = { "<cmd>lua vim.diagnostic.goto_next { wrap = true }<cr>", "Next Diagnostic" },
+	}
+	nmaps["["] = {
+		-- defined in gitsigns for now
+		-- g = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
+		d = { "<cmd>lua vim.diagnostic.goto_prev { wrap = true }<cr>", "Prev Diagnostic" },
+	}
 end
 
 maps["L"] = {
@@ -145,16 +155,6 @@ if O.git then
 		R = { "<cmd>lua require'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
 		s = { "<cmd>lua require'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
 		u = { "<cmd>lua require'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk" },
-	}
-	nmaps["]"] = {
-		-- defined in gitsigns for now
-		-- g = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
-		d = { "<cmd>lua vim.diagnostic.goto_next { wrap = true }<cr>", "Next Diagnostic" },
-	}
-	nmaps["["] = {
-		-- defined in gitsigns for now
-		-- g = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
-		d = { "<cmd>lua vim.diagnostic.goto_next { wrap = true }<cr>", "Prev Diagnostic" },
 	}
 end
 

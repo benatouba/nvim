@@ -7,6 +7,8 @@ TERMINAL = vim.fn.expand("$TERMINAL")
 -- DATA_PATH = vim.fn.stdpath('data')
 vim.cmd('let &titleold="' .. TERMINAL .. '"')
 vim.o.titlestring = "%<%F%=%l/%L - nvim"
+vim.g.loaded = 1
+vim.g.loaded_netrwPlugin = 1
 vim.wo.wrap = O.wrap_lines -- Display long lines as just one line
 vim.cmd("set whichwrap+=<,>,[,]") -- move to next line with theses keys
 vim.o.syntax = "on" -- syntax highlighting

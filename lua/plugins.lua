@@ -140,15 +140,15 @@ return require("packer").startup({
 			end,
 		})
 		use("romgrk/barbar.nvim")
-		-- use({
-		-- 	"kyazdani42/nvim-tree.lua",
-		-- 	-- opt = true,
-		-- 	config = function()
-		-- 		require("base.nvim-tree").config()
-		-- 	end,
-		-- 	-- cmd = "NvimTreeToggle"
-		-- })
-		use({ "ms-jpq/chadtree", branch = "chad", run = ":CHADdeps" })
+		use({
+			"kyazdani42/nvim-tree.lua",
+			-- opt = true,
+			config = function()
+				require("base.nvim-tree").config()
+			end,
+			-- cmd = "NvimTreeToggle"
+		})
+		-- use({ "ms-jpq/chadtree", branch = "chad", run = ":CHADdeps" })
 
 		-- manipulation
 		use({
@@ -311,6 +311,7 @@ return require("packer").startup({
 				"nvim-neotest/neotest",
 				requires = {
 					"nvim-neotest/neotest-python",
+					"marilari88/neotest-vitest",
 					"nvim-neotest/neotest-vim-test",
 					"vim-test/vim-test",
 					"nvim-lua/plenary.nvim",

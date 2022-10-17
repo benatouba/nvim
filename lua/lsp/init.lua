@@ -59,7 +59,7 @@ local pop_opts = { border = border_style }
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, pop_opts)
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, pop_opts)
 
-local capabilities = function() return require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()) end
+-- local capabilities = function() return require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()) end
 
 -- NOTE: Server Setup
 local mason_ok, mason = pcall(require, "mason")
@@ -81,7 +81,7 @@ local lsp_defaults = {
   flags = {
     debounce_text_changes = 150,
   },
-  capabilities = require('cmp_nvim_lsp').update_capabilities(
+  capabilities = require('cmp_nvim_lsp').default_capabilities(
     vim.lsp.protocol.make_client_capabilities()
   ),
   on_attach = function(client, bufnr)

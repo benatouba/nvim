@@ -34,12 +34,12 @@ M.config = function()
     return
   end
   which_key.register({
-    F = {
-      name = "debug",
+    v = {
+      name = "vimkind",
       d = {"<cmd>lua require'osv'.run_this()<cr>", "this file"},
       S = {"<cmd>lua require'osv'.launch()<cr>", "Start server"}
     }
-  }, {prefix = "<leader>"})
+  }, {prefix = "<leader>d"})
 
 end
 
