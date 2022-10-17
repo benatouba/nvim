@@ -127,7 +127,7 @@ lspconfig.clangd.setup {  }
 lspconfig.cmake.setup {  }
 lspconfig.dockerls.setup {  }
 lspconfig.fortls.setup {  }
--- lspconfig.grammarly.setup {  }
+lspconfig.grammarly.setup {  }
 -- lspconfig.jedi_language_server.setup {  }
 -- lspconfig.vuels.setup {  }
 lspconfig.volar.setup {  }
