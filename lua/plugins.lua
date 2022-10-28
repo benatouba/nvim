@@ -32,12 +32,14 @@ return require("packer").startup({
 		use("wbthomason/packer.nvim") -- plugin manager
 		use("nvim-lua/popup.nvim") -- handle popup (important)
 		use("nvim-lua/plenary.nvim") -- most important functions (very important)
-		use({"rcarriga/nvim-notify", config = function()
-			vim.notify = require("notify")
-			require("telescope").load_extension("notify")
-		end,
-		after = "telescope.nvim"
-	})
+		use({
+			"rcarriga/nvim-notify",
+			config = function()
+				vim.notify = require("notify")
+				require("telescope").load_extension("notify")
+			end,
+			after = "telescope.nvim",
+		})
 		use({
 			"Tastyep/structlog.nvim",
 			deactivate = false,
@@ -45,7 +47,7 @@ return require("packer").startup({
 			after = "nvim-notify",
 			config = function()
 				require("base.structlog")
-			end
+			end,
 		})
 		use({
 			"lewis6991/impatient.nvim",
@@ -402,15 +404,15 @@ return require("packer").startup({
 						open_mapping = [[<c-\>]],
 						direction = "float",
 						float_opts = {
-							border = 'single',
+							border = "single",
 							width = function()
 								return vim.o.columns * 0.8
 							end,
 							height = 30,
 							winblend = 3,
-						}
-						})
-					end
+						},
+					})
+				end,
 			})
 			use({
 				"danymat/neogen",
@@ -418,6 +420,13 @@ return require("packer").startup({
 					require("misc.neogen")
 				end,
 				requires = "nvim-treesitter/nvim-treesitter",
+			})
+			use({
+				"benatouba/colortils.nvim",
+				cmd = "Colortils",
+				config = function()
+					require("colortils").setup()
+				end,
 			})
 		end
 		use("wuelnerdotexe/vim-enfocado")
@@ -460,11 +469,15 @@ return require("packer").startup({
 				"MunifTanjim/nui.nvim",
 			},
 		})
-	use({"dstein64/vim-startuptime"})
-		use({"kevinhwang91/nvim-hlslens", config = function() require('hlslens').setup({
-			calm_down = true,
+		use({ "dstein64/vim-startuptime" })
+		use({
+			"kevinhwang91/nvim-hlslens",
+			config = function()
+				require("hlslens").setup({
+					calm_down = true,
+				})
+			end,
 		})
-	end})
 	end,
 	config = {
 		profile = {

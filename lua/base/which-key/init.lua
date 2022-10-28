@@ -23,7 +23,7 @@ vim.g.mapleader = " "
 local nmaps = {}
 
 local maps = {
-	["c"] = { ":BufferClose<CR>", "Close Buffer" },
+
 	-- ["h"] = {":HopChar2<cr>", "hop to 2 char sequence"},
 	-- ["H"] = {":HopWord<cr>", "hop to word"},
 	["e"] = { ":NvimTreeToggle<cr>", "Explorer" },
@@ -32,7 +32,8 @@ local maps = {
 	-- a is for actions
 	a = {
 		name = "+Actions",
-		-- c = {"<cmd>ColorizerToggle<cr>", "colorizer"},
+		c = { ":BufferClose<CR>", "Close Buffer" },
+		C = { "<cmd>ColorizerToggle<cr>", "Toggle Colorizer" },
 		h = { "<cmd>let @/ = ''<cr>", "remove highlighted" },
 		H = { ":set hlsearch!<CR>", "turn off highlight" },
 		-- i = {"<cmd>IndentBlanklineToggle<cr>", "toggle indent lines"},
@@ -47,6 +48,15 @@ local maps = {
 		R = { ":nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>", "redraw" },
 	},
 
+	c = {
+		name = "+Colors",
+		c = { "<cmd>Colortils css list<cr>", "CSS Colors list"},
+		d = { "<cmd>Colortils darken<cr>", "Darken"},
+		g = { "<cmd>Colortils gradient<cr>", "Gradient"},
+		G = { "<cmd>Colortils greyscale<cr>", "Greyscale"},
+		l = { "<cmd>Colortils lighten<cr>", "Lighten"},
+		p = { "<cmd>Colortils picker<cr><cr>", "Picker"},
+	},
 	p = {
 		name = "+Packer",
 		c = { "<cmd>PackerClean<cr>", "Clean" },
