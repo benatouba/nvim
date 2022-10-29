@@ -132,11 +132,13 @@ if O.lsp then
 		-- defined in gitsigns for now
 		-- g = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
 		d = { "<cmd>lua vim.diagnostic.goto_next { wrap = true }<cr>", "Next Diagnostic" },
+		t = { "<cmd>lua require('todo-comments').jump_next()<cr>", "Next todo comment"}
 	}
 	nmaps["["] = {
 		-- defined in gitsigns for now
 		-- g = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
 		d = { "<cmd>lua vim.diagnostic.goto_prev { wrap = true }<cr>", "Prev Diagnostic" },
+		t = { "<cmd>lua require('todo-comments').jump_prev()<cr>", "Previous todo comment"}
 	}
 end
 

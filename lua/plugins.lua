@@ -368,7 +368,6 @@ return require("packer").startup({
 			})
 		end
 
-		-- TODO: test todo-comments with sidebar
 		if O.misc then
 			use("kevinhwang91/nvim-bqf")
 			use("andymass/vim-matchup")
@@ -386,7 +385,6 @@ return require("packer").startup({
 			})
 			use({
 				"folke/todo-comments.nvim",
-				disable = true,
 				config = function()
 					require("todo-comments").setup()
 				end,
