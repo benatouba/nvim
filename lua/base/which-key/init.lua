@@ -69,6 +69,7 @@ local maps = {
 		f = { "<cmd>Telescope find_files<cr>", "Find File" },
 		g = { "<cmd>Telescope git_files<cr>", "Git Files" },
 		h = { "<cmd>Telescope howdoi<cr>", "How Do I .." },
+		k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
 		m = { "<cmd>Telescope marks<cr>", "Marks" },
 		M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
 		n = { "<cmd>Telescope notify<cr>", "Notifications" },
