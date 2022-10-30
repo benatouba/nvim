@@ -86,6 +86,12 @@ return require("packer").startup({
 			-- config = function() require('telescope').load_extension('frecency') end,
 		})
 		use({
+			"nvim-telescope/telescope-dap.nvim",
+			config = function()
+				require("telescope").load_extension("dap")
+			end,
+		})
+		use({
 			"nvim-telescope/telescope.nvim",
 			config = function()
 				require("base.telescope").config()
@@ -330,7 +336,7 @@ return require("packer").startup({
 			use({
 				"mfussenegger/nvim-dap",
 				requires = {
-					"theHamsta/nvim-dap-virtual-text"
+					"theHamsta/nvim-dap-virtual-text",
 				},
 				config = function()
 					require("debug.dap").config()
@@ -403,12 +409,10 @@ return require("packer").startup({
 				config = function()
 					require("toggleterm").setup({
 						open_mapping = [[<c-\>]],
-						direction = "float",
+						direction = "horizontal",
 						float_opts = {
 							border = "single",
-							width = function()
-								return vim.o.columns * 0.8
-							end,
+							width = 120,
 							height = 30,
 							winblend = 3,
 						},

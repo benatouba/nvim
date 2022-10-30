@@ -32,6 +32,10 @@ M.config = function()
 
 	cmp.setup({
 		enabled = function()
+			-- enable autocompletion in nvim-dap
+			if vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer() then
+				return true
+			end
 			-- disable completion in comments
 			local context = require("cmp.config.context")
 			-- keep command mode completion enabled when cursor is in a comment
@@ -188,6 +192,11 @@ M.config = function()
 		},
 	})
 
+	cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+		sources = {
+			{ name = "dap" },
+		},
+	})
 	-- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
 
 	cmp.setup.cmdline(":", {

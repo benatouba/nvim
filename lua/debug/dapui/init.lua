@@ -12,16 +12,9 @@ end
 
 local M = {}
 local mappings = {
-	["t"] = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle UI" },
+	["u"] = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle UI" },
 	["e"] = { "<cmd>lua require('dapui').eval()<cr>", "Evaluate Expression" },
-}
-mappings["u"] = {
-	name = "+UI",
-	["o"] = { "<cmd>lua require('dapui').open()<cr>", "Open UI" },
-	["c"] = { "<cmd>lua require('dapui').close()<cr>", "Close UI" },
-	["t"] = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle UI" },
-	["f"] = { "<cmd>lua require('dapui').float_element()<cr>", "Open Floating Info" },
-	["e"] = { "<cmd>lua require('dapui').eval()<cr>", "Evaluate Expression" },
+	["F"] = { "<cmd>lua require('dapui').float_element()<cr>", "Open Floating Info" },
 }
 
 M.config = function()
@@ -35,7 +28,7 @@ M.config = function()
 	dap.listeners.before.event_exited['dapui_conf'] = function ()
 		dapui.close()
 	end
-	require("which-key").register(mappings, { mode = "n", prefix = "<leader>d" })
+	require("which-key").register(mappings, { mode = "n", prefix = "<leader>" })
 end
 
 return M
