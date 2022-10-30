@@ -123,7 +123,7 @@ M.config = function()
 			["<C-e>"] = cmp.mapping.abort(),
 			["<C-h>"] = cmp.mapping.abort(),
 			["<CR>"] = cmp.mapping.confirm({
-				behavior = cmp.ConfirmBehavior.Replace,
+				-- behavior = cmp.ConfirmBehavior.Replace,
 				select = false,
 			}),
 			["<C-n>"] = cmp.mapping.select_next_item(),

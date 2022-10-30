@@ -29,11 +29,13 @@ local mappings = {}
 mappings["d"] = {
 	name = "+Debug",
 	b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
+	B = { "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('BP Condition: '))<cr>", "Conditional Breakpoint" },
 	c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
 	C = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run To Cursor" },
 	d = { "<cmd>lua require'dap'.disconnect()<cr>", "Disconnect" },
 	g = { "<cmd>lua require'dap'.session()<cr>", "Get Session" },
 	i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
+	l = { "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<cr>", "Log Point Message" },
 	o = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
 	O = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
 	p = { "<cmd>lua require'dap'.pause.toggle()<cr>", "Pause" },
@@ -50,7 +52,7 @@ M.config = function()
 	vim.fn.sign_define("DapStopped", data.stopped)
 
 	dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
-
+	require('nvim-dap-virtual-text').setup()
 	require("which-key").register(mappings, { mode = "n", prefix = "<leader>" })
 end
 return M

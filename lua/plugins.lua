@@ -329,6 +329,9 @@ return require("packer").startup({
 		if O.dap then -- debug adapter protocol
 			use({
 				"mfussenegger/nvim-dap",
+				requires = {
+					"theHamsta/nvim-dap-virtual-text"
+				},
 				config = function()
 					require("debug.dap").config()
 				end,
@@ -347,7 +350,7 @@ return require("packer").startup({
 					require("debug.dapui").config()
 				end,
 			})
-			use({ "Pocco81/DAPInstall.nvim", after = "nvim-dap" })
+			-- use({ "Pocco81/DAPInstall.nvim", after = "nvim-dap" })
 			use({
 				"jbyuki/one-small-step-for-vimkind",
 				after = "nvim-dap",
