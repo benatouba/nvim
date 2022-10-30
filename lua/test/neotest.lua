@@ -22,7 +22,7 @@ local mappings = {
     a = { "<cmd>lua require('neotest').run.attach()<CR>", "Attach to nearest" },
     A = { "<cmd>lua require('neotest').run.adapters()<CR>", "Adapter list" },
     d = { "<cmd>lua require('neotest').run.run({strategy = 'dap'})<CR>", "Debug Test" },
-    f = { "<cmd>lua require('neotest').run.run(vim.fn.expand(%))<CR>", "Test File" },
+    f = { "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<CR>", "Test File" },
     l = { "<cmd>lua require('neotest').run.run_last()<CR>", "Last Test" },
     o = { "<cmd>lua require('neotest').output.open({ enter = true })<CR>", "Output" },
     s = { "<cmd>lua require('neotest').summary.toggle()<CR>", "Summary" },

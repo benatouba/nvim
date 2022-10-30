@@ -72,10 +72,8 @@ local maps = {
 		b = { "<cmd>Telescope git_branches<cr>", "Branches" },
 		B = { "<cmd>Telescope file_browser<cr>", "Browser" },
 		c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-		d = { "<cmd>Telescope lsp_document_diagnostics<cr>", "Document Diagnostics" },
-		D = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
-		-- d = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
-		-- D = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
+		d = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
+		D = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
 		f = { "<cmd>Telescope find_files<cr>", "Find File" },
 		g = { "<cmd>Telescope git_files<cr>", "Git Files" },
 		h = { "<cmd>Telescope howdoi<cr>", "How Do I .." },
@@ -102,9 +100,9 @@ if O.lsp then
 		a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
 		A = { "<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action" },
 		c = { "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>", "Server Capabilities" },
-		d = { "<cmd>lua vim.lsp.definition()<cr>", "Definition" },
-		D = { "<cmd>lua vim.lsp.declaration()<cr>", "Declaration" },
-		l = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Find definition" },
+		d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },
+		D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Declaration" },
+		l = { "<cmd>LspLog<CR>", "Logs" },
 		f = { "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", "Format Document" },
 		F = { "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", "Format Document (Sync)" },
 		h = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover" },
@@ -147,6 +145,7 @@ maps["L"] = {
 	name = "+Logs",
 	c = { "<cmd>LuaCacheProfile<cr>", "CacheProfile" },
 	p = { "<cmd>PackerProfile<cr>", "PackerProfile" },
+	l = { "<cmd>LspLog<cr>", "LSP" },
 }
 
 if O.git then
@@ -181,11 +180,11 @@ if O.misc then
 	}
 end
 
-if O.testing then
-	maps["T"] = {
-		name = "+Tests",
-	}
-end
+-- if O.testing then
+-- 	maps["T"] = {
+-- 		name = "+Tests",
+-- 	}
+-- end
 
 if O.project_management then
 	maps["o"] = {
