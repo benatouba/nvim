@@ -462,18 +462,6 @@ return require("packer").startup({
 				require("windows").setup()
 			end,
 		})
-		use({
-			"jameshiew/nvim-magic",
-			config = function()
-				require("nvim-magic").setup({
-					use_default_keymap = false,
-				})
-			end,
-			requires = {
-				"nvim-lua/plenary.nvim",
-				"MunifTanjim/nui.nvim",
-			},
-		})
 		use({ "dstein64/vim-startuptime" })
 		use({
 			"kevinhwang91/nvim-hlslens",
