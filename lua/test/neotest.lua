@@ -8,8 +8,13 @@ neotest.setup({
   adapters = {
     require("neotest-python")({
       dap = { justMyCode = true },
+      args = { "--log-level", "DEBUG" },
+      runner = "pytest",
+
     }),
-    require("neotest-vitest"),
+    require("neotest-vitest")({
+      ignore_file_types = { "python" },
+    }),
     require("neotest-vim-test")({
       ignore_file_types = { "python" },
     }),
@@ -33,7 +38,7 @@ local mappings = {
 require("which-key").register(mappings, { mode = "n", prefix = "<leader>" })
 
 local jumps = {
-  ["[t"] = {"<cmd>lua require('neotest').jump.prev({ status = 'failed' })<CR>", "Test (failed)"},
-  ["]t"] = {"<cmd>lua require('neotest').jump.next({ status = 'failed' })<CR>", "Test (failed)"},
+  ["[T"] = { "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<CR>", "Test (failed)" },
+  ["]T"] = { "<cmd>lua require('neotest').jump.next({ status = 'failed' })<CR>", "Test (failed)" },
 }
 require("which-key").register(jumps, { mode = "n", prefix = "" })

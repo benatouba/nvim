@@ -28,7 +28,7 @@ M.config = function()
 	dap.listeners.before.event_exited['dapui_conf'] = function ()
 		dapui.close()
 	end
-	require("which-key").register(mappings, { mode = "n", prefix = "<leader>" })
+	require("which-key").register(mappings, { mode = "n", prefix = "<leader>d" })
 end
 
 return M
