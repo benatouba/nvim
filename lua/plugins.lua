@@ -125,8 +125,9 @@ return require("packer").startup({
 		use("kyazdani42/nvim-web-devicons")
 		use({
 			"lukas-reineke/indent-blankline.nvim",
-			opt = true,
-			event = "BufReadPost",
+			config = function()
+				require("base.indent-blankline").config()
+			end,
 		})
 
 		-- Status Line and Bufferline
@@ -327,7 +328,7 @@ return require("packer").startup({
 					"antoinemadec/FixCursorHold.nvim",
 				},
 				config = function()
-					require("test.neotest")
+					require("test.neotest").config()
 				end,
 			})
 		end
@@ -374,6 +375,13 @@ return require("packer").startup({
 				config = function()
 					require("management.orgmode")
 				end,
+			})
+		  use({"renerocksai/telekasten.nvim",
+				after = "telescope.nvim",
+				requires = { "renerocksai/calendar-vim" },
+				config = function()
+					require('management.telekasten').config()
+				end
 			})
 		end
 
@@ -435,7 +443,53 @@ return require("packer").startup({
 			})
 		end
 		use("wuelnerdotexe/vim-enfocado")
-		use("folke/tokyonight.nvim")
+		use({
+			"folke/tokyonight.nvim",
+			config = function()
+				require("tokyonight").setup({
+					style = "night",
+					transparent = true,
+					hide_inactive_statusline = false,
+				})
+			end,
+		})
+		use({
+			"catppuccin/nvim",
+			as = "catppuccin",
+			require("catppuccin").setup({
+				flavour = "mocha", -- mocha, macchiato, frappe, latte
+				integrations = {
+					cmp = true,
+					barbar = true,
+					gitsigns = true,
+					harpoon = false,
+					lsp_saga = true,
+					lsp_trouble = true,
+					markdown = true,
+					mason = true,
+					neogit = true,
+					neotest = true,
+					noice = true,
+					notify = true,
+					nvimtree = true,
+					telekasten = true,
+					telescope = true,
+					treesitter = true,
+					treesitter_context = true,
+					ts_rainbow = true,
+					vimwiki = true,
+					which_key = true,
+					dap = {
+						enabled = true,
+						enable_ui = true,
+					},
+					indent_blankline = {
+						enabled = true,
+						colored_indent_levels = false,
+					},
+				},
+			}),
+		})
 		use({
 			"ThePrimeagen/refactoring.nvim",
 			requires = {

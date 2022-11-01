@@ -3,27 +3,26 @@ for an effective workflow on any machine (even headless)
 
 The configuration is written in Lua as are most of the used plugins.
 
-config is based on LunarVim but extended, modified and refactored
+Config is based on but extended, modified and refactored
 
 [_TOC_]
 
 # What is Neo(vim)
 
-Neovim hyperextensible Vim-based text editor. It has lua built-in functionality and 30% less source-code than Vim. This enables features on the command line that definitely improve your workflow on the command line and save you a ton of time. No other editor can compare.
+Neovim hyperextensible Vim-based text editor. It has Lua built-in functionality and 30% less source-code than Vim. This enables features on the command line that definitely improve your workflow on the command line and save you a ton of time. No other editor can compare.
 
 # Why should I use it?
 1. Vim is a good, fast text editor.
-2. IDEs are usually very practical for one or a couple of languages. So if you code in a different language, you will have to get familiar with a whole different setup. Neovim is highly extensible and you can set it up for any language.
+2. IDEs are usually very practical for one or a couple of languages. So if you code in a different language, you will have to get familiar with a whole different setup. Neovim is highly extensible, and you can set it up for any language.
 3. It works on the command line on any machine, also on headless machines e.g. HPC.
 4. It is open source, free (both beer and freedom) and does not collect your telemetry data.
 5. etc.
 
 # Setup
 ### Minimal setup includes
-- system-wide fuzzy file finding and grepping ([nvim-telescope](https://github.com/nvim-telescope/telescope.nvim)   the best plugin out there)
+- system-wide fuzzy file finding and grepping ([nvim-telescope](https://github.com/nvim-telescope/telescope.nvim)  the best plugin out there)
     - uses [fzf](https://github.com/junegunn/fzf) for file matching
     - uses ripgrep for text matching NEED [ripgrep](https://github.com/BurntSushi/ripgrep)
-- ~~status bar ([galaxyline.nvim](https://github.com/NTBBloodbath/galaxyline.nvim))~~
 - status bar ([lualine.nvim](https://github.com/nvim-lualine/lualine.nvim))
 - top bar ([barbar.nvim](https://github.com/romgrk/barbar.nvim)
 - highly customizable package management ([packer.nvim](https://github.com/wbthomason/packer.nvim))

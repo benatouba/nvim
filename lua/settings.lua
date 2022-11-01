@@ -20,13 +20,12 @@ vim.o.mouse = "c" -- Enable your mouse
 vim.o.splitbelow = true -- Horizontal splits will automatically be below
 vim.o.termguicolors = true -- set term gui colors most terminals support this
 vim.o.splitright = true -- Vertical splits will automatically be to the right
--- TODO: leads to errors. it is not even needed anymore, i think
--- vim.o.t_Co = "256" -- Support 256 colors
 vim.o.conceallevel = 0 -- So that I can see `` in markdown files
 vim.cmd("set ts=4") -- Insert 2 spaces for a tab
 vim.cmd("set sw=4") -- Change the number of space characters inserted for indentation
 vim.cmd("set nojoinspaces") -- do not insert space on line join
-vim.cmd("set listchars+=tab:→→\\|,space:.,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨")
+vim.opt.list = true
+vim.opt.listchars:append "nbsp:␣,trail:•,extends:⟩,precedes:⟨"
 vim.bo.tabstop = 8
 vim.bo.expandtab = true -- Converts tabs to spaces
 vim.bo.smartindent = true -- Makes indenting smart
@@ -64,7 +63,7 @@ vim.o.conceallevel = 0 -- Every character can be seen
 
 -- Settings for folkes tokyo night colorscheme
 vim.g.tokynight_style = "storm"
--- vim.g.tokyonight_transparent = true
+vim.g.tokyonight_transparent = true
 vim.g.tokyonight_sidebars = { "terminal", "packer", "qf", "nvimtree" }
 -- vim.g.tokyonight_colors = { hint = "orange", error = "#ff0000" }
 vim.g.loaded_perl_provider = 0
@@ -74,6 +73,6 @@ vim.diagnostic.config({
   signs = true,
   update_in_insert = false,
   underline = true,
-  severity_sort = false,
+  severity_sort = true,
   float = true,
 })

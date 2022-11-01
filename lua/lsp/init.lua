@@ -30,8 +30,14 @@
 -- }
 
 -- LSP signs default
-vim.fn.sign_define( "DiagnosticSignError", { texthl = "DiagnosticSignError", text = "", numhl = "DiagnosticSignError" })
-vim.fn.sign_define( "DiagnosticSignWarning", { texthl = "DiagnosticSignWarning", text = "", numhl = "DiagnosticSignWarning" })
+vim.fn.sign_define(
+  "DiagnosticSignError",
+  { texthl = "DiagnosticSignError", text = "", numhl = "DiagnosticSignError" }
+)
+vim.fn.sign_define(
+  "DiagnosticSignWarning",
+  { texthl = "DiagnosticSignWarning", text = "", numhl = "DiagnosticSignWarning" }
+)
 vim.fn.sign_define("DiagnosticSignHint", { texthl = "DiagnosticSignHint", text = "", numhl = "DiagnosticSignHint" })
 vim.fn.sign_define("DiagnosticSignInfo", { texthl = "DiagnosticSignInfo", text = "", numhl = "DiagnosticSignInfo" })
 
@@ -67,26 +73,23 @@ if not mason_ok then
   vim.notify("mason not okay in lspconfig")
   return
 end
-mason.setup {}
+mason.setup({})
 
 local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
 if not mason_lspconfig_ok then
   vim.notify("mason-lspconfig not okay in lspconfig")
   return
 end
-mason_lspconfig.setup {}
-
+mason_lspconfig.setup({})
 
 local lsp_defaults = {
   flags = {
     debounce_text_changes = 150,
   },
-  capabilities = require('cmp_nvim_lsp').default_capabilities(
-    vim.lsp.protocol.make_client_capabilities()
-  ),
+  capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
   on_attach = function(client, bufnr)
-    vim.api.nvim_exec_autocmds('User', {pattern = 'LspAttached'})
-  end
+    vim.api.nvim_exec_autocmds("User", { pattern = "LspAttached" })
+  end,
 }
 
 local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
@@ -101,39 +104,94 @@ if not lsp_status_ok then
 end
 lsp_status.register_progress()
 
-lspconfig.util.default_config = vim.tbl_deep_extend(
-  'force',
-  lspconfig.util.default_config,
-  lsp_defaults
-)
+lspconfig.util.default_config = vim.tbl_deep_extend("force", lspconfig.util.default_config, lsp_defaults)
+
+require("mason-lspconfig").setup_handlers({
+  -- The first entry (without a key) will be the default handler
+  -- and will be called for each installed server that doesn't have
+  -- a dedicated handler.
+  function(server_name) -- default handler (optional)
+    require("lspconfig")[server_name].setup({})
+  end,
+
+  ["sumneko_lua"] = function()
+    local runtime_path = vim.split(package.path, ";")
+    table.insert(runtime_path, "lua/?.lua")
+    table.insert(runtime_path, "lua/?/init.lua")
+    lspconfig.sumneko_lua.setup({
+      settings = {
+        Lua = {
+          runtime = {
+            version = "LuaJIT",
+            path = runtime_path,
+          },
+          diagnostics = {
+            globals = { "vim" },
+          },
+          workspace = {
+            library = {
+              vim.api.nvim_get_runtime_file("", true),
+            },
+            maxPreload = 10000,
+            preloadFileSize = 1000,
+          },
+          telemetry = {
+            enable = false,
+          },
+        },
+      },
+    })
+  end,
+
+  ["sourcery"] = function()
+    lspconfig.sourcery.setup({
+      filetypes = { "python" },
+      init_options = {
+        token = "user_re1CDsCNaWsCXRrWENblMoIhU8INKHMGuiqQDG1FG0CKWTC7Td_93Ilq7FA",
+        extension_version = "vim.lsp",
+        editor_version = "vim",
+      },
+      settings = {
+        sourcery = {
+          metricsEnabled = false,
+        },
+      },
+    })
+  end,
+})
 
 -- local opts = {}
 -- opts.capabilities = capabilities
 -- opts.on_attach = lsp_status.on_attach
 
-lspconfig.tsserver.setup {  }
-lspconfig.vimls.setup {  }
-lspconfig.rls.setup {  }
-lspconfig.gopls.setup {  }
--- lspconfig.pyright.setup {  }
-lspconfig.pylsp.setup {  }
-lspconfig.cssls.setup {  }
-lspconfig.rust_analyzer.setup {  }
-lspconfig.bashls.setup {  }
-lspconfig.jsonls.setup {  }
-lspconfig.html.setup {  }
-lspconfig.salt_ls.setup {  }
-lspconfig.clangd.setup {  }
-lspconfig.cmake.setup {  }
-lspconfig.dockerls.setup {  }
-lspconfig.fortls.setup {  }
-lspconfig.grammarly.setup {  }
--- lspconfig.jedi_language_server.setup {  }
--- lspconfig.vuels.setup {  }
-lspconfig.volar.setup {  }
-lspconfig.texlab.setup {  }
-lspconfig.volar.setup {  }
-lspconfig.yamlls.setup {  }
+-- lspconfig.ansiblels.setup({})
+-- lspconfig.bashls.setup({})
+-- lspconfig.clangd.setup({})
+-- lspconfig.cmake.setup({})
+-- lspconfig.cssls.setup({})
+-- lspconfig.dockerls.setup({})
+-- lspconfig.fortls.setup({})
+-- lspconfig.gopls.setup({})
+-- -- lspconfig.grammarly.setup({})
+-- lspconfig.html.setup({})
+-- -- lspconfig.jedi_language_server.setup {  }
+-- lspconfig.jsonls.setup({})
+-- -- lspconfig.ltex.setup({})
+-- lspconfig.pylsp.setup({})
+-- -- lspconfig.pyright.setup {  }
+-- -- lspconfig.remark_ls.setup({})
+-- lspconfig.rls.setup({})
+-- lspconfig.rust_analyzer.setup({})
+-- lspconfig.salt_ls.setup({})
+-- lspconfig.sqls.setup({})
+-- lspconfig.taplo.setup({})
+-- lspconfig.texlab.setup({})
+-- lspconfig.tsserver.setup({})
+-- lspconfig.vimls.setup({})
+-- lspconfig.volar.setup({})
+-- -- lspconfig.vuels.setup {  }
+-- lspconfig.yamlls.setup({})
+
 -- .init_options = {
 --   config = {
 --     css = {},
@@ -173,43 +231,3 @@ lspconfig.yamlls.setup {  }
 --   }
 -- }
 -- lspconfig.vuels.setup { opts }
-
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
-lspconfig.sumneko_lua.setup {
-  settings = {
-    Lua = {
-      runtime = {
-        version = "LuaJIT",
-        path = runtime_path,
-      },
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = {
-          vim.api.nvim_get_runtime_file("", true),
-        },
-        maxPreload = 10000,
-        preloadFileSize = 1000,
-      },
-      telemetry = {
-        enable = false
-      }
-    },
-  }
-}
-lspconfig.sourcery.setup {
-  filetypes = { "python" },
-  init_options = {
-    token = "user_re1CDsCNaWsCXRrWENblMoIhU8INKHMGuiqQDG1FG0CKWTC7Td_93Ilq7FA",
-    extension_version = "vim.lsp",
-    editor_version = "vim"
-  },
-  settings = {
-    sourcery = {
-      metricsEnabled = false
-    }
-  }
-}
