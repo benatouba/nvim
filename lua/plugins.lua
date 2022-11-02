@@ -376,12 +376,13 @@ return require("packer").startup({
 					require("management.orgmode")
 				end,
 			})
-		  use({"renerocksai/telekasten.nvim",
+			use({
+				"renerocksai/telekasten.nvim",
 				after = "telescope.nvim",
 				requires = { "renerocksai/calendar-vim" },
 				config = function()
-					require('management.telekasten').config()
-				end
+					require("management.telekasten").config()
+				end,
 			})
 		end
 
@@ -456,39 +457,41 @@ return require("packer").startup({
 		use({
 			"catppuccin/nvim",
 			as = "catppuccin",
-			require("catppuccin").setup({
-				flavour = "mocha", -- mocha, macchiato, frappe, latte
-				integrations = {
-					cmp = true,
-					barbar = true,
-					gitsigns = true,
-					harpoon = false,
-					lsp_saga = true,
-					lsp_trouble = true,
-					markdown = true,
-					mason = true,
-					neogit = true,
-					neotest = true,
-					noice = true,
-					notify = true,
-					nvimtree = true,
-					telekasten = true,
-					telescope = true,
-					treesitter = true,
-					treesitter_context = true,
-					ts_rainbow = true,
-					vimwiki = true,
-					which_key = true,
-					dap = {
-						enabled = true,
-						enable_ui = true,
+			config = function()
+				require("catppuccin").setup({
+					flavour = "mocha", -- mocha, macchiato, frappe, latte
+					integrations = {
+						cmp = true,
+						barbar = true,
+						gitsigns = true,
+						harpoon = false,
+						lsp_saga = true,
+						lsp_trouble = true,
+						markdown = true,
+						mason = true,
+						neogit = true,
+						neotest = true,
+						noice = true,
+						notify = true,
+						nvimtree = true,
+						telekasten = true,
+						telescope = true,
+						treesitter = true,
+						treesitter_context = true,
+						ts_rainbow = true,
+						vimwiki = true,
+						which_key = true,
+						dap = {
+							enabled = true,
+							enable_ui = true,
+						},
+						indent_blankline = {
+							enabled = true,
+							colored_indent_levels = false,
+						},
 					},
-					indent_blankline = {
-						enabled = true,
-						colored_indent_levels = false,
-					},
-				},
-			}),
+				})
+			end,
 		})
 		use({
 			"ThePrimeagen/refactoring.nvim",
