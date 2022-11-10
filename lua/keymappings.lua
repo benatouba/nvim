@@ -21,12 +21,6 @@ map("n", "N", "Nzzzv", defaultOpts)
 -- map('n', '<C-j>', '<C-w>j', {silent = true})
 -- map('n', '<C-k>', '<C-w>k', {silent = true})
 -- map('n', '<C-l>', '<C-w>l', {silent = true})
-map("n", "gh", "<cmd>lua vim.lsp.buf.hover()<CR>", defaultOpts)
--- map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', defaultOpts)
--- map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', defaultOpts)
--- map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', defaultOpts)
-map("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", defaultOpts)
-map("n", "gds", "<cmd>lua vim.lsp.buf.document_symbol()<CR>")
 map("n", "<esc>", ":nohlsearch<CR>")
 -- map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
 -- map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev { wrap = false }<cr>')
@@ -57,7 +51,7 @@ map("n", "#", "", {
     end,
 })
 
-map("n", "gR", "", {
+map("n", "<leader>CR", "", {
     -- silent = true,
     desc = "Reload Config",
     callback = function()

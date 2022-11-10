@@ -438,8 +438,9 @@ return require("packer").startup({
 			use({
 				"benatouba/colortils.nvim",
 				cmd = "Colortils",
+				disable = true,
 				config = function()
-					require("colortils").setup()
+					require("misc.colortils").config()
 				end,
 			})
 		end

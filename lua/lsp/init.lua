@@ -158,6 +158,24 @@ require("mason-lspconfig").setup_handlers({
       },
     })
   end,
+
+  ["pylsp"] = function()
+    lspconfig.pylsp.setup({
+      plugins = {
+        autopep8 = {enabled = false},
+        flake8 = {enabled = false},
+        pycodestyle = {enabled = false},
+        pyflakes = {enabled = false},
+        -- pydocstyle = {enabled = false},
+        pylint = {enabled = false},
+        rope_autimport = {enabled = true},
+        rope_completion = {enabled = true},
+        black = {enabled = false},
+        yapf = {enabled = false},
+        -- jedi = {auto_import_modules = ["numpy", "pandas", "salem", "matplotlib"]}
+      }
+    })
+  end
 })
 
 -- local opts = {}
