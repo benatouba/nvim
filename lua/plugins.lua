@@ -86,12 +86,6 @@ return require("packer").startup({
 			-- config = function() require('telescope').load_extension('frecency') end,
 		})
 		use({
-			"nvim-telescope/telescope-dap.nvim",
-			config = function()
-				require("telescope").load_extension("dap")
-			end,
-		})
-		use({
 			"nvim-telescope/telescope.nvim",
 			config = function()
 				require("base.telescope").config()
@@ -228,7 +222,6 @@ return require("packer").startup({
 				},
 				-- event = { "CmdlineEnter", "InsertEnter" },
 			})
-
 			use({
 				"hrsh7th/nvim-cmp",
 				-- event = "InsertEnter",
@@ -364,6 +357,12 @@ return require("packer").startup({
 				ft = "lua",
 				config = function()
 					require("debug.one_small_step_for_vimkind").config()
+				end,
+			})
+			use({
+				"nvim-telescope/telescope-dap.nvim",
+				config = function()
+					require("telescope").load_extension("dap")
 				end,
 			})
 		end

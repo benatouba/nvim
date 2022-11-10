@@ -174,7 +174,7 @@ M.config = function()
 			-- { name = "copilot", group_index = 2 },
 			{ name = "nvim_lsp", keyword_length = 1 },
 			{ name = "nvim_lsp_document_symbol", keyword_length = 4 },
-			{ name = "nvim_lsp_signature_help", keyword_length = 3 },
+			{ name = "nvim_lsp_signature_help" },
 			{ name = "luasnip", keyword_length = 2 },
 			{ name = "treesitter", keyword_length = 3 },
 			{ name = "nvim_lua", keyword_length = 3 },
