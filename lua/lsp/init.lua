@@ -82,6 +82,24 @@ if not mason_lspconfig_ok then
 end
 mason_lspconfig.setup({})
 
+local null_ls_ok, null_ls = pcall(require, "null-ls")
+if not null_ls_ok then
+  vim.notify("null-ls not okay in lspconfig")
+  return
+end
+null_ls.setup({})
+
+local mason_null_ls_ok, mason_null_ls = pcall(require, "mason-null-ls")
+if not mason_null_ls_ok then
+  vim.notify("mason-null-ls not okay in lspconfig")
+  return
+end
+mason_null_ls.setup({
+    ensure_installed = {"black", "stylua", },
+    automatic_setup = true,
+  })
+mason_null_ls.setup_handlers()
+
 local lsp_defaults = {
   flags = {
     debounce_text_changes = 150,

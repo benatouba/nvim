@@ -33,6 +33,7 @@ local sources = {
 		filetypes = { "python" },
 	}),
 	null_ls.builtins.diagnostics.ruff,
+	null_ls.builtins.diagnostics.pyre,
 	-- null_ls.builtins.diagnostics.vulture,
 	-- null_ls.builtins.diagnostics.pylama,
 	null_ls.builtins.formatting.isort,

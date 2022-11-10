@@ -55,8 +55,9 @@ map("n", "<leader>CR", "", {
     -- silent = true,
     desc = "Reload Config",
     callback = function()
-        -- vim.cmd([[update $MYVIMRC]])
-        vim.cmd([[source $MYVIMRC]])
+        vim.cmd([[
+          source $MYVIMRC
+        ]])
         vim.notify("Nvim config successfully reloaded", vim.log.levels.INFO, { title = "nvim-config" })
     end,
 })

@@ -214,6 +214,7 @@ return require("packer").startup({
 			use({
 				"williamboman/mason.nvim",
 				"williamboman/mason-lspconfig.nvim",
+				"jayp0521/mason-null-ls.nvim",
 				{
 					"neovim/nvim-lspconfig",
 					config = function()
@@ -280,10 +281,10 @@ return require("packer").startup({
 				-- event = { "BufReadPost", "InsertEnter" },
 				-- fn = { "edit", "e" },
 				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
-				config = function()
+				-- config = function()
 					-- require("null-ls").setup()
-					require("lsp.null-ls").config()
-				end,
+					-- require("lsp.null-ls").config()
+				-- end,
 			})
 		end
 
@@ -527,6 +528,12 @@ return require("packer").startup({
 					calm_down = true,
 				})
 			end,
+		})
+		use({
+			'Vonr/align.nvim',
+			config = function()
+				require('misc.align').config()
+			end
 		})
 	end,
 	config = {
