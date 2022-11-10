@@ -48,15 +48,6 @@ local maps = {
 		R = { ":nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>", "redraw" },
 	},
 
-	c = {
-		name = "+Colors",
-		c = { "<cmd>Colortils css list<cr>", "CSS Colors list"},
-		d = { "<cmd>Colortils darken<cr>", "Darken"},
-		g = { "<cmd>Colortils gradient<cr>", "Gradient"},
-		G = { "<cmd>Colortils greyscale<cr>", "Greyscale"},
-		l = { "<cmd>Colortils lighten<cr>", "Lighten"},
-		p = { "<cmd>Colortils picker<cr><cr>", "Picker"},
-	},
 	p = {
 		name = "+Packer",
 		c = { "<cmd>PackerClean<cr>", "Clean" },
@@ -206,7 +197,13 @@ which_key.register(diffmaps, {
 which_key.register(terminal_maps, terminal_opts)
 
 local gmaps = {
-	["r"] = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "TS Rename" },
+  ["h"] =  { "<cmd>lua vim.lsp.buf.hover()<CR>", "Help" },
+  ['d'] =  { '<cmd>lua vim.lsp.buf.definition()<CR>', "Definition" },
+  ['D'] =  { '<cmd>lua vim.lsp.buf.declaration()<CR>', "Declaration" },
+  ["I"] =  { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Implementations" },
+	["r"] = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "Rename" },
+  ['R'] =  { '<cmd>lua vim.lsp.buf.references()<CR>', "References" },
+  ["s"] =  { "<cmd>lua vim.lsp.buf.document_symbol()<CR>", "Symbols" },
 }
 which_key.register(gmaps, {
 	mode = "n", -- NORMAL mode

@@ -1,6 +1,6 @@
 AddAutocommands({
 	_general_settings = {
-		{ "TextYankPost", "*", "lua require('vim.highlight').on_yank({higroup = 'Search', timeout = 200})" },
+		{ "TextYankPost", "*", "lua require('vim.highlight').on_yank({higroup = 'Search', timeout = 40})" },
 		{ "BufWinEnter", "*", "setlocal formatoptions-=c formatoptions-=r formatoptions-=o" },
 		{ "BufRead", "*", "setlocal formatoptions-=c formatoptions-=r formatoptions-=o" },
 		{ "BufWinEnter,BufRead,BufNewFile", "*", "tnoremap <silent> <esc> <c-\\><c-n>" },
