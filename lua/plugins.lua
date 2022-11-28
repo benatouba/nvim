@@ -210,6 +210,12 @@ return require("packer").startup({
 		if O.lsp then
 			use({
 				"ray-x/lsp_signature.nvim",
+				config = function()
+					require("lsp_signature").setup({
+						handler_opts = { border = "single" },
+						max_width = 80,
+					})
+				end,
 			})
 			use({
 				"williamboman/mason.nvim",
@@ -282,8 +288,8 @@ return require("packer").startup({
 				-- fn = { "edit", "e" },
 				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
 				-- config = function()
-					-- require("null-ls").setup()
-					-- require("lsp.null-ls").config()
+				-- require("null-ls").setup()
+				-- require("lsp.null-ls").config()
 				-- end,
 			})
 		end
@@ -530,10 +536,10 @@ return require("packer").startup({
 			end,
 		})
 		use({
-			'Vonr/align.nvim',
+			"Vonr/align.nvim",
 			config = function()
-				require('misc.align').config()
-			end
+				require("misc.align").config()
+			end,
 		})
 	end,
 	config = {

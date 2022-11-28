@@ -95,9 +95,9 @@ if not mason_null_ls_ok then
   return
 end
 mason_null_ls.setup({
-    ensure_installed = {"black", "stylua", },
-    automatic_setup = true,
-  })
+  ensure_installed = { "black", "stylua" },
+  automatic_setup = true,
+})
 mason_null_ls.setup_handlers()
 
 local lsp_defaults = {
@@ -144,6 +144,7 @@ require("mason-lspconfig").setup_handlers({
             path = runtime_path,
           },
           diagnostics = {
+            enable = true,
             globals = { "vim" },
           },
           workspace = {
@@ -180,20 +181,35 @@ require("mason-lspconfig").setup_handlers({
   ["pylsp"] = function()
     lspconfig.pylsp.setup({
       plugins = {
-        autopep8 = {enabled = false},
-        flake8 = {enabled = false},
-        pycodestyle = {enabled = false},
-        pyflakes = {enabled = false},
+        autopep8 = { enabled = false },
+        flake8 = { enabled = false },
+        pycodestyle = { enabled = false },
+        pyflakes = { enabled = false },
         -- pydocstyle = {enabled = false},
-        pylint = {enabled = false},
-        rope_autimport = {enabled = true},
-        rope_completion = {enabled = true},
-        black = {enabled = false},
-        yapf = {enabled = false},
+        pylint = { enabled = false },
+        rope_autimport = { enabled = true },
+        rope_completion = { enabled = true },
+        black = { enabled = false },
+        yapf = { enabled = false },
         -- jedi = {auto_import_modules = ["numpy", "pandas", "salem", "matplotlib"]}
-      }
+      },
     })
-  end
+  end,
+
+  ["volar"] = function()
+    require("lsp.volar_config")
+    -- lspconfig.volar.setup(volar_options)
+    -- lspconfig.volar.setup({
+    --   init_options = {
+    --     typescript = {
+    --       tsdk = vim.fn.stdpath("data")
+    --           .. "/mason/packages/typescript-language-server/node_modules/typescript/lib",
+    --       -- Alternative location if installed as root:
+    --       -- tsdk = '/usr/local/lib/node_modules/typescript/lib'
+    --     },
+    --   },
+    -- })
+  end,
 })
 
 -- local opts = {}

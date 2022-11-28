@@ -6,7 +6,10 @@ local has_words_before = function()
 end
 
 M.config = function()
+	require("luasnip").filetype_extend("javascript", { "vue" })
+	require("luasnip").filetype_extend("typescript", { "vue_typescript" })
 	require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
+	require("luasnip.loaders.from_vscode").lazy_load()
 	vim.opt.completeopt = { "menu", "menuone", "noselect" }
 	-- local neogen_ok, neogen = pcall(require, "neogen")
 	local cmp_ok, cmp = pcall(require, "cmp")
@@ -173,7 +176,6 @@ M.config = function()
 		sources = {
 			-- { name = "copilot", group_index = 2 },
 			{ name = "nvim_lsp", keyword_length = 1 },
-			{ name = "nvim_lsp_document_symbol", keyword_length = 4 },
 			{ name = "nvim_lsp_signature_help" },
 			{ name = "luasnip", keyword_length = 2 },
 			{ name = "treesitter", keyword_length = 3 },
@@ -217,8 +219,8 @@ M.config = function()
 			completion = cmp.config.window.bordered({ autocomplete = false }),
 		},
 		sources = {
+			{ name = "nvim_lsp_document_symbol" },
 			{ name = "buffer" },
-			-- { name = "nvim_lsp_document_symbol" },
 		},
 	})
 
