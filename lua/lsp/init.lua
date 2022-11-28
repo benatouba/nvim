@@ -82,6 +82,24 @@ if not mason_lspconfig_ok then
 end
 mason_lspconfig.setup({})
 
+local null_ls_ok, null_ls = pcall(require, "null-ls")
+if not null_ls_ok then
+  vim.notify("null-ls not okay in lspconfig")
+  return
+end
+null_ls.setup({})
+
+local mason_null_ls_ok, mason_null_ls = pcall(require, "mason-null-ls")
+if not mason_null_ls_ok then
+  vim.notify("mason-null-ls not okay in lspconfig")
+  return
+end
+mason_null_ls.setup({
+  ensure_installed = { "black", "stylua" },
+  automatic_setup = true,
+})
+mason_null_ls.setup_handlers()
+
 local lsp_defaults = {
   flags = {
     debounce_text_changes = 150,
@@ -126,6 +144,7 @@ require("mason-lspconfig").setup_handlers({
             path = runtime_path,
           },
           diagnostics = {
+            enable = true,
             globals = { "vim" },
           },
           workspace = {
@@ -162,20 +181,35 @@ require("mason-lspconfig").setup_handlers({
   ["pylsp"] = function()
     lspconfig.pylsp.setup({
       plugins = {
-        autopep8 = {enabled = false},
-        flake8 = {enabled = false},
-        pycodestyle = {enabled = false},
-        pyflakes = {enabled = false},
+        autopep8 = { enabled = false },
+        flake8 = { enabled = false },
+        pycodestyle = { enabled = false },
+        pyflakes = { enabled = false },
         -- pydocstyle = {enabled = false},
-        pylint = {enabled = false},
-        rope_autimport = {enabled = true},
-        rope_completion = {enabled = true},
-        black = {enabled = false},
-        yapf = {enabled = false},
+        pylint = { enabled = false },
+        rope_autimport = { enabled = true },
+        rope_completion = { enabled = true },
+        black = { enabled = false },
+        yapf = { enabled = false },
         -- jedi = {auto_import_modules = ["numpy", "pandas", "salem", "matplotlib"]}
-      }
+      },
     })
-  end
+  end,
+
+  ["volar"] = function()
+    require("lsp.volar_config")
+    -- lspconfig.volar.setup(volar_options)
+    -- lspconfig.volar.setup({
+    --   init_options = {
+    --     typescript = {
+    --       tsdk = vim.fn.stdpath("data")
+    --           .. "/mason/packages/typescript-language-server/node_modules/typescript/lib",
+    --       -- Alternative location if installed as root:
+    --       -- tsdk = '/usr/local/lib/node_modules/typescript/lib'
+    --     },
+    --   },
+    -- })
+  end,
 })
 
 -- local opts = {}

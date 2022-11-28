@@ -1,4 +1,4 @@
-M = {}
+local M = {}
 
 M.config = function()
 	local ref_ok, ref = pcall(require, "refactoring")

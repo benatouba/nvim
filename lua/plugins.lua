@@ -210,10 +210,17 @@ return require("packer").startup({
 		if O.lsp then
 			use({
 				"ray-x/lsp_signature.nvim",
+				config = function()
+					require("lsp_signature").setup({
+						handler_opts = { border = "single" },
+						max_width = 80,
+					})
+				end,
 			})
 			use({
 				"williamboman/mason.nvim",
 				"williamboman/mason-lspconfig.nvim",
+				"jayp0521/mason-null-ls.nvim",
 				{
 					"neovim/nvim-lspconfig",
 					config = function()
@@ -280,10 +287,10 @@ return require("packer").startup({
 				-- event = { "BufReadPost", "InsertEnter" },
 				-- fn = { "edit", "e" },
 				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
-				config = function()
-					-- require("null-ls").setup()
-					require("lsp.null-ls").config()
-				end,
+				-- config = function()
+				-- require("null-ls").setup()
+				-- require("lsp.null-ls").config()
+				-- end,
 			})
 		end
 
