@@ -11,6 +11,7 @@ AddAutocommands({
 		{ "BufWinEnter,BufRead,BufNewFile", "*.r", "setfiletype r" },
 		{ "BufWinEnter,BufRead,BufNewFile", "*.Rmd", "setfiletype rmd" },
 		{ "BufWinEnter,BufRead,BufNewFile", "*.rmd", "setfiletype rmd" },
+		{ "BufWinEnter,BufRead,BufNewFile", "*.ipynb", "setfiletype ipynb" },
 		-- { "BufWritePost", "plugins.lua", "lua R('plugins')" },
 		-- { "BufWritePost", "~/.config/nvim/init.lua", "lua require('functions').reload_config()" },
 		{ "BufWritePre", "*", ":%s/\\s\\+$//e" },

@@ -528,7 +528,17 @@ return require("packer").startup({
 				})
 			end,
 		})
+		if O.notebooks then
+			use({
+					"bfredl/nvim-ipy",
+					ft='ipynb',
+					config = function ()
+						require('notebooks.nvim-ipy').config()
+					end
+				})
+		end
 	end,
+
 	config = {
 		profile = {
 			enable = true,

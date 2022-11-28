@@ -14,6 +14,7 @@ O.format = true
 O.test = true
 O.dap = true -- debugging
 O.project_management = true
+O.notebooks = true
 O.misc = true
 
 O.auto_complete = true
