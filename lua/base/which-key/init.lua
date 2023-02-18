@@ -58,6 +58,7 @@ local maps = {
 		u = { "<cmd>PackerUpdate<cr>", "Update" },
 	},
 
+	b = { "<cmd>Telescope buffers<cr>", "Buffers" },
 	s = {
 		name = "+Search",
 		b = { "<cmd>Telescope git_branches<cr>", "Branches" },
@@ -94,7 +95,7 @@ if O.lsp then
 		d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },
 		D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Declaration" },
 		l = { "<cmd>LspLog<CR>", "Logs" },
-		f = { "<cmd>lua vim.lsp.buf.format({ async = true })<CR>", "Format Document" },
+		f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" },
 		F = { "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", "Format Document (Sync)" },
 		h = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover" },
 		i = { "<cmd>LspInfo<cr>", "Info" },
@@ -154,7 +155,7 @@ if O.git then
 		k = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
 		p = { "<cmd>Git pull<cr>", "pull" },
 		P = { "<cmd>Git push<cr>", "Push" },
-		r = { "<cmd>lua require'gitsigns'.reset_hunk()<CR>',<cr>", "Reset Hunk" },
+		r = { "<cmd>lua require'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
 		R = { "<cmd>lua require'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
 		s = { "<cmd>lua require'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
 		u = { "<cmd>lua require'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk" },
@@ -212,15 +213,14 @@ which_key.register(gmaps, {
 
 -- nvim-magic
 local magic_maps = {
-	name = "+magic",
-	a = { "<Plug>nvim-magic-suggest-alteration<CR>", "Alternate" },
-	c = { "<Plug>nvim-magic-append-completion<CR>", "Complete" },
-	d = { "<Plug>nvim-magic-suggest-docstring<CR>", "Docstring" },
+	name = "+LSP",
+	f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" },
+	a = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "Code Action" },
 }
 
 which_key.register(magic_maps, {
-	mode = "v", -- NORMAL mode
-	prefix = "m",
+	mode = "v", -- VISUAL mode
+	prefix = "l",
 })
 
 which_key.register(nmaps, {

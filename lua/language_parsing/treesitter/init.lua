@@ -32,6 +32,9 @@ ts.setup({
 		enable = true,
 		-- disable = { "python", "html" },
 	},
+	endwise = {
+		enable = true
+	},
 	matchup = { enable = true },
 	autopairs = { enable = true },
 	playground = {
@@ -108,11 +111,11 @@ ts.setup({
 		navigation = {
 			enable = false,
 			keymaps = {
-				goto_definition_lsp_fallback = "gnd",
-				list_definitions = "gnD",
+				goto_definition_lsp_fallback = "gtd",
+				list_definitions = "gtD",
 				list_definitions_toc = "gO",
-				goto_next_usage = "<a-*>",
-				goto_previous_usage = "<a-#>",
+				goto_next_usage = "]u",
+				goto_previous_usage = "[u",
 			},
 		},
 		smart_rename = {

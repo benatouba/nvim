@@ -70,21 +70,7 @@ M.config = function()
 		-- nvim_tree_gitignore = true,
 		-- nvim_tree_hide_dotfiles = false,
 		open_on_tab = true,
-		open_on_setup = true,
 		-- nvim_tree_ignore = { ".git", "node_modules", ".cache" },
-		ignore_ft_on_setup = {
-			"python",
-			"lua",
-			"vue",
-			"javascript",
-			"conf",
-			"txt",
-			"sls",
-			"typescript",
-			"java",
-			"fortran",
-			"markdown",
-		},
 		view = {
 			width = 50,
 			mappings = {

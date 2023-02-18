@@ -36,7 +36,7 @@ M.config = function()
 	cmp.setup({
 		enabled = function()
 			-- enable autocompletion in nvim-dap
-			if vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt" or require("cmp_dap").is_dap_buffer() then
+			if require("cmp_dap").is_dap_buffer() then
 				return true
 			end
 			-- disable completion in comments
@@ -63,7 +63,7 @@ M.config = function()
 			-- 	return vim_item
 			-- end
 			format = lspkind.cmp_format({
-				with_text = false,
+				with_text = true,
 				before = function(entry, vim_item)
 					-- Get the full snippet (and only keep first line)
 					local word = entry:get_insert_text()
@@ -112,11 +112,11 @@ M.config = function()
 			comparators = {
 				-- require("copilot_cmp.comparators").prioritize,
 				-- require("copilot_cmp.comparators").score,
-				cmp.config.compare.offset,
-				cmp.config.compare.exact,
-				cmp.config.compare.score,
 				require("cmp-under-comparator").under,
+				cmp.config.compare.exact,
 				cmp.config.compare.kind,
+				cmp.config.compare.offset,
+				cmp.config.compare.score,
 				cmp.config.compare.sort_text,
 				cmp.config.compare.length,
 				cmp.config.compare.order,
@@ -174,14 +174,12 @@ M.config = function()
 		-- --                 ﬘    m    
 
 		sources = {
-			-- { name = "copilot", group_index = 2 },
-			{ name = "nvim_lsp", keyword_length = 1 },
+			{ name = "luasnip" },
+			{ name = "nvim_lsp" },
 			{ name = "nvim_lsp_signature_help" },
-			{ name = "luasnip", keyword_length = 2 },
 			{ name = "treesitter", keyword_length = 3 },
 			{ name = "nvim_lua", keyword_length = 3 },
 			{ name = "path", keyword_length = 3 },
-			{ name = "cmp_git" },
 			-- { name = "tmux" },
 			{ name = "orgmode" },
 			-- { name = 'zsh', },
@@ -204,7 +202,7 @@ M.config = function()
 	cmp.setup.cmdline(":", {
 		mapping = cmp.mapping.preset.cmdline(),
 		window = {
-			completion = cmp.config.window.bordered({ autocomplete = false }),
+			completion = cmp.config.window.bordered({ autocomplete = true }),
 		},
 		sources = cmp.config.sources({
 			{ name = "path" },
@@ -216,7 +214,7 @@ M.config = function()
 	cmp.setup.cmdline("/", {
 		mapping = cmp.mapping.preset.cmdline(),
 		window = {
-			completion = cmp.config.window.bordered({ autocomplete = false }),
+			completion = cmp.config.window.bordered({ autocomplete = true }),
 		},
 		sources = {
 			{ name = "nvim_lsp_document_symbol" },
@@ -226,38 +224,43 @@ M.config = function()
 
 	-- require("luasnip/loaders/from_vscode").lazy_load({paths={vim.fn.stdpath('config') .. "/snippets"}})
 
-	local cmp_git_ok, _ = pcall(require, "cmp_git")
+	cmp.setup.filetype("gitcommit", {
+		sources = {
+			{name = 'git'}
+		}
+	})
+
+	local cmp_git_ok, cmp_git = pcall(require, "cmp_git")
 	if not cmp_git_ok then
 		vim.notify("cmp_git not okay")
 		return
 	end
-	cmp.setup.filetype("gitcommit", {
-		sources = cmp.config.sources({
-			{ name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
-		}, {
-			{ name = "buffer" },
-		}),
-		github = {
-			issues = {
-				filter = "all", -- assigned, created, mentioned, subscribed, all, repos
-				limit = 100,
-				state = "open", -- open, closed, all
-			},
-			mentions = {
-				limit = 100,
-			},
-		},
-		gitlab = {
-			issues = {
-				limit = 100,
-				state = "opened", -- opened, closed, all
-			},
-			mentions = {
-				limit = 100,
-			},
-		},
-	})
-
+cmp_git.setup()
+-- cmp.config.sources({
+-- 			{ name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
+-- 		}, {
+-- 			{ name = "buffer" },
+-- 		}),
+-- 		github = {
+-- 			issues = {
+-- 				filter = "all", -- assigned, created, mentioned, subscribed, all, repos
+-- 				limit = 100,
+-- 				state = "open", -- open, closed, all
+-- 			},
+-- 			mentions = {
+-- 				limit = 100,
+-- 			},
+-- 		},
+-- 		gitlab = {
+-- 			issues = {
+-- 				limit = 100,
+-- 				state = "opened", -- opened, closed, all
+-- 			},
+-- 			mentions = {
+-- 				limit = 100,
+-- 			},
+-- 		},
+--
 	local sign = function(opts)
 		vim.fn.sign_define(opts.name, {
 			texthl = opts.name,

@@ -1,3 +1,13 @@
+local neodev_ok, neodev = pcall(require, 'neodev')
+if not neodev_ok then
+	vim.notify('neodev not okay in nvim-dap-ui')
+	return
+end
+
+neodev.setup({
+  library = { plugins = { "nvim-dap-ui" }, types = true },
+})
+
 local ok, dapui = pcall(require, "dapui")
 if not ok then
 	vim.notify("nvim-dap-ui not okay")

@@ -6,9 +6,7 @@ log.configure({
       log.sinks.NvimNotify(
         log.level.WARN,
         {
-          processors = {
-            log.processors.Namer(),
-          },
+          processors = {},
           formatter = log.formatters.Format( --
             "%s",
             { "msg" },

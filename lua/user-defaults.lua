@@ -14,7 +14,7 @@ O = {
     wrap_lines = false,
     number = true,
     relative_number = true,
-    shell = 'bash',
+    shell = '/usr/bin/zsh',
     mapleader = " ",
     packer_compile_path = vim.fn.stdpath('config')..'/lua/packer_compiled.lua',
     galaxyline = {
@@ -51,7 +51,6 @@ O = {
     },
 
     org = {agenda_files = {}, default_notes_file = ''},
-    formatters = {}
 }
 
 DATA_PATH = vim.fn.stdpath('data')
