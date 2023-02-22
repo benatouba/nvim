@@ -219,7 +219,9 @@ return require("packer").startup({
 								end,
 						})
 						use({
-								"VonHeikemen/lsp-zero.nvim",
+								"williamboman/mason.nvim",
+								"williamboman/mason-lspconfig.nvim",
+								"jayp0521/mason-null-ls.nvim",
 								{
 										"neovim/nvim-lspconfig",
 										config = function()

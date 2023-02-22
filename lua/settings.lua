@@ -1,36 +1,35 @@
-vim.cmd("set iskeyword+=-") -- treat dash separated words as a word text object"
-vim.cmd("set shortmess+=c") -- Don't pass messages to |ins-completion-menu|.
-vim.cmd("set inccommand=split") -- Make substitution work in realtime
-vim.o.hidden = O.hidden_files -- Required to keep multiple buffers open multiple buffers
+vim.opt.iskeyword:append("-") -- treat dash separated words as a word text object"
+vim.opt.shortmess:append("c") -- Don't pass messages to |ins-completion-menu|.
+vim.opt.inccommand = "split" -- Make substitution work in realtime
+vim.o.hidden = true -- Required to keep multiple buffers open multiple buffers
 vim.o.title = true
 TERMINAL = vim.fn.expand("$TERMINAL")
--- DATA_PATH = vim.fn.stdpath('data')
-vim.cmd('let &titleold="' .. TERMINAL .. '"')
+DATA_PATH = vim.fn.stdpath('data')
+-- vim.cmd('let &titleold="' .. TERMINAL .. '"')
 vim.o.titlestring = "%<%F%=%l/%L - nvim"
 vim.g.loaded = 1
 vim.g.loaded_netrwPlugin = 1
-vim.wo.wrap = O.wrap_lines -- Display long lines as just one line
-vim.cmd("set whichwrap+=<,>,[,]") -- move to next line with theses keys
+vim.wo.wrap = true -- Display long lines as just one line
+vim.opt.whichwrap:append("<,>,[,]") -- move to next line with theses keys
 vim.o.syntax = "on" -- syntax highlighting
 vim.o.pumheight = 10 -- Makes popup menu smaller
 vim.o.fileencoding = "utf-8" -- The encoding written to file
 vim.o.cmdheight = 0 -- More space for displaying messages
-vim.cmd("set colorcolumn=99999") -- fix indentline for now
 vim.o.mouse = "c" -- Enable your mouse
 vim.o.splitbelow = true -- Horizontal splits will automatically be below
 vim.o.termguicolors = true -- set term gui colors most terminals support this
 vim.o.splitright = true -- Vertical splits will automatically be to the right
 vim.o.conceallevel = 0 -- So that I can see `` in markdown files
-vim.cmd("set ts=4") -- Insert 2 spaces for a tab
-vim.cmd("set sw=4") -- Change the number of space characters inserted for indentation
-vim.cmd("set nojoinspaces") -- do not insert space on line join
+vim.opt.ts=4 -- Insert 2 spaces for a tab
+vim.opt.sw=4 -- Change the number of space characters inserted for indentation
+-- vim.opt.nojoinspaces = true -- do not insert space on line join
 vim.opt.list = true
 vim.opt.listchars:append "nbsp:␣,trail:•,extends:⟩,precedes:⟨"
 vim.bo.tabstop = 8
 vim.bo.expandtab = true -- Converts tabs to spaces
 vim.bo.smartindent = true -- Makes indenting smart
-vim.wo.number = O.number -- set numbered lines
-vim.wo.relativenumber = O.relative_number -- set relative number
+vim.wo.number = true -- set numbered lines
+vim.wo.relativenumber = true -- set relative number
 vim.wo.cursorline = true -- Enable highlighting of the current line
 vim.opt.sidescrolloff = 7
 vim.opt.colorcolumn = "89"
@@ -45,8 +44,8 @@ vim.o.updatetime = 200 -- Faster completion
 vim.o.timeoutlen = 200 -- By default timeoutlen is 1000 ms
 vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
 -- vim.o.winbar = "yes"
--- vim.cmd("set foldmethod=expr")
--- vim.cmd("set foldexpr=nvim_treesitter#foldexpr()")
+vim.opt.foldmethod= "expr"
+-- vim.opt.foldexpr=nvim_treesitter#foldexpr()
 -- vim.bo.ts_highlight_lua = true
 
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
@@ -60,7 +59,7 @@ vim.o.undofile = true -- enable persistent undo (meaning if you quit Neovim and 
 if not IsDir(DATA_PATH .. "/directory") then
 	os.execute("mkdir " .. DATA_PATH .. "/directory")
 end
-vim.o.directory = vim.fn.stdpath("data") .. "/directory" -- Configure 'directory' to ensure that Neovim swap files are not written to repos.
+vim.o.directory = DATA_PATH .. "/directory" -- Configure 'directory' to ensure that Neovim swap files are not written to repos.
 vim.o.conceallevel = 0 -- Every character can be seen
 
 -- Settings for folkes tokyo night colorscheme
