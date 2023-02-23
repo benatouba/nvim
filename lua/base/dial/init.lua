@@ -9,6 +9,7 @@ M.config = function()
     vim.notify("dial not okay")
     return
   end
+  vim.o.backupdir = true --sdfgsdg
 
   local augend = require("dial.augend")
 
@@ -33,12 +34,17 @@ M.config = function()
       augend.semver.alias.semver,
       augend.constant.alias.Alpha,
     },
+    visual = {
+      augend.integer.alias.decimal,
+      augend.integer.alias.hex,
+      augend.date.alias["%Y/%m/%d"],
+      augend.constant.alias.alpha,
+      augend.constant.alias.Alpha,
+    },
   })
 
   vim.api.nvim_set_keymap("n", "<C-a>", require("dial.map").inc_normal(), {})
   vim.api.nvim_set_keymap("n", "<C-x>", require("dial.map").dec_normal(), {})
-  vim.api.nvim_set_keymap("v", "<C-a>", require("dial.map").inc_visual(), {})
-  vim.api.nvim_set_keymap("v", "<C-x>", require("dial.map").dec_visual(), {})
   vim.api.nvim_set_keymap("v", "g<C-a>", require("dial.map").inc_gvisual(), {})
   vim.api.nvim_set_keymap("v", "g<C-x>", require("dial.map").dec_gvisual(), {})
   vim.api.nvim_set_keymap("v", "<C-a>", require("dial.map").inc_normal("visual"), {})

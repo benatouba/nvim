@@ -5,7 +5,7 @@ vim.o.hidden = true -- Required to keep multiple buffers open multiple buffers
 vim.o.title = true
 TERMINAL = vim.fn.expand("$TERMINAL")
 DATA_PATH = vim.fn.stdpath('data')
--- vim.cmd('let &titleold="' .. TERMINAL .. '"')
+vim.cmd('let &titleold="' .. TERMINAL .. '"')
 vim.o.titlestring = "%<%F%=%l/%L - nvim"
 vim.g.loaded = 1
 vim.g.loaded_netrwPlugin = 1
@@ -22,7 +22,7 @@ vim.o.splitright = true -- Vertical splits will automatically be to the right
 vim.o.conceallevel = 0 -- So that I can see `` in markdown files
 vim.opt.ts=4 -- Insert 2 spaces for a tab
 vim.opt.sw=4 -- Change the number of space characters inserted for indentation
--- vim.opt.nojoinspaces = true -- do not insert space on line join
+vim.o.joinspaces = false -- do not insert space on line join
 vim.opt.list = true
 vim.opt.listchars:append "nbsp:␣,trail:•,extends:⟩,precedes:⟨"
 vim.bo.tabstop = 8
@@ -43,10 +43,9 @@ vim.wo.signcolumn = "yes:1" -- Always show the signcolumn, otherwise it would sh
 vim.o.updatetime = 200 -- Faster completion
 vim.o.timeoutlen = 200 -- By default timeoutlen is 1000 ms
 vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
--- vim.o.winbar = "yes"
+vim.o.winbar = "yes"
 vim.opt.foldmethod= "expr"
--- vim.opt.foldexpr=nvim_treesitter#foldexpr()
--- vim.bo.ts_highlight_lua = true
+vim.o.foldexpr="nvim_treesitter#foldexpr()"
 
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
 vim.o.smartcase = true -- smartcase makes it so that searching becomes case sensitive if you use a capital letter
