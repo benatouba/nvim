@@ -49,7 +49,7 @@ M.config = function()
   local config = ll.get_config()
   config.sections.lualine_c = {"filename", "lsp_progress"}
   config.sections.lualine_x = {{get_lsp_client}, 'encoding', 'fileformat', 'filetype'}
-  config.options.extensions = { "quickfix", "fugitive",}
+  config.options.extensions = { "quickfix", "fugitive", "nvim-tree", "toggleterm", "nvim-dap-ui", }
   if O.colorscheme == 'catppuccin' then
     config.options.theme = O.colorscheme
   else

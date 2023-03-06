@@ -9,7 +9,6 @@ M.config = function()
     vim.notify("dial not okay")
     return
   end
-  vim.o.backupdir = true --sdfgsdg
 
   local augend = require("dial.augend")
 

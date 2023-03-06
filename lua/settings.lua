@@ -2,12 +2,13 @@ vim.opt.iskeyword:append("-") -- treat dash separated words as a word text objec
 vim.opt.shortmess:append("c") -- Don't pass messages to |ins-completion-menu|.
 vim.opt.inccommand = "split" -- Make substitution work in realtime
 vim.o.hidden = true -- Required to keep multiple buffers open multiple buffers
-vim.o.title = true
+-- vim.o.title = true
 TERMINAL = vim.fn.expand("$TERMINAL")
 DATA_PATH = vim.fn.stdpath('data')
-vim.cmd('let &titleold="' .. TERMINAL .. '"')
+-- vim.cmd('let &titleold="' .. TERMINAL .. '"')
 vim.o.titlestring = "%<%F%=%l/%L - nvim"
 vim.g.loaded = 1
+vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.wo.wrap = true -- Display long lines as just one line
 vim.opt.whichwrap:append("<,>,[,]") -- move to next line with theses keys
@@ -22,7 +23,6 @@ vim.o.splitright = true -- Vertical splits will automatically be to the right
 vim.o.conceallevel = 0 -- So that I can see `` in markdown files
 vim.opt.ts=4 -- Insert 2 spaces for a tab
 vim.opt.sw=4 -- Change the number of space characters inserted for indentation
-vim.o.joinspaces = false -- do not insert space on line join
 vim.opt.list = true
 vim.opt.listchars:append "nbsp:␣,trail:•,extends:⟩,precedes:⟨"
 vim.bo.tabstop = 8
@@ -43,18 +43,16 @@ vim.wo.signcolumn = "yes:1" -- Always show the signcolumn, otherwise it would sh
 vim.o.updatetime = 200 -- Faster completion
 vim.o.timeoutlen = 200 -- By default timeoutlen is 1000 ms
 vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
-vim.o.winbar = "yes"
 vim.opt.foldmethod= "expr"
-vim.o.foldexpr="nvim_treesitter#foldexpr()"
 
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
 vim.o.smartcase = true -- smartcase makes it so that searching becomes case sensitive if you use a capital letter
 if not IsDir(DATA_PATH .. "/backup") then
 	os.execute("mkdir " .. DATA_PATH .. "/backup")
 end
-vim.o.backupdir = DATA_PATH .. "/backup" -- set backup directory to be a subdirectory of data to ensure that backups are not written to git repos
-vim.o.undodir = vim.fn.stdpath("data") .. "/undo" -- set undodir to ensure that the undofiles are not saved to git repos.
-vim.o.undofile = true -- enable persistent undo (meaning if you quit Neovim and come back to a file and want to undo previous changes you can)
+vim.o.backupdir=DATA_PATH .. "/backup" -- set backup directory to be a subdirectory of data to ensure that backups are not written to git repos
+vim.o.undodir=DATA_PATH .. "/undo" -- set undodir to ensure that the undofiles are not saved to git repos.
+vim.o.undofile=true -- enable persistent undo (meaning if you quit Neovim and come back to a file and want to undo previous changes you can)
 if not IsDir(DATA_PATH .. "/directory") then
 	os.execute("mkdir " .. DATA_PATH .. "/directory")
 end
@@ -74,5 +72,4 @@ vim.diagnostic.config({
   update_in_insert = false,
   underline = true,
   severity_sort = true,
-  float = true,
 })

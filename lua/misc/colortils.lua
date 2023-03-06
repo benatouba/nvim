@@ -5,6 +5,12 @@ if not isOk then
 	return
 end
 
+local wkOk, which_key = pcall(require, 'which-key')
+if not isOk then
+	vim.notify('Which key not okay in Colortils')
+	return
+end
+
 M.config = function()
 	colortils.setup()
 	local maps = {
@@ -18,8 +24,9 @@ M.config = function()
 			p = { "<cmd>Colortils picker<cr><cr>", "Picker" },
 		}
 	}
-	which_key.register(nmaps, {
+	which_key.register(maps, {
 		mode = "n", -- NORMAL mode
 		prefix = "<leader>",
 	})
 end
+return M
