@@ -182,6 +182,7 @@ M.config = function()
 			{ name = "path", keyword_length = 3 },
 			-- { name = "tmux" },
 			{ name = "orgmode" },
+			{ name = "neorg"},
 			-- { name = 'zsh', },
 			{ name = "calc" },
 			{ name = "emoji" },
