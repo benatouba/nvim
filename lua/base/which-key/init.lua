@@ -117,6 +117,7 @@ if O.lsp then
 	maps["m"] = {
 		name = "+Mason",
 		m = { "<cmd>Mason<cr>", "Info" },
+		u = { "<cmd>MasonUpdate<cr>", "Update Servers" },
 		l = { "<cmd>MasonLog<cr>", "Log" },
 	}
 	nmaps["]"] = {
