@@ -76,10 +76,8 @@ map("n", "<C-Left>", ":vertical resize +2<CR>")
 map("n", "<C-Right>", ":vertical resize -2<CR>")
 
 -- switch buffer
-map("n", "<c-l>", ":BufferNext<CR>")
-map("n", "<c-h>", ":BufferPrevious<CR>")
-map("i", "<c-l>", ":BufferNext<CR>")
-map("i", "<c-h>", ":BufferPrevious<CR>")
+-- map("n", "<c-l>", ":BufferNext<CR>")
+-- map("n", "<c-h>", ":BufferPrevious<CR>")
 map("t", "<C-l>", "<C-\\><C-N><C-w>:BufferNext<CR>", { remap = false })
 map("t", "<C-h>", "<C-\\><C-N><C-w>:BufferPrevious<CR>", { remap = false })
 
