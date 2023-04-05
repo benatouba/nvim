@@ -39,6 +39,11 @@ M.config = function()
 			if require("cmp_dap").is_dap_buffer() then
 				return true
 			end
+
+			-- disbable completion in telescope buffers
+			if vim.fn.bufname() == "TelescopePrompt" then
+				return false
+			end
 			-- disable completion in comments
 			local context = require("cmp.config.context")
 			-- keep command mode completion enabled when cursor is in a comment
