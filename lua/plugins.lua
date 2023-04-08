@@ -239,6 +239,7 @@ return require("packer").startup({
 			use({
 				"williamboman/mason.nvim",
 				"williamboman/mason-lspconfig.nvim",
+				{"ckipp01/stylua-nvim", run = "cargo install stylua"},
 				"jayp0521/mason-null-ls.nvim",
 				{
 					"neovim/nvim-lspconfig",

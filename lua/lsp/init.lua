@@ -89,7 +89,7 @@ if not mason_null_ls_ok then
   return
 end
 mason_null_ls.setup({
-  ensure_installed = { "stylua" },
+  ensure_installed = {},
   automatic_setup = true,
 })
 mason_null_ls.setup_handlers()
@@ -217,10 +217,18 @@ require("mason-lspconfig").setup_handlers({
             },
             maxPreload = 10000,
             preloadFileSize = 1000,
+            checkThirdParty = false,
           },
           telemetry = {
             enable = false,
           },
+        },
+      },
+      commands = {
+        Format = {
+          function()
+            require('stylua-nvim').format_file()
+          end,
         },
       },
     })
