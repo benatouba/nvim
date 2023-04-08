@@ -62,14 +62,14 @@ M.config = function()
 				cmp.ItemField.Abbr,
 				cmp.ItemField.Menu,
 			},
-			-- if entry.source.name == "copilot" then
-			-- 	vim_item.kind = "[]"
-			-- 	vim_item.kind_hl_group = "CmpItemKindCopilot"
-			-- 	return vim_item
-			-- end
 			format = lspkind.cmp_format({
 				with_text = true,
 				before = function(entry, vim_item)
+					if entry.source.name == "copilot" then
+						vim_item.kind = "[] Copilot"
+						vim_item.kind_hl_group = "CmpItemKindCopilot"
+						return vim_item
+					end
 					-- Get the full snippet (and only keep first line)
 					local word = entry:get_insert_text()
 					if entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet then
@@ -84,8 +84,9 @@ M.config = function()
 						word = before .. "..."
 					end
 
-					if entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet
-							and string.sub(vim_item.abbr, -1, -1) == "~"
+					if
+						entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet
+						and string.sub(vim_item.abbr, -1, -1) == "~"
 					then
 						word = word .. "~"
 					end
@@ -115,19 +116,19 @@ M.config = function()
 		sorting = {
 			-- priority_weight = 2,
 			comparators = {
-				-- require("copilot_cmp.comparators").prioritize,
+				require("copilot_cmp.comparators").prioritize,
 				-- require("copilot_cmp.comparators").score,
 				require("cmp-under-comparator").under,
 				cmp.config.compare.exact,
-				cmp.config.compare.kind,
-				cmp.config.compare.offset,
-				cmp.config.compare.score,
-				cmp.config.compare.sort_text,
-				cmp.config.compare.length,
-				cmp.config.compare.order,
+				-- cmp.config.compare.kind,
+				-- cmp.config.compare.offset,
+				-- cmp.config.compare.score,
+				-- cmp.config.compare.sort_text,
+				-- cmp.config.compare.length,
+				-- cmp.config.compare.order,
 			},
 		},
-		mapping = {
+		mapping = cmp.mapping.preset.insert{
 			["<C-d>"] = cmp.mapping.scroll_docs(-4),
 			-- ["<C-f>"] = cmp.mapping.scroll_docs(4),
 			["<C-u>"] = cmp.mapping.scroll_docs(4),
@@ -165,7 +166,6 @@ M.config = function()
 					fallback()
 				end
 			end, { "i", "s" }),
-
 			["<S-Tab>"] = cmp.mapping(function(fallback)
 				if cmp.visible() then
 					cmp.select_prev_item()
@@ -179,6 +179,7 @@ M.config = function()
 		-- --                 ﬘    m    
 
 		sources = {
+			{ name = "copilot", keyword_length = 0 },
 			{ name = "luasnip" },
 			{ name = "nvim_lsp" },
 			{ name = "nvim_lsp_signature_help" },
@@ -187,7 +188,7 @@ M.config = function()
 			{ name = "path", keyword_length = 3 },
 			-- { name = "tmux" },
 			{ name = "orgmode" },
-			{ name = "neorg"},
+			{ name = "neorg" },
 			-- { name = 'zsh', },
 			{ name = "calc" },
 			{ name = "emoji" },
@@ -204,6 +205,20 @@ M.config = function()
 		},
 	})
 	-- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
+	cmp.setup.filetype({ "ipynb", "jupyter_python", "jupynium" }, {
+		sources = {
+			{ name = "jupynium", priority = 1000 },
+			{ name = "luasnip" },
+			{ name = "nvim_lsp" },
+			{ name = "nvim_lsp_signature_help" },
+			{ name = "treesitter", keyword_length = 3 },
+			{ name = "neorg" },
+			{ name = "calc" },
+			{ name = "emoji" },
+			{ name = "tags", keyword_length = 5, max_item_count = 5 },
+			{ name = "buffer", keyword_length = 5, max_item_count = 5 },
+		},
+	})
 
 	cmp.setup.cmdline(":", {
 		mapping = cmp.mapping.preset.cmdline(),
@@ -232,8 +247,8 @@ M.config = function()
 
 	cmp.setup.filetype("gitcommit", {
 		sources = {
-			{name = 'git'}
-		}
+			{ name = "git" },
+		},
 	})
 
 	local cmp_git_ok, cmp_git = pcall(require, "cmp_git")
@@ -241,32 +256,32 @@ M.config = function()
 		vim.notify("cmp_git not okay")
 		return
 	end
-cmp_git.setup()
--- cmp.config.sources({
--- 			{ name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
--- 		}, {
--- 			{ name = "buffer" },
--- 		}),
--- 		github = {
--- 			issues = {
--- 				filter = "all", -- assigned, created, mentioned, subscribed, all, repos
--- 				limit = 100,
--- 				state = "open", -- open, closed, all
--- 			},
--- 			mentions = {
--- 				limit = 100,
--- 			},
--- 		},
--- 		gitlab = {
--- 			issues = {
--- 				limit = 100,
--- 				state = "opened", -- opened, closed, all
--- 			},
--- 			mentions = {
--- 				limit = 100,
--- 			},
--- 		},
---
+	cmp_git.setup()
+	-- cmp.config.sources({
+	-- 			{ name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
+	-- 		}, {
+	-- 			{ name = "buffer" },
+	-- 		}),
+	-- 		github = {
+	-- 			issues = {
+	-- 				filter = "all", -- assigned, created, mentioned, subscribed, all, repos
+	-- 				limit = 100,
+	-- 				state = "open", -- open, closed, all
+	-- 			},
+	-- 			mentions = {
+	-- 				limit = 100,
+	-- 			},
+	-- 		},
+	-- 		gitlab = {
+	-- 			issues = {
+	-- 				limit = 100,
+	-- 				state = "opened", -- opened, closed, all
+	-- 			},
+	-- 			mentions = {
+	-- 				limit = 100,
+	-- 			},
+	-- 		},
+	--
 	local sign = function(opts)
 		vim.fn.sign_define(opts.name, {
 			texthl = opts.name,
@@ -296,7 +311,7 @@ cmp_git.setup()
 	vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 
 	vim.lsp.handlers["textDocument/signatureHelp"] =
-	vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+		vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 end
 
 return M

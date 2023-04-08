@@ -5,6 +5,12 @@ if not wk_ok then
 	vim.notify("which-key not okay in nvim-ipy")
 end
 
+-- local startKernel = function()
+-- 	local handle = io.popen('pyenv version-name')
+-- 	local kernel = handle:read("*a")
+-- 	handle:close()
+-- 	vim.api.nvim_command("call IPyConnect('--kernel'" .. kernel .. "'--no-window')")
+-- end
 local connectToKernel = function()
 	local handle = io.popen('pyenv version-name')
 	local kernel = handle:read("*a")
@@ -13,9 +19,7 @@ local connectToKernel = function()
 end
 
 local addFilepathToSyspath = function()
-	local filepath = vim.api.nvim_exec([[
-		expand('%:p:h')
-		]])
+	local filepath = vim.api.nvim_exec([[ expand('%:p:h') ]], false)
 	vim.api.nvim_command("call IPyRun('import sys; sys.path.append(\"'" .. filepath .. "'\")')")
 	vim.notify('Added ' .. filepath .. ' to pythons sys.path')
 end

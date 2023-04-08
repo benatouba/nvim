@@ -1,32 +1,61 @@
 local M = {}
-local copilot_ok, copilot = pcall(require, 'copilot')
+local copilot_ok, copilot = pcall(require, "copilot")
 if not copilot_ok then
-    vim.notify('copilot not okay')
+    vim.notify("copilot not okay")
+    return
+end
+
+local wk_ok, wk = pcall(require, "which-key")
+if not wk_ok then
+    vim.notify("which-key not okay in copilot")
     return
 end
 
 M.config = function()
-    vim.defer_fn(function()
-        copilot.setup {
-            cmp = {
-                method = "getCompletionsCycling",
+    copilot.setup({
+        panel = {
+            enabled = true,
+            auto_refresh = true,
+            keymap = {
+                jump_prev = "[[",
+                jump_next = "]]",
+                accept = "<CR>",
+                refresh = "gr",
+                open = "<M-CR>",
             },
-            plugin_manager_path = vim.fn.stdpath("data") .. "/site/pack/packer",
-            server_opts_override = {
-                settings = {
-                    inlineSuggest = "enable",
-                    editor = {
-                        showEditorCompletions = true,
-                        enableAutoCompletions = true,
-                    },
-                    advanced = {
-                        list_count = 5,
-                        inlinrSuggestCount = 3,
-                    }
-                }
-            }
-        }
-    end, 100)
+            layout = {
+                position = "bottom", -- | top | left | right
+                ratio = 0.4,
+            },
+        },
+        suggestion = {
+            enabled = true,
+            auto_trigger = true,
+            debounce = 75,
+            keymap = {
+                accept = "<M-l>",
+                accept_word = false,
+                accept_line = false,
+                next = "<M-]>",
+                prev = "<M-[>",
+                dismiss = "<C-h>",
+            },
+        },
+        filetypes = {
+            vue = true,
+            yaml = false,
+            markdown = false,
+            help = false,
+            gitcommit = true,
+            gitrebase = false,
+            hgcommit = false,
+            svn = false,
+            cvs = false,
+            ["."] = false,
+        },
+        copilot_node_command = "node", -- Node.js version must be > 16.x
+        server_opts_overrides = {},
+    })
 end
 
 return M

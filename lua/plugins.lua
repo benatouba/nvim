@@ -33,6 +33,12 @@ return require("packer").startup({
 		use("nvim-lua/popup.nvim") -- handle popup (important)
 		use("nvim-lua/plenary.nvim") -- most important functions (very important)
 		use({
+			"glacambre/firenvim",
+			run = function()
+				vim.fn["firenvim#install"](0)
+			end,
+		})
+		use({
 			"rcarriga/nvim-notify",
 			config = function()
 				vim.notify = require("notify")
@@ -225,6 +231,12 @@ return require("packer").startup({
 				end,
 			})
 			use({
+				"zbirenbaum/copilot.lua",
+				config = function()
+					require("lsp.copilot").config()
+				end,
+			})
+			use({
 				"williamboman/mason.nvim",
 				"williamboman/mason-lspconfig.nvim",
 				"jayp0521/mason-null-ls.nvim",
@@ -255,7 +267,7 @@ return require("packer").startup({
 					"ray-x/cmp-treesitter",
 					"lukas-reineke/cmp-under-comparator",
 					"lukas-reineke/cmp-rg",
-					{ "David-Kunz/cmp-npm",         filetype = { "javascript", "vue", "typescript" } },
+					{ "David-Kunz/cmp-npm", filetype = { "javascript", "vue", "typescript" } },
 					"L3MON4D3/LuaSnip",
 					"saadparwaiz1/cmp_luasnip",
 					{ "kdheepak/cmp-latex-symbols", ft = "latex" },
@@ -264,6 +276,13 @@ return require("packer").startup({
 					"octaltree/cmp-look",
 					"tamago324/cmp-zsh",
 					"onsails/lspkind-nvim",
+					{
+						"zbirenbaum/copilot-cmp",
+						after = { "copilot.lua" },
+						config = function()
+							require("copilot_cmp").setup()
+						end,
+					},
 				},
 				config = function()
 					require("lsp.cmp").config()
@@ -557,13 +576,21 @@ return require("packer").startup({
 			end,
 		})
 		if O.notebooks then
+			-- use({
+			-- 	"bfredl/nvim-ipy",
+			-- 	ft = "ipynb",
+			-- 	config = function()
+			-- 		require("notebooks.nvim-ipy").config()
+			-- 	end,
+			-- })
 			use({
-				"bfredl/nvim-ipy",
-				ft = "ipynb",
-				config = function()
-					require("notebooks.nvim-ipy").config()
-				end,
+				"kiyoon/jupynium.nvim",
+				run = "pip3 install --user .",
+				-- config = function()
+				-- 	require("jupynium").setup()
+				-- end,
 			})
+			use({ "stevearc/dressing.nvim" })
 		end
 	end,
 	config = {

@@ -50,24 +50,18 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
   severity_sort = true,
 })
 
-local border_style = {
-  { "╭", "FloatBorder" },
-  { "─", "FloatBorder" },
-  { "╮", "FloatBorder" },
-  { "│", "FloatBorder" },
-  { "╯", "FloatBorder" },
-  { "─", "FloatBorder" },
-  { "╰", "FloatBorder" },
-  { "│", "FloatBorder" },
-}
+-- local border_style = {
+--   { "╭", "FloatBorder" },
+--   { "─", "FloatBorder" },
+--   { "╮", "FloatBorder" },
+--   { "│", "FloatBorder" },
+--   { "╯", "FloatBorder" },
+--   { "─", "FloatBorder" },
+--   { "╰", "FloatBorder" },
+--   { "│", "FloatBorder" },
+-- }
 
-local pop_opts = { border = border_style }
--- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, pop_opts)
--- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, pop_opts)
-
--- local capabilities = function() return require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()) end
-
--- NOTE: Server Setup
+-- local pop_opts = { border = border_style }
 local mason_ok, mason = pcall(require, "mason")
 if not mason_ok then
   vim.notify("mason not okay in lspconfig")
@@ -164,7 +158,7 @@ require("mason-lspconfig").setup_handlers({
     local venv = Get_python_venv()
 
     lspconfig.pylsp.setup({
-      filetypes = { "python", "djangopython", "django" },
+      filetypes = { "python", "djangopython", "django", "jupynium" },
       -- capabilities = lsp_defaults.capabilities,
       cmd = { "pylsp", "-v" },
       cmd_env = { VIRTUAL_ENV = venv, PATH = lsputil.path.join(venv, "bin") .. ":" .. vim.env.PATH },
@@ -175,7 +169,7 @@ require("mason-lspconfig").setup_handlers({
           plugins = {
             autopep8 = { enabled = false },
             flake8 = { enabled = false },
-            pycodestyle = { enabled = false, maxLineLength = 120 },
+            pycodestyle = { enabled = false, maxLineLength = 100 },
             pyflakes = { enabled = false },
             pydocstyle = { enabled = true },
             mccabe = { enabled = true },
@@ -183,8 +177,8 @@ require("mason-lspconfig").setup_handlers({
             pylint = { enabled = false },
             rope_autimport = { enabled = true },
             rope_completion = { enabled = true },
-            ruff = { enabled = true, lineLength = 120 },
-            black = { enabled = false },
+            ruff = { enabled = false, lineLength = 100 },
+            black = { enabled = true, line_length = 100 },
             yapf = { enabled = false },
             jedi = {
               auto_import_modules = {
@@ -203,7 +197,7 @@ require("mason-lspconfig").setup_handlers({
     })
   end,
   ["lua_ls"] = function()
-    local runtime_path = vim.split(package.path, ";")
+    local runtime_path = vim.split(package.path, ";", {})
     table.insert(runtime_path, "lua/?.lua")
     table.insert(runtime_path, "lua/?/init.lua")
     lspconfig.lua_ls.setup({

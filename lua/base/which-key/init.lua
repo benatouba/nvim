@@ -16,6 +16,12 @@ local opts = {
 
 local terminal_maps = {}
 local terminal_opts = { mode = "t" }
+local visual_maps = {}
+local visual_opts = { mode = "v" }
+local vmaps = {
+	['<leader>t'] = {"<cmd>ToggleTermSendVisualLines<cr>", "Send to terminal"}
+}
+which_key.register(vmaps, visual_opts)
 -- Set leader
 -- vim.keymap.del("n", " ")
 vim.g.mapleader = " "
@@ -121,14 +127,16 @@ if O.lsp then
 		-- g = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
 		b = { "<cmd>bNext<cr>", "Buffer" },
 		d = { "<cmd>lua vim.diagnostic.goto_next { wrap = true }<cr>", "Next Diagnostic" },
-		t = { "<cmd>lua require('todo-comments').jump_next()<cr>", "Next todo comment" },
+		T = { "<cmd>lua require('todo-comments').jump_next()<cr>", "Next todo comment" },
+		t = { "<cmd>tabNext<cr>", "Next tab" },
 	}
 	nmaps["["] = {
 		-- defined in gitsigns for now
 		-- g = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
 		b = { "<cmd>bprevious<cr>", "Buffer" },
 		d = { "<cmd>lua vim.diagnostic.goto_prev { wrap = true }<cr>", "Prev Diagnostic" },
-		t = { "<cmd>lua require('todo-comments').jump_prev()<cr>", "Previous todo comment" },
+		T = { "<cmd>lua require('todo-comments').jump_prev()<cr>", "Previous todo comment" },
+		t = { "<cmd>tabprevious<cr>", "Tab" },
 	}
 end
 

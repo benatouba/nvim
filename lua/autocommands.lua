@@ -33,4 +33,14 @@ AddAutocommands({
 		{ "FileType", "checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard", "nnoremap <silent> <buffer> <esc> :q<CR>" },
 		-- {'buftype', 'nofile', 'nnoremap <silent> <buffer> q :q<CR>'},
 	},
+	firenvim = {
+		{"BufEnter", "*ipynb_er-DIV*.txt", "set filetype=python"},
+		{"BufEnter", "*ipynb_ontainer-DIV*.txt", "set filetype=markdown"}
+		},
+	-- jupyter = {
+	-- 	{"FileType", "ipynb", "\\call jobstart('jupyter qtconsole --JupyterWidget.include_other_output=True')"}
+	-- }
+	soga = {
+		{"BufWritePost", "manim*.py", "<cmd>!manim -pqg % RegressionTutorial<CR>"}
+	}
 })
