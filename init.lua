@@ -1,3 +1,4 @@
+vim.loader.enable()
 require('user-defaults')
 require('functions')
 require('keymappings')

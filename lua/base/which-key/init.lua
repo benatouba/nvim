@@ -99,7 +99,7 @@ if O.lsp then
 		l = { "<cmd>LspLog<CR>", "Logs" },
 		f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" },
 		F = { "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", "Format Document (Sync)" },
-		h = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover" },
+		h = { "<cmd>lua require('pretty_hover').hover()<cr>", "Hover" },
 		i = { "<cmd>LspInfo<cr>", "Info" },
 		n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
 		j = {

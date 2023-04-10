@@ -68,8 +68,15 @@ return require("packer").startup({
 			config = function()
 				require("impatient")
 			end,
+			disable = true,
 		})
 
+		use({
+				"Fildo7525/pretty_hover",
+				config = function()
+					require("pretty_hover")
+				end,
+			})
 		use({
 			"nvim-telescope/telescope-fzf-writer.nvim",
 			after = "telescope.nvim",
@@ -277,13 +284,13 @@ return require("packer").startup({
 					"octaltree/cmp-look",
 					"tamago324/cmp-zsh",
 					"onsails/lspkind-nvim",
-					{
-						"zbirenbaum/copilot-cmp",
-						after = { "copilot.lua" },
-						config = function()
-							require("copilot_cmp").setup()
-						end,
-					},
+					-- {
+					-- 	"zbirenbaum/copilot-cmp",
+					-- 	after = { "copilot.lua" },
+					-- 	config = function()
+					-- 		require("copilot_cmp").setup()
+					-- 	end,
+					-- },
 				},
 				config = function()
 					require("lsp.cmp").config()
