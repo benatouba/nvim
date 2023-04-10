@@ -116,16 +116,16 @@ M.config = function()
 		sorting = {
 			-- priority_weight = 2,
 			comparators = {
-				require("copilot_cmp.comparators").prioritize,
+				-- require("copilot_cmp.comparators").prioritize,
 				-- require("copilot_cmp.comparators").score,
 				require("cmp-under-comparator").under,
 				cmp.config.compare.exact,
-				-- cmp.config.compare.kind,
-				-- cmp.config.compare.offset,
-				-- cmp.config.compare.score,
-				-- cmp.config.compare.sort_text,
-				-- cmp.config.compare.length,
-				-- cmp.config.compare.order,
+				cmp.config.compare.kind,
+				cmp.config.compare.offset,
+				cmp.config.compare.score,
+				cmp.config.compare.sort_text,
+				cmp.config.compare.length,
+				cmp.config.compare.order,
 			},
 		},
 		mapping = cmp.mapping.preset.insert{

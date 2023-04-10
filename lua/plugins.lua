@@ -247,7 +247,7 @@ return require("packer").startup({
 				"williamboman/mason.nvim",
 				"williamboman/mason-lspconfig.nvim",
 				{"ckipp01/stylua-nvim", run = "cargo install stylua"},
-				"jayp0521/mason-null-ls.nvim",
+				-- "jayp0521/mason-null-ls.nvim",
 				{
 					"neovim/nvim-lspconfig",
 					config = function()
@@ -316,8 +316,8 @@ return require("packer").startup({
 				},
 			})
 			use({ "folke/trouble.nvim", cmd = "TroubleToggle" })
-			use({
-				"jose-elias-alvarez/null-ls.nvim",
+			-- use({
+			-- 	"jose-elias-alvarez/null-ls.nvim",
 				-- event = { "BufReadPost", "InsertEnter" },
 				-- fn = { "edit", "e" },
 				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
@@ -325,7 +325,7 @@ return require("packer").startup({
 				-- require("null-ls").setup()
 				-- require("lsp.null-ls").config()
 				-- end,
-			})
+			-- })
 		end
 
 		if O.git then -- Git (helpers)
