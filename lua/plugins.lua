@@ -101,6 +101,12 @@ return require("packer").startup({
 			requires = "nvim-lua/plenary.nvim",
 		})
 		use({
+			"epwalsh/obsidian.nvim",
+			config = function()
+				require("management.obsidian").config()
+			end
+		})
+		use({
 			"Tastyep/structlog.nvim",
 			deactivate = false,
 			requires = "rcarriga/nvim-notify",

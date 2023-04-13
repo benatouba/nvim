@@ -7,11 +7,10 @@ if not ts_ok then
 	return
 end
 ts.setup({
-	ensure_installed = O.treesitter.ensure_installed,
-	ignore_install = O.treesitter.ignore_install,
+	ensure_installed = "all",
 	highlight = {
 		enable = true,
-		additional_vim_regex_highlighting = false,
+		additional_vim_regex_highlighting = { "markdown" },
 		config = {
 			vue = {
 				style_element = "// %s",

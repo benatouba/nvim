@@ -40,6 +40,9 @@ M.config = function()
       augend.constant.alias.alpha,
       augend.constant.alias.Alpha,
     },
+    markdown = {
+      augend.constant.new({ elements = { "[ ]", "[x]" }, word = false, cyclic = true }),
+    }
   })
 
   vim.api.nvim_set_keymap("n", "<C-a>", require("dial.map").inc_normal(), {})
@@ -48,6 +51,15 @@ M.config = function()
   vim.api.nvim_set_keymap("v", "g<C-x>", require("dial.map").dec_gvisual(), {})
   vim.api.nvim_set_keymap("v", "<C-a>", require("dial.map").inc_normal("visual"), {})
   vim.api.nvim_set_keymap("v", "<C-x>", require("dial.map").dec_normal("visual"), {})
+
+  AddAutocommands({
+    markdown_dial = {
+      { "FileType", "markdown",
+        "lua vim.api.nvim_buf_set_keymap(0, 'n', '<C-a>', require('dial.map').inc_normal('markdown'), {noremap = true})" },
+      { "FileType", "markdown",
+        "lua vim.api.nvim_buf_set_keymap(0, 'n', '<C-x>', require('dial.map').dec_normal('markdown'), {noremap = true})" }
+    }
+  })
 end
 
 return M
