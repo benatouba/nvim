@@ -102,14 +102,8 @@ if O.lsp then
 		h = { "<cmd>lua require('pretty_hover').hover()<cr>", "Hover" },
 		i = { "<cmd>LspInfo<cr>", "Info" },
 		n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
-		j = {
-			"<cmd>lua vim.diagnostic.goto_next({popup_opts = {border = O.lsp.popup_border}})<cr>",
-			"Next Diagnostic",
-		},
-		k = {
-			"<cmd>lua vim.diagnostic.goto_prev({popup_opts = {border = O.lsp.popup_border}})<cr>",
-			"Prev Diagnostic",
-		},
+		j = { "<cmd>lua require('trouble').next({skip_groups = true, jump = true})<cr>", "Next Diagnostic" },
+		k = { "<cmd>lua require('trouble').previous({skip_groups = true, jump = true})<cr>", "Prev Diagnostic" },
 		q = { "<cmd>Telescope quickfix<cr>", "Quickfix" },
 		r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
 		t = { "<cmd>LspTypeDefinition<cr>", "Type Definition" },
@@ -127,6 +121,8 @@ if O.lsp then
 		-- g = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
 		b = { "<cmd>bNext<cr>", "Buffer" },
 		d = { "<cmd>lua vim.diagnostic.goto_next { wrap = true }<cr>", "Next Diagnostic" },
+		D = { "<cmd>lua require('trouble').next({skip_groups = true, jump = true})<cr>", "Next Trouble" },
+		E = { "<cmd>lua require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })"},
 		T = { "<cmd>lua require('todo-comments').jump_next()<cr>", "Next todo comment" },
 		t = { "<cmd>tabNext<cr>", "Next tab" },
 	}
@@ -135,6 +131,8 @@ if O.lsp then
 		-- g = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
 		b = { "<cmd>bprevious<cr>", "Buffer" },
 		d = { "<cmd>lua vim.diagnostic.goto_prev { wrap = true }<cr>", "Prev Diagnostic" },
+		D = { "<cmd>lua require('trouble').previous({skip_groups = true, jump = true})<cr>", "Next Trouble" },
+		E = { "<cmd>lua require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })"},
 		T = { "<cmd>lua require('todo-comments').jump_prev()<cr>", "Previous todo comment" },
 		t = { "<cmd>tabprevious<cr>", "Tab" },
 	}
@@ -207,9 +205,10 @@ which_key.register(diffmaps, {
 which_key.register(terminal_maps, terminal_opts)
 
 local gmaps = {
-	h = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Help" },
-	d = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
-	D = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
+	a = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
+	h = { "<cmd>Lspsaga lsp_finder<CR>", "Help" },
+	d = { "<cmd>Lspsaga goto_definition<<CR>", "Definition" },
+	D = { "<cmd>Lspsaga peek_definition<CR>", "Declaration" },
 	I = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Implementations" },
 	r = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "Rename" },
 	R = { "<cmd>lua vim.lsp.buf.references()<CR>", "References" },

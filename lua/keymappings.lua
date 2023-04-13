@@ -74,6 +74,7 @@ map("n", "<C-Up>", ":resize +2<CR>")
 map("n", "<C-Down>", ":resize -2<CR>")
 map("n", "<C-Left>", ":vertical resize +2<CR>")
 map("n", "<C-Right>", ":vertical resize -2<CR>")
+map("n", "K", ":Lspsaga hover_doc<CR>")
 
 -- switch buffer
 -- map("n", "<c-l>", ":BufferNext<CR>")

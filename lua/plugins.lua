@@ -33,6 +33,52 @@ return require("packer").startup({
 		use("nvim-lua/popup.nvim") -- handle popup (important)
 		use("nvim-lua/plenary.nvim") -- most important functions (very important)
 		use({
+			"glepnir/lspsaga.nvim",
+			opt = true,
+			branch = "main",
+			event = "LspAttach",
+			config = function()
+				require("lspsaga").setup({
+					code_action = {
+						num_shortcut = true,
+						show_server_name = true,
+						extend_gitsigns = true,
+						keys = {
+							quit = "q",
+							exec = "<CR>",
+						},
+					},
+					lightbulb = {
+						enable = false,
+					},
+					hover = {
+						max_width = 0.6,
+						open_link = 'gx',
+						open_browser = '!brave',
+					},
+					ui = {
+						-- This option only works in Neovim 0.9
+						title = true,
+						-- Border type can be single, double, rounded, solid, shadow.
+						border = "rounded",
+						winblend = 0,
+						expand = "",
+						collapse = "",
+						code_action = "💡",
+						incoming = " ",
+						outgoing = " ",
+						hover = ' ',
+						kind = {},
+					},
+				})
+			end,
+			requires = {
+				{ "nvim-tree/nvim-web-devicons" },
+				--Please make sure you install markdown and markdown_inline parser
+				{ "nvim-treesitter/nvim-treesitter" }
+			}
+		})
+		use({
 			"glacambre/firenvim",
 			run = function()
 				vim.fn["firenvim#install"](0)
@@ -315,16 +361,16 @@ return require("packer").startup({
 					"typescript.tsx",
 				},
 			})
-			use({ "folke/trouble.nvim", cmd = "TroubleToggle" })
+			use({ "folke/trouble.nvim", cmd = { "TroubleToggle", "Trouble" }, keys = { "]d", "[d" } })
 			-- use({
 			-- 	"jose-elias-alvarez/null-ls.nvim",
-				-- event = { "BufReadPost", "InsertEnter" },
-				-- fn = { "edit", "e" },
-				-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
-				-- config = function()
-				-- require("null-ls").setup()
-				-- require("lsp.null-ls").config()
-				-- end,
+			-- event = { "BufReadPost", "InsertEnter" },
+			-- fn = { "edit", "e" },
+			-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
+			-- config = function()
+			-- require("null-ls").setup()
+			-- require("lsp.null-ls").config()
+			-- end,
 			-- })
 		end
 
