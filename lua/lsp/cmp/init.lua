@@ -41,7 +41,7 @@ M.config = function()
 			end
 
 			-- disbable completion in telescope buffers
-			if vim.fn.bufname() == "TelescopePrompt" then
+			if vim.fn.buftype == "prompt" then
 				return false
 			end
 			-- disable completion in comments
