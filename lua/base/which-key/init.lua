@@ -207,7 +207,7 @@ which_key.register(terminal_maps, terminal_opts)
 local gmaps = {
 	a = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
 	h = { "<cmd>Lspsaga lsp_finder<CR>", "Help" },
-	d = { "<cmd>Lspsaga goto_definition<<CR>", "Definition" },
+	d = { "<cmd>Lspsaga goto_definition<CR>", "Definition" },
 	D = { "<cmd>Lspsaga peek_definition<CR>", "Declaration" },
 	I = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Implementations" },
 	r = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "Rename" },
