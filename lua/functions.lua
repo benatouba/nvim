@@ -67,8 +67,8 @@ end
 
 -- misc
 Pyflyby = function()
-    local cmd = "!tidy-imports --quiet --align-imports=false --replace-star-imports --action REPLACE %"
-		vim.api.nvim_exec(cmd, true)
+    local cmd = "!tidy-imports --quiet --align-imports=false --replace-star-imports --action REPLACE " .. vim.fn.expand("%")
+		vim.cmd(cmd)
 end
 
 function funcs.file_exists(name)

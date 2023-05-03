@@ -41,6 +41,7 @@ AddAutocommands({
 	-- 	{"FileType", "ipynb", "\\call jobstart('jupyter qtconsole --JupyterWidget.include_other_output=True')"}
 	-- }
 	soga = {
-		{"BufWritePost", "manim*.py", "<cmd>!manim -pqg % RegressionTutorial<CR>"}
+		{"BufWritePre", "manim*.py", ":cd %:p:h"},
+		{"BufWritePost", "manim*.py", ":!python3 '%:p'"}
 	}
 })

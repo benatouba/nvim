@@ -85,8 +85,8 @@ M.config = function()
 					end
 
 					if
-						entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet
-						and string.sub(vim_item.abbr, -1, -1) == "~"
+							entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet
+							and string.sub(vim_item.abbr, -1, -1) == "~"
 					then
 						word = word .. "~"
 					end
@@ -128,7 +128,7 @@ M.config = function()
 				cmp.config.compare.order,
 			},
 		},
-		mapping = cmp.mapping.preset.insert{
+		mapping = cmp.mapping.preset.insert {
 			["<C-d>"] = cmp.mapping.scroll_docs(-4),
 			-- ["<C-f>"] = cmp.mapping.scroll_docs(4),
 			["<C-u>"] = cmp.mapping.scroll_docs(4),
@@ -179,23 +179,23 @@ M.config = function()
 		-- --                 ﬘    m    
 
 		sources = {
-			{ name = "copilot", keyword_length = 0 },
+			{ name = "copilot",                 keyword_length = 0 },
 			{ name = "luasnip" },
 			{ name = "nvim_lsp" },
-			{ name = "nvim_lsp_signature_help" },
-			{ name = "treesitter", keyword_length = 3 },
-			{ name = "nvim_lua", keyword_length = 3 },
-			{ name = "path", keyword_length = 3 },
+			{ name = "nvim_lsp_signature_help", keyword_length = 0, priority = 1000 },
+			{ name = "treesitter",              keyword_length = 3 },
+			{ name = "nvim_lua",                keyword_length = 3 },
+			{ name = "path",                    keyword_length = 3 },
 			-- { name = "tmux" },
 			{ name = "orgmode" },
 			{ name = "neorg" },
 			-- { name = 'zsh', },
 			{ name = "calc" },
 			{ name = "emoji" },
-			{ name = "tags", keyword_length = 5, max_item_count = 5 },
+			{ name = "tags",                    keyword_length = 5, max_item_count = 5 },
 			-- { name = "look", },
 			-- { name = "vim-dadbod-completion" },
-			{ name = "buffer", keyword_length = 5, max_item_count = 5 },
+			{ name = "buffer",                  keyword_length = 5, max_item_count = 5 },
 		},
 	})
 
@@ -207,16 +207,16 @@ M.config = function()
 	-- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
 	cmp.setup.filetype({ "ipynb", "jupyter_python", "jupynium" }, {
 		sources = {
-			{ name = "jupynium", priority = 1000 },
+			{ name = "jupynium",               priority = 1000 },
 			{ name = "luasnip" },
 			{ name = "nvim_lsp" },
-			{ name = "nvim_lsp_signature_help" },
-			{ name = "treesitter", keyword_length = 3 },
+			-- { name = "nvim_lsp_signature_help" },
+			{ name = "treesitter",             keyword_length = 3 },
 			{ name = "neorg" },
 			{ name = "calc" },
 			{ name = "emoji" },
-			{ name = "tags", keyword_length = 5, max_item_count = 5 },
-			{ name = "buffer", keyword_length = 5, max_item_count = 5 },
+			{ name = "tags",                   keyword_length = 5, max_item_count = 5 },
+			{ name = "buffer",                 keyword_length = 5, max_item_count = 5 },
 		},
 	})
 
@@ -310,8 +310,8 @@ M.config = function()
 ]])
 	vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 
-	vim.lsp.handlers["textDocument/signatureHelp"] =
-		vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+	-- vim.lsp.handlers["textDocument/signatureHelp"] =
+	-- 		vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 end
 
 return M

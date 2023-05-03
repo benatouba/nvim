@@ -44,10 +44,16 @@ local get_lsp_client = function()
   end
 end
 
+local current_signature = function(width)
+  if not pcall(require, 'lsp_signature') then return end
+  local sig = require("lsp_signature").status_line(width)
+  return sig.label .. "🐼" .. sig.hint
+end
+
 local M = {}
 M.config = function()
   local config = ll.get_config()
-  config.sections.lualine_c = {"filename", "lsp_progress"}
+  config.sections.lualine_c = {"current_signature", "lsp_progress"}
   config.sections.lualine_x = {{get_lsp_client}, 'encoding', 'fileformat', 'filetype'}
   config.options.extensions = { "quickfix", "fugitive", "nvim-tree", "toggleterm", "nvim-dap-ui", }
   if O.colorscheme == 'catppuccin' then

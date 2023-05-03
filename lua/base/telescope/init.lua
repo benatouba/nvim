@@ -57,7 +57,7 @@ M.config = function()
                     -- To disable a keymap, put [map] = false
                     -- So, to not map "<C-n>", just put
                     ["<c-h>"] = actions.which_key,
-                    ["<esc>"] = actions.close,
+                    -- ["<esc>"] = actions.close,
 
                     -- Otherwise, just set the mapping to the function that you want it to be.
                     -- ["<C-i>"] = actions.select_horizontal,

@@ -94,16 +94,6 @@ mason_lspconfig.setup({})
 -- })
 -- mason_null_ls.setup_handlers()
 
-local lsp_defaults = {
-  flags = {
-    debounce_text_changes = 150,
-  },
-  capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
-  on_attach = function(client, bufnr)
-    vim.api.nvim_exec_autocmds("User", { pattern = "LspAttached" })
-  end,
-}
-
 local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
 if not lspconfig_ok then
   vim.notify("lspconfig not okay in lspconfig")
@@ -115,6 +105,21 @@ if not lsp_status_ok then
   vim.notify("lsp-status not okay in lspconfig")
 end
 lsp_status.register_progress()
+
+local lsp_defaults = {
+  flags = {
+    debounce_text_changes = 150,
+  },
+  capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  on_attach = function(client, bufnr)
+    vim.api.nvim_exec_autocmds("User", { pattern = "LspAttached" })
+    require'lsp_signature'.on_attach()
+    lsp_status.on_attach(client, bufnr)
+    if client.server_capabilities.documentSymbolProvider then
+      require("nvim-navic").attach(client, bufnr)
+    end
+  end,
+}
 
 lspconfig.util.default_config = vim.tbl_deep_extend("force", lspconfig.util.default_config, lsp_defaults)
 
@@ -159,26 +164,27 @@ require("mason-lspconfig").setup_handlers({
 
     lspconfig.pylsp.setup({
       filetypes = { "python", "djangopython", "django", "jupynium" },
-      -- capabilities = lsp_defaults.capabilities,
+      capabilities = lsp_defaults.capabilities,
       cmd = { "pylsp", "-v" },
       cmd_env = { VIRTUAL_ENV = venv, PATH = lsputil.path.join(venv, "bin") .. ":" .. vim.env.PATH },
-      -- on_attach = lsp_defaults.on_attach,
+      on_attach = lsp_defaults.on_attach,
       single_file_support = true,
       settings = {
         pylsp = {
           plugins = {
-            autopep8 = { enabled = false },
+            autopep8 = { enabled = true },
             flake8 = { enabled = false },
             pycodestyle = { enabled = false, maxLineLength = 100 },
-            pyflakes = { enabled = false },
+            pyflakes = { enabled = true },
             pydocstyle = { enabled = true },
             mccabe = { enabled = true },
             memestra = { enabled = true },
+            mypy = { enabled = true },
             pylint = { enabled = false },
             rope_autimport = { enabled = true },
             rope_completion = { enabled = true },
             ruff = { enabled = false, lineLength = 100 },
-            black = { enabled = true, line_length = 100 },
+            black = { enabled = false, line_length = 100 },
             yapf = { enabled = false },
             jedi = {
               auto_import_modules = {
@@ -235,11 +241,10 @@ require("mason-lspconfig").setup_handlers({
   end,
   ["sourcery"] = function()
     lspconfig.sourcery.setup({
-      filetypes = { "python" },
       init_options = {
         token = "user_re1CDsCNaWsCXRrWENblMoIhU8INKHMGuiqQDG1FG0CKWTC7Td_93Ilq7FA",
         extension_version = "vim.lsp",
-        editor_version = "vim",
+        editor_version = "nvim",
       },
       settings = {
         sourcery = {
@@ -250,13 +255,15 @@ require("mason-lspconfig").setup_handlers({
   end,
   ["eslint"] = function()
     lspconfig.eslint.setup({
-      filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+      filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "json" },
     })
   end,
   ["volar"] = function()
     local util = require("lspconfig.util")
     local function get_typescript_server_path(root_dir)
-      local global_ts = "/usr/local/lib/node_modules/typescript/lib"
+      -- local global_ts = "$PNPM_HOME/global/5"
+      local global_ts = "/home/ben/.local/share/pnpm/global/5/node_modules/typescript/lib"
+      -- local global_ts = "/usr/local/lib"
       local found_ts = ""
       local function check_dir(path)
         found_ts = util.path.join(path, "node_modules", "typescript", "lib")

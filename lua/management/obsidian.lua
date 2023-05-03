@@ -16,7 +16,7 @@ M.config = function()
 	obsidian.setup({
 		dir = "~/documents/vivere",
 		completion = { nvim_cmp = true },
-		daily_notes = { folder = "Day Planners" },
+		daily_notes = { folder = "calendar/daily" },
 		templates = {
 			subdir = "templates",
 			date_format = "%Y-%m-%d-%a",
@@ -34,7 +34,7 @@ M.config = function()
 					suffix = suffix .. string.char(math.random(65, 90))
 				end
 			end
-			return tostring(os.time()) .. "-" .. suffix
+			return suffix
 		end,
 		note_frontmatter_func = function(note)
 			local out = { id = note.id, aliases = note.aliases, tags = note.tags }

@@ -43,8 +43,8 @@ M.config = function()
         },
         filetypes = {
             vue = true,
-            yaml = false,
-            markdown = false,
+            yaml = true,
+            markdown = true,
             help = false,
             gitcommit = true,
             gitrebase = false,
