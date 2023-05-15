@@ -49,6 +49,7 @@ M.config = function()
 			},
 			["core.integrations.telescope"] = {}, -- Allows for use of telescope
 			["core.integrations.treesitter"] = {}, -- Allows for use of treesitter
+			["core.ui.calendar"] = {},
 		},
 	})
 	local maps = {

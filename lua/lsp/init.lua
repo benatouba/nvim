@@ -172,10 +172,10 @@ require("mason-lspconfig").setup_handlers({
       settings = {
         pylsp = {
           plugins = {
-            autopep8 = { enabled = true },
+            autopep8 = { enabled = false },
             flake8 = { enabled = false },
             pycodestyle = { enabled = false, maxLineLength = 100 },
-            pyflakes = { enabled = true },
+            pyflakes = { enabled = false },
             pydocstyle = { enabled = true },
             mccabe = { enabled = true },
             memestra = { enabled = true },

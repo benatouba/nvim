@@ -67,7 +67,7 @@ end
 
 -- misc
 Pyflyby = function()
-    local cmd = "!tidy-imports --quiet --align-imports=false --replace-star-imports --action REPLACE " .. vim.fn.expand("%")
+    local cmd = "!tidy-imports --quiet --black --replace-star-imports --action REPLACE " .. vim.fn.expand("%")
 		vim.cmd(cmd)
 end
 

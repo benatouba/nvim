@@ -6,7 +6,30 @@ M.config = function()
 		vim.notify("Refactoring.nvim not okay")
 		return
 	end
-	ref.setup({})
+	ref.setup({
+		    prompt_func_return_type = {
+        go = false,
+        java = false,
+				python = true,
+        cpp = false,
+        c = false,
+        h = false,
+        hpp = false,
+        cxx = false,
+    },
+    prompt_func_param_type = {
+        go = false,
+        java = false,
+				python = true,
+        cpp = false,
+        c = false,
+        h = false,
+        hpp = false,
+        cxx = false,
+    },
+    printf_statements = {},
+    print_var_statements = {},
+	})
 	-- load refactoring Telescope extension
 	require("telescope").load_extension("refactoring")
 end
@@ -59,7 +82,7 @@ M.maps = function()
 		["r"] = {
 			name = "+refactor",
 			b = { "<cmd>lua require('refactoring').refactor('Extract Block')<CR>", "Block" },
-			f = { "<cmd>lua require('refactoring').refactor('Extract Block to File')<CR>", "block to File" },
+			f = { "<cmd>lua require('refactoring').refactor('Extract Block to File')<CR>", "Block to File" },
 			i = { "<cmd>lua require('refactoring').refactor('Inline Variable')<CR>", "Inline variable" },
 		},
 	}

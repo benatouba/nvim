@@ -20,7 +20,7 @@ AddAutocommands({
 		{ "BufNewFile", "*", "setlocal formatoptions-=c formatoptions-=r formatoptions-=o" },
 		-- { "VimLeavePre", "*", "set title set titleold=" },
 		{ "BufWinEnter,BufRead,BufNewFile", "*.sls", "setf sls" },
-		{ "BufWritePost", "*.py", "lua Pyflyby()" },
+		{ "BufWritePost", "*.py", "silent lua Pyflyby()" },
 	},
 	_markdown = { { "FileType", "markdown", "setlocal wrap" } },
 	_buffer_bindings = {

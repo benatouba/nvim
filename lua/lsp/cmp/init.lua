@@ -1,8 +1,9 @@
 local M = {}
 
 local has_words_before = function()
+	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
 	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+	return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
 end
 
 M.config = function()
@@ -50,7 +51,8 @@ M.config = function()
 			if vim.api.nvim_get_mode().mode == "c" then
 				return true
 			else
-				return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
+				return true
+				-- return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
 			end
 		end,
 		-- view = {
@@ -114,9 +116,9 @@ M.config = function()
 			}),
 		},
 		sorting = {
-			-- priority_weight = 2,
+			priority_weight = 2,
 			comparators = {
-				-- require("copilot_cmp.comparators").prioritize,
+				-- require("copilot_cmp").comparators.prioritize,
 				-- require("copilot_cmp.comparators").score,
 				require("cmp-under-comparator").under,
 				cmp.config.compare.exact,
@@ -179,7 +181,7 @@ M.config = function()
 		-- --                 ﬘    m    
 
 		sources = {
-			{ name = "copilot",                 keyword_length = 0 },
+			-- { name = "copilot",                 keyword_length = 0 },
 			{ name = "luasnip" },
 			{ name = "nvim_lsp" },
 			{ name = "nvim_lsp_signature_help", keyword_length = 0, priority = 1000 },
@@ -207,16 +209,16 @@ M.config = function()
 	-- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
 	cmp.setup.filetype({ "ipynb", "jupyter_python", "jupynium" }, {
 		sources = {
-			{ name = "jupynium",               priority = 1000 },
+			{ name = "jupynium",   priority = 1000 },
 			{ name = "luasnip" },
 			{ name = "nvim_lsp" },
 			-- { name = "nvim_lsp_signature_help" },
-			{ name = "treesitter",             keyword_length = 3 },
+			{ name = "treesitter", keyword_length = 3 },
 			{ name = "neorg" },
 			{ name = "calc" },
 			{ name = "emoji" },
-			{ name = "tags",                   keyword_length = 5, max_item_count = 5 },
-			{ name = "buffer",                 keyword_length = 5, max_item_count = 5 },
+			{ name = "tags",       keyword_length = 5, max_item_count = 5 },
+			{ name = "buffer",     keyword_length = 5, max_item_count = 5 },
 		},
 	})
 
