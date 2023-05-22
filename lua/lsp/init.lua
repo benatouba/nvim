@@ -84,7 +84,13 @@ end
 mason_null_ls.setup({
   ensure_installed = {"semgrep", "shellcheck", "docformatter",  "shellharden", "markdownlint"},
   automatic_setup = true,
-  handlers = {},
+  handlers = {
+    ["semgrep"] = function ()
+      return {
+        command = "semgrep",
+        args = {"--config=auto", "--json", "--no-recursive", "--no-ignore", "--no-ignore-config", "--no-ignore-parent-config", "--no-ignore-global-config", "--no-ignore-local-config", "--no-ignore-rules", "--no-ignore-dirs", "--no-ignore-files", "--no-ignore-lines", "--no-ignore-patterns", "--no-ignore-i", "--no-ignore-vcs", "--no-ignore-symlinks", "--no-ignore-unreadable", "--no-ignore-unwriteable", "--no-ignore-permissions", "--no-ignore-unknown-extensions", "--no-ignore-unknown-syntaxes", "--no-ignore-unknown-mime-types", "--no-ignore-unknown-languages", "--no-ignore-unknown-lexers", "--no-ignore-unknown-encodings", "--no-ignore-unknown-encodings" }}
+    end
+  },
 })
 
 local null_ls_ok, null_ls = pcall(require, "null-ls")
