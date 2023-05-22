@@ -25,6 +25,9 @@ AddAutocommands({
 	_markdown = { { "FileType", "markdown", "setlocal wrap" } },
 	_buffer_bindings = {
 		{ "FileType", "dashboard", "nnoremap <silent> <buffer> q :q<CR>" },
+		{ "FileType", "neotest-*", "nnoremap <silent> <buffer> q :q<CR>" },
+		{ "FileType", "neotest-output-panel", "nnoremap <silent> <buffer> q :q<CR>" },
+		{ "FileType", "notify", "nnoremap <silent> <buffer> q :q<CR>" },
 		{ "FileType", "lspinfo", "nnoremap <silent> <buffer> q :q<CR>" },
 		{ "FileType", "floaterm", "nnoremap <silent> <buffer> q :q<CR>" },
 		{ "FileType", "fugitive", "nnoremap <silent> <buffer> q :q<CR>" },

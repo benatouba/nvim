@@ -76,29 +76,41 @@ if not mason_lspconfig_ok then
 end
 mason_lspconfig.setup({})
 
--- local null_ls_ok, null_ls = pcall(require, "null-ls")
--- if not null_ls_ok then
---   vim.notify("null-ls not okay in lspconfig")
---   return
--- end
--- null_ls.setup({})
---
--- local mason_null_ls_ok, mason_null_ls = pcall(require, "mason-null-ls")
--- if not mason_null_ls_ok then
---   vim.notify("mason-null-ls not okay in lspconfig")
---   return
--- end
--- mason_null_ls.setup({
---   ensure_installed = {},
---   automatic_setup = true,
--- })
--- mason_null_ls.setup_handlers()
+local mason_null_ls_ok, mason_null_ls = pcall(require, "mason-null-ls")
+if not mason_null_ls_ok then
+  vim.notify("mason-null-ls not okay in lspconfig")
+  return
+end
+mason_null_ls.setup({
+  ensure_installed = {"semgrep", "shellcheck", "docformatter",  "shellharden", "markdownlint"},
+  automatic_setup = true,
+  handlers = {},
+})
+
+local null_ls_ok, null_ls = pcall(require, "null-ls")
+if not null_ls_ok then
+  vim.notify("null-ls not okay in lspconfig")
+  return
+end
+null_ls.setup({
+    default_timeout = 10000,
+  })
 
 local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
 if not lspconfig_ok then
   vim.notify("lspconfig not okay in lspconfig")
   return
 end
+
+local mason_nvim_dap_ok, mason_nvim_dap = pcall(require, "mason-nvim-dap")
+if not mason_nvim_dap_ok then
+  vim.notify("mason-nvim-dap not okay in lspconfig")
+  return
+end
+-- mason_nvim_dap.setup({
+--   ensure_installed = { "python" },
+--   -- handlers = {},
+-- })
 
 local lsp_status_ok, lsp_status = pcall(require, "lsp-status")
 if not lsp_status_ok then

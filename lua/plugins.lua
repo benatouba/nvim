@@ -38,51 +38,13 @@ return require("packer").startup({
 			branch = "main",
 			event = "LspAttach",
 			config = function()
-				require("lspsaga").setup({
-					code_action = {
-						num_shortcut = true,
-						show_server_name = true,
-						extend_gitsigns = true,
-						keys = {
-							quit = "q",
-							exec = "<CR>",
-						},
-					},
-					lightbulb = {
-						enable = false,
-					},
-					hover = {
-						max_width = 0.6,
-						open_link = 'gx',
-						open_browser = '!brave',
-					},
-					ui = {
-						-- This option only works in Neovim 0.9
-						title = true,
-						-- Border type can be single, double, rounded, solid, shadow.
-						border = "rounded",
-						winblend = 0,
-						expand = "",
-						collapse = "",
-						code_action = "💡",
-						incoming = " ",
-						outgoing = " ",
-						hover = ' ',
-						kind = {},
-					},
-				})
+				require("lsp.lspsaga").config()
 			end,
 			requires = {
 				{ "nvim-tree/nvim-web-devicons" },
 				--Please make sure you install markdown and markdown_inline parser
 				{ "nvim-treesitter/nvim-treesitter" }
 			}
-		})
-		use({
-			"glacambre/firenvim",
-			run = function()
-				vim.fn["firenvim#install"](0)
-			end,
 		})
 		use({
 			"rcarriga/nvim-notify",
@@ -130,9 +92,6 @@ return require("packer").startup({
 		use({
 			"nvim-telescope/telescope-fzf-writer.nvim",
 			after = "telescope.nvim",
-		})
-		use({
-			"whiteinge/diffconflicts",
 		})
 		use({
 			"nvim-telescope/telescope-fzf-native.nvim",
@@ -301,7 +260,8 @@ return require("packer").startup({
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			{ "ckipp01/stylua-nvim", run = "cargo install stylua" },
-			-- "jayp0521/mason-null-ls.nvim",
+			"jay-babu/mason-null-ls.nvim",
+			"jay-babu/mason-nvim-dap.nvim",
 			{
 				"neovim/nvim-lspconfig",
 				config = function()
@@ -370,16 +330,16 @@ return require("packer").startup({
 			},
 		})
 		use({ "folke/trouble.nvim", cmd = { "TroubleToggle", "Trouble" }, keys = { "]d", "[d" } })
-		-- use({
-		-- 	"jose-elias-alvarez/null-ls.nvim",
+		use({
+			"jose-elias-alvarez/null-ls.nvim",
 		-- event = { "BufReadPost", "InsertEnter" },
 		-- fn = { "edit", "e" },
 		-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
 		-- config = function()
-		-- require("null-ls").setup()
-		-- require("lsp.null-ls").config()
+			-- require("null-ls").setup()
+			-- require("lsp.null-ls").config()
 		-- end,
-		-- })
+		})
 
 		use({
 			"tpope/vim-fugitive",
@@ -426,18 +386,25 @@ return require("packer").startup({
 				require("debug.dap").config()
 			end,
 		})
-		use({
-			"mfussenegger/nvim-dap-python",
-			ft = "python",
-			config = function()
-				require("debug.dap_python").config()
-			end,
-		})
+		-- use({
+		-- 	"mfussenegger/nvim-dap-python",
+		-- 	ft = "python",
+		-- 	config = function()
+		-- 		require("debug.dap_python").config()
+		-- 	end,
+		-- })
 		use({
 			"rcarriga/nvim-dap-ui",
 			requires = {
 				"mfussenegger/nvim-dap",
-				"folke/neodev.nvim",
+				{
+					"folke/neodev.nvim",
+					config = function()
+						require("neodev").setup({
+							library = { plugins = { "nvim-dap-ui", "neotest" }, types = true },
+						})
+					end,
+				},
 			},
 			config = function()
 				require("debug.dapui").config()
@@ -491,6 +458,7 @@ return require("packer").startup({
 
 		-- miscellaneous
 		use("kevinhwang91/nvim-bqf")
+		use({"stevearc/overseer.nvim", config = function() require("overseer").setup() end})
 		use("andymass/vim-matchup")
 		use({
 			"GustavoKatel/sidebar.nvim",

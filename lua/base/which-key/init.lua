@@ -75,7 +75,7 @@ local maps = {
 		k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
 		m = { "<cmd>Telescope marks<cr>", "Marks" },
 		M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-		n = { "<cmd>Telescope notify<cr>", "Notifications" },
+		n = { "<cmd>lua require('notify').history()<cr>", "Notifications" },
 		o = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
 		p = { "<cmd>Telescope projects<cr>", "Projects" },
 		q = { "<cmd>Telescope quickfix<cr>", "Quickfix List" },
@@ -205,10 +205,6 @@ which_key.register(diffmaps, {
 which_key.register(terminal_maps, terminal_opts)
 
 local gmaps = {
-	a = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
-	h = { "<cmd>Lspsaga lsp_finder<CR>", "Help" },
-	d = { "<cmd>Lspsaga goto_definition<CR>", "Definition" },
-	D = { "<cmd>Lspsaga peek_definition<CR>", "Declaration" },
 	I = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Implementations" },
 	r = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "Rename" },
 	R = { "<cmd>lua vim.lsp.buf.references()<CR>", "References" },

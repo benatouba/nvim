@@ -7,29 +7,8 @@ end
 local M = {}
 
 function M.config()
-  local lib = require("neotest.lib")
-  local get_env = function()
-    local env = {}
-    local file = ".env"
-    if not lib.files.exists(file) then
-      return {}
-    end
-
-    for _, line in ipairs(vim.fn.readfile(file)) do
-      for name, value in string.gmatch(line, "(%S+)=['\"]?(.*)['\"]?") do
-        local str_end = string.sub(value, -1, -1)
-        if str_end == "'" or str_end == '"' then
-          value = string.sub(value, 1, -2)
-        end
-
-        env[name] = value
-      end
-    end
-    return env
-  end
-
   neotest.setup({
-    -- log_level = vim.log.level.WARN,
+    log_level = vim.log.levels.WARN,
     status = {
       virtual_text = true,
       signs = true,
@@ -41,6 +20,32 @@ function M.config()
       integrated = {
         width = 180,
       },
+    },
+    summary = {
+      animated = true,
+      enabled = true,
+      expand_errors = true,
+      follow = true,
+      mappings = {
+        attach = "a",
+        clear_marked = "M",
+        clear_target = "T",
+        debug = "d",
+        debug_marked = "D",
+        expand = { "<CR>", "<2-LeftMouse>" },
+        expand_all = "e",
+        jumpto = "i",
+        mark = "m",
+        next_failed = "J",
+        output = "o",
+        prev_failed = "K",
+        run = "r",
+        run_marked = "R",
+        short = "O",
+        stop = "u",
+        target = "t"
+      },
+      open = "botright vsplit | vertical resize 50"
     },
     adapters = {
       require("neotest-python")({
@@ -55,67 +60,30 @@ function M.config()
         ignore_file_types = { "python" },
       }),
     },
+    consumers = {
+      overseer = require("neotest.consumers.overseer"),
+    },
+    -- overseer = {
+    --   enabled = true,
+    -- }
   })
-
-  local mappings = {
-    ["<leader>dr"] = function()
-      neotest.run.run({ vim.fn.expand("%:p"), env = get_env() })
-    end,
-    ["<leader>ds"] = function()
-      for _, adapter_id in ipairs(neotest.run.adapters()) do
-        neotest.run.run({ suite = true, adapter = adapter_id, env = get_env() })
-      end
-    end,
-    ["<leader>dw"] = function()
-      neotest.watch.watch()
-    end,
-    ["<leader>dx"] = function()
-      neotest.run.stop()
-    end,
-    ["<leader>dn"] = function()
-      neotest.run.run({ env = get_env() })
-    end,
-    ["<leader>dd"] = function()
-      neotest.run.run({ strategy = "dap", env = get_env() })
-    end,
-    ["<leader>dl"] = neotest.run.run_last,
-    ["<leader>dD"] = function()
-      neotest.run.run_last({ strategy = "dap" })
-    end,
-    ["<leader>da"] = neotest.run.attach,
-    ["<leader>do"] = function()
-      neotest.output.open({ enter = true })
-    end,
-    ["<leader>dO"] = function()
-      neotest.output.open({ enter = true, short = true })
-    end,
-    ["<leader>dp"] = neotest.summary.toggle,
-    ["<leader>dm"] = neotest.summary.run_marked,
-    ["[n"] = function()
-      neotest.jump.prev({ status = "failed" })
-    end,
-    ["]n"] = function()
-      neotest.jump.next({ status = "failed" })
-    end,
-  }
-
-  for keys, mapping in pairs(mappings) do
-    vim.api.nvim_set_keymap("n", keys, "", { callback = mapping, noremap = true })
-  end
 
   local mappings = {
     t = {
       name = "+test",
       a = { "<cmd>lua require('neotest').run.attach()<CR>", "Attach to nearest" },
       A = { "<cmd>lua require('neotest').run.adapters()<CR>", "Adapter list" },
-      d = { "<cmd>lua require('neotest').run.run({strategy = 'dap', env = get_env() })<CR>", "Debug Test" },
-      f = { "<cmd>lua require('neotest').run.run({ vim.fn.expand('%'), env = get_env() })<CR>", "Test File" },
-      l = { "<cmd>lua require('neotest').run.run_last<CR>", "Last Test" },
+      d = { "<cmd>lua require('neotest').run.run({ strategy = 'dap'  })<CR>", "Debug" },
+      f = { "<cmd>lua require('neotest').run.run({ vim.fn.expand('%') })<CR>", "File" },
+      l = { "<cmd>lua require('neotest').run.run_last()<CR>", "Last" },
+      L = { "<cmd>lua require('neotest').run.run_last({ strategy = 'dap' })<CR>", "Last" },
+      n = { "<cmd>lua require('neotest').run.run()<CR>", "Nearest" },
       o = { "<cmd>lua require('neotest').output.open({ enter = true })<CR>", "Output" },
-      O = { "<cmd>lua require('neotest').output.open({ enter = true, short = true })<CR>", "Output" },
-      s = { "<cmd>lua require('neotest').summary.toggle<CR>", "Summary" },
-      t = { "<cmd>lua require('neotest').run.run()<CR>", "Test Nearest" },
-      w = { "<cmd>lua require('neotest').watch.watch()<CR>", "watch" },
+      O = { "<cmd>lua require('neotest').output.open({ enter = true, short = true })<CR>", "Output (short)" },
+      p = { "<cmd>lua require('neotest').output_panel.toggle()<CR>", "Panel" },
+      s = { "<cmd>lua require('neotest').summary.toggle()<CR>", "Summary" },
+      S = { "<cmd>lua require('neotest').run.run({ suite = true })<CR>", "Suite" },
+      t = { "<cmd>lua require('neotest').run.run({ suite = true })<CR>", "Suite" },
       x = { "<cmd>lua require('neotest').run.stop()<CR>", "Stop" },
     },
   }
@@ -127,4 +95,5 @@ function M.config()
   }
   require("which-key").register(jumps, { mode = "n", prefix = "" })
 end
+
 return M

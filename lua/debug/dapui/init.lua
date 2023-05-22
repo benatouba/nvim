@@ -21,10 +21,13 @@ if not dap_ok then
 end
 
 local M = {}
-local mappings = {
+local nmaps = {
 	["u"] = { "<cmd>lua require('dapui').toggle()<cr>", "Toggle UI" },
 	["e"] = { "<cmd>lua require('dapui').eval()<cr>", "Evaluate Expression" },
 	["F"] = { "<cmd>lua require('dapui').float_element()<cr>", "Open Floating Info" },
+}
+local vmaps = {
+	["e"] = { "<cmd>lua require('dapui').eval()<cr>", "Evaluate Expression" },
 }
 
 M.config = function()
@@ -38,7 +41,8 @@ M.config = function()
 	dap.listeners.before.event_exited['dapui_conf'] = function ()
 		dapui.close()
 	end
-	require("which-key").register(mappings, { mode = "n", prefix = "<leader>d" })
+	require("which-key").register(nmaps, { mode = "n", prefix = "<leader>d" })
+	require("which-key").register(vmaps, { mode = "v", prefix = "<leader>d" })
 end
 
 return M
