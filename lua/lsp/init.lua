@@ -82,13 +82,20 @@ if not mason_null_ls_ok then
   return
 end
 mason_null_ls.setup({
-  ensure_installed = {"semgrep", "shellcheck", "docformatter",  "shellharden", "markdownlint"},
+  ensure_installed = { "shellcheck", "shellharden", "markdownlint" },
   automatic_setup = true,
   handlers = {
-    ["semgrep"] = function ()
+    ["semgrep"] = function()
       return {
         command = "semgrep",
-        args = {"--config=auto", "--json", "--no-recursive", "--no-ignore", "--no-ignore-config", "--no-ignore-parent-config", "--no-ignore-global-config", "--no-ignore-local-config", "--no-ignore-rules", "--no-ignore-dirs", "--no-ignore-files", "--no-ignore-lines", "--no-ignore-patterns", "--no-ignore-i", "--no-ignore-vcs", "--no-ignore-symlinks", "--no-ignore-unreadable", "--no-ignore-unwriteable", "--no-ignore-permissions", "--no-ignore-unknown-extensions", "--no-ignore-unknown-syntaxes", "--no-ignore-unknown-mime-types", "--no-ignore-unknown-languages", "--no-ignore-unknown-lexers", "--no-ignore-unknown-encodings", "--no-ignore-unknown-encodings" }}
+        args = { "--config=auto", "--json", "--no-recursive", "--no-ignore", "--no-ignore-config",
+          "--no-ignore-parent-config", "--no-ignore-global-config", "--no-ignore-local-config", "--no-ignore-rules",
+          "--no-ignore-dirs", "--no-ignore-files", "--no-ignore-lines", "--no-ignore-patterns", "--no-ignore-i",
+          "--no-ignore-vcs", "--no-ignore-symlinks", "--no-ignore-unreadable", "--no-ignore-unwriteable",
+          "--no-ignore-permissions", "--no-ignore-unknown-extensions", "--no-ignore-unknown-syntaxes",
+          "--no-ignore-unknown-mime-types", "--no-ignore-unknown-languages", "--no-ignore-unknown-lexers",
+          "--no-ignore-unknown-encodings", "--no-ignore-unknown-encodings" }
+      }
     end
   },
 })
@@ -99,8 +106,8 @@ if not null_ls_ok then
   return
 end
 null_ls.setup({
-    default_timeout = 10000,
-  })
+  default_timeout = 10000,
+})
 
 local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
 if not lspconfig_ok then
@@ -131,7 +138,7 @@ local lsp_defaults = {
   capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities()),
   on_attach = function(client, bufnr)
     vim.api.nvim_exec_autocmds("User", { pattern = "LspAttached" })
-    require'lsp_signature'.on_attach()
+    require 'lsp_signature'.on_attach()
     lsp_status.on_attach(client, bufnr)
     if client.server_capabilities.documentSymbolProvider then
       require("nvim-navic").attach(client, bufnr)
@@ -200,7 +207,7 @@ require("mason-lspconfig").setup_handlers({
             mypy = { enabled = true },
             pylint = { enabled = false },
             rope_autimport = { enabled = true },
-            rope_completion = { enabled = true },
+            rope_completion = { enabled = false },
             ruff = { enabled = false, lineLength = 100 },
             black = { enabled = false, line_length = 100 },
             yapf = { enabled = false },
@@ -214,7 +221,7 @@ require("mason-lspconfig").setup_handlers({
                 "djangorestframework",
               },
             },
-            jedi_completion = { enabled = true, eager = true, fuzzy = true },
+            jedi_completion = { enabled = true, eager = false, fuzzy = true },
           },
         },
       },

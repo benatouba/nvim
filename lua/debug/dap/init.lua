@@ -64,7 +64,10 @@ M.config = function()
 	vim.fn.sign_define("DapStopped", data.stopped)
 
 	dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
-	require("nvim-dap-virtual-text").setup()
+	require("nvim-dap-virtual-text").setup({
+			virt_text_pos = vim.fn.has 'nvim-0.10' == 1 and 'inline' or 'eol',
+			all_frames = true,
+		})
 	require("which-key").register(mappings, { mode = "n", prefix = "<leader>" })
 
 	dap.adapters.chrome = {
@@ -101,7 +104,7 @@ M.config = function()
 				local cwd = vim.fn.getcwd()
 				local venv = Get_python_venv()
 				if venv and vim.fn.executable(venv .. "/bin/python") == 1 then
-					return os.getenv("VIRTUAL_ENV") .. "/bin/python"
+					return venv .. "/bin/python"
 				elseif vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
 					return cwd .. "/venv/bin/python"
 				elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
