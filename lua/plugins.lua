@@ -329,7 +329,7 @@ return require("packer").startup({
 				"typescript.tsx",
 			},
 		})
-		use({ "folke/trouble.nvim", cmd = { "TroubleToggle", "Trouble" }, keys = { "]d", "[d" } })
+		use({ "folke/trouble.nvim", cmd = { "TroubleToggle", "Trouble", "Gitsigns setqflist", "Gitsigns setloclist" }, keys = { "]d", "[d", "<leader>g" } })
 		use({
 			"jose-elias-alvarez/null-ls.nvim",
 		-- event = { "BufReadPost", "InsertEnter" },

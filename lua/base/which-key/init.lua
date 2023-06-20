@@ -144,7 +144,6 @@ maps["L"] = {
 if O.git then
 	maps["g"] = {
 		name = "+Git",
-		a = { "<cmd>Git add %<cr>", "Add/Stage File" },
 		c = { "<cmd>Git commit %<cr>", "Commit File" },
 		C = { "<cmd>Git commit<cr>", "Commit staged" },
 		g = { "<cmd>G<cr>", "Fugitive" },

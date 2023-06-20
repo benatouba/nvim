@@ -82,14 +82,20 @@ M.config = function()
 	local maps = {
 		["g"] = {
 			name = "+Git",
-			b = { "<cmd>Gitsigns blame_line<cr>", "Blame line" },
-			B = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Blame line (toggle)" },
-			h = { "<cmd>lua require'gitsigns'.preview_hunk()<cr>", "preview Hunk" },
+			b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Blame line (toggle)" },
+			B = { "<cmd>Gitsigns blame_line<cr>", "Blame line" },
+			d = { "<cmd>Gitsigns diffthis<cr>", "Diff this" },
+			D = { "<cmd>Gitsigns diffthis HEAD<cr>", "Diff this HEAD" },
+			h = { "<cmd>lua require'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
 			j = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
 			k = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
+			l = { "<cmd>Gitsigns setloclist<cr>", "Set loclist" },
+			q = { "<cmd>Gitsigns setqflist<cr>", "Set quickfix" },
 			r = { "<cmd>lua require'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
 			R = { "<cmd>lua require'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
 			s = { "<cmd>lua require'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
+			S = { "<cmd>lua require'gitsigns'.stage_buffer()<cr>", "Stage Buffer" },
+			t = { "<cmd>lua require'gitsigns'.toogle_deleted()<cr>", "Toggle Deleted" },
 			u = { "<cmd>lua require'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk" },
 		}
 	}
