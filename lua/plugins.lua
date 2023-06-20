@@ -143,7 +143,7 @@ return require("packer").startup({
 			end,
 			event = "BufReadPost",
 		})
-		use("sheerun/vim-polyglot")
+		-- use("sheerun/vim-polyglot")
 
 		-- Icons and visuals
 		use("kyazdani42/nvim-web-devicons")
@@ -354,11 +354,10 @@ return require("packer").startup({
 		use({
 			"lewis6991/gitsigns.nvim",
 			config = function()
-				require("git.gitsigns")
+				require("git.gitsigns").config()
 			end,
 			event = "BufReadPost",
-			-- disable = true
-		}) -- fails on startup. TODO: activate when #205 is fixed
+		})
 
 		use({
 			"nvim-neotest/neotest",

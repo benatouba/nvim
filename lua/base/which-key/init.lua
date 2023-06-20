@@ -117,8 +117,6 @@ if O.lsp then
 		l = { "<cmd>MasonLog<cr>", "Log" },
 	}
 	nmaps["]"] = {
-		-- defined in gitsigns for now
-		-- g = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
 		b = { "<cmd>bNext<cr>", "Buffer" },
 		d = { "<cmd>lua vim.diagnostic.goto_next { wrap = true }<cr>", "Next Diagnostic" },
 		D = { "<cmd>lua require('trouble').next({skip_groups = true, jump = true})<cr>", "Next Trouble" },
@@ -127,8 +125,6 @@ if O.lsp then
 		t = { "<cmd>tabNext<cr>", "Next tab" },
 	}
 	nmaps["["] = {
-		-- defined in gitsigns for now
-		-- g = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
 		b = { "<cmd>bprevious<cr>", "Buffer" },
 		d = { "<cmd>lua vim.diagnostic.goto_prev { wrap = true }<cr>", "Prev Diagnostic" },
 		D = { "<cmd>lua require('trouble').previous({skip_groups = true, jump = true})<cr>", "Next Trouble" },
@@ -149,23 +145,14 @@ if O.git then
 	maps["g"] = {
 		name = "+Git",
 		a = { "<cmd>Git add %<cr>", "Add/Stage File" },
-		b = { "<cmd>Gitsigns blame_line<cr>", "Blame line" },
-		B = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Blame line (toggle)" },
 		c = { "<cmd>Git commit %<cr>", "Commit File" },
 		C = { "<cmd>Git commit<cr>", "Commit staged" },
 		g = { "<cmd>G<cr>", "Fugitive" },
-		h = { "<cmd>lua require'gitsigns'.preview_hunk()<cr>", "preview Hunk" },
 		l = { "<cmd>Git log<cr>", "Log" },
 		n = { "<cmd>Neogit<cr>", "Neogit" },
 		N = { "<cmd>Neogit commit %<cr>", "(Neogit) Commit Menu" },
-		j = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
-		k = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
 		p = { "<cmd>Git pull<cr>", "pull" },
 		P = { "<cmd>Git push<cr>", "Push" },
-		r = { "<cmd>lua require'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
-		R = { "<cmd>lua require'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
-		s = { "<cmd>lua require'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-		u = { "<cmd>lua require'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk" },
 	}
 end
 
