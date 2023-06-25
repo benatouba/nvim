@@ -75,7 +75,7 @@ local maps = {
 		k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
 		m = { "<cmd>Telescope marks<cr>", "Marks" },
 		M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-		n = { "<cmd>lua require('notify').history()<cr>", "Notifications" },
+		n = { "<cmd>Telescope notify<cr>", "Notifications" },
 		o = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
 		p = { "<cmd>Telescope projects<cr>", "Projects" },
 		q = { "<cmd>Telescope quickfix<cr>", "Quickfix List" },
@@ -91,7 +91,8 @@ local maps = {
 if O.lsp then
 	maps["l"] = {
 		name = "+LSP",
-		a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+		a = { "<cmd>Lspsaga code_action<cr>", "Code Action" },
+		-- a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
 		A = { "<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action" },
 		c = { "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>", "Server Capabilities" },
 		d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },

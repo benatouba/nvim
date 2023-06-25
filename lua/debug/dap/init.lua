@@ -10,6 +10,7 @@ local data = {
 		texthl = "LspDiagnosticsSignError",
 		linehl = "",
 		numhl = "",
+		priority = 200,
 	},
 	breakpoint_rejected = {
 		text = "",

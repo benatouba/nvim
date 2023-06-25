@@ -19,7 +19,7 @@ M.config = function()
 			show_server_name = true,
 			extend_gitsigns = true,
 			keys = {
-				quit = "q",
+				quit = {"q", "<ESC>"},
 				exec = "<CR>",
 			},
 		},
@@ -27,6 +27,7 @@ M.config = function()
 			enable = false,
 		},
 		hover = {
+			enable = false,
 			max_width = 0.6,
 			open_link = 'gx',
 			open_browser = '!brave',

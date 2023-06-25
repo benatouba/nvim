@@ -4,21 +4,8 @@ if not ll_ok then
   return
     end
 
-local lsp_status_ok, lsp_status = pcall(require, "lsp-status")
-if not lsp_status_ok then
-	vim.notify("lsp-status not okay in lualine")
-end
-
-local lspstatus = function ()
-  local status = ''
-  if table.maxn(vim.lsp.buf_get_clients()) > 0 then
-    status = lsp_status.status()
-  end
-  return status
-end
-
 local get_lsp_client = function()
-  local msg = "LSP Inactive " .. lspstatus()
+  local msg = "LSP Inactive "
   local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
   local clients = vim.lsp.get_active_clients()
   if next(clients) == nil then
@@ -40,21 +27,26 @@ local get_lsp_client = function()
   if lsps == "" then
     return msg
   else
-    return lsps .. lspstatus()
+    return lsps
   end
-end
-
-local current_signature = function(width)
-  if not pcall(require, 'lsp_signature') then return end
-  local sig = require("lsp_signature").status_line(width)
-  return sig.label .. "🐼" .. sig.hint
 end
 
 local M = {}
 M.config = function()
   local config = ll.get_config()
-  config.sections.lualine_c = {"current_signature", "lsp_progress"}
-  config.sections.lualine_x = {{get_lsp_client}, 'encoding', 'fileformat', 'filetype'}
+  -- config.sections.lualine_c = {}
+  config.sections.lualine_x = {{get_lsp_client}, 'encoding', 'fileformat', 'filetype',
+      {
+        require("noice").api.status.mode.get,
+        cond = require("noice").api.status.mode.has,
+        color = { fg = "#ff9e64" },
+      },
+      {
+        require("noice").api.status.search.get,
+        cond = require("noice").api.status.search.has,
+        color = { fg = "#ff9e64" },
+      },
+  }
   config.options.extensions = { "quickfix", "fugitive", "nvim-tree", "toggleterm", "nvim-dap-ui", }
   if O.colorscheme == 'catppuccin' then
     config.options.theme = O.colorscheme

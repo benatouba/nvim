@@ -7,11 +7,12 @@ local has_words_before = function()
 end
 
 M.config = function()
-	require("luasnip").filetype_extend("javascript", { "vue" })
-	require("luasnip").filetype_extend("typescript", { "vue_typescript" })
-	require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
+	-- require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
 	require("luasnip.loaders.from_vscode").lazy_load()
-	vim.opt.completeopt = { "menu", "menuone", "noselect" }
+	require("luasnip").filetype_extend("vue", { "html", "javascript", "nuxt_html", "nuxt_js_ts", "vue", })
+	require("luasnip").filetype_extend("python", { "django", "django/django_rest" })
+
+	vim.opt.completeopt = { "menuone", "noselect" }
 	-- local neogen_ok, neogen = pcall(require, "neogen")
 	local cmp_ok, cmp = pcall(require, "cmp")
 	local snip_ok, luasnip = pcall(require, "luasnip")
@@ -51,8 +52,7 @@ M.config = function()
 			if vim.api.nvim_get_mode().mode == "c" then
 				return true
 			else
-				return true
-				-- return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
+				return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
 			end
 		end,
 		-- view = {
@@ -65,7 +65,7 @@ M.config = function()
 				cmp.ItemField.Menu,
 			},
 			format = lspkind.cmp_format({
-				with_text = true,
+				with_text = false,
 				before = function(entry, vim_item)
 					if entry.source.name == "copilot" then
 						vim_item.kind = "[] Copilot"
@@ -87,8 +87,8 @@ M.config = function()
 					end
 
 					if
-							entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet
-							and string.sub(vim_item.abbr, -1, -1) == "~"
+						entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet
+						and string.sub(vim_item.abbr, -1, -1) == "~"
 					then
 						word = word .. "~"
 					end
@@ -131,9 +131,16 @@ M.config = function()
 			},
 		},
 		mapping = cmp.mapping.preset.insert {
-			["<C-d>"] = cmp.mapping.scroll_docs(-4),
-			-- ["<C-f>"] = cmp.mapping.scroll_docs(4),
-			["<C-u>"] = cmp.mapping.scroll_docs(4),
+			["<C-d>"] = function()
+				if not require("noice.lsp").scroll(4) then
+					cmp.mapping.scroll_docs(4)
+				end
+			end,
+			["<C-u>"] = function()
+				if not require("noice.lsp").scroll(-4) then
+					cmp.mapping.scroll_docs(-4)
+				end
+			end,
 			["<C-Space>"] = cmp.mapping.complete(),
 			["<C-e>"] = cmp.mapping.abort(),
 			["<C-h>"] = cmp.mapping.abort(),
@@ -143,25 +150,13 @@ M.config = function()
 			}),
 			["<C-n>"] = cmp.mapping.select_next_item(),
 			["<C-p>"] = cmp.mapping.select_prev_item(),
-			["<C-f>"] = cmp.mapping(function(fallback)
-				if luasnip.jumpable(1) then
-					luasnip.jump(1)
-				else
-					fallback()
-				end
-			end, { "i", "s" }),
-			["<C-b>"] = cmp.mapping(function(fallback)
-				if luasnip.jumpable(-1) then
-					luasnip.jump(-1)
-				else
-					fallback()
-				end
-			end, { "i", "s" }),
+			["<C-f>"] = cmp.mapping.scroll_docs(4),
+			["<C-b>"] = cmp.mapping.scroll_docs(-4),
 			["<Tab>"] = cmp.mapping(function(fallback)
-				if cmp.visible() then
-					cmp.select_next_item()
-				elseif luasnip.expand_or_jumpable() then
+				if luasnip.expand_or_jumpable() then
 					luasnip.expand_or_jump()
+				elseif cmp.visible() then
+					cmp.select_next_item()
 				elseif has_words_before() then
 					cmp.complete()
 				else
@@ -169,7 +164,9 @@ M.config = function()
 				end
 			end, { "i", "s" }),
 			["<S-Tab>"] = cmp.mapping(function(fallback)
-				if cmp.visible() then
+				if luasnip.expand_or_jumpable() then
+					luasnip.jump(-1)
+				elseif cmp.visible() then
 					cmp.select_prev_item()
 				elseif luasnip.jumpable(-1) then
 					luasnip.jump(-1)
@@ -184,20 +181,20 @@ M.config = function()
 			-- { name = "copilot",                 keyword_length = 0 },
 			{ name = "luasnip" },
 			{ name = "nvim_lsp" },
-			{ name = "nvim_lsp_signature_help", keyword_length = 0, priority = 1000 },
-			{ name = "treesitter",              keyword_length = 3 },
-			{ name = "nvim_lua",                keyword_length = 3 },
-			{ name = "path",                    keyword_length = 3 },
+			-- { name = "nvim_lsp_signature_help", keyword_length = 0, priority = 1000 },
+			{ name = "treesitter", keyword_length = 3 },
+			{ name = "nvim_lua",   keyword_length = 3 },
+			{ name = "path",       keyword_length = 3 },
 			-- { name = "tmux" },
 			{ name = "orgmode" },
 			{ name = "neorg" },
 			-- { name = 'zsh', },
 			{ name = "calc" },
 			{ name = "emoji" },
-			{ name = "tags",                    keyword_length = 5, max_item_count = 5 },
+			{ name = "tags",       keyword_length = 5, max_item_count = 5 },
 			-- { name = "look", },
 			-- { name = "vim-dadbod-completion" },
-			{ name = "buffer",                  keyword_length = 5, max_item_count = 5 },
+			{ name = "buffer",     keyword_length = 5, max_item_count = 5 },
 		},
 	})
 
@@ -314,6 +311,33 @@ M.config = function()
 
 	-- vim.lsp.handlers["textDocument/signatureHelp"] =
 	-- 		vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+	-- gray
+	-- vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
+	-- -- blue
+	-- vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', { bg = 'NONE', fg = '#569CD6' })
+	-- vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = 'CmpIntemAbbrMatch' })
+	-- -- light blue
+	-- vim.api.nvim_set_hl(0, 'CmpItemKindVariable', { bg = 'NONE', fg = '#9CDCFE' })
+	-- vim.api.nvim_set_hl(0, 'CmpItemKindInterface', { link = 'CmpItemKindVariable' })
+	-- vim.api.nvim_set_hl(0, 'CmpItemKindText', { link = 'CmpItemKindVariable' })
+	-- -- pink
+	-- vim.api.nvim_set_hl(0, 'CmpItemKindFunction', { bg = 'NONE', fg = '#C586C0' })
+	-- vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { link = 'CmpItemKindFunction' })
+	-- -- front
+	-- vim.api.nvim_set_hl(0, 'CmpItemKindKeyword', { bg = 'NONE', fg = '#D4D4D4' })
+	-- vim.api.nvim_set_hl(0, 'CmpItemKindProperty', { link = 'CmpItemKindKeyword' })
+	-- vim.api.nvim_set_hl(0, 'CmpItemKindUnit', { link = 'CmpItemKindKeyword' })
+	vim.keymap.set({ "n", "i", "s" }, "<c-f>", function()
+		if not require("noice.lsp").scroll(4) then
+			return "<c-f>"
+		end
+	end, { silent = true, expr = true })
+
+	vim.keymap.set({ "n", "i", "s" }, "<c-b>", function()
+		if not require("noice.lsp").scroll(-4) then
+			return "<c-b>"
+		end
+	end, { silent = true, expr = true })
 end
 
 return M

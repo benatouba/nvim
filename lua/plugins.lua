@@ -30,7 +30,7 @@ return require("packer").startup({
 	function(use)
 		-- Packer can manage itself as an optional plugin
 		use("wbthomason/packer.nvim") -- plugin manager
-		use("nvim-lua/popup.nvim")  -- handle popup (important)
+		use("nvim-lua/popup.nvim") -- handle popup (important)
 		use("nvim-lua/plenary.nvim") -- most important functions (very important)
 		use({
 			"glepnir/lspsaga.nvim",
@@ -60,7 +60,7 @@ return require("packer").startup({
 				require("management.neorg").config()
 			end,
 			run = ":Neorg sync-parsers",
-			requires = {"nvim-lua/plenary.nvim", "nvim-neorg/neorg-telescope"},
+			requires = { "nvim-lua/plenary.nvim", "nvim-neorg/neorg-telescope" },
 		})
 		use({
 			"benatouba/obsidian.nvim",
@@ -158,8 +158,8 @@ return require("packer").startup({
 			"nvim-lualine/lualine.nvim",
 			requires = {
 				{ "kyazdani42/nvim-web-devicons", opt = true },
-				"nvim-lua/lsp-status.nvim",
-				"arkav/lualine-lsp-progress",
+				-- "nvim-lua/lsp-status.nvim",
+				-- "arkav/lualine-lsp-progress",
 			},
 			config = function()
 				require("base.lualine").config()
@@ -249,6 +249,7 @@ return require("packer").startup({
 					require('lsp_signature').signature_help()
 				end, { silent = true, noremap = true, desc = 'toggle signature' })
 			end,
+			disable = true,
 		})
 		use({
 			"zbirenbaum/copilot.lua",
@@ -290,7 +291,7 @@ return require("packer").startup({
 				"lukas-reineke/cmp-under-comparator",
 				"lukas-reineke/cmp-rg",
 				{ "David-Kunz/cmp-npm",         filetype = { "javascript", "vue", "typescript" } },
-				"L3MON4D3/LuaSnip",
+				{"L3MON4D3/LuaSnip", requires = "rafamadriz/friendly-snippets"},
 				"saadparwaiz1/cmp_luasnip",
 				{ "kdheepak/cmp-latex-symbols", ft = "latex" },
 				"f3fora/cmp-spell",
@@ -311,13 +312,6 @@ return require("packer").startup({
 			end,
 		})
 		use({
-			"rafamadriz/friendly-snippets",
-			after = "LuaSnip",
-			config = function()
-				require("luasnip").filetype_extend("vue", { "html", "javascript", "pug", "vue" })
-			end,
-		})
-		use({
 			"jose-elias-alvarez/nvim-lsp-ts-utils",
 			-- after = "nvim-lspconfig",
 			ft = {
@@ -329,16 +323,20 @@ return require("packer").startup({
 				"typescript.tsx",
 			},
 		})
-		use({ "folke/trouble.nvim", cmd = { "TroubleToggle", "Trouble", "Gitsigns setqflist", "Gitsigns setloclist" }, keys = { "]d", "[d", "<leader>g" } })
+		use({
+			"folke/trouble.nvim",
+			cmd = { "TroubleToggle", "Trouble", "Gitsigns setqflist", "Gitsigns setloclist" },
+			keys = { "]d", "[d", "<leader>g" }
+		})
 		use({
 			"jose-elias-alvarez/null-ls.nvim",
-		-- event = { "BufReadPost", "InsertEnter" },
-		-- fn = { "edit", "e" },
-		-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
-		-- config = function()
+			-- event = { "BufReadPost", "InsertEnter" },
+			-- fn = { "edit", "e" },
+			-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
+			-- config = function()
 			-- require("null-ls").setup()
 			-- require("lsp.null-ls").config()
-		-- end,
+			-- end,
 		})
 
 		use({
@@ -408,6 +406,7 @@ return require("packer").startup({
 			config = function()
 				require("debug.dapui").config()
 			end,
+			deactivate = true,
 		})
 		-- use({ "Pocco81/DAPInstall.nvim", after = "nvim-dap" })
 		use({
@@ -457,7 +456,7 @@ return require("packer").startup({
 
 		-- miscellaneous
 		use("kevinhwang91/nvim-bqf")
-		use({"stevearc/overseer.nvim", config = function() require("overseer").setup() end})
+		use({ "stevearc/overseer.nvim", config = function() require("overseer").setup() end })
 		use("andymass/vim-matchup")
 		use({
 			"GustavoKatel/sidebar.nvim",
@@ -470,6 +469,7 @@ return require("packer").startup({
 					},
 				})
 			end,
+			disable = true,
 		})
 		use({
 			"folke/todo-comments.nvim",
@@ -529,14 +529,40 @@ return require("packer").startup({
 				require("catppuccin").setup({
 					flavour = "mocha", -- mocha, macchiato, frappe, latte
 					integrations = {
+						barbar = false,
 						cmp = true,
-						barbar = true,
+						dap = {
+							enabled = true,
+							enable_ui = true,
+						},
 						gitsigns = true,
-						harpoon = false,
+						harpoon = true,
+						indent_blankline = {
+							enabled = true,
+							colored_indent_levels = true,
+						},
 						lsp_saga = true,
 						lsp_trouble = true,
 						markdown = true,
 						mason = true,
+						native_lsp = {
+							enabled = true,
+							virtual_text = {
+								errors = { "italic" },
+								hints = { "italic" },
+								warnings = { "italic" },
+								information = { "italic" },
+							},
+							underlines = {
+								errors = { "underline" },
+								hints = { "underline" },
+								warnings = { "underline" },
+								information = { "underline" },
+							},
+							inlay_hints = {
+								background = true,
+							},
+						},
 						neogit = true,
 						neotest = true,
 						noice = true,
@@ -547,16 +573,9 @@ return require("packer").startup({
 						treesitter = true,
 						treesitter_context = true,
 						ts_rainbow = true,
+						overseer = true,
 						vimwiki = true,
 						which_key = true,
-						dap = {
-							enabled = true,
-							enable_ui = true,
-						},
-						indent_blankline = {
-							enabled = true,
-							colored_indent_levels = false,
-						},
 					},
 				})
 			end,
@@ -612,6 +631,36 @@ return require("packer").startup({
 			-- end,
 		})
 		use({ "stevearc/dressing.nvim" })
+		use({
+			"folke/noice.nvim",
+			requires = {
+				"MunifTanjim/nui.nvim",
+				"rcarriga/nvim-notify",
+			},
+			config = function()
+				require("noice").setup({
+					lsp = {
+						override = {
+							["vim.lsp.util.convert_input_to_markdown_lines"] = false,
+							["vim.lsp.util.stylize_markdown"] = false,
+							["cmp.entry.get_documentation"] = false,
+						}
+					},
+					-- you can enable a preset for easier configuration
+					presets = {
+						bottom_search = true, -- use a classic bottom cmdline for search
+						command_palette = false, -- position the cmdline and popupmenu together
+						long_message_to_split = true, -- long messages will be sent to a split
+						inc_rename = false, -- enables an input dialog for inc-rename.nvim
+						lsp_doc_border = true, -- add a border to hover docs and signature help
+					},
+					cmdline = {
+						enabled = true,
+						view = "cmdline"
+					}
+				})
+			end,
+		})
 	end,
 	config = {
 		profile = {
