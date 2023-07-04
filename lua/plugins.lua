@@ -345,7 +345,7 @@ return require("packer").startup({
 			-- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"}
 		})
 		use({
-			"TimUntersberger/neogit",
+			"NeogitOrg/neogit",
 			requires = { "sindrets/diffview.nvim" },
 			cmd = "Neogit",
 		})
