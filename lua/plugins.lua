@@ -517,7 +517,7 @@ return require("packer").startup({
 			config = function()
 				require("tokyonight").setup({
 					style = "night",
-					transparent = true,
+					transparent = false,
 					hide_inactive_statusline = false,
 				})
 			end,
