@@ -19,7 +19,7 @@ local terminal_opts = { mode = "t" }
 local visual_maps = {}
 local visual_opts = { mode = "v" }
 local vmaps = {
-	['<leader>t'] = {"<cmd>ToggleTermSendVisualLines<cr>", "Send to terminal"}
+	['<leader>t'] = { "<cmd>ToggleTermSendVisualLines<cr>", "Send to terminal" }
 }
 which_key.register(vmaps, visual_opts)
 -- Set leader
@@ -91,52 +91,48 @@ local maps = {
 	},
 	-- S = {name = "+Session", s = {"<cmd>SessionSave<cr>", "Save Session"}, l = {"<cmd>SessionLoad<cr>", "Load Session"}}
 }
-if O.lsp then
-	maps["l"] = {
-		name = "+LSP",
-		a = { "<cmd>Lspsaga code_action<cr>", "Code Action" },
-		-- a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
-		A = { "<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action" },
-		c = { "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>", "Server Capabilities" },
-		d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },
-		D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Declaration" },
-		l = { "<cmd>LspLog<CR>", "Logs" },
-		f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" },
-		F = { "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", "Format Document (Sync)" },
-		h = { "<cmd>lua require('pretty_hover').hover()<cr>", "Hover" },
-		i = { "<cmd>LspInfo<cr>", "Info" },
-		n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
-		j = { "<cmd>lua require('trouble').next({skip_groups = true, jump = true})<cr>", "Next Diagnostic" },
-		k = { "<cmd>lua require('trouble').previous({skip_groups = true, jump = true})<cr>", "Prev Diagnostic" },
-		q = { "<cmd>Telescope quickfix<cr>", "Quickfix" },
-		r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
-		t = { "<cmd>LspTypeDefinition<cr>", "Type Definition" },
-		x = { "<cmd>cclose<cr>", "Close Quickfix" },
-		s = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature Help" },
-	}
-	maps["m"] = {
-		name = "+Mason",
-		m = { "<cmd>Mason<cr>", "Info" },
-		u = { "<cmd>MasonUpdate<cr>", "Update Servers" },
-		l = { "<cmd>MasonLog<cr>", "Log" },
-	}
-	nmaps["]"] = {
-		b = { "<cmd>bNext<cr>", "Buffer" },
-		d = { "<cmd>lua vim.diagnostic.goto_next { wrap = true }<cr>", "Next Diagnostic" },
-		D = { "<cmd>lua require('trouble').next({skip_groups = true, jump = true})<cr>", "Next Trouble" },
-		E = { "<cmd>lua require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })"},
-		T = { "<cmd>lua require('todo-comments').jump_next()<cr>", "Next todo comment" },
-		t = { "<cmd>tabNext<cr>", "Next tab" },
-	}
-	nmaps["["] = {
-		b = { "<cmd>bprevious<cr>", "Buffer" },
-		d = { "<cmd>lua vim.diagnostic.goto_prev { wrap = true }<cr>", "Prev Diagnostic" },
-		D = { "<cmd>lua require('trouble').previous({skip_groups = true, jump = true})<cr>", "Next Trouble" },
-		E = { "<cmd>lua require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })"},
-		T = { "<cmd>lua require('todo-comments').jump_prev()<cr>", "Previous todo comment" },
-		t = { "<cmd>tabprevious<cr>", "Tab" },
-	}
-end
+maps["l"] = {
+	name = "+LSP",
+	a = { "<cmd>Lspsaga code_action<cr>", "Code Action" },
+	-- a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+	A = { "<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action" },
+	c = { "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>", "Server Capabilities" },
+	d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },
+	D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Declaration" },
+	l = { "<cmd>LspLog<CR>", "Logs" },
+	f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" },
+	F = { "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", "Format Document (Sync)" },
+	h = { "<cmd>lua require('pretty_hover').hover()<cr>", "Hover" },
+	i = { "<cmd>LspInfo<cr>", "Info" },
+	n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
+	q = { "<cmd>Telescope quickfix<cr>", "Quickfix" },
+	r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+	t = { "<cmd>LspTypeDefinition<cr>", "Type Definition" },
+	x = { "<cmd>cclose<cr>", "Close Quickfix" },
+	s = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature Help" },
+}
+maps["m"] = {
+	name = "+Mason",
+	m = { "<cmd>Mason<cr>", "Info" },
+	u = { "<cmd>MasonUpdate<cr>", "Update Servers" },
+	l = { "<cmd>MasonLog<cr>", "Log" },
+}
+nmaps["]"] = {
+	-- b = { "<cmd>bNext<cr>", "Buffer" },
+	d = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
+	D = { "<cmd>lua require('trouble').next({skip_groups = true, jump = true})<cr>", "Next Trouble" },
+	E = { "<cmd>lua require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })" },
+	T = { "<cmd>lua require('todo-comments').jump_next()<cr>", "Next todo comment" },
+	t = { "<cmd>tabNext<cr>", "Next tab" },
+}
+nmaps["["] = {
+	-- b = { "<cmd>bprevious<cr>", "Buffer" },
+	d = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
+	D = { "<cmd>lua require('trouble').previous({skip_groups = true, jump = true})<cr>", "Next Trouble" },
+	E = { "<cmd>lua require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })" },
+	T = { "<cmd>lua require('todo-comments').jump_prev()<cr>", "Previous todo comment" },
+	t = { "<cmd>tabprevious<cr>", "Tab" },
+}
 
 maps["L"] = {
 	name = "+Logs",
@@ -145,29 +141,25 @@ maps["L"] = {
 	l = { "<cmd>LspLog<cr>", "LSP" },
 }
 
-if O.git then
-	maps["g"] = {
-		name = "+Git",
-		c = { "<cmd>Git commit %<cr>", "Commit File" },
-		C = { "<cmd>Git commit<cr>", "Commit staged" },
-		g = { "<cmd>G<cr>", "Fugitive" },
-		l = { "<cmd>Git log<cr>", "Log" },
-		n = { "<cmd>Neogit<cr>", "Neogit" },
-		N = { "<cmd>Neogit commit %<cr>", "(Neogit) Commit Menu" },
-		p = { "<cmd>Git pull<cr>", "pull" },
-		P = { "<cmd>Git push<cr>", "Push" },
-	}
-end
+maps["g"] = {
+	name = "+Git",
+	c = { "<cmd>Git commit %<cr>", "Commit File" },
+	C = { "<cmd>Git commit<cr>", "Commit staged" },
+	g = { "<cmd>G<cr>", "Fugitive" },
+	l = { "<cmd>Git log<cr>", "Log" },
+	n = { "<cmd>Neogit<cr>", "Neogit" },
+	N = { "<cmd>Neogit commit %<cr>", "(Neogit) Commit Menu" },
+	p = { "<cmd>Git pull<cr>", "pull" },
+	P = { "<cmd>Git push<cr>", "Push" },
+}
 
-if O.misc then
-	maps["n"] = {
-		name = "+Generate Annotations",
-		n = { "<cmd>lua require('neogen').generate()<CR>", "Auto" },
-		c = { "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", "Class" },
-		f = { "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", "Function" },
-		t = { "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", "Type" },
-	}
-end
+maps["n"] = {
+	name = "+Generate Annotations",
+	n = { "<cmd>lua require('neogen').generate()<CR>", "Auto" },
+	c = { "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", "Class" },
+	f = { "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", "Function" },
+	t = { "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", "Type" },
+}
 
 -- if O.testing then
 -- 	maps["T"] = {
@@ -175,13 +167,12 @@ end
 -- 	}
 -- end
 
-if O.project_management then
 	maps["o"] = {
 		name = "+Organisation",
 		a = { "<cmd>lua require('orgmode').action('agenda.prompt')<CR>", "Agenda" },
 		c = { "<cmd>lua require('orgmode').action('capture.prompt')<CR>", "Capture" },
 	}
-end
+
 local diffmaps = {
 	["dr"] = { ":diffget RE<CR>", "Diffget remote" },
 	["dl"] = { ":diffget LO<CR>", "Diffget local" },

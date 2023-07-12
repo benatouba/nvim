@@ -65,6 +65,9 @@ vim.g.tokyonight_transparent = true
 vim.g.tokyonight_sidebars = { "terminal", "packer", "qf", "nvimtree" }
 -- vim.g.tokyonight_colors = { hint = "orange", error = "#ff0000" }
 vim.g.loaded_perl_provider = 0
+if Exists("/home/ben/.pyenv/versions/3.10.11/bin/python3") then
+	vim.g.python3_host_prog = "/home/ben/.pyenv/versions/3.10.11/bin/python3"
+end
 
 vim.diagnostic.config({
   virtual_text = true,

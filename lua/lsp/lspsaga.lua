@@ -27,7 +27,7 @@ M.config = function()
 			enable = false,
 		},
 		hover = {
-			enable = false,
+			enable = true,
 			max_width = 0.6,
 			open_link = 'gx',
 			open_browser = '!brave',
@@ -51,7 +51,7 @@ M.config = function()
 
 	local gmaps = {
 		a = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
-		h = { "<cmd>Lspsaga lsp_finder<CR>", "Help" },
+		h = { "<cmd>Lspsaga finder<CR>", "Help" },
 		d = { "<cmd>Lspsaga goto_definition<CR>", "Definition" },
 		p = { "<cmd>Lspsaga peek_definition<CR>", "Declaration" },
 		o = { "<cmd>Lspsaga outline<CR>", "Outline" },

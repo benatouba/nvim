@@ -172,6 +172,7 @@ require("mason-lspconfig").setup_handlers({
 								"matplotlib",
 								"Django",
 								"djangorestframework",
+								"manim",
 							},
 						},
 						jedi_completion = { enabled = true, eager = false, fuzzy = true },
@@ -209,19 +210,12 @@ require("mason-lspconfig").setup_handlers({
 					},
 				},
 			},
-			commands = {
-				Format = {
-					function()
-						require('stylua-nvim').format_file()
-					end,
-				},
-			},
 		})
 	end,
 	["sourcery"] = function()
 		lspconfig.sourcery.setup({
 			init_options = {
-				token = "user_re1CDsCNaWsCXRrWENblMoIhU8INKHMGuiqQDG1FG0CKWTC7Td_93Ilq7FA",
+				token = require("secrets").sourcery,
 				extension_version = "vim.lsp",
 				editor_version = "nvim",
 			},

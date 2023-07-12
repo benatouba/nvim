@@ -26,31 +26,6 @@ map("n", "<esc>", ":nohlsearch<CR>")
 -- map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev { wrap = false }<cr>')
 -- map('n', ']d', '<cmd>lua vim.diagnostic.goto_next { wrap = false }<cr>')
 
-local isOk, hlslens = pcall(require, "hlslens")
-if not isOk then
-    vim.notify("hlslens not okay")
-    return
-end
-
-map("n", "n", "<Cmd>execute('normal! ' . v:count1 . 'n')<CR><Cmd>lua require('hlslens').start()<CR>", {})
-map("n", "N", "<Cmd>execute('normal! ' . v:count1 . 'N')<CR><Cmd>lua require('hlslens').start()<CR>", {})
-map("n", "g*", "g*<Cmd>lua require('hlslens').start()<CR>", {})
-map("n", "g#", "g#<Cmd>lua require('hlslens').start()<CR>", {})
-
-map("n", "*", "", {
-    callback = function()
-        vim.fn.execute("normal! *N")
-        hlslens.start()
-    end,
-})
-
-map("n", "#", "", {
-    callback = function()
-        vim.fn.execute("normal! #N")
-        hlslens.start()
-    end,
-})
-
 map("n", "<leader>CR", "", {
     -- silent = true,
     desc = "Reload Config",
