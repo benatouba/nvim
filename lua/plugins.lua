@@ -28,7 +28,7 @@ lazy.setup({
         "nvim-lua/plenary.nvim", -- most important functions (very important)
         {
             "glepnir/lspsaga.nvim",
-            lazy = true,
+            -- lazy = true,
             branch = "main",
             event = "LspAttach",
             config = function()
@@ -49,7 +49,7 @@ lazy.setup({
         },
         {
             "nvim-neorg/neorg",
-            event = "BufReadPost",
+            event = {"BufReadPost", "VimEnter"},
             config = function()
                 require("management.neorg").config()
             end,
@@ -201,6 +201,9 @@ lazy.setup({
         {
             "nvim-treesitter/nvim-treesitter",
             build = ":TSUpdate",
+			config = function()
+				require("language_parsing.treesitter").config()
+			end,
         },
         {
             "nvim-treesitter/nvim-treesitter-refactor",
@@ -441,7 +444,7 @@ lazy.setup({
                 vim.g.matchup_matchparen_offscreen = { method = "popup" }
                 vim.g.matchup_surround_enabled = 1
             end,
-            enabled = false,
+            enabled = true,
         },
         {
             "folke/todo-comments.nvim",
@@ -634,10 +637,4 @@ lazy.setup({
             end,
         }
     },
-    {
-        profile = {
-            enable = true,
-            threshold = 1, -- the amount in ms that a plugins load time must be over for it to be included in the profile
-        },
-        compile_path = O.packer_compile_path,
-    })
+    { })

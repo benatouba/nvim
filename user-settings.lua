@@ -25,9 +25,6 @@ O.wrap_lines = true
 -- special keys
 O.mapleader = " "
 
--- paths
-O.packer_compile_path = vim.fn.stdpath("config") .. "/lua/packer_compiled.lua"
-
 -- if you don't want all the parsers change this to a table of the ones you want
 O.treesitter.ensure_installed = "all"
 O.treesitter.ignore_install = {}

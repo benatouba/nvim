@@ -1,6 +1,6 @@
--- local M = {}
---
--- M.config = function()
+local M = {}
+
+M.config = function()
 local ts_ok, ts = pcall(require, "nvim-treesitter.configs")
 if not ts_ok then
 	vim.notify("Treesitter not okay")
@@ -8,7 +8,7 @@ if not ts_ok then
 end
 ts.setup({
 	ensure_installed = "all",
-	sync_install = false,
+	-- sync_install = false,
 	highlight = {
 		enable = true,
 		additional_vim_regex_highlighting = { "markdown" },
@@ -35,7 +35,7 @@ ts.setup({
 	endwise = {
 		enable = true
 	},
-	matchup = { enable = false },
+	matchup = { enable = true },
 	autopairs = { enable = true },
 	playground = {
 		enable = true,
@@ -126,5 +126,5 @@ ts.setup({
 		},
 	},
 })
--- end
--- return M
+end
+return M
