@@ -8,6 +8,7 @@ if not ts_ok then
 end
 ts.setup({
 	ensure_installed = "all",
+	sync_install = false,
 	highlight = {
 		enable = true,
 		additional_vim_regex_highlighting = { "markdown" },
@@ -34,7 +35,7 @@ ts.setup({
 	endwise = {
 		enable = true
 	},
-	matchup = { enable = true },
+	matchup = { enable = false },
 	autopairs = { enable = true },
 	playground = {
 		enable = true,

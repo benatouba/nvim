@@ -53,13 +53,16 @@ local maps = {
 		R = { ":nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>", "redraw" },
 	},
 	p = {
-		name = "+Packer",
-		c = { "<cmd>PackerClean<cr>", "Clean" },
-		C = { "<cmd>PackerCompile profile=true<cr>", "Compile" },
-		i = { "<cmd>PackerInstall<cr>", "Install" },
-		s = { "<cmd>PackerSync<cr>", "Sync" },
-		S = { "<cmd>PackerStatus<cr>", "Status" },
-		u = { "<cmd>PackerUpdate<cr>", "Update" },
+		name = "+Lazy ",
+		c = { "<cmd>Lazy clean<cr>", "Clean" },
+		C = { "<cmd>Lazy Check", "Check" },
+		i = { "<cmd>Lazy install<cr>", "Install" },
+		l = { "<cmd>Lazy<cr>", "Lazy" },
+		L = { "<cmd>Lazy log<cr>", "Log" },
+		p = { "<cmd>Lazy profile<cr>", "Profile" },
+		s = { "<cmd>Lazy sync<cr>", "Sync" },
+		S = { "<cmd>Lazy status<cr>", "Status" },
+		u = { "<cmd>Lazy update<cr>", "Update" },
 	},
 	b = { "<cmd>Telescope buffers<cr>", "Buffers" },
 	s = {
@@ -138,7 +141,7 @@ end
 maps["L"] = {
 	name = "+Logs",
 	c = { "<cmd>LuaCacheProfile<cr>", "CacheProfile" },
-	p = { "<cmd>PackerProfile<cr>", "PackerProfile" },
+	p = { "<cmd>Lazy profile<cr>", "Lazy Profile" },
 	l = { "<cmd>LspLog<cr>", "LSP" },
 }
 
