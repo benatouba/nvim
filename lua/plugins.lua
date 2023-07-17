@@ -24,7 +24,7 @@ end
 
 lazy.setup({
 		-- Packer can manage itself as an lazyional plugin
-		"nvim-lua/popup.nvim",   -- handle popup (important)
+		"nvim-lua/popup.nvim", -- handle popup (important)
 		"nvim-lua/plenary.nvim", -- most important functions (very important)
 		{
 			"glepnir/lspsaga.nvim",
@@ -338,6 +338,10 @@ lazy.setup({
 			"NeogitOrg/neogit",
 			dependencies = { "sindrets/diffview.nvim" },
 			cmd = "Neogit",
+			keys = "<leader>g",
+			config = function()
+				require("git.neogit").config()
+			end,
 		},
 		{
 			"lewis6991/gitsigns.nvim",
@@ -376,8 +380,6 @@ lazy.setup({
 		},
 		{
 			"rcarriga/nvim-dap-ui",
-			keys = { "<leader>d" },
-			cmd = "DapContinue",
 			event = "BufReadPost",
 			dependencies = {
 				"mfussenegger/nvim-dap",
@@ -393,7 +395,6 @@ lazy.setup({
 			config = function()
 				require("debug.dapui").config()
 			end,
-			deactivate = true,
 		},
 		{
 			"jbyuki/one-small-step-for-vimkind",
