@@ -37,11 +37,11 @@ telemetry data.
   - uses ripgrep for text matching NEED [ripgrep](https://github.com/BurntSushi/ripgrep)
 - status bar ([lualine.nvim](https://github.com/nvim-lualine/lualine.nvim))
 - top bar ([barbar.nvim](https://github.com/romgrk/barbar.nvim)
-- highly customizable package management ([packer.nvim](https://github.com/wbthomason/packer.nvim))
+- highly customizable package management ([lazy.nvim](https://github.com/folke/lazy.nvim))
 - incrementing/decrementing/toggle almost anything ([dial.nvim](https://github.com/monaqa/dial.nvim))
 - key mappings helper ([which-key.nvim](https://github.com/folke/which-key.nvim))
 - syntax highlighting via regex for languages without
-    [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter) ([vim-polyglot](https://github.com/sheerun/vim-polyglot))
+    [nvim-treesitter](https://github.com/nvim-treesitter/nvim-treesitter)
 - developer icons ([nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons))
   - IMPORTANT: NEED ONE OR ALL [PATCHED FONTS](https://github.com/ryanoasis/nerd-fonts)!
 - database access ([sql.nvim](https://github.com/tami5/sql.nvim))

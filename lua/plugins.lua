@@ -255,7 +255,9 @@ lazy.setup({
 				require("lsp.copilot").config()
 			end,
 		},
-		"williamboman/mason.nvim",
+		{"williamboman/mason.nvim", build = ":MasonUpdate", config = function()
+			require("mason").setup()
+		end,},
 		"williamboman/mason-lspconfig.nvim",
 		"jay-babu/mason-null-ls.nvim",
 		"jay-babu/mason-nvim-dap.nvim",
@@ -288,7 +290,7 @@ lazy.setup({
 				"lukas-reineke/cmp-under-comparator",
 				"lukas-reineke/cmp-rg",
 				{ "David-Kunz/cmp-npm", filetype = { "javascript", "vue", "typescript" } },
-				{ "L3MON4D3/LuaSnip",   dependencies = "friendly-snippets" },
+				{ "L3MON4D3/LuaSnip",   dependencies = "friendly-snippets", build = "make install_jsregexp", },
 				"saadparwaiz1/cmp_luasnip",
 				{ "kdheepak/cmp-latex-symbols", ft = "latex" },
 				"f3fora/cmp-spell",
