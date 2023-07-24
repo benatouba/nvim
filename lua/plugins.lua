@@ -127,8 +127,7 @@ lazy.setup({
 		-- help me find my way  around,
 		"folke/which-key.nvim",
 
-		-- Color,
-		{ "christianchiarulli/nvcode-color-schemes.vim", lazy = true },
+		-- Colorize hex and other colors in code,
 		{
 			"nvchad/nvim-colorizer.lua",
 			config = function()
@@ -268,7 +267,6 @@ lazy.setup({
 				require("lsp")
 			end,
 		},
-		-- event = { "CmdlineEnter", "InsertEnter" },
 		{
 			"hrsh7th/nvim-cmp",
 			event = { "InsertEnter", "CmdlineEnter" },
@@ -495,8 +493,11 @@ lazy.setup({
 		{
 			"folke/tokyonight.nvim",
 			config = function()
+				if O.colorscheme ~= "tokyonight" then
+					return
+				end
 				require("tokyonight").setup({
-					style = "night",
+					style = "storm",
 					transparent = false,
 					hide_inactive_statusline = false,
 				})
@@ -506,6 +507,9 @@ lazy.setup({
 			"catppuccin/nvim",
 			as = "catppuccin",
 			config = function()
+				if O.colorscheme ~= "catppuccin" then
+					return
+				end
 				require("catppuccin").setup({
 					flavour = "mocha", -- mocha, macchiato, frappe, latte
 					integrations = {
