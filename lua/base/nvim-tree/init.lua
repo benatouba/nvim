@@ -155,7 +155,12 @@ M.config = function()
 		git = {
 			ignore = true,
 		},
+		sync_root_with_cwd = true,
 		respect_buf_cwd = true,
+		update_focused_file = {
+			enable = true,
+			update_root = true,
+		},
 		-- nvim_tree_gitignore = true,
 		-- nvim_tree_hide_dotfiles = false,
 		open_on_tab = true,

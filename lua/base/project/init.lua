@@ -8,7 +8,8 @@ M.setup = function()
     end
 
     project.setup{
-        detection_methods = { "lsp", "pattern", "=src", ">projects", ">scripts", "pillar", ".git", "=nvim"},
+        detection_methods = { "lsp", "pattern", },
+		patterns = { "=src", ">projects", ">scripts", "pillar", ".git", "=nvim"},
         ignore_lsp = { 'null-ls', "salt-lsp", "copilot" },
         exclude_dirs = { "*/node_modules/*" },
     }
