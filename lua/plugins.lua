@@ -27,7 +27,7 @@ lazy.setup({
 		"nvim-lua/popup.nvim", -- handle popup (important)
 		"nvim-lua/plenary.nvim", -- most important functions (very important)
 		{
-			"glepnir/lspsaga.nvim",
+			"nvimdev/lspsaga.nvim",
 			-- lazy = true,
 			branch = "main",
 			event = "LspAttach",
