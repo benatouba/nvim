@@ -40,9 +40,10 @@ M.config = function()
 			["core.dirman"] = {   -- Manages Neorg workspaces
 				config = {
 					workspaces = {
-						notes = "~/documents/vivere/neorg",
-						work = "~/documents/vivere/neorg/work",
-						home = "~/documents/vivere/neorg/home",
+						notes = "~/documents/vivere",
+						work = "~/documents/vivere/work",
+						home = "~/documents/vivere/home",
+						people = "~/documents/vivere/06_people",
 					},
 					default_workspace = "notes",
 				},
