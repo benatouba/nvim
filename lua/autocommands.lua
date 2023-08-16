@@ -20,7 +20,7 @@ AddAutocommands({
 		{ "BufNewFile", "*", "setlocal formatoptions-=c formatoptions-=r formatoptions-=o" },
 		-- { "VimLeavePre", "*", "set title set titleold=" },
 		{ "BufWinEnter,BufRead,BufNewFile", "*.sls", "setf sls" },
-		{ "BufWritePost", "*.py", "silent lua Pyflyby()" },
+		-- { "BufWritePost", "*.py", "silent lua Pyflyby()" },
 	},
 	_markdown = { { "FileType", "markdown", "setlocal wrap" } },
 	_buffer_bindings = {
@@ -32,6 +32,7 @@ AddAutocommands({
 		{ "FileType", "floaterm", "nnoremap <silent> <buffer> q :q<CR>" },
 		{ "FileType", "fugitive", "nnoremap <silent> <buffer> q :q<CR>" },
 		{ "FileType", "qf", "nnoremap <silent> <buffer> q :q<CR>" },
+		{ "FileType", "query", "nnoremap <silent> <buffer> q :q<CR>" },
 		{ "FileType", "checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard", "nnoremap <silent> <buffer> q :q<CR>" },
 		{ "FileType", "checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard", "nnoremap <silent> <buffer> <esc> :q<CR>" },
 		-- {'buftype', 'nofile', 'nnoremap <silent> <buffer> q :q<CR>'},
@@ -43,8 +44,8 @@ AddAutocommands({
 	-- jupyter = {
 	-- 	{"FileType", "ipynb", "\\call jobstart('jupyter qtconsole --JupyterWidget.include_other_output=True')"}
 	-- }
-	soga = {
-		{"BufWritePre", "manim*.py", ":cd %:p:h"},
-		{"BufWritePost", "manim*.py", ":!python3 '%:p'"}
-	}
+	-- soga = {
+	-- 	{"BufWritePre", "manim*.py", ":cd %:p:h"},
+	-- 	{"BufWritePost", "manim*.py", ":!python3 '%:p'"}
+	-- }
 })

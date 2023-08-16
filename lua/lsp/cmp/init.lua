@@ -186,18 +186,37 @@ M.config = function()
 			{ name = "nvim_lua",   keyword_length = 3 },
 			{ name = "path",       keyword_length = 3 },
 			-- { name = "tmux" },
-			{ name = "orgmode" },
-			{ name = "neorg" },
 			-- { name = 'zsh', },
 			{ name = "calc" },
 			{ name = "emoji" },
 			{ name = "tags",       keyword_length = 5, max_item_count = 5 },
 			-- { name = "look", },
 			-- { name = "vim-dadbod-completion" },
-			{ name = "buffer",     keyword_length = 5, max_item_count = 5 },
+			{ name = "buffer",     keyword_length = 5, max_item_count = 5, group_index=3},
 		},
 	})
 
+	cmp.setup.filetype({"org", "orgagenda"}, {
+		sources = {
+			{ name = "orgmode", priority = 100 },
+			{ name = "luasnip" },
+			{ name = "nvim_lsp" },
+			{ name = "treesitter" },
+			{ name = "calc" },
+			{ name = "emoji" },
+		}
+	})
+
+	cmp.setup.filetype({ "norg" }, {
+		sources = {
+			{ name = "neorg",     priority = 100 },
+			{ name = "luasnip" },
+			{ name = "nvim_lsp" },
+			{ name = "treesitter" },
+			{ name = "calc" },
+			{ name = "emoji" },
+		},
+	})
 	cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
 		sources = {
 			{ name = "dap" },
@@ -211,7 +230,6 @@ M.config = function()
 			{ name = "nvim_lsp" },
 			-- { name = "nvim_lsp_signature_help" },
 			{ name = "treesitter", keyword_length = 3 },
-			{ name = "neorg" },
 			{ name = "calc" },
 			{ name = "emoji" },
 			{ name = "tags",       keyword_length = 5, max_item_count = 5 },

@@ -57,6 +57,14 @@ M.config = function()
 		o = { "<cmd>Lspsaga outline<CR>", "Outline" },
 	}
 	wk.register(gmaps, { mode = "n", prefix = "g"})
+	local forward_maps = {
+		d = { "<cmd>Lspsaga diagnostic_jump_next<CR>", "Next Diagnostic" },
+	}
+	local backward_maps = {
+		d = { "<cmd>Lspsaga diagnostic_jump_prev<CR>", "Prev Diagnostic" },
+	}
+	wk.register(forward_maps, { mode = "n", prefix = "]"})
+	wk.register(backward_maps, { mode = "n", prefix = "["})
 end
 
 

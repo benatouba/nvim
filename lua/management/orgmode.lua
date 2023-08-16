@@ -25,6 +25,62 @@ tsc.setup({
 		enable = true,
 		additional_vim_regex_highlighting = { "org" }, -- Required since TS highlighter doesn't support all syntax features (conceal)
 	},
-	ensure_installed = { "org" }, -- Or run :TSUpdate org
+	ensure_installed = { "org" },                -- Or run :TSUpdate org
 })
-org.setup(require('management.orgmode_config'))
+org.setup({
+	org_agenda_files = { "~/documents/vivere/org/*", },
+	org_default_notes_file = "~/documents/vivere/org/refile.org",
+	org_timestamp_rounding_minutes = 15,
+	notifications = {
+		enabled = true,
+		deadline_warning_reminder_time = true,
+		reminder_time = { 0, 10, 30, 60 }
+	},
+	org_agenda_min_height = 22,
+	org_agenda_text_search_extra_files = { 'agenda-archives' },
+	org_capture_templates = {
+		t = {
+			description = "Task",
+			template = "* TODO %?\n  %U\n  %a",
+			target = "~/documents/vivere/org/todo.org"
+		},
+		n = {
+			description = "Note",
+			template = "* %?\n  %U\n  %a",
+			target = "~/documents/vivere/org/refile.org"
+		},
+		j = {
+			description = "Journal",
+			template = "\n*** %<%Y-%m-%d> %<%A>\n**** %U\n\n%?",
+			target = "~/documents/vivere/org/journal.org"
+		},
+		m = {
+			description = "Meeting",
+			template = "* MEETING with %? :MEETING:\n  %U",
+			target = "~/documents/vivere/org/meetings.org"
+		},
+	}
+})
+
+local maps = {
+	["o"] = {
+		name = "+Org",
+		a = { "<cmd>lua require('orgmode').action('agenda.prompt')<CR>", "org-Agenda" },
+		c = { "<cmd>lua require('orgmode').action('capture.prompt')<CR>", "org-Capture" },
+	}
+}
+
+local opts = {
+	mode = "n", -- NORMAL mode
+	prefix = "<leader>",
+	-- buffer = nil, -- Global maps. Specify a buffer number for buffer local maps
+	silent = true, -- use `silent` when creating keymaps
+	noremap = true, -- use `remap` when creating keymaps
+	nowait = false, -- use `nowait` when creating keymaps
+}
+local isOk, which_key = pcall(require, "which-key")
+if not isOk then
+	vim.notify("which-key not okay in orgmode", vim.log.levels.ERROR)
+	return
+end
+which_key.register(maps, opts)

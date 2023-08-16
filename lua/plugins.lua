@@ -24,7 +24,7 @@ end
 
 lazy.setup({
 		-- Packer can manage itself as an lazyional plugin
-		"nvim-lua/popup.nvim", -- handle popup (important)
+		"nvim-lua/popup.nvim",   -- handle popup (important)
 		"nvim-lua/plenary.nvim", -- most important functions (very important)
 		{
 			"nvimdev/lspsaga.nvim",
@@ -46,6 +46,7 @@ lazy.setup({
 				require("telescope").load_extension("notify")
 			end,
 			dependencies = "telescope.nvim",
+			enabled = true
 		},
 		{
 			"nvim-neorg/neorg",
@@ -55,21 +56,15 @@ lazy.setup({
 			end,
 			build = ":Neorg sync-parsers",
 			dependencies = { "plenary.nvim", "nvim-neorg/neorg-telescope" },
+			enabled = true
 		},
 		{
-			"benatouba/obsidian.nvim",
+			"epwalsh/obsidian.nvim",
 			event = { "BufReadPost" },
 			config = function()
 				require("management.obsidian").config()
-			end
-		},
-		{
-			"Tastyep/structlog.nvim",
-			-- deactivate = false,
-			dependencies = "nvim-notify",
-			-- config = function()
-			-- 	require("base.structlog")
-			-- end,
+			end,
+			enabled = false,
 		},
 		{
 			"lewis6991/impatient.nvim",
@@ -82,7 +77,8 @@ lazy.setup({
 		{
 			"SmiteshP/nvim-navic",
 			event = "InsertEnter",
-			dependencies = "nvim-lspconfig"
+			dependencies = "nvim-lspconfig",
+			enabled = true,
 		},
 		{
 			"nvim-telescope/telescope-fzf-writer.nvim",
@@ -134,6 +130,7 @@ lazy.setup({
 				require("colorizer").setup()
 			end,
 			event = "BufReadPost",
+			enabled = false,
 		},
 		-- use("sheerun/vim-polyglot")
 
@@ -155,19 +152,21 @@ lazy.setup({
 			config = function()
 				require("base.lualine").config()
 			end,
+			enabled = true,
 		},
 		{
 			"romgrk/barbar.nvim",
 			config = function()
 				require("ui.barbar").config()
 			end,
+			enabled = true,
 		},
 		{
 			'echasnovski/mini.bracketed',
 			version = false,
 			config = function()
-				require("mini.bracketed").setup({})
-			end
+				require("mini.bracketed").setup()
+			end,
 		},
 		{
 			"kyazdani42/nvim-tree.lua",
@@ -176,6 +175,7 @@ lazy.setup({
 			config = function()
 				require("base.nvim-tree").config()
 			end,
+			enabled = true,
 		},
 
 		-- manipulation
@@ -190,13 +190,20 @@ lazy.setup({
 			config = function()
 				require("base.comment_nvim").config()
 			end,
+			enabled = true,
 		},
-		{ "mbbill/undotree",                             lazy = true, cmd = "UndotreeToggle" },
+		{
+			"mbbill/undotree",
+			lazy = true,
+			cmd = "UndotreeToggle",
+			enabled = true,
+		},
 		{
 			"kylechui/nvim-surround",
 			config = function()
 				require("nvim-surround").setup({})
 			end,
+			enabled = true,
 		},
 
 		-- language specific,
@@ -214,24 +221,28 @@ lazy.setup({
 		{
 			"nvim-treesitter/nvim-treesitter-refactor",
 			dependencies = "nvim-treesitter",
+			enabled = false,
 		},
 		{
 			"nvim-treesitter/nvim-treesitter-textobjects",
 			dependencies = "nvim-treesitter",
+			enabled = false,
 		},
-		{ "p00f/nvim-ts-rainbow",           dependencies = "nvim-treesitter" },
-		{ "RRethy/nvim-treesitter-endwise", dependencies = "nvim-treesitter" },
-		{ "windwp/nvim-ts-autotag",         dependencies = "nvim-treesitter" },
+		{ "p00f/nvim-ts-rainbow",           dependencies = "nvim-treesitter", enabled = false },
+		{ "RRethy/nvim-treesitter-endwise", dependencies = "nvim-treesitter", enabled = false },
+		{ "windwp/nvim-ts-autotag",         dependencies = "nvim-treesitter", enabled = false },
 		{
 			"windwp/nvim-autopairs",
 			dependencies = "nvim-treesitter",
 			config = function()
 				require("language_parsing.autopairs")
 			end,
+			enabled = true,
 		},
 		{
 			"JoosepAlviste/nvim-ts-context-commentstring",
 			dependencies = "nvim-treesitter",
+			enabled = true,
 		},
 		{
 			"ray-x/lsp_signature.nvim",
@@ -253,12 +264,17 @@ lazy.setup({
 			config = function()
 				require("lsp.copilot").config()
 			end,
+			enabled = true
 		},
-		{"williamboman/mason.nvim", build = ":MasonUpdate", config = function()
-			require("mason").setup()
-		end,},
+		{
+			"williamboman/mason.nvim",
+			build = ":MasonUpdate",
+			config = function()
+				require("mason").setup()
+			end,
+			enabled = true
+		},
 		"williamboman/mason-lspconfig.nvim",
-		"jay-babu/mason-null-ls.nvim",
 		"jay-babu/mason-nvim-dap.nvim",
 		{
 			"neovim/nvim-lspconfig",
@@ -288,7 +304,7 @@ lazy.setup({
 				"lukas-reineke/cmp-under-comparator",
 				"lukas-reineke/cmp-rg",
 				{ "David-Kunz/cmp-npm", filetype = { "javascript", "vue", "typescript" } },
-				{ "L3MON4D3/LuaSnip",   dependencies = "friendly-snippets", build = "make install_jsregexp", },
+				{ "L3MON4D3/LuaSnip",   dependencies = "friendly-snippets",              build = "make install_jsregexp", },
 				"saadparwaiz1/cmp_luasnip",
 				{ "kdheepak/cmp-latex-symbols", ft = "latex" },
 				"f3fora/cmp-spell",
@@ -300,6 +316,7 @@ lazy.setup({
 			config = function()
 				require("lsp.cmp").config()
 			end,
+			enabled = true
 		},
 		{
 			"jose-elias-alvarez/nvim-lsp-ts-utils",
@@ -312,27 +329,19 @@ lazy.setup({
 				"typescriptreact",
 				"typescript.tsx",
 			},
+			enabled = false,
 		},
 		{
 			"folke/trouble.nvim",
 			cmd = { "TroubleToggle", "Trouble", "Gitsigns setqflist", "Gitsigns setloclist" },
-			keys = { "]d", "[d", "<leader>g" }
+			keys = { "]d", "[d", "<leader>g" },
+			enabled = false,
 		},
-		{
-			"jose-elias-alvarez/null-ls.nvim",
-			-- event = { "BufReadPost", "InsertEnter" },
-			-- fn = { "edit", "e" },
-			-- cmd = { "LspStart", "LspInfo", "TSUpdate" },
-			-- config = function()
-			-- require("null-ls").setup()
-			-- require("lsp.null-ls").config()
-			-- end,
-		}
-		,
 		{
 			"tpope/vim-fugitive",
 			lazy = false,
-			-- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"}
+			-- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"},
+			enabled = false,
 		},
 		{
 			"NeogitOrg/neogit",
@@ -361,7 +370,7 @@ lazy.setup({
 				"vim-test/vim-test",
 				"nvim-lua/plenary.nvim",
 				"nvim-treesitter/nvim-treesitter",
-				"antoinemadec/FixCursorHold.nvim",
+				-- "antoinemadec/FixCursorHold.nvim",
 			},
 			config = function()
 				require("test.neotest").config()
@@ -377,6 +386,7 @@ lazy.setup({
 			config = function()
 				require("debug.dap").config()
 			end,
+			enabled = true,
 		},
 		{
 			"rcarriga/nvim-dap-ui",
@@ -390,11 +400,13 @@ lazy.setup({
 							library = { plugins = { "nvim-dap-ui", "neotest" }, types = true },
 						})
 					end,
+					enabled = true,
 				},
 			},
 			config = function()
 				require("debug.dapui").config()
 			end,
+			enabled = true,
 		},
 		{
 			"jbyuki/one-small-step-for-vimkind",
@@ -403,6 +415,7 @@ lazy.setup({
 			config = function()
 				require("debug.one_small_step_for_vimkind").config()
 			end,
+			enabled = false,
 		},
 		{
 			"nvim-telescope/telescope-dap.nvim",
@@ -419,11 +432,13 @@ lazy.setup({
 				require("debug.vscode_js")
 			end,
 			ft = { "javascript", "typescript", },
+			enabled = false,
 		},
 		{
 			"microsoft/vscode-js-debug",
 			lazy = true,
 			build = "pnpm install --legacy-peer-deps && pnpm run compile",
+			enabled = false,
 		},
 
 		-- project management
@@ -433,6 +448,7 @@ lazy.setup({
 			config = function()
 				require("management.orgmode")
 			end,
+			enabled = false,
 		},
 		{
 			"renerocksai/telekasten.nvim",
@@ -441,11 +457,12 @@ lazy.setup({
 			config = function()
 				require("management.telekasten").config()
 			end,
+			enabled = false,
 		},
 
 		-- miscellaneous,
 		"kevinhwang91/nvim-bqf",
-		{ "stevearc/overseer.nvim", config = function() require("overseer").setup() end },
+		{ "stevearc/overseer.nvim",     config = function() require("misc.overseer").config() end },
 		{
 			"andymass/vim-matchup",
 			config = function()
@@ -483,13 +500,7 @@ lazy.setup({
 			end,
 			dependencies = "nvim-treesitter/nvim-treesitter",
 		},
-		{
-			"nvim-colortils/colortils.nvim",
-			config = function()
-				require("misc.colortils").config()
-			end,
-		},
-		"wuelnerdotexe/vim-enfocado",
+		{ "wuelnerdotexe/vim-enfocado", enabled = false },
 		{
 			"folke/tokyonight.nvim",
 			config = function()
@@ -594,6 +605,7 @@ lazy.setup({
 				vim.o.equalalways = false
 				require("windows").setup()
 			end,
+			enabled = false,
 		},
 		-- { "dstein64/vim-startuptime" },
 		{
@@ -601,6 +613,7 @@ lazy.setup({
 			config = function()
 				require("ui.hlslens").config()
 			end,
+			enabled = false,
 		},
 		-- for notebooks,
 		-- use({
@@ -616,6 +629,7 @@ lazy.setup({
 			-- config = function()
 			-- 	require("jupynium").setup()
 			-- end,
+			enabled = false,
 		},
 		-- { "stevearc/dressing.nvim" },
 		{
@@ -627,6 +641,7 @@ lazy.setup({
 			config = function()
 				require("ui.noice").config()
 			end,
+			enabled = true,
 		}
 	},
 	{})

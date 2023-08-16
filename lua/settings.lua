@@ -7,6 +7,7 @@ TERMINAL = vim.fn.expand("$TERMINAL")
 DATA_PATH = vim.fn.stdpath('data')
 -- vim.cmd('let &titleold="' .. TERMINAL .. '"')
 vim.o.titlestring = "%<%F%=%l/%L - nvim"
+vim.o.exrc = true
 vim.g.loaded = 1
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -44,6 +45,7 @@ vim.o.updatetime = 200 -- Faster completion
 vim.o.timeoutlen = 200 -- By default timeoutlen is 1000 ms
 vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
 vim.opt.foldmethod= "expr"
+vim.opt.foldlevelstart = 50
 
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
 vim.o.smartcase = true -- smartcase makes it so that searching becomes case sensitive if you use a capital letter

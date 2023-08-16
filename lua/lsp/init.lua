@@ -33,41 +33,6 @@ if not mason_lspconfig_ok then
 end
 mason_lspconfig.setup({})
 
-local mason_null_ls_ok, mason_null_ls = pcall(require, "mason-null-ls")
-if not mason_null_ls_ok then
-	vim.notify("mason-null-ls not okay in lspconfig")
-	return
-end
-mason_null_ls.setup({
-	ensure_installed = { "shellcheck", "shellharden", "markdownlint" },
-	automatic_setup = true,
-	handlers = {
-		["semgrep"] = function()
-			return {
-				command = "semgrep",
-				args = { "--config=auto", "--json", "--no-recursive", "--no-ignore", "--no-ignore-config",
-					"--no-ignore-parent-config", "--no-ignore-global-config", "--no-ignore-local-config",
-					"--no-ignore-rules",
-					"--no-ignore-dirs", "--no-ignore-files", "--no-ignore-lines", "--no-ignore-patterns",
-					"--no-ignore-i",
-					"--no-ignore-vcs", "--no-ignore-symlinks", "--no-ignore-unreadable", "--no-ignore-unwriteable",
-					"--no-ignore-permissions", "--no-ignore-unknown-extensions", "--no-ignore-unknown-syntaxes",
-					"--no-ignore-unknown-mime-types", "--no-ignore-unknown-languages", "--no-ignore-unknown-lexers",
-					"--no-ignore-unknown-encodings", "--no-ignore-unknown-encodings" }
-			}
-		end
-	},
-})
-
-local null_ls_ok, null_ls = pcall(require, "null-ls")
-if not null_ls_ok then
-	vim.notify("null-ls not okay in lspconfig")
-	return
-end
-null_ls.setup({
-	default_timeout = 10000,
-})
-
 local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
 if not lspconfig_ok then
 	vim.notify("lspconfig not okay in lspconfig")
@@ -100,7 +65,6 @@ local lsp_defaults = {
 }
 
 lspconfig.util.default_config = vim.tbl_deep_extend("force", lspconfig.util.default_config, lsp_defaults)
-
 require("mason-lspconfig").setup_handlers({
 	-- The first entry (without a key) will be the default handler
 	-- and will be called for each installed server that doesn't have
@@ -174,9 +138,12 @@ require("mason-lspconfig").setup_handlers({
 								"djangorestframework",
 								"manim",
 								"typing",
+								"plotly",
+								"dash",
+								"dash_bootstrap_components",
 							},
 						},
-						jedi_completion = { enabled = true, eager = false, fuzzy = true },
+						jedi_completion = { enabled = true, eager = true, fuzzy = true },
 					},
 				},
 			},
@@ -258,7 +225,7 @@ require("mason-lspconfig").setup_handlers({
 		local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 		lspconfig.volar.setup({
-			capabilities = capabilities,
+			capabilities = lsp_defaults.capabilities,
 			cmd = { "vue-language-server", "--stdio" },
 			filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "json" },
 			init_options = {
@@ -280,7 +247,11 @@ require("mason-lspconfig").setup_handlers({
 				languageFeatures = {
 					callHierarchy = true,
 					codeAction = true,
-					codeLens = true,
+					codeLens = {
+						references = true,
+						pugTools = true,
+						scriptSetupTools = true,
+					},
 					completion = {
 						defaultAttrNameCase = "kebabCase",
 						defaultTagNameCase = "both",

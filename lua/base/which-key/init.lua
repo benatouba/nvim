@@ -59,8 +59,7 @@ local maps = {
 		d = { "<cmd>Lazy debug<cr>", "Debug" },
 		h = { "<cmd>Lazy help<cr>", "Help" },
 		i = { "<cmd>Lazy install<cr>", "Install" },
-		l = { "<cmd>Lazy<cr>", "Lazy" },
-		L = { "<cmd>Lazy log<cr>", "Log" },
+		l = { "<cmd>Lazy log<cr>", "Log" },
 		p = { "<cmd>Lazy profile<cr>", "Profile" },
 		r = { "<cmd>Lazy restore<cr>", "Restore" },
 		s = { "<cmd>Lazy sync<cr>", "Sync" },
@@ -122,7 +121,7 @@ maps["m"] = {
 }
 nmaps["]"] = {
 	-- b = { "<cmd>bNext<cr>", "Buffer" },
-	d = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
+	-- d = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
 	D = { "<cmd>lua require('trouble').next({skip_groups = true, jump = true})<cr>", "Next Trouble" },
 	E = { "<cmd>lua require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })" },
 	T = { "<cmd>lua require('todo-comments').jump_next()<cr>", "Next todo comment" },
@@ -170,12 +169,6 @@ maps["n"] = {
 -- 	}
 -- end
 
-	maps["o"] = {
-		name = "+Organisation",
-		a = { "<cmd>lua require('orgmode').action('agenda.prompt')<CR>", "Agenda" },
-		c = { "<cmd>lua require('orgmode').action('capture.prompt')<CR>", "Capture" },
-	}
-
 local diffmaps = {
 	["dr"] = { ":diffget RE<CR>", "Diffget remote" },
 	["dl"] = { ":diffget LO<CR>", "Diffget local" },
@@ -199,7 +192,7 @@ which_key.register(gmaps, {
 	prefix = "g",
 })
 
-which_key.register(nmaps, {
-	mode = "n", -- NORMAL mode
-	prefix = "",
-})
+-- which_key.register(nmaps, {
+-- 	mode = "n", -- NORMAL mode
+-- 	prefix = "",
+-- })
