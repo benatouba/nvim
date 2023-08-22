@@ -51,10 +51,11 @@ M.config = function()
 
 	local gmaps = {
 		a = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
-		h = { "<cmd>Lspsaga finder<CR>", "Help" },
 		d = { "<cmd>Lspsaga goto_definition<CR>", "Definition" },
-		p = { "<cmd>Lspsaga peek_definition<CR>", "Declaration" },
+		H = { "<cmd>Lspsaga finder<CR>", "Help" },
+		I = { "<cmd>Lspsaga finder imp<CR>", "Implementation" },
 		o = { "<cmd>Lspsaga outline<CR>", "Outline" },
+		p = { "<cmd>Lspsaga peek_definition<CR>", "Declaration" },
 	}
 	wk.register(gmaps, { mode = "n", prefix = "g"})
 	local forward_maps = {
@@ -65,6 +66,7 @@ M.config = function()
 	}
 	wk.register(forward_maps, { mode = "n", prefix = "]"})
 	wk.register(backward_maps, { mode = "n", prefix = "["})
+	vim.keymap.set('n', 'K', '<cmd>Lspsaga hover_doc<cr>')
 end
 
 

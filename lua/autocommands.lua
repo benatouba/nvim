@@ -20,7 +20,7 @@ AddAutocommands({
 		{ "BufNewFile", "*", "setlocal formatoptions-=c formatoptions-=r formatoptions-=o" },
 		-- { "VimLeavePre", "*", "set title set titleold=" },
 		{ "BufWinEnter,BufRead,BufNewFile", "*.sls", "setf sls" },
-		-- { "BufWritePost", "*.py", "silent lua Pyflyby()" },
+		{ "BufWritePost", "*.py", "silent lua Pyflyby()" },
 	},
 	_markdown = { { "FileType", "markdown", "setlocal wrap" } },
 	_buffer_bindings = {
@@ -43,9 +43,5 @@ AddAutocommands({
 		},
 	-- jupyter = {
 	-- 	{"FileType", "ipynb", "\\call jobstart('jupyter qtconsole --JupyterWidget.include_other_output=True')"}
-	-- }
-	-- soga = {
-	-- 	{"BufWritePre", "manim*.py", ":cd %:p:h"},
-	-- 	{"BufWritePost", "manim*.py", ":!python3 '%:p'"}
 	-- }
 })

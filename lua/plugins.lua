@@ -24,7 +24,7 @@ end
 
 lazy.setup({
 		-- Packer can manage itself as an lazyional plugin
-		"nvim-lua/popup.nvim",   -- handle popup (important)
+		"nvim-lua/popup.nvim", -- handle popup (important)
 		"nvim-lua/plenary.nvim", -- most important functions (very important)
 		{
 			"nvimdev/lspsaga.nvim",
@@ -50,13 +50,14 @@ lazy.setup({
 		},
 		{
 			"nvim-neorg/neorg",
+			lazy = true,
 			event = { "BufReadPost", "VimEnter" },
 			config = function()
 				require("management.neorg").config()
 			end,
 			build = ":Neorg sync-parsers",
 			dependencies = { "plenary.nvim", "nvim-neorg/neorg-telescope" },
-			enabled = true
+			enabled = true,
 		},
 		{
 			"epwalsh/obsidian.nvim",
@@ -72,13 +73,6 @@ lazy.setup({
 				require("impatient")
 			end,
 			enabled = false,
-		}
-		,
-		{
-			"SmiteshP/nvim-navic",
-			event = "InsertEnter",
-			dependencies = "nvim-lspconfig",
-			enabled = true,
 		},
 		{
 			"nvim-telescope/telescope-fzf-writer.nvim",
@@ -102,6 +96,7 @@ lazy.setup({
 				"telescope.nvim",
 				"tami5/sql.nvim",
 			},
+			enabled = false,
 			-- config = function() require('telescope').load_extension('frecency') end,
 		},
 		{
@@ -130,7 +125,7 @@ lazy.setup({
 				require("colorizer").setup()
 			end,
 			event = "BufReadPost",
-			enabled = false,
+			enabled = true,
 		},
 		-- use("sheerun/vim-polyglot")
 
@@ -141,6 +136,7 @@ lazy.setup({
 			config = function()
 				require("base.indent-blankline").config()
 			end,
+			event = "BufReadPost",
 		},
 		{
 			"nvim-lualine/lualine.nvim",
@@ -159,6 +155,7 @@ lazy.setup({
 			config = function()
 				require("ui.barbar").config()
 			end,
+			lazy = true,
 			enabled = true,
 		},
 		{
@@ -184,12 +181,14 @@ lazy.setup({
 			config = function()
 				require("base.dial").config()
 			end,
+			keys = { "<C-a>", "<C-x>" },
 		}, -- increment/decrement basically everything,
 		{
 			"numToStr/Comment.nvim",
 			config = function()
 				require("base.comment_nvim").config()
 			end,
+			keys = { "gc", "gcc" },
 			enabled = true,
 		},
 		{
@@ -203,12 +202,13 @@ lazy.setup({
 			config = function()
 				require("nvim-surround").setup({})
 			end,
+			event = "InsertEnter",
 			enabled = true,
 		},
 
 		-- language specific,
-		"saltstack/salt-vim",
-		"Glench/Vim-Jinja2-Syntax",
+		{ "saltstack/salt-vim",       ft = "sls" },
+		{ "Glench/Vim-Jinja2-Syntax", ft = { "sls", "Jinja2" } },
 
 		-- Treesitter,
 		{
@@ -228,7 +228,6 @@ lazy.setup({
 			dependencies = "nvim-treesitter",
 			enabled = false,
 		},
-		{ "p00f/nvim-ts-rainbow",           dependencies = "nvim-treesitter", enabled = false },
 		{ "RRethy/nvim-treesitter-endwise", dependencies = "nvim-treesitter", enabled = false },
 		{ "windwp/nvim-ts-autotag",         dependencies = "nvim-treesitter", enabled = false },
 		{
@@ -237,10 +236,12 @@ lazy.setup({
 			config = function()
 				require("language_parsing.autopairs")
 			end,
+			event = "InsertEnter",
 			enabled = true,
 		},
 		{
 			"JoosepAlviste/nvim-ts-context-commentstring",
+			ft = { "vue", "typescript", "javascript", },
 			dependencies = "nvim-treesitter",
 			enabled = true,
 		},
@@ -319,23 +320,10 @@ lazy.setup({
 			enabled = true
 		},
 		{
-			"jose-elias-alvarez/nvim-lsp-ts-utils",
-			dependencies = "nvim-lspconfig",
-			ft = {
-				"javascript",
-				"javascriptreact",
-				"javascript.jsx",
-				"typescript",
-				"typescriptreact",
-				"typescript.tsx",
-			},
-			enabled = false,
-		},
-		{
 			"folke/trouble.nvim",
 			cmd = { "TroubleToggle", "Trouble", "Gitsigns setqflist", "Gitsigns setloclist" },
-			keys = { "]d", "[d", "<leader>g" },
-			enabled = false,
+			event = "LspAttach",
+			enabled = true,
 		},
 		{
 			"tpope/vim-fugitive",
@@ -347,6 +335,7 @@ lazy.setup({
 			"NeogitOrg/neogit",
 			dependencies = { "sindrets/diffview.nvim" },
 			cmd = "Neogit",
+			event = "InsertEnter",
 			keys = "<leader>g",
 			config = function()
 				require("git.neogit").config()
@@ -386,11 +375,12 @@ lazy.setup({
 			config = function()
 				require("debug.dap").config()
 			end,
+			event = "InsertEnter",
 			enabled = true,
 		},
 		{
 			"rcarriga/nvim-dap-ui",
-			event = "BufReadPost",
+			event = "InsertEnter",
 			dependencies = {
 				"mfussenegger/nvim-dap",
 				{
@@ -420,7 +410,7 @@ lazy.setup({
 		{
 			"nvim-telescope/telescope-dap.nvim",
 			dependencies = { "nvim-dap", "telescope.nvim" },
-			keys = "<leader>d",
+			keys = { "<leader>" },
 			config = function()
 				require("telescope").load_extension("dap")
 			end,
@@ -461,14 +451,15 @@ lazy.setup({
 		},
 
 		-- miscellaneous,
-		"kevinhwang91/nvim-bqf",
-		{ "stevearc/overseer.nvim",     config = function() require("misc.overseer").config() end },
+		{ "kevinhwang91/nvim-bqf",  event = "InsertEnter" },
+		{ "stevearc/overseer.nvim", config = function() require("misc.overseer").config() end },
 		{
 			"andymass/vim-matchup",
 			config = function()
 				vim.g.matchup_matchparen_offscreen = { method = "popup" }
 				vim.g.matchup_surround_enabled = 1
 			end,
+			event = "InsertEnter",
 			enabled = true,
 		},
 		{
@@ -476,6 +467,8 @@ lazy.setup({
 			config = function()
 				require("todo-comments").setup()
 			end,
+			event = "InsertEnter",
+			enabled = true,
 		},
 		{
 			"akinsho/toggleterm.nvim",
@@ -499,14 +492,43 @@ lazy.setup({
 				require("misc.neogen")
 			end,
 			dependencies = "nvim-treesitter/nvim-treesitter",
+			enabled = true,
+			event = "InsertEnter",
 		},
-		{ "wuelnerdotexe/vim-enfocado", enabled = false },
+		{
+			"hiphish/rainbow-delimiters.nvim",
+			config = function()
+				-- This module contains a number of default definitions
+				local rainbow_delimiters = require 'rainbow-delimiters'
+
+				vim.g.rainbow_delimiters = {
+					strategy = {
+						[''] = rainbow_delimiters.strategy['global'],
+						vim = rainbow_delimiters.strategy['local'],
+					},
+					query = {
+						[''] = 'rainbow-delimiters',
+						lua = 'rainbow-blocks',
+					},
+					highlight = {
+						'RainbowDelimiterRed',
+						'RainbowDelimiterYellow',
+						'RainbowDelimiterBlue',
+						'RainbowDelimiterOrange',
+						'RainbowDelimiterGreen',
+						'RainbowDelimiterViolet',
+						'RainbowDelimiterCyan',
+					},
+				}
+			end,
+			event = "BufReadPost",
+		},
+		{ "wuelnerdotexe/vim-enfocado", lazy = vim.cmd('colorscheme') ~= "enfocado", keys = { "<leader>s", } },
 		{
 			"folke/tokyonight.nvim",
+			lazy = vim.cmd("colorscheme") ~= "tokyonight",
+			priority = 1000,
 			config = function()
-				if O.colorscheme ~= "tokyonight" then
-					return
-				end
 				require("tokyonight").setup({
 					style = "storm",
 					transparent = false,
@@ -516,11 +538,9 @@ lazy.setup({
 		},
 		{
 			"catppuccin/nvim",
-			as = "catppuccin",
+			name = "catppuccin",
+			lazy = vim.cmd("colorscheme") ~= "catppuccin",
 			config = function()
-				if O.colorscheme ~= "catppuccin" then
-					return
-				end
 				require("catppuccin").setup({
 					flavour = "mocha", -- mocha, macchiato, frappe, latte
 					integrations = {

@@ -39,21 +39,56 @@ if not lspconfig_ok then
 	return
 end
 
--- local mason_nvim_dap_ok, mason_nvim_dap = pcall(require, "mason-nvim-dap")
--- if not mason_nvim_dap_ok then
--- 	vim.notify("mason-nvim-dap not okay in lspconfig")
--- 	return
--- end
--- mason_nvim_dap.setup({
---   ensure_installed = { "python" },
---   -- handlers = {},
--- })
+local mason_nvim_dap_ok, mason_nvim_dap = pcall(require, "mason-nvim-dap")
+if not mason_nvim_dap_ok then
+	vim.notify("mason-nvim-dap not okay in lspconfig")
+	return
+end
+mason_nvim_dap.setup({
+	ensure_installed = { "python" },
+	handlers = {},
+})
 
 local common_on_attach = function(client, bufnr)
-	vim.api.nvim_exec_autocmds("User", { pattern = "LspAttached" })
-	if client.server_capabilities.documentSymbolProvider then
-		require("nvim-navic").attach(client, bufnr)
+	-- vim.api.nvim_exec_autocmds("User", { pattern = "LspAttached" })
+	local isOk, wk = pcall(require, "which-key")
+	if not isOk then
+		vim.notify("which-key not okay in lspconfig")
+		return
 	end
+	local maps = {
+		s = {
+			name = "+Search",
+			d = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
+			D = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
+			s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols (LSP)" },
+			S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols (LSP)" },
+		},
+		l = {
+			name = "+LSP",
+			a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+			c = { "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>", "Server Capabilities" },
+			d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },
+			D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Declaration" },
+			l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens" },
+			L = { "<cmd>LspLog<CR>", "Logs" },
+			f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" },
+			F = { "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", "Format Document (Sync)" },
+			h = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover" },
+			i = { "<cmd>LspInfo<cr>", "Info" },
+			q = { "<cmd>Telescope quickfix<cr>", "Quickfix" },
+			r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+			R = { "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>", "Refactor" },
+			t = { "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Type Definition" },
+			x = { "<cmd>cclose<cr>", "Close Quickfix" },
+			s = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature Help" },
+		}
+	}
+	wk.register(maps, { mode = "n", buffer = bufnr, prefix = "<leader>" })
+	local gmaps = {
+		r = { "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>", "Refactor" },
+	}
+	wk.register(gmaps, { mode = "v", prefix = "g" })
 end
 
 local lsp_defaults = {
@@ -109,7 +144,7 @@ require("mason-lspconfig").setup_handlers({
 			capabilities = lsp_defaults.capabilities,
 			cmd = { "pylsp", "-v" },
 			cmd_env = { VIRTUAL_ENV = venv, PATH = lsputil.path.join(venv, "bin") .. ":" .. vim.env.PATH },
-			on_attach = lsp_defaults.on_attach,
+			-- on_attach = lsp_defaults.on_attach,
 			single_file_support = true,
 			settings = {
 				pylsp = {
@@ -222,8 +257,6 @@ require("mason-lspconfig").setup_handlers({
 			end
 		end
 
-		local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
 		lspconfig.volar.setup({
 			capabilities = lsp_defaults.capabilities,
 			cmd = { "vue-language-server", "--stdio" },
@@ -231,7 +264,7 @@ require("mason-lspconfig").setup_handlers({
 			init_options = {
 				volar = {
 					format = {
-						initialIndent = true,
+						initialIndent = false,
 					}
 				},
 				documentFeatures = {
@@ -274,11 +307,9 @@ require("mason-lspconfig").setup_handlers({
 					tsdk = "",
 				},
 			},
-			on_attach = function(client)
-				client.server_capabilities.documentFormattingProvider = true
-				client.server_capabilities.documentRangeFormattingProvider = true
-				client.server_capabilities.renameProvider = true
-			end,
+			-- on_attach = function(client)
+			-- 	client.server_capabilities.documentRangeFormattingProvider = true
+			-- end,
 			on_new_config = function(new_config, new_root_dir)
 				new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
 			end,

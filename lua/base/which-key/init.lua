@@ -71,8 +71,6 @@ local maps = {
 		b = { "<cmd>Telescope git_branches<cr>", "Branches" },
 		B = { "<cmd>Telescope file_browser<cr>", "Browser" },
 		c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-		d = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
-		D = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
 		f = { "<cmd>Telescope find_files<cr>", "Find File" },
 		g = { "<cmd>Telescope git_files<cr>", "Git Files" },
 		h = { "<cmd>Telescope howdoi<cr>", "How Do I .." },
@@ -85,33 +83,10 @@ local maps = {
 		q = { "<cmd>Telescope quickfix<cr>", "Quickfix List" },
 		r = { "<cmd>Telescope frecency<cr>", "Frecency" },
 		R = { "<cmd>Telescope registers<cr>", "Registers" },
-		s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols (LSP)" },
-		S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols (LSP)" },
 		t = { "<cmd>Telescope live_grep<cr>", "Text" },
 		T = { "<cmd>Telescope treesitter<cr>", "Treesitter Symbols" },
 	},
 	-- S = {name = "+Session", s = {"<cmd>SessionSave<cr>", "Save Session"}, l = {"<cmd>SessionLoad<cr>", "Load Session"}}
-}
-maps["l"] = {
-	name = "+LSP",
-	a = { "<cmd>Lspsaga code_action<cr>", "Code Action" },
-	-- a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
-	-- A = { "<cmd>lua vim.lsp.buf.range_code_action()<cr>", "Selected Action" },
-	A = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
-	c = { "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>", "Server Capabilities" },
-	d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },
-	D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Declaration" },
-	l = { "<cmd>LspLog<CR>", "Logs" },
-	f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" },
-	F = { "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", "Format Document (Sync)" },
-	h = { "<cmd>lua require('pretty_hover').hover()<cr>", "Hover" },
-	i = { "<cmd>LspInfo<cr>", "Info" },
-	n = { "<cmd>NullLsInfo<cr>", "Null-Ls Info" },
-	q = { "<cmd>Telescope quickfix<cr>", "Quickfix" },
-	r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
-	t = { "<cmd>LspTypeDefinition<cr>", "Type Definition" },
-	x = { "<cmd>cclose<cr>", "Close Quickfix" },
-	s = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature Help" },
 }
 maps["m"] = {
 	name = "+Mason",
@@ -121,9 +96,9 @@ maps["m"] = {
 }
 nmaps["]"] = {
 	-- b = { "<cmd>bNext<cr>", "Buffer" },
-	-- d = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
+	d = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
 	D = { "<cmd>lua require('trouble').next({skip_groups = true, jump = true})<cr>", "Next Trouble" },
-	E = { "<cmd>lua require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })" },
+	E = { "<cmd>lua require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })<cr>", "Next Error" },
 	T = { "<cmd>lua require('todo-comments').jump_next()<cr>", "Next todo comment" },
 	t = { "<cmd>tabNext<cr>", "Next tab" },
 }
@@ -131,7 +106,7 @@ nmaps["["] = {
 	-- b = { "<cmd>bprevious<cr>", "Buffer" },
 	d = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
 	D = { "<cmd>lua require('trouble').previous({skip_groups = true, jump = true})<cr>", "Next Trouble" },
-	E = { "<cmd>lua require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })" },
+	E = { "<cmd>lua require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })<cr>", "Prev Error" },
 	T = { "<cmd>lua require('todo-comments').jump_prev()<cr>", "Previous todo comment" },
 	t = { "<cmd>tabprevious<cr>", "Tab" },
 }
@@ -186,13 +161,13 @@ local gmaps = {
 	r = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "Rename" },
 	R = { "<cmd>lua vim.lsp.buf.references()<CR>", "References" },
 	s = { "<cmd>lua vim.lsp.buf.document_symbol()<CR>", "Symbols" },
+	S = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature" },
 }
 which_key.register(gmaps, {
 	mode = "n", -- NORMAL mode
 	prefix = "g",
 })
 
--- which_key.register(nmaps, {
--- 	mode = "n", -- NORMAL mode
--- 	prefix = "",
--- })
+which_key.register(nmaps, {
+	mode = "n", -- NORMAL mode
+})
