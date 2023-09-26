@@ -5,6 +5,15 @@ local has_words_before = function()
 	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
 	return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
 end
+local bufIsBig = function(bufnr)
+	local max_filesize = 100 * 1024 -- 100 KB
+	local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+	if ok and stats and stats.size > max_filesize then
+		return true
+	else
+		return false
+	end
+end
 
 M.config = function()
 	-- require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
@@ -34,6 +43,7 @@ M.config = function()
 		region_check_events = "CursorMoved",
 		delete_check_events = "TextChanged",
 	})
+	local compare = cmp.config.compare
 
 	cmp.setup({
 		enabled = function()
@@ -43,7 +53,7 @@ M.config = function()
 			end
 
 			-- disbable completion in telescope buffers
-			if vim.fn.buftype == "prompt" then
+			if vim.fn.filetype == "TelescopePrompt" then
 				return false
 			end
 			-- disable completion in comments
@@ -65,7 +75,7 @@ M.config = function()
 				cmp.ItemField.Menu,
 			},
 			format = lspkind.cmp_format({
-				with_text = false,
+				with_text = true,
 				before = function(entry, vim_item)
 					if entry.source.name == "copilot" then
 						vim_item.kind = "[] Copilot"
@@ -116,18 +126,20 @@ M.config = function()
 			}),
 		},
 		sorting = {
-			-- priority_weight = 2,
+			priority_weight = 1.,
 			comparators = {
 				-- require("copilot_cmp").comparators.prioritize,
 				-- require("copilot_cmp.comparators").score,
 				require("cmp-under-comparator").under,
+				compare.locality,
+				compare.recently_used,
+				compare.score,
+				compare.offset,
+				compare.order,
 				-- cmp.config.compare.exact,
 				-- cmp.config.compare.kind,
-				-- cmp.config.compare.offset,
-				-- cmp.config.compare.score,
 				-- cmp.config.compare.sort_text,
 				-- cmp.config.compare.length,
-				-- cmp.config.compare.order,
 			},
 		},
 		mapping = cmp.mapping.preset.insert {
@@ -176,24 +188,35 @@ M.config = function()
 			end, { "i", "s" }),
 		},
 		-- --                 ﬘    m    
-
-		sources = {
-			{ name = "copilot" },
-			-- { name = "nvim_lsp_signature_help" },
-			{ name = "path" },
-			{ name = "luasnip",                max_item_count = 4 },
-			{ name = "nvim_lsp",               keyword_length = 0 },
-			{ name = "treesitter" },
-			{ name = "calc" },
-			{ name = "emoji" },
-			{ name = "nvim_lua" },
-			{ name = "tags" },
-			{ name = "tmux" },
-			{ name = 'zsh', },
-			-- { name = "look", },
-			-- { name = "vim-dadbod-completion" },
-			{ name = "buffer" },
-		},
+	})
+	local default_cmp_sources = cmp.config.sources({
+		-- { name = "copilot",   prority = 8 },
+		-- { name = "nvim_lsp_signature_help" },
+		{ name = "path",      priority = 4 },
+		{ name = "luasnip",   max_item_count = 4, priority = 10 },
+		{ name = "nvim_lsp",  keyword_length = 0, priority = 8 },
+		-- { name = "treesitter" },
+		{ name = "calc",      priority = 3 },
+		{ name = "emoji",     priority = 3 },
+		{ name = "nvim_lua",  priority = 5 },
+		{ name = "tags",      priority = 1 },
+		{ name = "tmux",      priority = 10 },
+		{ name = 'zsh',       priority = 10 },
+		-- { name = "look", },
+		-- { name = "vim-dadbod-completion" },
+		{ name = "buffer",    priority = 5 },
+	}
+	)
+	vim.api.nvim_create_autocmd('BufReadPre', {
+		callback = function(t)
+			local sources = default_cmp_sources
+			if not bufIsBig(t.buf) then
+				sources[#sources + 1] = { name = 'treesitter', group_index = 2 }
+			end
+			cmp.setup.buffer {
+				sources = sources
+			}
+		end
 	})
 
 	cmp.setup.filetype({ "org", "orgagenda" }, {

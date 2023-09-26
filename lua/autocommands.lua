@@ -35,7 +35,7 @@ AddAutocommands({
 		{ "FileType", "query", "nnoremap <silent> <buffer> q :q<CR>" },
 		{ "FileType", "checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard", "nnoremap <silent> <buffer> q :q<CR>" },
 		{ "FileType", "checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard", "nnoremap <silent> <buffer> <esc> :q<CR>" },
-		-- {'buftype', 'nofile', 'nnoremap <silent> <buffer> q :q<CR>'},
+		{'FileType', 'nofile', 'nnoremap <silent> <buffer> q :q<CR>'},
 	},
 	firenvim = {
 		{"BufEnter", "*ipynb_er-DIV*.txt", "set filetype=python"},
