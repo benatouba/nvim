@@ -37,6 +37,7 @@ lazy.setup({
 			dependencies = {
 				"nvim-web-devicons",
 				"nvim-treesitter",
+				"nvim-lspconfig",
 			}
 		},
 		{
@@ -78,17 +79,17 @@ lazy.setup({
 			"nvim-telescope/telescope-fzf-writer.nvim",
 			dependencies = "telescope.nvim",
 		},
-		-- {
-		--     "nvim-telescope/telescope-fzf-native.nvim",
-		--     build = "make",
-		--     dependencies = "telescope.nvim",
-		--     lazy = true,
-		--     cmd = "Telescope",
-		--     event = "BufReadPost",
-		--     config = function()
-		--         require("telescope").load_extension("fzf")
-		--     end,
-		-- },
+		{
+			"nvim-telescope/telescope-fzf-native.nvim",
+			build = "make",
+			-- dependencies = "telescope.nvim",
+			-- lazy = true,
+			-- cmd = "Telescope",
+			-- event = "BufReadPost",
+			-- config = function()
+			-- 	require("telescope").load_extension("fzf")
+			-- end,
+		},
 		-- "tami5/sql.nvim",
 		{
 			"nvim-telescope/telescope-frecency.nvim",
@@ -104,6 +105,7 @@ lazy.setup({
 			config = function()
 				require("base.telescope").config()
 			end,
+			dependencies = "telescope-fzf-native.nvim"
 			-- cmd = "Telescope",
 			-- event = "InsertEnter",
 		},
@@ -188,6 +190,7 @@ lazy.setup({
 			config = function()
 				require("base.comment_nvim").config()
 			end,
+			event = { "InsertEnter", "CmdlineEnter", "CursorMoved" },
 			keys = { "gc", "gcc" },
 			enabled = true,
 		},
@@ -202,7 +205,8 @@ lazy.setup({
 			config = function()
 				require("nvim-surround").setup({})
 			end,
-			event = "InsertEnter",
+			event = { "InsertEnter", "CursorMoved" },
+			keys = { "c", "d", "y" },
 			enabled = true,
 		},
 
@@ -226,7 +230,7 @@ lazy.setup({
 		{
 			"nvim-treesitter/nvim-treesitter-textobjects",
 			dependencies = "nvim-treesitter",
-			enabled = false,
+			enabled = true,
 		},
 		{ "RRethy/nvim-treesitter-endwise", dependencies = "nvim-treesitter", enabled = false },
 		{ "windwp/nvim-ts-autotag",         dependencies = "nvim-treesitter", enabled = false },
@@ -275,13 +279,20 @@ lazy.setup({
 			end,
 			enabled = true
 		},
-		"williamboman/mason-lspconfig.nvim",
+		{ "williamboman/mason-lspconfig.nvim" },
 		"jay-babu/mason-nvim-dap.nvim",
 		{
 			"neovim/nvim-lspconfig",
-			event = "BufReadPre",
+			dependencies = {
+				"hrsh7th/cmp-nvim-lsp",
+				{ "antosha417/nvim-lsp-file-operations", config = true },
+			},
+			-- lazy = true,
+			event = {"BufReadPre", "BufNewFile", "InsertEnter"},
+			-- cmd = {"LspInfo", "LspStart", "LspInstallInfo"},
+			-- keys = { "<leader>l", "i"},
 			config = function()
-				require("lsp")
+				require("lsp").config()
 			end,
 		},
 		{
@@ -326,6 +337,41 @@ lazy.setup({
 			enabled = true,
 		},
 		{
+			"tpope/vim-dadbod",
+			lazy = false,
+			-- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"},
+			enabled = true,
+		},
+		{
+			'kristijanhusak/vim-dadbod-ui',
+			dependencies = {
+				{ 'tpope/vim-dadbod',                     lazy = true },
+				{ 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true },
+			},
+			cmd = {
+				'DBUI',
+				'DBUIToggle',
+				'DBUIAddConnection',
+				'DBUIFindBuffer',
+			},
+			init = function()
+				-- Your DBUI configuration
+				vim.g.db_ui_auto_execute_table_helpers = 1
+				vim.g.db_ui_use_nerd_fonts = 1
+			end,
+		},
+		{
+			"kristijanhusak/vim-dadbod-completion",
+			lazy = true,
+			-- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"},
+			config = function()
+				vim.cmd([[
+				  autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
+				]])
+			end,
+			enabled = true,
+		},
+		{
 			"tpope/vim-fugitive",
 			lazy = false,
 			-- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"},
@@ -340,6 +386,7 @@ lazy.setup({
 			config = function()
 				require("git.neogit").config()
 			end,
+			enabled = true,
 		},
 		{
 			"lewis6991/gitsigns.nvim",
@@ -451,14 +498,15 @@ lazy.setup({
 		},
 
 		-- miscellaneous,
-		{ "kevinhwang91/nvim-bqf",  event = "InsertEnter" },
-		{ "stevearc/overseer.nvim", config = function() require("misc.overseer").config() end },
+		{ "kevinhwang91/nvim-bqf",            event = "InsertEnter" },
+		{ "stevearc/overseer.nvim",           config = function() require("misc.overseer").config() end },
 		{
 			"andymass/vim-matchup",
 			config = function()
 				vim.g.matchup_matchparen_offscreen = { method = "popup" }
 				vim.g.matchup_surround_enabled = 1
 			end,
+			keys = { "%" },
 			event = "InsertEnter",
 			enabled = true,
 		},
@@ -522,6 +570,7 @@ lazy.setup({
 				}
 			end,
 			event = "BufReadPost",
+			enabled = true,
 		},
 		{ "wuelnerdotexe/vim-enfocado", lazy = vim.cmd('colorscheme') ~= "enfocado", keys = { "<leader>s", } },
 		{
@@ -662,6 +711,13 @@ lazy.setup({
 				require("ui.noice").config()
 			end,
 			enabled = true,
-		}
+		},
+		{
+			"lervag/vimtex",
+			ft = "tex",
+			config = function()
+				require("misc.vimtex").config()
+			end,
+		},
 	},
 	{})

@@ -52,10 +52,10 @@ M.config = function()
 	local gmaps = {
 		a = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
 		d = { "<cmd>Lspsaga goto_definition<CR>", "Definition" },
-		H = { "<cmd>Lspsaga finder<CR>", "Help" },
+		h = { "<cmd>Lspsaga finder<CR>", "Help" },
 		I = { "<cmd>Lspsaga finder imp<CR>", "Implementation" },
 		o = { "<cmd>Lspsaga outline<CR>", "Outline" },
-		p = { "<cmd>Lspsaga peek_definition<CR>", "Declaration" },
+		p = { "<cmd>Lspsaga peek_definition<CR>", "Peek" },
 	}
 	wk.register(gmaps, { mode = "n", prefix = "g"})
 	local forward_maps = {

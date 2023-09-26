@@ -65,7 +65,7 @@ local maps = {
 		s = { "<cmd>Lazy sync<cr>", "Sync" },
 		u = { "<cmd>Lazy update<cr>", "Update" },
 	},
-	b = { "<cmd>Telescope buffers<cr>", "Buffers" },
+	b = { "<cmd>Telescope buffers theme=dropdown<cr>", "Buffers" },
 	s = {
 		name = "+Search",
 		b = { "<cmd>Telescope git_branches<cr>", "Branches" },
@@ -73,11 +73,12 @@ local maps = {
 		c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
 		f = { "<cmd>Telescope find_files<cr>", "Find File" },
 		g = { "<cmd>Telescope git_files<cr>", "Git Files" },
-		h = { "<cmd>Telescope howdoi<cr>", "How Do I .." },
+		-- h = { "<cmd>Telescope howdoi<cr>", "How Do I .." },
 		k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
 		m = { "<cmd>Telescope marks<cr>", "Marks" },
 		M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-		n = { "<cmd>Telescope notify<cr>", "Notifications" },
+		n = { "<cmd>Telescope notify theme=ivy<cr>", "Notifications" },
+		N = { "<cmd>Noice telescope<cr>", "Noice Notifications" },
 		o = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
 		p = { "<cmd>Telescope projects<cr>", "Projects" },
 		q = { "<cmd>Telescope quickfix<cr>", "Quickfix List" },
@@ -157,11 +158,13 @@ which_key.register(diffmaps, {
 which_key.register(terminal_maps, terminal_opts)
 
 local gmaps = {
-	I = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Implementations" },
+	-- d = { "<cmd>Telescope lsp_definitions<cr>", "Definitions" }, --defined in lspsaga
+	A = { vim.lsp.buf.code_action, "Code Actions" },
+	D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Definitions" },
+	I = { "<cmd>Telescope lsp_implementations<CR>", "Implementations" },
 	r = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "Rename" },
-	R = { "<cmd>lua vim.lsp.buf.references()<CR>", "References" },
-	s = { "<cmd>lua vim.lsp.buf.document_symbol()<CR>", "Symbols" },
-	S = { "<cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature" },
+	R = { "<cmd>Telescope lsp_references<cr>", "References" },
+	s = { vim.lsp.buf.signature_help, "Signature" },
 }
 which_key.register(gmaps, {
 	mode = "n", -- NORMAL mode

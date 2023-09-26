@@ -6,25 +6,38 @@ M.config = function()
 		vim.notify("Telescope could not be initiated")
 		return
 	end
+	-- vim.api.nvim_create_augroup('telescope_previewer', {})
+	-- vim.api.nvim_create_autocmd('TelescopePreviewerLoaded', {
+	-- 	group = 'telescope_previewer',
+	-- 	pattern = '*',
+	-- 	command = 'setlocal wrap',
+	-- })
+	vim.cmd([[
+	autocmd User TelescopePreviewerLoaded setlocal wrap
+	]])
 
 	local trouble_ok, trouble = pcall(require, "trouble.providers.telescope")
+	if not trouble_ok then
+		vim.notify('Trouble in trouble in telescope')
+		return
+	end
 
 	local actions = require('telescope.actions')
 	local sorters = require('telescope.sorters')
 	local previewers = require 'telescope.previewers'
 	telescope.setup {
 		defaults = {
-			find_command = { 'grep', '--line-number', '--column', '--ignore-case', '--color' },
+			find_command = { 'rg', '--line-number', '--column', '--smart-case', '--color' },
 			-- prompt_prefix = " ",
 			prompt_prefix = " ",
 			selection_caret = " ",
-			entry_prefix = "  ",
+			entry_prefix = " ",
 			initial_mode = "insert",
 			selection_strategy = "reset",
 			sorting_strategy = "descending",
 			layout_strategy = "horizontal",
-			file_sorter = sorters.get_fzy_sorter,
-			file_ignore_patterns = { 'parser.c' },
+			file_sorter = sorters.get_fuzzy_file,
+			file_ignore_patterns = { 'parser.c', '*.ipynb' },
 			generic_sorter = require 'telescope.sorters'.get_generic_fuzzy_sorter,
 			path_display = {},
 			winblend = 0,
@@ -90,7 +103,7 @@ M.config = function()
 				override_file_sorter = true,
 			},
 			fzf_writer = {
-				use_highlighter = false,
+				use_highlighter = true,
 				minimum_grep_characters = 6,
 			},
 			frecency = {
@@ -107,12 +120,13 @@ M.config = function()
 			},
 			fzf = {
 				override_generic_sorter = false, -- override the generic sorter
-				override_file_sorter = true,     -- override the file sorter
-				case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+				override_file_sorter = true, -- override the file sorter
+				case_mode = "smart_case", -- or "ignore_case" or "respect_case"
 				-- the default case_mode is "smart_case"
 			}
 		}
 	}
+	telescope.load_extension("fzf")
 end
 
 return M

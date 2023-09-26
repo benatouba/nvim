@@ -12,7 +12,7 @@ M.config = function()
 	require("luasnip").filetype_extend("vue", { "html", "javascript", "nuxt_html", "nuxt_js_ts", "vue", })
 	require("luasnip").filetype_extend("python", { "django", "django/django_rest" })
 
-	vim.opt.completeopt = { "menuone", "noselect" }
+	vim.opt.completeopt = { "menu", "menuone", "noselect" }
 	-- local neogen_ok, neogen = pcall(require, "neogen")
 	local cmp_ok, cmp = pcall(require, "cmp")
 	local snip_ok, luasnip = pcall(require, "luasnip")
@@ -116,18 +116,18 @@ M.config = function()
 			}),
 		},
 		sorting = {
-			priority_weight = 2,
+			-- priority_weight = 2,
 			comparators = {
 				-- require("copilot_cmp").comparators.prioritize,
 				-- require("copilot_cmp.comparators").score,
 				require("cmp-under-comparator").under,
-				cmp.config.compare.exact,
-				cmp.config.compare.kind,
-				cmp.config.compare.offset,
-				cmp.config.compare.score,
-				cmp.config.compare.sort_text,
-				cmp.config.compare.length,
-				cmp.config.compare.order,
+				-- cmp.config.compare.exact,
+				-- cmp.config.compare.kind,
+				-- cmp.config.compare.offset,
+				-- cmp.config.compare.score,
+				-- cmp.config.compare.sort_text,
+				-- cmp.config.compare.length,
+				-- cmp.config.compare.order,
 			},
 		},
 		mapping = cmp.mapping.preset.insert {
@@ -178,27 +178,27 @@ M.config = function()
 		-- --                 ﬘    m    
 
 		sources = {
-			-- { name = "copilot",                 keyword_length = 0 },
-			{ name = "luasnip" },
-			{ name = "nvim_lsp" },
-			-- { name = "nvim_lsp_signature_help", keyword_length = 0, priority = 1000 },
-			{ name = "treesitter", keyword_length = 3 },
-			{ name = "nvim_lua",   keyword_length = 3 },
-			{ name = "path",       keyword_length = 3 },
-			-- { name = "tmux" },
-			-- { name = 'zsh', },
+			{ name = "copilot" },
+			-- { name = "nvim_lsp_signature_help" },
+			{ name = "path" },
+			{ name = "luasnip",                max_item_count = 4 },
+			{ name = "nvim_lsp",               keyword_length = 0 },
+			{ name = "treesitter" },
 			{ name = "calc" },
 			{ name = "emoji" },
-			{ name = "tags",       keyword_length = 5, max_item_count = 5 },
+			{ name = "nvim_lua" },
+			{ name = "tags" },
+			{ name = "tmux" },
+			{ name = 'zsh', },
 			-- { name = "look", },
 			-- { name = "vim-dadbod-completion" },
-			{ name = "buffer",     keyword_length = 5, max_item_count = 5, group_index=3},
+			{ name = "buffer" },
 		},
 	})
 
-	cmp.setup.filetype({"org", "orgagenda"}, {
+	cmp.setup.filetype({ "org", "orgagenda" }, {
 		sources = {
-			{ name = "orgmode", priority = 100 },
+			{ name = "orgmode",   priority = 100 },
 			{ name = "luasnip" },
 			{ name = "nvim_lsp" },
 			{ name = "treesitter" },
@@ -225,7 +225,7 @@ M.config = function()
 	-- vim.api.nvim_set_hl(0, "CmpItemKindCopilot", {fg = "#6CC644"})
 	cmp.setup.filetype({ "ipynb", "jupyter_python", "jupynium" }, {
 		sources = {
-			{ name = "jupynium",   priority = 1000 },
+			-- { name = "jupynium",   priority = 1000 },
 			{ name = "luasnip" },
 			{ name = "nvim_lsp" },
 			-- { name = "nvim_lsp_signature_help" },
@@ -313,18 +313,18 @@ M.config = function()
 	sign({ name = "DiagnosticSignInfo", text = "" })
 
 	_ = vim.cmd([[
-  augroup DadbodSql
-    au!
-    autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer { sources = { { name = 'vim-dadbod-completion' } } }
-  augroup END
-]])
+	  augroup DadbodSql
+		au!
+		autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer { sources = { { name = 'vim-dadbod-completion' } } }
+	  augroup END
+	]])
 
 	_ = vim.cmd([[
-  augroup CmpZsh
-    au!
-    autocmd Filetype zsh lua require'cmp'.setup.buffer { sources = { { name = "zsh" }, } }
-  augroup END
-]])
+	  augroup CmpZsh
+		au!
+		autocmd Filetype zsh lua require'cmp'.setup.buffer { sources = { { name = "zsh" }, } }
+	  augroup END
+	]])
 	-- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 
 	-- vim.lsp.handlers["textDocument/signatureHelp"] =
