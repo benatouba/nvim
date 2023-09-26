@@ -16,8 +16,8 @@ local bufIsBig = function(bufnr)
 end
 
 M.config = function()
-	-- require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
 	require("luasnip.loaders.from_vscode").lazy_load()
+	require("luasnip.loaders.from_vscode").lazy_load({paths="./snippets"})
 	require("luasnip").filetype_extend("vue", { "html", "javascript", "nuxt_html", "nuxt_js_ts", "vue", })
 	require("luasnip").filetype_extend("python", { "django", "django/django_rest" })
 
@@ -44,6 +44,23 @@ M.config = function()
 		delete_check_events = "TextChanged",
 	})
 	local compare = cmp.config.compare
+	local default_cmp_sources = cmp.config.sources({
+		-- { name = "copilot",   prority = 8 },
+		-- { name = "nvim_lsp_signature_help" },
+		{ name = "path",     priority = 4 },
+		{ name = "luasnip",  max_item_count = 4, priority = 10 },
+		{ name = "nvim_lsp", keyword_length = 0, priority = 8 },
+		-- { name = "treesitter" },
+		{ name = "calc",     priority = 3 },
+		{ name = "emoji",    priority = 3 },
+		{ name = "nvim_lua", priority = 5 },
+		{ name = "tags",     priority = 1 },
+		{ name = "tmux",     priority = 10 },
+		{ name = 'zsh',      priority = 10 },
+		-- { name = "look", },
+		-- { name = "vim-dadbod-completion" },
+		{ name = "buffer",   priority = 5 },
+	})
 
 	cmp.setup({
 		enabled = function()
@@ -187,26 +204,9 @@ M.config = function()
 				end
 			end, { "i", "s" }),
 		},
+		sources = default_cmp_sources,
 		-- --                 ﬘    m    
 	})
-	local default_cmp_sources = cmp.config.sources({
-		-- { name = "copilot",   prority = 8 },
-		-- { name = "nvim_lsp_signature_help" },
-		{ name = "path",      priority = 4 },
-		{ name = "luasnip",   max_item_count = 4, priority = 10 },
-		{ name = "nvim_lsp",  keyword_length = 0, priority = 8 },
-		-- { name = "treesitter" },
-		{ name = "calc",      priority = 3 },
-		{ name = "emoji",     priority = 3 },
-		{ name = "nvim_lua",  priority = 5 },
-		{ name = "tags",      priority = 1 },
-		{ name = "tmux",      priority = 10 },
-		{ name = 'zsh',       priority = 10 },
-		-- { name = "look", },
-		-- { name = "vim-dadbod-completion" },
-		{ name = "buffer",    priority = 5 },
-	}
-	)
 	vim.api.nvim_create_autocmd('BufReadPre', {
 		callback = function(t)
 			local sources = default_cmp_sources

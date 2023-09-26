@@ -1,0 +1,13 @@
+{
+	"voiceover": {
+		"prefix": "voiceover",
+		"body": [
+			"with self.voiceover(",
+			"\ttext=\"\"\"",
+			"\t$1",
+			"\t\"\"\"",
+			"):",
+			"$0"
+		]
+	}
+}
