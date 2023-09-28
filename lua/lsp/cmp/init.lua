@@ -17,7 +17,7 @@ end
 
 M.config = function()
 	require("luasnip.loaders.from_vscode").lazy_load()
-	require("luasnip.loaders.from_vscode").lazy_load({paths="./snippets"})
+	require("luasnip.loaders.from_vscode").lazy_load({ paths = "./snippets" })
 	require("luasnip").filetype_extend("vue", { "html", "javascript", "nuxt_html", "nuxt_js_ts", "vue", })
 	require("luasnip").filetype_extend("python", { "django", "django/django_rest" })
 
@@ -49,17 +49,17 @@ M.config = function()
 		-- { name = "nvim_lsp_signature_help" },
 		{ name = "path",     priority = 4 },
 		{ name = "luasnip",  max_item_count = 4, priority = 10 },
-		{ name = "nvim_lsp", keyword_length = 0, priority = 8 },
+		{ name = "nvim_lsp", keyword_length = 0, priority = 9 },
 		-- { name = "treesitter" },
 		{ name = "calc",     priority = 3 },
 		{ name = "emoji",    priority = 3 },
 		{ name = "nvim_lua", priority = 5 },
-		{ name = "tags",     priority = 1 },
-		{ name = "tmux",     priority = 10 },
-		{ name = 'zsh',      priority = 10 },
+		{ name = "tags",     priority = 1, keyword_length = 3 },
+		{ name = "tmux",     priority = 4 },
+		{ name = 'zsh',      priority = 4 },
 		-- { name = "look", },
 		-- { name = "vim-dadbod-completion" },
-		{ name = "buffer",   priority = 5 },
+		{ name = "buffer",   priority = 1, keyword_length = 3 },
 	})
 
 	cmp.setup({
@@ -148,15 +148,15 @@ M.config = function()
 				-- require("copilot_cmp").comparators.prioritize,
 				-- require("copilot_cmp.comparators").score,
 				require("cmp-under-comparator").under,
+				compare.score,
 				compare.locality,
 				compare.recently_used,
-				compare.score,
 				compare.offset,
 				compare.order,
-				-- cmp.config.compare.exact,
-				-- cmp.config.compare.kind,
-				-- cmp.config.compare.sort_text,
-				-- cmp.config.compare.length,
+				-- compare.exact,
+				-- compare.kind,
+				-- compare.sort_text,
+				-- compare.length,
 			},
 		},
 		mapping = cmp.mapping.preset.insert {

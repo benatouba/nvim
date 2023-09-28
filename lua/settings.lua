@@ -22,7 +22,7 @@ vim.o.splitbelow = true -- Horizontal splits will automatically be below
 vim.o.termguicolors = true -- set term gui colors most terminals support this
 vim.o.splitright = true -- Vertical splits will automatically be to the right
 vim.o.conceallevel = 0 -- So that I can see `` in markdown files
-vim.opt.ts=4 -- Insert 2 spaces for a tab
+vim.opt.ts=4 -- Insert 4 spaces for a tab
 vim.opt.sw=4 -- Change the number of space characters inserted for indentation
 vim.opt.list = true
 vim.opt.listchars:append "nbsp:␣,trail:•,extends:⟩,precedes:⟨"
@@ -35,7 +35,7 @@ vim.wo.cursorline = true -- Enable highlighting of the current line
 vim.opt.sidescrolloff = 7
 vim.opt.colorcolumn = "100"
 vim.o.scrolloff = 8
-vim.o.showtabline = 2 -- Always show tabs
+-- vim.o.showtabline = 2 -- Always show tabs
 vim.o.showmode = false -- We don't need to see things like -- INSERT -- anymore
 vim.o.backup = true -- backup files
 vim.g.cursorhold_updatetime = 100

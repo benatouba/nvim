@@ -135,9 +135,11 @@ lazy.setup({
 		"kyazdani42/nvim-web-devicons",
 		{
 			"lukas-reineke/indent-blankline.nvim",
+			main = "ibl",
 			config = function()
 				require("base.indent-blankline").config()
 			end,
+			dependencies = "nvim-treesitter",
 			event = "BufReadPost",
 		},
 		{

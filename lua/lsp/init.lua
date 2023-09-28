@@ -124,8 +124,8 @@ M.config = function()
 		["jedi_language_server"] = function()
 			lspconfig.jedi_language_server.setup({
 				settings = {
-					completion={
-						enable=false
+					completion = {
+						enable = false
 					}
 				}
 			})
@@ -187,16 +187,17 @@ M.config = function()
 							flake8 = { enabled = false },
 							pycodestyle = { enabled = false, maxLineLength = 100 },
 							pyflakes = { enabled = false },
-							pydocstyle = { enabled = true },
+							pydocstyle = { enabled = false, convention = "google" },
 							mccabe = { enabled = false },
 							memestra = { enabled = false },
-							mypy = { enabled = true },
+							mypy = { enabled = false },
 							pylint = { enabled = false },
 							rope_autimport = { enabled = true },
 							rope_completion = { enabled = true },
 							ruff = { enabled = false, lineLength = 100 },
 							black = { enabled = true, line_length = 100 },
 							yapf = { enabled = false },
+							preload = {modules = {"manim", "numpy", "pandas"}},
 							jedi = {
 								auto_import_modules = {
 									"numpy",
@@ -212,7 +213,25 @@ M.config = function()
 									"dash_bootstrap_components",
 								},
 							},
-							jedi_completion = { enabled = true, eager = false, fuzzy = true },
+							jedi_completion = {
+								enabled = false,
+								eager = false,
+								fuzzy = true,
+								include_class_objects = false,
+								include_function_objects = false,
+								cache_for = {
+									"pandas",
+									"numpy",
+									"matplotlib",
+									"salem",
+									"Django",
+									"djangorestframework",
+									"manim",
+									"plotly",
+									"dash",
+									"dash_bootstrap_components"
+								},
+							},
 						},
 					},
 				},
