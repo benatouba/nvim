@@ -11,11 +11,10 @@ M.config = function()
 		"Whitespace",
 	}
 	ibl.setup({
-		indent = { highlight = highlight, char = " ", tab_char = "▎" },
-		scope = { enabled = false },
+		indent = { highlight = highlight, tab_char = "" },
+		scope = { enabled = true },
 		whitespace = {
 			highlight = highlight,
-			char = "·",
 			remove_blankline_trail = true,
 		},
 		exclude = {

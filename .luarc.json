@@ -1,6 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
-    "Lua.diagnostics.globals": [
+    "diagnostics.globals": [
         "vim",
         "pcall",
         "require",
@@ -14,5 +14,10 @@
         "/home/ben/.config/nvim/lua",
         "${3rd}/luv/library",
         "${3rd}/luv/library"
-    ]
+    ],
+	"runtime.version": "LuaJIT",
+	"workspace.checkThirdParty": true,
+	"workspace.maxPreload": 10000,
+	"workspace.preloadFileSize": 1000,
+	"telemetry.enable": false
 }

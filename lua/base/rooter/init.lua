@@ -26,3 +26,4 @@ rooter.setup {
     end
 }
 end
+return setup

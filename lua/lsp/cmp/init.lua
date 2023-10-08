@@ -43,10 +43,12 @@ M.config = function()
 		region_check_events = "CursorMoved",
 		delete_check_events = "TextChanged",
 	})
+	require('cmp-npm').setup({})
 	local compare = cmp.config.compare
 	local default_cmp_sources = cmp.config.sources({
 		-- { name = "copilot",   prority = 8 },
 		-- { name = "nvim_lsp_signature_help" },
+		{ name = "npm",      priority = 10, keyword_length = 4 },
 		{ name = "path",     priority = 4 },
 		{ name = "luasnip",  max_item_count = 4, priority = 10 },
 		{ name = "nvim_lsp", keyword_length = 0, priority = 9 },
@@ -54,12 +56,12 @@ M.config = function()
 		{ name = "calc",     priority = 3 },
 		{ name = "emoji",    priority = 3 },
 		{ name = "nvim_lua", priority = 5 },
-		{ name = "tags",     priority = 1, keyword_length = 3 },
+		{ name = "tags",     priority = 1,       keyword_length = 3 },
 		{ name = "tmux",     priority = 4 },
 		{ name = 'zsh',      priority = 4 },
 		-- { name = "look", },
 		-- { name = "vim-dadbod-completion" },
-		{ name = "buffer",   priority = 1, keyword_length = 3 },
+		{ name = "rg",   priority = 1,       keyword_length = 3 },
 	})
 
 	cmp.setup({
@@ -207,16 +209,27 @@ M.config = function()
 		sources = default_cmp_sources,
 		-- --                 ﬘    m    
 	})
-	vim.api.nvim_create_autocmd('BufReadPre', {
-		callback = function(t)
-			local sources = default_cmp_sources
-			if not bufIsBig(t.buf) then
-				sources[#sources + 1] = { name = 'treesitter', group_index = 2 }
-			end
-			cmp.setup.buffer {
-				sources = sources
-			}
-		end
+	-- vim.api.nvim_create_autocmd('BufReadPre', {
+	-- 	callback = function(t)
+	-- 		local sources = default_cmp_sources
+	-- 		if not bufIsBig(t.buf) then
+	-- 			sources[#sources + 1] = { name = 'treesitter', group_index = 2 }
+	-- 		end
+	-- 		cmp.setup.buffer {
+	-- 			sources = sources
+	-- 		}
+	-- 	end
+	-- })
+	cmp.setup.filetype({ "latex", "tex" }, {
+		sources = {
+			{ name = "latex_symbols", option = { strategy = 2 }},
+			{ name = "luasnip" },
+			{ name = "nvim_lsp" },
+			{ name = "treesitter" },
+			{ name = "calc" },
+			{ name = "path" },
+			{ name = "emoji" },
+		}
 	})
 
 	cmp.setup.filetype({ "org", "orgagenda" }, {
@@ -256,27 +269,32 @@ M.config = function()
 			{ name = "calc" },
 			{ name = "emoji" },
 			{ name = "tags",       keyword_length = 5, max_item_count = 5 },
-			{ name = "buffer",     keyword_length = 5, max_item_count = 5 },
+			{ name = "rg",     keyword_length = 5, max_item_count = 5 },
 		},
 	})
 
 	cmp.setup.cmdline(":", {
 		mapping = cmp.mapping.preset.cmdline(),
-		window = {
-			completion = cmp.config.window.bordered({ autocomplete = true }),
-		},
-		sources = cmp.config.sources({
-			{ name = "path" },
-		}, {
-			{ name = "cmdline" },
-		}),
+		-- window = {
+		-- 	completion = cmp.config.window.bordered({ autocomplete = true }),
+		-- },
+		sources = cmp.config.sources(
+			{
+				{ name = "path" },
+			},
+			{
+				name = "cmdline",
+				option = {
+					ignore_cmds = { "Man", "!" }
+				}
+			}),
 	})
 
 	cmp.setup.cmdline("/", {
 		mapping = cmp.mapping.preset.cmdline(),
-		window = {
-			completion = cmp.config.window.bordered({ autocomplete = true }),
-		},
+		-- window = {
+		-- 	completion = cmp.config.window.bordered({ autocomplete = true }),
+		-- },
 		sources = {
 			{ name = "nvim_lsp_document_symbol" },
 			{ name = "buffer" },
@@ -300,7 +318,7 @@ M.config = function()
 	-- cmp.config.sources({
 	-- 			{ name = "cmp_git" }, -- You can specify the `cmp_git` source if you were installed it.
 	-- 		}, {
-	-- 			{ name = "buffer" },
+	-- 			{ name = "rg" },
 	-- 		}),
 	-- 		github = {
 	-- 			issues = {

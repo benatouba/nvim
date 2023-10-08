@@ -59,7 +59,6 @@ if not IsDir(DATA_PATH .. "/directory") then
 	os.execute("mkdir " .. DATA_PATH .. "/directory")
 end
 vim.o.directory = DATA_PATH .. "/directory" -- Configure 'directory' to ensure that Neovim swap files are not written to repos.
-vim.o.conceallevel = 0 -- Every character can be seen
 
 -- Settings for folkes tokyo night colorscheme
 vim.g.tokynight_style = "storm"
