@@ -7,7 +7,7 @@ M.config = function()
 		return
 	end
 	local highlight = {
-		"CursorColumn",
+		-- "CursorColumn",
 		"Whitespace",
 	}
 	ibl.setup({
