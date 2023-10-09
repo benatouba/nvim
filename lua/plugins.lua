@@ -311,6 +311,7 @@ lazy.setup({
         "hrsh7th/cmp-calc",
         "hrsh7th/cmp-emoji",
         "hrsh7th/cmp-cmdline",
+        "dmitmel/cmp-cmdline-history",
         "rcarriga/cmp-dap",
         "petertriho/cmp-git",
         "andersevenrud/compe-tmux",
@@ -330,7 +331,6 @@ lazy.setup({
         "f3fora/cmp-spell",
         -- "quangnguyen30192/cmp-nvim-tags",
         "octaltree/cmp-look",
-        "tamago324/cmp-zsh",
         "onsails/lspkind-nvim",
       },
       config = function ()
