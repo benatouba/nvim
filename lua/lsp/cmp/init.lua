@@ -4,7 +4,7 @@ local has_words_before = function ()
   if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and
-  vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+    vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
 end
 local bufIsBig = function (bufnr)
   local max_filesize = 100 * 1024 -- 100 KB
@@ -83,7 +83,7 @@ M.config = function ()
         return true
       else
         return not context.in_treesitter_capture("comment") and
-        not context.in_syntax_group("Comment")
+          not context.in_syntax_group("Comment")
       end
     end,
     -- view = {
@@ -163,7 +163,7 @@ M.config = function ()
         -- compare.length,
       },
     },
-    mapping = cmp.mapping.preset.insert {
+    mapping = cmp.mapping.preset.insert({
       ["<C-d>"] = function ()
         if not require("noice.lsp").scroll(4) then
           cmp.mapping.scroll_docs(4)
@@ -195,7 +195,7 @@ M.config = function ()
         else
           fallback()
         end
-      end, { "i", "s" }),
+      end, { "i", "s", "c" }),
       ["<S-Tab>"] = cmp.mapping(function (fallback)
         if luasnip.expand_or_jumpable() then
           luasnip.jump(-1)
@@ -206,8 +206,8 @@ M.config = function ()
         else
           fallback()
         end
-      end, { "i", "s" }),
-    },
+      end, { "i", "s", "c" }),
+    }),
     sources = default_cmp_sources,
     -- --                 ﬘    m    
   })
@@ -276,20 +276,17 @@ M.config = function ()
   })
 
   cmp.setup.cmdline(":", {
-    -- mapping = cmp.mapping.preset.cmdline(),
-    window = {
-      completion = cmp.config.window.bordered({ autocomplete = true }),
-    },
+    mapping = cmp.mapping.preset.cmdline(),
     sources = cmp.config.sources(
       {
         { name = "path" },
-        { name = "nvim_lua" },
-        { name = "cmdline_history", max_item_count = 4 },
       },
       {
-        name = "cmdline",
-        option = {
-        	ignore_cmds = { "Man", "!" }
+        {
+          name = "cmdline",
+          option = {
+            ignore_cmds = { "Man", "!" }
+          }
         }
       }),
   })
