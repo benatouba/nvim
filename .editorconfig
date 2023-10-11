@@ -63,7 +63,7 @@ space_around_table_append_operator = false
 
 ignore_spaces_inside_function_call = false
 
-space_before_inline_comment = 1
+space_before_inline_comment = 2
 
 # [operator space]
 space_around_math_operator = true

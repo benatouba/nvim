@@ -85,7 +85,7 @@ M.config = function ()
         D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Declaration" },
         l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens" },
         L = { "<cmd>LspLog<CR>", "Logs" },
-        f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" },
+        -- f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" },
         F = { "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", "Format Document (Sync)" },
         h = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover" },
         i = { "<cmd>LspInfo<cr>", "Info" },
