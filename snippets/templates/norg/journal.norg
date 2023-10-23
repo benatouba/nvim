@@ -1,0 +1,15 @@
+@document.meta
+title: Journal
+description: A daily journal entry
+authors: {AUTHOR}
+categories: journal
+created: {TODAY}
+updated: {TODAY}
+version: 1.0.0
+\@end
+
+* Journal - {TODAY}
+  {{:{YESTERDAY}:}}[Yesterday] - {{:{TOMORROW}:}}[Tomorrow]
+
+** Daily Review
+  - {CURSOR}
