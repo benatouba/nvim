@@ -37,6 +37,8 @@ M.config = function()
 			title = true,
 			-- Border type can be single, double, rounded, solid, shadow.
 			border = "rounded",
+      -- lines = { '┗', '┣', '┃', '━', '┏' },
+      lines = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
 			winblend = 0,
 			expand = "",
 			collapse = "",

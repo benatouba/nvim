@@ -18,11 +18,5 @@ local util = require("luasnip.util.util")
 
 return {
     rust = {
-        ls.parser.parse_snippet({trig = "fn"}, [[
-/// $1
-fn $2($3) ${4:-> ${5:i32}} \{
-	$0
-\}
-]])
     }
 }

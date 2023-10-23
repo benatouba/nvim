@@ -18,8 +18,6 @@ local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.expand_conditions")
 local events = require("luasnip.util.events")
 
-local utils = require("luasnip_snippets.utils")
-
 return {
     markdown = {
         -- todo

@@ -6,6 +6,7 @@ neogen.setup {
     languages = {
         lua = {template = {annotation_convention = "emmylua"}},
         python = {template = {annotation_convention = "google_docstrings"}},
+        -- python = {template = {annotation_convention = "numpydoc"}},
         javascript = {template = {annotation_convention = "jsdoc"}},
 		typescript = {template = {annotation_convention = "tsdoc"}},
 		vue = {template = {annotation_convention = "jsdoc"}},

@@ -18,8 +18,6 @@ local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.expand_conditions")
 local events = require("luasnip.util.events")
 
-local utils = require("luasnip_snippets.utils")
-
 -- link to spec
 -- https://github.com/nvim-neorg/neorg/blob/main/docs/NFF-0.1-spec.md#tags
 
@@ -29,92 +27,93 @@ local utils = require("luasnip_snippets.utils")
 
 
 return {
-    norg = {
-        -- make this more modular so that you can modify the @{...} ...., and then the code...
-        -- rename this to "neorg tags"
-        s("norg code", { -- neorg tag
-            t({ "@code", "" }),
-            -- insert code, text, " ", insert lang
-            i(1, "code goes here.."),
-            t({ "", "@end"}),
-        }),
+  norg = {
+    -- make this more modular so that you can modify the @{...} ...., and then the code...
+    -- rename this to "neorg tags"
 
-        s("neorg checkbox", {
-            t("- [ ] "), i(1, "todo.."),
-        }),
+    s("norg code", {  -- neorg tag
+      t({ "@code", "" }),
+      -- insert code, text, " ", insert lang
+      i(1, "code goes here.."),
+      t({ "", "@end" }),
+    }),
 
-        -------------------------
-        ---       links       ---
-        -------------------------
+    s("neorg checkbox", {
+      t("- [ ] "), i(1, "todo.."),
+    }),
 
-        s("neorg link curly", {
-            t("{"), i(1, "name"), t("}["),  i(2, "link"), t("]"),
-        }),
-        s("neorg link paren", {
-            t("("), i(1, "name"), t(")["),  i(2, "link"), t("]"),
-        }),
-        s("neorg link square", {
-            t("["), i(1, "name"), t("]["),  i(2, "link"), t("]"),
-        }),
-        --
+    -------------------------
+    ---       links       ---
+    -------------------------
 
-
-        -- TODO: GTD
-        -- TODO: date
-        -- yyyy-mm-dd
+    s("neorg link curly", {
+      t("{"), i(1, "name"), t("}["), i(2, "link"), t("]"),
+    }),
+    s("neorg link paren", {
+      t("("), i(1, "name"), t(")["), i(2, "link"), t("]"),
+    }),
+    s("neorg link square", {
+      t("["), i(1, "name"), t("]["), i(2, "link"), t("]"),
+    }),
+    --
 
 
-        -- TODO: gtd project
-        -- @code norg
-        --     #contexts §context_name§ §context_name§ ...
-        --     #time.start §date§
-        --     #time.due §date§
-        --     * §Project name§
-        --     - [ ] §Task description§
-        -- @end
-        s("neorg project starter", {
-            t("#context $"), i(1, "context name"), t({ "$", "" }),
-            t("#time.start $"), i(2, "date"), t({ "$", "" }),
-            t("#time.due $"), i(3, "date"), t({ "$", "" }),
-            t("* $"), i(4, "project name"), t({ "$", "" }),
-            t("- [ ] $"), i(5, "task description"), t("$"),
-        }),
-
-        -- @code norg
-        -- | §Area Of Focus name§
-        -- marker body
-        -- | _
-        -- @end
-        s("neorg focus area", {
-            t("| $"), i(1, "focus_area_name"), t({ "$", "" }),
-            i(1, "marker body"),
-            t({ "", "| _"}),
-        }),
+    -- TODO: GTD
+    -- TODO: date
+    -- yyyy-mm-dd
 
 
-        -- TODO: table snippets
-      -- @table
-      -- Column 1 | Column 2
-      -- -
-      -- This is in a new row | which got separated by a horizontal line
-      -- And check this out: I can span the columns!
-      -- @end
+    -- TODO: gtd project
+    -- @code norg
+    --     #contexts §context_name§ §context_name§ ...
+    --     #time.start §date§
+    --     #time.due §date§
+    --     * §Project name§
+    --     - [ ] §Task description§
+    -- @end
+    s("neorg project starter", {
+      t("#context $"), i(1, "context name"), t({ "$", "" }),
+      t("#time.start $"), i(2, "date"), t({ "$", "" }),
+      t("#time.due $"), i(3, "date"), t({ "$", "" }),
+      t("* $"), i(4, "project name"), t({ "$", "" }),
+      t("- [ ] $"), i(5, "task description"), t("$"),
+    }),
 
-        -- TODO: media images / video
-      -- @image png svg jpeg jfif exif
-      -- <base64-encoded image data>
-      -- @end
-
-      -- @embed image
-      -- https://github.com/vhyrro/neorg/blob/main/res/neorg.svg
-      -- @end
-
-        -- TODO: math
-
-      -- @math
-      -- f(x) = y
-      -- @end
+    -- @code norg
+    -- | §Area Of Focus name§
+    -- marker body
+    -- | _
+    -- @end
+    s("neorg focus area", {
+      t("| $"), i(1, "focus_area_name"), t({ "$", "" }),
+      i(1, "marker body"),
+      t({ "", "| _" }),
+    }),
 
 
-    }
+    -- TODO: table snippets
+    -- @table
+    -- Column 1 | Column 2
+    -- -
+    -- This is in a new row | which got separated by a horizontal line
+    -- And check this out: I can span the columns!
+    -- @end
+
+    -- TODO: media images / video
+    -- @image png svg jpeg jfif exif
+    -- <base64-encoded image data>
+    -- @end
+
+    -- @embed image
+    -- https://github.com/vhyrro/neorg/blob/main/res/neorg.svg
+    -- @end
+
+    -- TODO: math
+
+    -- @math
+    -- f(x) = y
+    -- @end
+
+
+  }
 }

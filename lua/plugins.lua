@@ -57,7 +57,12 @@ lazy.setup({
       require("management.neorg").config()
     end,
     build = ":Neorg sync-parsers",
-    dependencies = { "plenary.nvim", "nvim-neorg/neorg-telescope" },
+    dependencies = {
+      "plenary.nvim",
+      "nvim-neorg/neorg-telescope",
+      "max397574/neorg-contexts",
+      { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
+    },
     enabled = true,
   },
   {
@@ -147,7 +152,7 @@ lazy.setup({
     dependencies = {
       "nvim-web-devicons",
       -- "nvim-lua/lsp-status.nvim",
-      -- "arkav/lualine-lsp-progress",
+      "arkav/lualine-lsp-progress",
     },
     config = function ()
       require("base.lualine").config()
@@ -219,6 +224,12 @@ lazy.setup({
   -- Treesitter,
   {
     "nvim-treesitter/nvim-treesitter",
+    dependencies = {
+      {
+        "LiadOz/nvim-dap-repl-highlights",
+        config = function () require("nvim-dap-repl-highlights").setup() end
+      }
+    },
     build = ":TSUpdate",
     config = function ()
       require("language_parsing.treesitter").config()
@@ -227,7 +238,7 @@ lazy.setup({
   {
     "nvim-treesitter/nvim-treesitter-refactor",
     dependencies = "nvim-treesitter",
-    enabled = false,
+    enabled = true,
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
@@ -314,7 +325,7 @@ lazy.setup({
       "dmitmel/cmp-cmdline-history",
       "rcarriga/cmp-dap",
       "petertriho/cmp-git",
-      "andersevenrud/compe-tmux",
+      "andersevenrud/cmp-tmux",
       "ray-x/cmp-treesitter",
       "lukas-reineke/cmp-under-comparator",
       "lukas-reineke/cmp-rg",
@@ -325,12 +336,20 @@ lazy.setup({
           require("cmp-npm").setup({})
         end,
       },
-      { "L3MON4D3/LuaSnip", dependencies = "friendly-snippets", build = "make install_jsregexp" },
+      {
+        "L3MON4D3/LuaSnip",
+        version = "v2.*",
+        dependencies = "friendly-snippets",
+        build = "make install_jsregexp",
+        config = function ()
+          require("snippets.luasnip").config()
+        end
+      },
       "saadparwaiz1/cmp_luasnip",
-      { "kdheepak/cmp-latex-symbols", ft = { "latex", "tex" } },
-      "f3fora/cmp-spell",
+      "amarakon/nvim-cmp-lua-latex-symbols",
+      -- "f3fora/cmp-spell",
       -- "quangnguyen30192/cmp-nvim-tags",
-      "octaltree/cmp-look",
+      -- "octaltree/cmp-look",
       "onsails/lspkind-nvim",
     },
     config = function ()
@@ -514,6 +533,25 @@ lazy.setup({
     end,
   },
   {
+    "mfussenegger/nvim-lint",
+    config = function ()
+      require("lint").linters_by_ft = {
+        tex = { "vale", }
+      }
+      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+        callback = function ()
+          require("lint").try_lint()
+        end,
+      })
+    end,
+    enabled = false
+  },
+  {
+    "barreiroleo/ltex_extra.nvim",
+    ft = { "markdown", "tex" },
+    dependencies = { "neovim/nvim-lspconfig" },
+  },
+  {
     "stevearc/conform.nvim",
     opts = {},
     config = function ()
@@ -576,7 +614,7 @@ lazy.setup({
     -- stylua: ignore
     keys = {
       {
-        "s",
+        "<c-s>",
         mode = { "n", "x", "o" },
         function () require("flash").jump() end,
         desc = "Flash"
@@ -690,7 +728,7 @@ lazy.setup({
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    lazy = vim.cmd("colorscheme") ~= "catppuccin",
+    -- lazy = vim.cmd("colorscheme") ~= "catppuccin",
     config = function ()
       require("catppuccin").setup({
         flavour = "mocha",  -- mocha, macchiato, frappe, latte
@@ -760,8 +798,13 @@ lazy.setup({
   },
   {
     "iamcco/markdown-preview.nvim",
-    ft = "markdown",
-    build = "cd app && yarn install",
+    ft = { "markdown" },
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    build = "cd app && pnpm install",
+    enabled = true,
+    init = function ()
+      vim.g.mkdp_filetypes = { "markdown" }
+    end,
   },
   { "szw/vim-maximizer" },
   {

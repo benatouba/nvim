@@ -18,7 +18,7 @@ O.notebooks = true
 O.misc = true
 
 O.auto_complete = true
-O.colorscheme = "tokyonight"
+O.colorscheme = "catppuccin-macchiato"
 O.auto_close_tree = 0
 O.wrap_lines = true
 

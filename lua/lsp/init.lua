@@ -16,13 +16,13 @@ M.config = function ()
 
   -- LSP Enable diagnostics
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = false,
-    underline = true,
-    signs = true,
-    update_in_insert = true,
-    severity_sort = true,
-  })
+    vim.lsp.diagnostic.on_publish_diagnostics, {
+      virtual_text = false,
+      underline = true,
+      signs = true,
+      update_in_insert = true,
+      severity_sort = true,
+    })
 
   local mason_ok, mason = pcall(require, "mason")
   if not mason_ok then
@@ -38,13 +38,6 @@ M.config = function ()
   end
   mason_lspconfig.setup({})
 
-  local ok, wf = pcall(require, "vim.lsp._watchfiles")
-  if ok then
-    -- disable lsp watcher. Too slow on linux
-    wf._watchfunc = function ()
-      return function () end
-    end
-  end
   local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
   if not lspconfig_ok then
     vim.notify("lspconfig not okay in lspconfig")
@@ -109,9 +102,16 @@ M.config = function ()
       debounce_text_changes = 150,
     },
     capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol
-    .make_client_capabilities()),
+      .make_client_capabilities()),
     on_attach = common_on_attach,
   }
+  -- local ok, wf = pcall(require, "vim.lsp._watchfiles")
+  -- if ok then
+  --   -- wf._watchfunc = function(_, _, _) return true end
+  --   wf._watchfunc = function ()
+  --     return function () end
+  --   end
+  -- end
 
   lspconfig.util.default_config = vim.tbl_deep_extend("force", lspconfig.util.default_config,
     lsp_defaults)
@@ -119,7 +119,7 @@ M.config = function ()
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
     -- a dedicated handler.
-    function (server_name) -- default handler (optional)
+    function (server_name)  -- default handler (optional)
       require("lspconfig")[server_name].setup({})
     end,
     ["bashls"] = function ()
@@ -139,17 +139,22 @@ M.config = function ()
     ["pyright"] = function ()
       lspconfig.pyright.setup({
         on_attach = lsp_defaults.on_attach,
-        settings = {
-          pyright = { autoImportCompletion = true, },
-          python = {
-            analysis = {
-              autoSearchPaths = true,
-              diagnosticMode = "openFilesOnly",
-              useLibraryCodeForTypes = true,
-              typeCheckingMode = "off"
-            }
-          }
-        }
+        -- settings = {
+        --   pyright = {
+        --     disableOrganizeImports = true,
+        --     openFilesOnly = true,
+        --   },
+        --   python = {
+        --     analysis = {
+        --       autoImportCompletions = true,
+        --       autoSearchPaths = true,
+        --       logLevel = "Warning",
+        --       diagnosticMode = "openFilesOnly",
+        --       useLibraryCodeForTypes = true,
+        --       typeCheckingMode = "basic",
+        --     }
+        --   }
+        -- }
       })
     end,
     ["pylsp"] = function ()
@@ -248,7 +253,7 @@ M.config = function ()
         init_options = {
           token = require("secrets").sourcery,
           extension_version = "vim.lsp",
-          editor_version = "nvim",
+          editor_version = "vim",
         },
         settings = {
           sourcery = {
@@ -371,6 +376,79 @@ M.config = function ()
         },
       })
     end,
+    ["ltex"] = function ()
+      lspconfig.ltex.setup({
+        capabilities = lsp_defaults.capabilities,
+        on_attach = function (client, bufnr)
+          require("ltex_extra").setup({
+            path = vim.fn.expand("~") .. "/.local/share/ltex"
+          })
+        end,
+      })
+    end
   })
+  local watch_type = require("vim._watch").FileChangeType
+
+  local function handler(res, callback)
+    if not res.files or res.is_fresh_instance then
+      return
+    end
+
+    for _, file in ipairs(res.files) do
+      local path = res.root .. "/" .. file.name
+      local change = watch_type.Changed
+      if file.new then
+        change = watch_type.Created
+      end
+      if not file.exists then
+        change = watch_type.Deleted
+      end
+      callback(path, change)
+    end
+  end
+
+  local function watchman(path, opts, callback)
+    vim.system({ "watchman", "watch", path }):wait()
+
+    local buf = {}
+    local sub = vim.system({
+      "watchman",
+      "-j",
+      "--server-encoding=json",
+      "-p",
+    }, {
+      stdin = vim.json.encode({
+        "subscribe",
+        path,
+        "nvim:" .. path,
+        {
+          expression = { "anyof", { "type", "f" }, { "type", "d" } },
+          fields = { "name", "exists", "new" },
+        },
+      }),
+      stdout = function (_, data)
+        if not data then
+          return
+        end
+        for line in vim.gsplit(data, "\n", { plain = true, trimempty = true }) do
+          table.insert(buf, line)
+          if line == "}" then
+            local res = vim.json.decode(table.concat(buf))
+            handler(res, callback)
+            buf = {}
+          end
+        end
+      end,
+      text = true,
+    })
+
+    return function ()
+      sub:kill("sigint")
+    end
+  end
+
+  if vim.fn.executable("watchman") == 1 then
+    require("vim.lsp._watchfiles")._watchfunc = watchman
+  end
 end
 return M

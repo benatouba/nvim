@@ -18,42 +18,8 @@ local fmta = require("luasnip.extras.fmt").fmta
 local types = require("luasnip.util.types")
 local conds = require("luasnip.extras.expand_conditions")
 
-local utils = require("luasnip_snippets.utils")
-
 return {
 	java = {
         -- Very long example for a java class.
-        s("fn", {
-            d(6, utils.jdocsnip, { 2, 4, 5 }),
-            t({ "", "" }),
-            c(1, {
-                t("public "),
-                t("private "),
-            }),
-            c(2, {
-                t("void"),
-                t("String"),
-                t("char"),
-                t("int"),
-                t("double"),
-                t("boolean"),
-                i(nil, ""),
-            }),
-            t(" "),
-            i(3, "myFunc"),
-            t("("),
-            i(4),
-            t(")"),
-            c(5, {
-                t(""),
-                sn(nil, {
-                    t({ "", " throws " }),
-                    i(1),
-                }),
-            }),
-            t({ " {", "\t" }),
-            i(0),
-            t({ "", "}" }),
-        }),
 	}
 }
