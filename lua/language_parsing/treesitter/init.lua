@@ -27,7 +27,7 @@ ts.setup({
 			node_decremental = "<S-TAB>",
 		},
 	},
-	context_commentstring = { enable = true },
+	-- context_commentstring = { enable = true },
 	indent = {
 		enable = true,
 		-- disable = { "python", "html" },

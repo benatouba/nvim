@@ -3,6 +3,11 @@ if not ok then
 	vim.notify("dap-python not ok")
 	return
 end
+local dap_ok, dap = pcall(require, "dap")
+if not dap_ok then
+  vim.notify("dap not ok in dap-python")
+  return
+end
 
 local M = {}
 
@@ -20,10 +25,16 @@ M.config = function()
 	else
 		command = string.format(mason_debugpy)
 	end
+
 	dap_py.setup("python")
 	-- dap_py.test_runner = "unittest"
-	require("which-key").register(mappings, { mode = "n", prefix = "<leader>d" })
-	require("which-key").register({
+  local wk_ok, wk = pcall(require, "which-key")
+  if not wk_ok then
+    vim.notify("which-key not ok in dap-python")
+    return
+  end
+	wk.register(mappings, { mode = "n", prefix = "<leader>d" })
+	wk.register({
 		["ds"] = { "<ESC><cmd>lua require('dap-python').debug_selection()<CR>", "Debug Selection" },
 	}, { mode = "v", prefix = "" })
 end

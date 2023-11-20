@@ -40,7 +40,7 @@ M.config = function ()
     vim.notify("luasnip not ok")
   end
 
-  require("cmp-npm").setup({})
+  -- require("cmp-npm").setup({})
   local compare = cmp.config.compare
   local default_cmp_sources = cmp.config.sources({
     { name = "copilot", priority = 8 },
@@ -171,9 +171,6 @@ M.config = function ()
 
 
           -- Get the full snippet (and only keep first line)
-          if entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet then
-            word = vim.lsp.util.parse_snippet(word)
-          end
           word = str.oneline(word)
 
           -- concatenates the string
@@ -325,7 +322,7 @@ M.config = function ()
   cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
     sources = cmp.config.sources({
       { name = "dap" },
-    }),
+    })
   })
   cmp.setup.filetype({ "ipynb", "jupyter_python", "jupynium" }, {
     sources = cmp.config.sources({

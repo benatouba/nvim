@@ -75,11 +75,11 @@ M.config = function ()
       ["core.summary"] = {},
       ["core.ui.calendar"] = {},
       ["external.context"] = {},
-      ["external.templates"] = {
-        config = {
-          templates_dir = vim.fn.stdpath("config") .. "/snippets/templates/norg/"
-        }
-      },
+      -- ["external.templates"] = {
+      --   config = {
+      --     templates_dir = vim.fn.stdpath("config") .. "/snippets/templates/norg/"
+      --   }
+      -- },
     }
   })
   local maps = {

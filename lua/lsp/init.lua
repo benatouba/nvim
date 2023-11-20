@@ -54,6 +54,15 @@ M.config = function ()
     handlers = {},
   })
 
+  -- local lspconfig_configs = require("lspconfig.configs")
+  -- lspconfig_configs.contextive = {
+  --   default_config = {
+  --     cmd = { "Contextive.LanguageServer" },
+  --     root_dir = lspconfig.util.root_pattern(".contextive", ".git"),
+  --   },
+  -- }
+  -- lspconfig.contextive.setup {}
+
   local common_on_attach = function (client, bufnr)
     -- vim.api.nvim_exec_autocmds("User", { pattern = "LspAttached" })
     local isOk, wk = pcall(require, "which-key")
@@ -138,50 +147,31 @@ M.config = function ()
     end,
     ["pyright"] = function ()
       lspconfig.pyright.setup({
+        before_init = function (_, config)
+          config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
+        end,
         on_attach = lsp_defaults.on_attach,
-        -- settings = {
-        --   pyright = {
-        --     disableOrganizeImports = true,
-        --     openFilesOnly = true,
-        --   },
-        --   python = {
-        --     analysis = {
-        --       autoImportCompletions = true,
-        --       autoSearchPaths = true,
-        --       logLevel = "Warning",
-        --       diagnosticMode = "openFilesOnly",
-        --       useLibraryCodeForTypes = true,
-        --       typeCheckingMode = "basic",
-        --     }
-        --   }
-        -- }
+        settings = {
+          pyright = {
+            disableOrganizeImports = true,
+            openFilesOnly = true,
+          },
+          python = {
+            analysis = {
+              autoImportCompletions = true,
+              autoSearchPaths = true,
+              -- logLevel = "Warning",
+              diagnosticMode = "openFilesOnly",
+              useLibraryCodeForTypes = true,
+              typeCheckingMode = "off",
+            }
+          }
+        }
       })
     end,
     ["pylsp"] = function ()
       local lsputil = require("lspconfig/util")
 
-      Get_python_venv = function ()
-        vim.fn.system("pyenv init")
-        vim.fn.system("pyenv init -")
-
-        if vim.env.VIRTUAL_ENV then
-          return vim.env.VIRTUAL_ENV
-        end
-
-        local match = vim.fn.glob(lsputil.path.join(vim.fn.getcwd(), "Pipfile"))
-        if match ~= "" then
-          return vim.fn.trim(vim.fn.system("PIPENV_PIPFILE=" .. match .. " pipenv --venv"))
-        end
-
-        match = vim.fn.glob(lsputil.path.join(vim.fn.getcwd(), "poetry.lock"))
-        if match ~= "" then
-          return vim.fn.trim(vim.fn.system("poetry env info -p"))
-        end
-        match = vim.fn.glob(lsputil.path.join(vim.fn.getcwd(), ".python_version"))
-        if match ~= "" then
-          return vim.fn.trim(vim.fn.system("pyenv prefix"))
-        end
-      end
       local venv = Get_python_venv()
 
       lspconfig.pylsp.setup({
@@ -285,65 +275,63 @@ M.config = function ()
           return found_ts
         else
           util.path.exists(global_ts)
-          -- vim.notify("Using global typescript")
+          vim.notify("Using global typescript")
           return global_ts
         end
       end
-
+      local init_options = {
+        typescript = {
+          tsdk = "",
+        },
+        languageFeatures = {
+          references = true,
+          implementation = true,
+          definition = true,
+          typeDefinition = true,
+          callHierarchy = true,
+          hover = true,
+          rename = true,
+          renameFileRefactoring = true,
+          signatureHelp = true,
+          completion = {
+            defaultTagNameCase = "both",
+            defaultAttrNameCase = "kebabCase",
+            getDocumentNameCasesRequest = true,
+            getDocumentSelectionRequest = true,
+          },
+          documentHighlight = true,
+          documentLink = true,
+          workspaceSymbol = true,
+          codeLens = true,
+          semanticTokens = true,
+          codeAction = true,
+          diagnostics = true,
+          schemaRequestService = true,
+        },
+        documentFeatures = {
+          allowedLanguageIds = {
+            "javascript",
+            "javascriptreact",
+            "typescript",
+            "typescriptreact",
+            "vue",
+            "json",
+          },
+          selectionRange = true,
+          foldingRange = true,
+          linkedEditingRange = true,
+          documentSymbol = true,
+          documentColor = true,
+          documentFormatting = true,
+        },
+      }
       lspconfig.volar.setup({
         capabilities = lsp_defaults.capabilities,
         cmd = { "vue-language-server", "--stdio" },
         filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "json" },
-        init_options = {
-          volar = {
-            format = {
-              initialIndent = false,
-            }
-          },
-          documentFeatures = {
-            documentColor = true,
-            documentFormatting = {
-              defaultPrintWidth = 100,
-            },
-            documentSymbol = true,
-            foldingRange = true,
-            linkedEditingRange = true,
-            selectionRange = true,
-          },
-          languageFeatures = {
-            callHierarchy = true,
-            codeAction = true,
-            codeLens = {
-              references = true,
-              pugTools = true,
-              scriptSetupTools = true,
-            },
-            completion = {
-              defaultAttrNameCase = "kebabCase",
-              defaultTagNameCase = "both",
-            },
-            definition = true,
-            diagnostics = true,
-            documentHighlight = true,
-            documentLink = true,
-            hover = true,
-            implementation = true,
-            references = true,
-            rename = true,
-            renameFileRefactoring = true,
-            schemaRequestService = true,
-            semanticTokens = true,
-            signatureHelp = true,
-            typeDefinition = true,
-          },
-          typescript = {
-            tsdk = "",
-          },
-        },
-        -- on_attach = function(client)
-        -- 	client.server_capabilities.documentRangeFormattingProvider = true
-        -- end,
+        init_options = init_options,
         on_new_config = function (new_config, new_root_dir)
+          new_config.init_options = init_options
           new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
         end,
       })
@@ -376,9 +364,18 @@ M.config = function ()
         },
       })
     end,
+    ["jsonls"] = function ()
+      lsp_defaults.capabilities.textDocument.completion.completionItem.snippetSupport = true
+      lspconfig.jsonls.setup({
+        capabilities = lsp_defaults.capabilities,
+        on_attach = lsp_defaults.on_attach,
+      })
+    end,
     ["ltex"] = function ()
       lspconfig.ltex.setup({
         capabilities = lsp_defaults.capabilities,
+        filetypes = { "bib", "markdown", "org", "plaintex", "rst", "rnoweb", "tex", "pandoc",
+          "quarto", "rmd" },
         on_attach = function (client, bufnr)
           require("ltex_extra").setup({
             path = vim.fn.expand("~") .. "/.local/share/ltex"

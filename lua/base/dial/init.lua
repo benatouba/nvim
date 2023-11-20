@@ -52,7 +52,7 @@ M.config = function()
   vim.api.nvim_set_keymap("v", "<C-a>", require("dial.map").inc_normal("visual"), {})
   vim.api.nvim_set_keymap("v", "<C-x>", require("dial.map").dec_normal("visual"), {})
 
-  AddAutocommands({
+  require("utils").add_autocommands({
     markdown_dial = {
       { "FileType", "markdown",
         "lua vim.api.nvim_buf_set_keymap(0, 'n', '<C-a>', require('dial.map').inc_normal('markdown'), {noremap = true})" },

@@ -20,50 +20,14 @@ local conds = require("luasnip.extras.expand_conditions")
 local events = require("luasnip.util.events")
 
 return {
-  lua = {
-    s("lua print var", {
-      t("print(\""),
-      i(1, "desrc"),
-      t(": \" .. "),
-      i(2, "the_variable"),
-      t(")"),
-    }),
-
-    s({ trig = "if basic", wordTrig = true }, {
-      t({ "if " }),
-      i(1),
-      t({ " then", "\t" }),
-      i(0),
-      t({ "", "end" })
-    }),
-
-    s({ trig = "ee", wordTrig = true }, {
-      t({ "else", "\t" }),
-      i(0),
-    }),
-
-    s("for", {
-      t "for ", c(1, {
-      sn(nil, { i(1, "k"), t ", ", i(2, "v"), t " in ", c(3, { t "pairs", t "ipairs" }), t "(", i(4),
-        t ")" }),
-      sn(nil, { i(1, "i"), t " = ", i(2), t ", ", i(3), })
-    }), t { " do", "\t" }, i(0), t { "", "end" }
-    }),
-    s("lf", {
-      t({ "local " }),
-      i(1),
-      t({ " = function(" }),
-      i(2),
-      t({ "\n", "\t" }),
-      i(3),
-      t({ "\n", "end" }),
-    }),
-    s("req", {
-      t({ "local " }),
-      i(1),
-      t({ " = require('" }),
-      rep(i),
-      t({ "')" }),
-    })
-  }
+  s({ trig = "locreq", name = "locreq" },
+    fmt(
+      [[
+      local {} = require("{}")
+      {}
+      ]], { f(function (import_name)
+        local parts = vim.split(import_name[1][1], ".", true)
+        return parts[#parts] or ""
+      end, { 1 }), i(1), i(0) })
+  ),
 }

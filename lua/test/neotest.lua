@@ -63,17 +63,18 @@ function M.config()
     consumers = {
       overseer = require("neotest.consumers.overseer"),
     },
-    -- overseer = {
-    --   enabled = true,
-    -- }
+    overseer = {
+      enabled = true,
+    }
   })
 
   local mappings = {
     t = {
       name = "+test",
       a = { "<cmd>lua require('neotest').run.attach()<CR>", "Attach to nearest" },
-      A = { "<cmd>lua require('neotest').run.adapters()<CR>", "Adapter list" },
-      d = { "<cmd>lua require('neotest').run.run({ strategy = 'dap'  })<CR>", "Debug" },
+      A = { "<cmd>lua require('neotest').state.adapter_ids()<CR>", "Adapters" },
+      d = { "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<CR>", "Debug" },
+      D = { "<cmd>lua require('neotest').run.run({ vim.fn.expand('%'), strategy = 'dap' })<CR>", "Debug File" },
       f = { "<cmd>lua require('neotest').run.run({ vim.fn.expand('%') })<CR>", "File" },
       l = { "<cmd>lua require('neotest').run.run_last()<CR>", "Last" },
       L = { "<cmd>lua require('neotest').run.run_last({ strategy = 'dap' })<CR>", "Last" },
@@ -84,6 +85,7 @@ function M.config()
       s = { "<cmd>lua require('neotest').summary.toggle()<CR>", "Summary" },
       S = { "<cmd>lua require('neotest').run.run({ suite = true })<CR>", "Suite" },
       t = { "<cmd>lua require('neotest').run.run({ suite = true })<CR>", "Suite" },
+      w = { "<cmd>lua require('neotest').watch.toggle(vim.fn.expand(%))<CR>", "Watch" },
       x = { "<cmd>lua require('neotest').run.stop()<CR>", "Stop" },
     },
   }

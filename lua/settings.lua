@@ -1,5 +1,6 @@
 vim.opt.iskeyword:append("-") -- treat dash separated words as a word text object"
 vim.opt.shortmess:append("c") -- Don't pass messages to |ins-completion-menu|.
+vim.opt.fillchars:append('stl: ')
 vim.opt.inccommand = "split" -- Make substitution work in realtime
 vim.o.hidden = true -- Required to keep multiple buffers open multiple buffers
 -- vim.o.title = true
@@ -21,20 +22,21 @@ vim.o.mouse = "c" -- Enable your mouse
 vim.o.splitbelow = true -- Horizontal splits will automatically be below
 vim.o.termguicolors = true -- set term gui colors most terminals support this
 vim.o.splitright = true -- Vertical splits will automatically be to the right
-vim.o.conceallevel = 0 -- So that I can see `` in markdown files
+vim.o.conceallevel = 2 -- So that I can see `` in markdown files
 vim.opt.ts=4 -- Insert 4 spaces for a tab
 vim.opt.sw=4 -- Change the number of space characters inserted for indentation
 vim.opt.list = true
 vim.opt.listchars:append "nbsp:␣,trail:•,extends:⟩,precedes:⟨"
-vim.bo.tabstop = 8
+vim.bo.tabstop = 4
+vim.opt.shiftwidth=4 -- Change the number of space characters inserted for indentation
 vim.bo.expandtab = true -- Converts tabs to spaces
 vim.bo.smartindent = true -- Makes indenting smart
-vim.wo.number = true -- set numbered lines
-vim.wo.relativenumber = true -- set relative number
-vim.wo.cursorline = true -- Enable highlighting of the current line
+vim.opt.number = true -- set numbered lines
+vim.opt.relativenumber = true -- set relative number
+vim.opt.cursorline = true -- Enable highlighting of the current line
 vim.opt.sidescrolloff = 7
 vim.opt.colorcolumn = "100"
-vim.o.scrolloff = 8
+vim.o.scrolloff = 999
 -- vim.o.showtabline = 2 -- Always show tabs
 vim.o.showmode = false -- We don't need to see things like -- INSERT -- anymore
 vim.o.backup = true -- backup files
@@ -46,6 +48,9 @@ vim.o.timeoutlen = 200 -- By default timeoutlen is 1000 ms
 vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
 vim.opt.foldmethod= "expr"
 vim.opt.foldlevelstart = 50
+vim.opt.formatoptions:remove('c');
+vim.opt.formatoptions:remove('r');
+vim.opt.formatoptions:remove('o');
 
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
 vim.o.smartcase = true -- smartcase makes it so that searching becomes case sensitive if you use a capital letter

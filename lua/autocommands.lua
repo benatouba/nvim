@@ -1,9 +1,20 @@
-AddAutocommands({
+local utils = require("utils")
+local api = vim.api
+api.nvim_create_autocmd("TextYankPost",
+  { callback = function () vim.highlight.on_yank({ higroup = "IncSearch", timeout = 40 }) end })
+api.nvim_create_autocmd({ "BufRead", "BufNewFile" },
+  { pattern = "*/node_modules/*", command = "lua vim.diagnostic.disable(0)" })
+api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { "*.txt", "*.md", "*.tex" },
+  command = "setlocal spell"
+})
+api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { "*.txt", "*.md", "*.json" },
+  command = "setlocal conceallevel=0"
+})
+
+utils.add_autocommands({
   _general_settings = {
-    { "TextYankPost", "*", "lua require('vim.highlight').on_yank({higroup = 'Search', timeout = 40})" },
-    { "BufWinEnter", "*", "setlocal formatoptions-=c formatoptions-=r formatoptions-=o" },
-    { "BufRead", "*", "setlocal formatoptions-=c formatoptions-=r formatoptions-=o" },
-    { "BufRead", "*", "tnoremap <silent> <esc> <c-\\><c-n>" },
     { "BufRead", "*_p3d*", "setfiletype fortran" },
     { "BufRead", "*.pro", "setfiletype idlang" },
     { "BufRead", "*.bash*", "setfiletype bash" },
@@ -16,8 +27,7 @@ AddAutocommands({
     { "BufRead", "*swa*.conf*", "setfiletype i3config" },
     -- { "BufWritePost", "plugins.lua", "lua R('plugins')" },
     -- { "BufWritePost", "~/.config/nvim/init.lua", "lua require('functions').reload_config()" },
-    { "BufWritePre", "*", ":%s/\\s\\+$//e" },
-    { "BufNewFile", "*", "setlocal formatoptions-=c formatoptions-=r formatoptions-=o" },
+    -- { "BufWritePre", "*", ":%s/\\s\\+$//e" },
     -- { "VimLeavePre", "*", "set title set titleold=" },
     { "BufRead", "*.sls", "setf sls" },
     { "BufWritePost", "*.py", "silent lua Pyflyby()" },
@@ -39,6 +49,8 @@ AddAutocommands({
       "nnoremap <silent> <buffer> <esc> :q<CR>" },
     { "FileType", "nofile", "nnoremap <silent> <buffer> q :q<CR>" },
     { "FileType", "norg", ":lua vim.o.conceallevel=2" },
+    -- { "FileType", "org", ":lua vim.o.conceallevel=2" },
+    { "FileType", "org", ":lua vim.o.concealcursor='nc'" },
   },
   firenvim = {
     { "BufEnter", "*ipynb_er-DIV*.txt", "set filetype=python" },

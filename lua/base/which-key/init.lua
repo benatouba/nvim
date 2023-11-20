@@ -60,6 +60,7 @@ local maps = {
 		h = { "<cmd>Lazy help<cr>", "Help" },
 		i = { "<cmd>Lazy install<cr>", "Install" },
 		l = { "<cmd>Lazy log<cr>", "Log" },
+    m = { "<cmd>Mason<cr>", "Info" },
 		p = { "<cmd>Lazy profile<cr>", "Profile" },
 		r = { "<cmd>Lazy restore<cr>", "Restore" },
 		s = { "<cmd>Lazy sync<cr>", "Sync" },
@@ -89,12 +90,6 @@ local maps = {
 	},
 	-- S = {name = "+Session", s = {"<cmd>SessionSave<cr>", "Save Session"}, l = {"<cmd>SessionLoad<cr>", "Load Session"}}
 }
-maps["m"] = {
-	name = "+Mason",
-	m = { "<cmd>Mason<cr>", "Info" },
-	u = { "<cmd>MasonUpdate<cr>", "Update Servers" },
-	l = { "<cmd>MasonLog<cr>", "Log" },
-}
 nmaps["]"] = {
 	-- b = { "<cmd>bNext<cr>", "Buffer" },
 	d = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
@@ -115,8 +110,9 @@ nmaps["["] = {
 maps["L"] = {
 	name = "+Logs",
 	c = { "<cmd>LuaCacheProfile<cr>", "CacheProfile" },
-	p = { "<cmd>Lazy profile<cr>", "Lazy Profile" },
 	l = { "<cmd>LspLog<cr>", "LSP" },
+	m = { "<cmd>MasonLog<cr>", "Log" },
+	p = { "<cmd>Lazy profile<cr>", "Lazy Profile" },
 }
 
 maps["g"] = {
@@ -174,3 +170,4 @@ which_key.register(gmaps, {
 which_key.register(nmaps, {
 	mode = "n", -- NORMAL mode
 })
+

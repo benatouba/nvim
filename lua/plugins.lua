@@ -51,7 +51,7 @@ lazy.setup({
   },
   {
     "nvim-neorg/neorg",
-    -- lazy = true,
+    lazy = false,
     -- event = { "BufReadPost", "VimEnter" },
     config = function ()
       require("management.neorg").config()
@@ -61,7 +61,7 @@ lazy.setup({
       "plenary.nvim",
       "nvim-neorg/neorg-telescope",
       "max397574/neorg-contexts",
-      { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
+      { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" }, enabled = false, },
     },
     enabled = true,
   },
@@ -227,7 +227,8 @@ lazy.setup({
     dependencies = {
       {
         "LiadOz/nvim-dap-repl-highlights",
-        config = function () require("nvim-dap-repl-highlights").setup() end
+        config = function () require("nvim-dap-repl-highlights").setup() end,
+        enabled = false,
       }
     },
     build = ":TSUpdate",
@@ -335,6 +336,7 @@ lazy.setup({
         config = function ()
           require("cmp-npm").setup({})
         end,
+        enabled = false,
       },
       {
         "L3MON4D3/LuaSnip",
@@ -406,7 +408,10 @@ lazy.setup({
   },
   {
     "NeogitOrg/neogit",
-    dependencies = { "sindrets/diffview.nvim" },
+    dependencies = {
+      "sindrets/diffview.nvim",
+      cmd = "DiffviewOpen",
+    },
     cmd = "Neogit",
     event = "InsertEnter",
     keys = "<leader>g",
@@ -437,6 +442,12 @@ lazy.setup({
     },
     config = function ()
       require("test.neotest").config()
+    end,
+  },
+  {
+    "vuki656/package-info.nvim",
+    config = function ()
+      require("misc.package_info").config()
     end,
   },
 
@@ -512,7 +523,7 @@ lazy.setup({
     config = function ()
       require("management.orgmode")
     end,
-    enabled = false,
+    enabled = true,
   },
   {
     "renerocksai/telekasten.nvim",
@@ -557,8 +568,23 @@ lazy.setup({
     config = function ()
       require("conform").setup({
         formatters_by_ft = {
-          -- Conform will run multiple formatters sequentially
           python = { "ruff_fix", "ruff_format" },
+          -- ["javascript"] = { "prettier" },
+          -- ["javascriptreact"] = { "prettier" },
+          -- ["typescript"] = { "prettier" },
+          -- ["typescriptreact"] = { "prettier" },
+          -- ["vue"] = { "prettier" },
+          -- ["css"] = { "prettier" },
+          -- ["scss"] = { "prettier" },
+          -- ["less"] = { "prettier" },
+          -- ["html"] = { "prettier" },
+          -- ["json"] = { "prettier" },
+          -- ["jsonc"] = { "prettier" },
+          -- ["yaml"] = { "prettier" },
+          -- ["markdown"] = { "prettier" },
+          -- ["markdown.mdx"] = { "prettier" },
+          -- ["graphql"] = { "prettier" },
+          -- ["handlebars"] = { "prettier" },
         },
       })
       local maps = {
@@ -785,6 +811,13 @@ lazy.setup({
     end,
   },
   {
+    "ThePrimeagen/harpoon",
+    config = function ()
+      require("misc.harpoon").config()
+      require("misc.harpoon").maps()
+    end,
+  },
+  {
     "ThePrimeagen/refactoring.nvim",
     event = "BufReadPost",
     dependencies = {
@@ -864,4 +897,13 @@ lazy.setup({
       require("misc.vimtex").config()
     end,
   },
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
+    enabled = false,
+    config = function ()
+      require("misc.typescript_tools").config()
+    end,
+  }
 }, {})
