@@ -283,7 +283,7 @@ lazy.setup({
     config = function ()
       require("lsp.copilot").config()
     end,
-    enabled = true,
+    enabled = false,
   },
   {
     "williamboman/mason.nvim",
@@ -294,7 +294,17 @@ lazy.setup({
     enabled = true,
   },
   { "williamboman/mason-lspconfig.nvim" },
-  "jay-babu/mason-nvim-dap.nvim",
+  { "nvimtools/none-ls.nvim"},
+  { "jay-babu/mason-null-ls.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    dependencies = {
+      "williamboman/mason.nvim",
+      "nvimtools/none-ls.nvim",
+    },
+    config = function()
+      require("lsp.null-ls").config()
+    end,},
+  {"jay-babu/mason-nvim-dap.nvim"},
   {
     "neovim/nvim-lspconfig",
     dependencies = {
