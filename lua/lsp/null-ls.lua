@@ -30,9 +30,9 @@ local sources = {
   null_ls.builtins.diagnostics.gitlint.with({
     filetypes = {"NeogitCommitMessage"}
   }),
-  null_ls.builtins.diagnostics.commitlint.with({
-    filetypes = { "NeogitCommitMessage" }
-  }),
+  -- null_ls.builtins.diagnostics.commitlint.with({
+  --   filetypes = { "NeogitCommitMessage" }
+  -- }),
   null_ls.builtins.diagnostics.proselint,
   -- null_ls.builtins.diagnostics.semgrep,
   -- null_ls.builtins.completion.spell,
