@@ -14,7 +14,7 @@ M.config = function()
   telescope.load_extension("harpoon")
 
   harpoon.setup({
-    global_settings = {
+    settings = {
       save_on_toggle = true,
       save_on_change = true,
     },
@@ -22,7 +22,7 @@ M.config = function()
 end
 
 M.maps = function ()
-  local status_ok, _ = pcall(require, "harpoon")
+  local status_ok, harpoon = pcall(require, "harpoon")
   if not status_ok then
     vim.notify("Harpoon not okay", vim.log.levels.ERROR)
     return
@@ -32,23 +32,24 @@ M.maps = function ()
     vim.notify("WhichKey not okay", vim.log.levels.ERROR)
     return
   end
+  vim.keymap.set("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
   local maps = {
     m = {
       name = "+Marks",
-      m = { "<cmd>lua require('harpoon.mark').add_file()<cr>", "Add mark" },
+      m = { "<cmd>lua require('harpoon'):list():append()<cr>", "Add mark" },
       t = { "<cmd>Telescope harpoon marks<cr>", "Toggle menu" },
       n = { "<cmd>lua require('harpoon.mark').nav_next()<cr>", "Next mark" },
       p = { "<cmd>lua require('harpoon.mark').nav_prev()<cr>", "Prev mark" },
-      ["1"] = { "<cmd>lua require('harpoon.ui').nav_file(1)<cr>", "Go to mark 1" },
-      ["2"] = { "<cmd>lua require('harpoon.ui').nav_file(2)<cr>", "Go to mark 2" },
-      ["3"] = { "<cmd>lua require('harpoon.ui').nav_file(3)<cr>", "Go to mark 3" },
-      ["4"] = { "<cmd>lua require('harpoon.ui').nav_file(4)<cr>", "Go to mark 4" },
-      ["5"] = { "<cmd>lua require('harpoon.ui').nav_file(5)<cr>", "Go to mark 5" },
-      ["6"] = { "<cmd>lua require('harpoon.ui').nav_file(6)<cr>", "Go to mark 6" },
-      ["7"] = { "<cmd>lua require('harpoon.ui').nav_file(7)<cr>", "Go to mark 7" },
-      ["8"] = { "<cmd>lua require('harpoon.ui').nav_file(8)<cr>", "Go to mark 8" },
-      ["9"] = { "<cmd>lua require('harpoon.ui').nav_file(9)<cr>", "Go to mark 9" },
-      ["0"] = { "<cmd>lua require('harpoon.ui').nav_file(10)<cr>", "Go to mark 10" },
+      ["1"] = { "<cmd>lua require('harpoon'):list():select(1)<cr>", "Go to mark 1" },
+      ["2"] = { "<cmd>lua require('harpoon'):list():select(2)<cr>", "Go to mark 2" },
+      ["3"] = { "<cmd>lua require('harpoon'):list():select(3)<cr>", "Go to mark 3" },
+      ["4"] = { "<cmd>lua require('harpoon'):list():select(4)<cr>", "Go to mark 4" },
+      ["5"] = { "<cmd>lua require('harpoon'):list():select(5)<cr>", "Go to mark 5" },
+      ["6"] = { "<cmd>lua require('harpoon'):list():select(6)<cr>", "Go to mark 6" },
+      ["7"] = { "<cmd>lua require('harpoon'):list():select(7)<cr>", "Go to mark 7" },
+      ["8"] = { "<cmd>lua require('harpoon'):list():select(8)<cr>", "Go to mark 8" },
+      ["9"] = { "<cmd>lua require('harpoon'):list():select(9)<cr>", "Go to mark 9" },
+      ["0"] = { "<cmd>lua require('harpoon'):list():select(10)<cr>", "Go to mark 10" },
     }
   }
   local opts = {

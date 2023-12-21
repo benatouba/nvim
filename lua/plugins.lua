@@ -822,6 +822,8 @@ lazy.setup({
   },
   {
     "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = function ()
       require("misc.harpoon").config()
       require("misc.harpoon").maps()
