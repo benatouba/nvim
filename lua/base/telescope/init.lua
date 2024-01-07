@@ -138,7 +138,7 @@ M.config = function ()
       b = { "<cmd>Telescope git_branches<cr>", "Branches" },
       B = { "<cmd>Telescope file_browser<cr>", "Browser" },
       c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-      f = { "<cmd>Telescope find_files<cr>", "Find File" },
+      f = { "<cmd>Telescope find_files hidden=true<cr>", "Find File" },
       g = { "<cmd>Telescope git_files<cr>", "Git Files" },
       -- h = { "<cmd>Telescope howdoi<cr>", "How Do I .." },
       k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
