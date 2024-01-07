@@ -11,7 +11,7 @@ function M.config()
     log_level = vim.log.levels.WARN,
     status = {
       virtual_text = true,
-      signs = true,
+      signs = false,
     },
     icons = {
       running_animated = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
@@ -77,15 +77,15 @@ function M.config()
       D = { "<cmd>lua require('neotest').run.run({ vim.fn.expand('%'), strategy = 'dap' })<CR>", "Debug File" },
       f = { "<cmd>lua require('neotest').run.run({ vim.fn.expand('%') })<CR>", "File" },
       l = { "<cmd>lua require('neotest').run.run_last()<CR>", "Last" },
-      L = { "<cmd>lua require('neotest').run.run_last({ strategy = 'dap' })<CR>", "Last" },
+      L = { "<cmd>lua require('neotest').run.run_last({ strategy = 'dap' })<CR>", "Last (Debug)" },
       n = { "<cmd>lua require('neotest').run.run()<CR>", "Nearest" },
       o = { "<cmd>lua require('neotest').output.open({ enter = true })<CR>", "Output" },
       O = { "<cmd>lua require('neotest').output.open({ enter = true, short = true })<CR>", "Output (short)" },
       p = { "<cmd>lua require('neotest').output_panel.toggle()<CR>", "Panel" },
       s = { "<cmd>lua require('neotest').summary.toggle()<CR>", "Summary" },
       S = { "<cmd>lua require('neotest').run.run({ suite = true })<CR>", "Suite" },
-      t = { "<cmd>lua require('neotest').run.run({ suite = true })<CR>", "Suite" },
-      w = { "<cmd>lua require('neotest').watch.toggle(vim.fn.expand(%))<CR>", "Watch" },
+      t = { "<cmd>lua require('neotest').run.run()<CR>", "Suite" },
+      w = { "<cmd>lua require('neotest').watch.toggle()<CR>", "Watch" },
       x = { "<cmd>lua require('neotest').run.stop()<CR>", "Stop" },
     },
   }

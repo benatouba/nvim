@@ -1,4 +1,5 @@
 local neorg_ok, neorg = pcall(require, "neorg")
+
 if not neorg_ok then
   vim.notify("neorg not ok")
   return
@@ -14,15 +15,58 @@ local M = {}
 
 local neorg_callbacks = require("neorg.core.callbacks")
 
+local function imports()
+  return require("luasnip"), require("neorg.modules.external.templates.default_snippets")
+end
+
+local my_keys = {
+  TODAY_OF_FILE_ORG = function ()  -- detect date from filename and return in org date format
+    local ls, m = imports()
+    -- use m.file_name_date() if you use journal.strategy == "flat"
+    return ls.text_node(m.parse_date(0, m.file_tree_date(), [[<%Y-%m-%d %a]]))  -- <2006-11-01 Wed>
+  end,
+  TODAY_OF_FILE_NORG = function ()  -- detect date from filename and return in norg date format
+    local ls, m = imports()
+    -- use m.file_name_date() if you use journal.strategy == "flat"
+    return ls.text_node(m.parse_date(0, m.file_tree_date(), [[%a, %d %b %Y]]))  -- Wed, 1 Nov 2006
+  end,
+  TODAY_ORG = function ()  -- detect date from filename and return in org date format
+    local ls, m = imports()
+    return ls.text_node(m.parse_date(0, os.time(), [[<%Y-%m-%d %a %H:%M:%S>]]))  -- <2006-11-01 Wed 19:15>
+  end,
+  TODAY_NORG = function ()  -- detect date from filename and return in norg date format
+    local ls, m = imports()
+    return ls.text_node(m.parse_date(0, os.time(), [[%a, %d %b %Y %H:%M:%S]]))  -- Wed, 1 Nov 2006 19:15
+  end,
+  NOW_IN_DATETIME = function ()  -- print current date+time of invoke
+    local ls, m = imports()
+    return ls.text_node(m.parse_date(0, os.time(), [[%Y-%m-%d %a %X]]))  -- 2023-11-01 Wed 23:48:10
+  end,
+}
+
+local function isLineStartingWithHyphenOrWhitespace()
+    local line = vim.fn.getline('.')
+    return line:match('^%s*%- (') ~= nil
+end
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'norg',
+  callback = function()
+    M.insertHyphenParentheses()
+  end
+})
+
+function M.insertHyphenParentheses()
+    if isLineStartingWithHyphenOrWhitespace() then
+        vim.api.nvim_command('normal! o- ( )')
+    else
+        vim.api.nvim_command('normal! o')
+    end
+end
+
+
 neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function (_, keybinds)
-  -- Map all the below keybinds only when the "norg" mode is active
   keybinds.map_event_to_mode("norg", {
-    n = {  -- Bind keys in normal mode
-      { "<leader>oO", "core.integrations.telescope.find_linkable" },
-    },
-    i = {  -- Bind in insert mode
-      { "<C-l>", "core.integrations.telescope.insert_link" },
-    },
   }, {
     silent = true,
     noremap = true,
@@ -75,11 +119,18 @@ M.config = function ()
       ["core.summary"] = {},
       ["core.ui.calendar"] = {},
       ["external.context"] = {},
-      -- ["external.templates"] = {
-      --   config = {
-      --     templates_dir = vim.fn.stdpath("config") .. "/snippets/templates/norg/"
-      --   }
-      -- },
+      ["core.keybinds"] = {
+        config = {
+          default_keybinds = true,
+          neorg_leader = "<localleader>",
+        },
+      },
+      ["external.templates"] = {
+        config = {
+          templates_dir = vim.fn.stdpath("config") .. "/templates/norg",
+          keywords = my_keys,
+        },
+      },
     }
   })
   local maps = {
@@ -91,6 +142,7 @@ M.config = function ()
       t = { "<cmd>Neorg workspace tech<CR>", "Tech" },
       p = { "<cmd>Neorg workspace people<CR>", "People" },
       w = { "<cmd>Neorg workspace projects<CR>", "Work (Projects)" },
+      W = { "<cmd>Neorg return<CR>", "Return" },
     },
   }
   local locmaps = {

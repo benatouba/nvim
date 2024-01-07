@@ -37,9 +37,30 @@ local data = {
   },
 }
 
+local js_attach_with_arguments = function ()
+  local js_based_languages = {
+    "javascript",
+    "typescript",
+    "vue",
+    "javascriptreact",
+    "typescriptreact",
+  }
+  if vim.fn.filereadable(".vscode/launch.json") then
+    local dap_vscode = require("dap.ext.vscode")
+    dap_vscode.load_launchjs(nil, {
+      ["pwa-node"] = js_based_languages,
+      ["pwa-chrome"] = js_based_languages,
+      ["node"] = js_based_languages,
+      ["chrome"] = js_based_languages,
+    })
+  end
+  require("dap").continue()
+end
+
 local mappings = {}
 mappings["d"] = {
   name = "+Debug",
+  a = { function() js_attach_with_arguments() end, "Run with arguments" },
   b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
   B = { "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('BP Condition: '))<cr>", "Conditional Breakpoint" },
   c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
@@ -69,29 +90,38 @@ mappings["d"] = {
 }
 
 local M = {}
-M.vt_config = function()
+M.vt_config = function ()
   dap_vt.setup({
-    enabled = true,                        -- enable this plugin (the default)
-    enabled_commands = true,               -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
-    highlight_changed_variables = true,    -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
-    highlight_new_as_changed = false,      -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
-    show_stop_reason = true,               -- show stop reason when stopped for exceptions
-    commented = false,                     -- prefix virtual text with comment string
-    only_first_definition = true,          -- only show virtual text at first definition (if there are multiple)
-    all_references = false,                -- show virtual text on all all references of the variable (not only definitions)
-    filter_references_pattern = "<module", -- filter references (not definitions) pattern when all_references is activated (Lua gmatch pattern, default filters out Python modules)
+    enabled = true,  -- enable this plugin (the default)
+    enabled_commands = true,  -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
+    highlight_changed_variables = true,  -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
+    highlight_new_as_changed = false,  -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
+    show_stop_reason = true,  -- show stop reason when stopped for exceptions
+    commented = false,  -- prefix virtual text with comment string
+    only_first_definition = true,  -- only show virtual text at first definition (if there are multiple)
+    all_references = false,  -- show virtual text on all all references of the variable (not only definitions)
+    filter_references_pattern = "<module",  -- filter references (not definitions) pattern when all_references is activated (Lua gmatch pattern, default filters out Python modules)
     -- Experimental Features:
-    virt_text_pos = "eol",                 -- position of virtual text, see `:h nvim_buf_set_extmark()`
-    all_frames = false,                    -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
-    virt_lines = false,                    -- show virtual lines instead of virtual text (will flicker!)
-    virt_text_win_col = nil,               -- position the virtual text at a fixed window column (starting from the first text column) ,
+    virt_text_pos = "eol",  -- position of virtual text, see `:h nvim_buf_set_extmark()`
+    all_frames = false,  -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
+    virt_lines = false,  -- show virtual lines instead of virtual text (will flicker!)
+    virt_text_win_col = nil,  -- position the virtual text at a fixed window column (starting from the first text column) ,
   })
 end
+
+local js_based_languages = {
+  "javascript",
+  "typescript",
+  "vue",
+  "javascriptreact",
+  "typescriptreact",
+}
 
 M.config = function ()
   vim.fn.sign_define("DapBreakpoint", data.breakpoint)
   vim.fn.sign_define("DapBreakpointRejected", data.breakpoint_rejected)
   vim.fn.sign_define("DapStopped", data.stopped)
+  vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
   dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
   require("nvim-dap-virtual-text").setup({
@@ -99,17 +129,6 @@ M.config = function ()
     all_frames = true,
   })
   require("which-key").register(mappings, { mode = "n", prefix = "<leader>" })
-
-  dap.adapters.chrome = {
-    type = "executable",
-    command = "node",
-    args = { DATA_PATH .. "/mason/packages/chrome-debug-adapter/src/chromeDebug.ts" },
-  }
-  dap.adapters.node2 = {
-    type = "executable",
-    command = "node",
-    args = { DATA_PATH .. "/mason/packages/node-debug2-adapter/out/src/nodeDebug.js" },
-  }
 
   local mason_debugpy = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
   dap.adapters.python = {
@@ -175,61 +194,56 @@ M.config = function ()
     },
   }
 
-  dap.configurations.javascript = {
-    {
-      type = "chrome",
-      request = "attach",
-      program = "${file}",
-      cwd = vim.fn.getcwd(),
-      sourceMaps = true,
-      protocol = "inspector",
-      port = 9222,
-      webRoot = "${workspaceFolder}",
-    },
-  }
-
-  dap.configurations.typescript = {
-    {
-      type = "chrome",
-      request = "attach",
-      program = "${file}",
-      cwd = vim.fn.getcwd(),
-      sourceMaps = true,
-      protocol = "inspector",
-      port = 9222,
-      webRoot = "${workspaceFolder}",
-    },
-  }
-
-  dap.configurations.vue = {
-    {
-      type = "chrome",
-      request = "attach",
-      program = "${file}",
-      cwd = vim.fn.getcwd(),
-      sourceMaps = true,
-      protocol = "inspector",
-      port = 9222,
-      webRoot = "${workspaceFolder}",
-    },
-  }
-  dap.configurations.vue = {
-    {
-      name = "Launch",
-      type = "node2",
-      request = "launch",
-      program = "${file}",
-      cwd = vim.fn.getcwd(),
-      sourceMaps = true,
-      protocol = "inspector",
-      console = "integratedTerminal",
-    },
-    {
-      name = "Attach to process",
-      type = "node2",
-      request = "attach",
-      processId = require("dap.utils").pick_process,
-    },
-  }
+  for _, lang in ipairs(js_based_languages) do
+    dap.configurations[lang] = {
+      {
+        type = "pwa-node",
+        request = "launch",
+        name = "Launch file",
+        program = "${file}",
+        cwd = "${workspaceFolder}",
+        sourceMaps = true,
+      },
+      {
+        type = "pwa-node",
+        request = "attach",
+        name = "Attach to Process",
+        program = "${file}",
+        cwd = "${workspaceFolder}",
+        sourceMaps = true,
+        processId = require("dap.utils").pick_process,
+      },
+      {
+        type = "pwa-chrome",
+        request = "launch",
+        name = "Launch Chrome",
+        url = function ()
+          local co = coroutine.running()
+          return coroutine.create(function ()
+            vim.ui.input({
+              prompt = "URL: ",
+              default = "http://localhost:3000",
+            }, function (url)
+              if url == nil or url == "" then
+                return
+              else
+                coroutine.resume(co, url)
+              end
+            end)
+          end)
+        end,
+        sourceMaps = true,
+        protocol = "inspector",
+        webRoot = "${workspaceFolder}",
+        skipFiles = { "<node_internals>/**/*.js" },
+        userDataDir = false,
+      },
+      {
+        name = "launch.json config",
+        type = "",
+        request = "launch",
+      }
+    }
+  end
 end
 return M

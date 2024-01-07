@@ -1,4 +1,5 @@
 local M = {}
+
 M.config = function ()
   -- LSP signs default
   vim.fn.sign_define("DiagnosticSignHint",
@@ -15,14 +16,14 @@ M.config = function ()
   )
 
   -- LSP Enable diagnostics
-  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-      virtual_text = false,
-      underline = true,
-      signs = true,
-      update_in_insert = true,
-      severity_sort = true,
-    })
+  -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  --   vim.lsp.diagnostic.on_publish_diagnostics, {
+  --     virtual_text = true,
+  --     underline = true,
+  --     signs = true,
+  --     update_in_insert = true,
+  --     severity_sort = true,
+  --   })
 
   local mason_ok, mason = pcall(require, "mason")
   if not mason_ok then
@@ -73,37 +74,79 @@ M.config = function ()
     local maps = {
       s = {
         name = "+Search",
-        d = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
-        D = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
-        s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols (LSP)" },
-        S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols (LSP)" },
+        l = {
+          name = "+LSP",
+          d = { "<cmd>Telescope lsp_definitions<cr>", "Definitions" },
+          D = { "<cmd>Telescope lsp_declarations<cr>", "Declarations" },
+          i = { "<cmd>Telescope lsp_implementations<cr>", "Implementations" },
+          r = { "<cmd>Telescope lsp_references<cr>", "References" },
+          s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols (LSP)" },
+          S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols (LSP)" },
+          -- s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols (LSP)" },
+          -- S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols (LSP)" },
+        },
       },
       l = {
         name = "+LSP",
-        a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+        a = { vim.lsp.buf.code_action, "Code Action" },
         c = { "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>",
           "Server Capabilities" },
-        d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },
-        D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Declaration" },
+        d = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
+        D = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
         l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens" },
         L = { "<cmd>LspLog<CR>", "Logs" },
-        -- f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" },
+        -- f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" }, covered by conform.nvim
+        -- with lsp_fallback
         F = { "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", "Format Document (Sync)" },
-        h = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover" },
+        h = { vim.lsp.buf.hover, "Hover" },
         i = { "<cmd>LspInfo<cr>", "Info" },
         q = { "<cmd>Telescope quickfix<cr>", "Quickfix" },
-        r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+        r = { vim.lsp.buf.rename, "Rename" },
         R = { "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>", "Refactor" },
-        t = { "<cmd>lua vim.lsp.buf.type_definition()<cr>", "Type Definition" },
+        v = { "<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>", "Virtual Text" },
         x = { "<cmd>cclose<cr>", "Close Quickfix" },
-        s = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "Signature Help" },
+        w = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", "Workspace" },
+        s = {
+          name = "+Settings",
+          c = { "<cmd>e $HOME/.config/nvim/lua/lsp/init.lua<cr>", "Config" },
+          s = { "<cmd>lua vim.lsp.status()<cr>", "Status" },
+        },
       }
     }
     wk.register(maps, { mode = "n", buffer = bufnr, prefix = "<leader>" })
     local gmaps = {
-      r = { "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>", "Refactor" },
+      d = { vim.lsp.buf.definition, "Definition" },
+      D = { vim.lsp.buf.declaration, "Declaration" },
+      I = { vim.lsp.buf.implementation, "Implementations" },
+      -- r = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "Rename" },
+      R = { vim.lsp.buf.references, "References" },
+      -- r = { "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>", "Refactor" },,
+      t = { vim.lsp.buf.type_definition, "Type Definition" },
+      s = { vim.lsp.buf.signature_help, "Signature" },
     }
+    wk.register(gmaps, {
+      mode = "n",  -- NORMAL mode
+      prefix = "g",
+    })
+
     wk.register(gmaps, { mode = "v", prefix = "g" })
+    vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>")
+    vim.keymap.set("n", "<C-K>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
+    vim.keymap.set("i", "<C-K>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
+    vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
+    vim.lsp.inlay_hint.enable()
+
+    -- -- Highlights occurences of the word under the cursor
+    -- vim.api.nvim_create_augroup("LspHighlighting", {})
+    -- vim.api.nvim_create_autocmd(
+    --   { "CursorHold", "CursorHoldI" }, {
+    --     group = "LspHighlighting",
+    --     buffer = 0,
+    --     command = "lua vim.lsp.buf.document_highlight()"
+    --   }
+    -- )
+    -- vim.api.nvim_create_autocmd("CursorMoved",
+    --   { group = "LspHighlighting", buffer = 0, command = "lua vim.lsp.buf.clear_references()" })
   end
 
   local lsp_defaults = {
@@ -164,6 +207,42 @@ M.config = function ()
               diagnosticMode = "openFilesOnly",
               useLibraryCodeForTypes = true,
               typeCheckingMode = "off",
+            }
+          }
+        }
+      })
+    end,
+    ["lua_ls"] = function ()
+      lspconfig.lua_ls.setup({
+        on_init = function (client)
+          local path = client.workspace_folders[1].name
+          if not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc") then
+            client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
+              Lua = {
+                runtime = {
+                  version = "LuaJIT"
+                },
+                workspace = {
+                  checkThirdParty = false,
+                  -- library = {
+                  --   vim.env.VIMRUNTIME
+                  --   -- "${3rd}/luv/library"
+                  --   -- "${3rd}/busted/library",
+                  -- }
+                  -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+                  library = vim.api.nvim_get_runtime_file("", true)
+                }
+              }
+            })
+
+            client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+          end
+          return true
+        end,
+        settings = {
+          Lua = {
+            completion = {
+              callSnippet = "Replace"
             }
           }
         }

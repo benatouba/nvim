@@ -34,8 +34,13 @@ vim.bo.smartindent = true -- Makes indenting smart
 vim.opt.number = true -- set numbered lines
 vim.opt.relativenumber = true -- set relative number
 vim.opt.cursorline = true -- Enable highlighting of the current line
+vim.opt.incsearch = true
+vim.opt.spelllang = "en,de"
+vim.opt.showcmd = true
+
 vim.opt.sidescrolloff = 7
 vim.opt.colorcolumn = "100"
+vim.opt.textwidth = 100
 vim.o.scrolloff = 999
 -- vim.o.showtabline = 2 -- Always show tabs
 vim.o.showmode = false -- We don't need to see things like -- INSERT -- anymore
@@ -51,6 +56,10 @@ vim.opt.foldlevelstart = 50
 vim.opt.formatoptions:remove('c');
 vim.opt.formatoptions:remove('r');
 vim.opt.formatoptions:remove('o');
+vim.opt.hlsearch = true
+
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
 
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
 vim.o.smartcase = true -- smartcase makes it so that searching becomes case sensitive if you use a capital letter
@@ -88,4 +97,25 @@ vim.diagnostic.config({
         border = 'rounded',
         focusable = false,
     },
+})
+
+-- SET THE LINE NUMBERS TO ABSOLUTE NUMBERS WHEN ENDTERING COMMAND MODE
+local set_cmdline = vim.api.nvim_create_augroup("set_cmdline", { clear = true })
+vim.api.nvim_create_autocmd("CmdlineEnter", {
+	pattern = {"*"},
+	callback = function()
+		-- print("cmdline enter")
+		vim.opt.relativenumber = false
+		vim.cmd('redraw')
+	end,
+	group = set_cmdline
+})
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+	pattern = {"*"},
+	callback = function()
+		-- print("cmdline leave")
+		vim.opt.relativenumber = true
+		vim.cmd('redraw')
+	end,
+	group = set_cmdline
 })

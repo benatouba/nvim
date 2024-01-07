@@ -237,24 +237,79 @@ M.config = function ()
           cmp.mapping.scroll_docs(-4)
         end
       end,
-      ["<C-Space>"] = cmp.mapping.complete(),
+      ["<C-Space>"] = cmp.mapping(function ()
+        if cmp.visible() then
+          cmp.abort()
+        else
+          cmp.complete()
+        end
+      end, { "i", "s", "c" }),
       ["<C-e>"] = cmp.mapping.abort(),
       ["<C-h>"] = cmp.mapping.abort(),
-      ["<CR>"] = cmp.mapping.confirm({
-        -- behavior = cmp.ConfirmBehavior.Replace,
-        select = false,
-      }),
-      ["<C-n>"] = cmp.mapping.select_next_item(),
-      ["<C-p>"] = cmp.mapping.select_prev_item(),
+      ["<C-l>"] = cmp.mapping(function(fallback)
+        local _, cp = pcall(require, "copilot.suggestion")
+        local entry = cmp.get_selected_entry()
+        if cmp.visible() and entry then
+          cmp.confirm({
+            select = false,
+          })
+        elseif cp.is_visible() then
+          cp.accept()
+        else
+          fallback()
+        end
+      end, { "i", "s", "c" }),
+      ["<CR>"] = cmp.mapping(function (fallback)
+        -- local _, cp = pcall(require, "copilot.suggestion")
+        local entry = cmp.get_selected_entry()
+        if cmp.visible() and entry then
+          cmp.confirm({
+            -- behavior = cmp.ConfirmBehavior.Replace,
+            select = false,
+          })
+        -- elseif cp.is_visible() then
+        --   cp.accept()
+        else
+          fallback()
+        end
+      end, { "i", "s", "c" }),
+      ["<C-n>"] = cmp.mapping(function (fallback)
+        local _, cp = pcall(require, "copilot.suggestion")
+        if cmp.visible() then
+          cmp.select_next_item()
+        elseif luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        elseif cp.is_visible() then
+          cp.next()
+        else
+          fallback()
+        end
+      end, { "i", "s", "c" }),
+      ["<C-p>"] = cmp.mapping(function (fallback)
+        local _, cp = pcall(require, "copilot.suggestion")
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        elseif cp.is_visible() then
+          cp.prev()
+        else
+          fallback()
+        end
+      end, { "i", "s", "c" }),
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
       ["<C-b>"] = cmp.mapping.scroll_docs(-4),
       ["<Tab>"] = cmp.mapping(function (fallback)
-        if luasnip.expand_or_jumpable() then
+        local _, cp = pcall(require, "copilot.suggestion")
+        local entry = cmp.get_selected_entry()
+        if cmp.visible() and entry then
+          cmp.confirm()
+        elseif luasnip.expand_or_jumpable() then
           luasnip.expand_or_jump()
-        elseif cmp.visible() then
-          cmp.select_next_item()
-        elseif has_words_before() then
-          cmp.complete()
+        elseif not has_words_before() then
+          fallback()
+        elseif cp.is_visible() then
+          cp.accept()
         else
           fallback()
         end
@@ -272,7 +327,7 @@ M.config = function ()
       end, { "i", "s", "c" }),
     }),
     sources = default_cmp_sources,
-    -- --                 ﬘    m    
+    --                 ﬘    m    
   })
   vim.api.nvim_create_autocmd("BufReadPre", {
     callback = function (t)

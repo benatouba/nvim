@@ -22,9 +22,6 @@ O.colorscheme = "catppuccin-macchiato"
 O.auto_close_tree = 0
 O.wrap_lines = true
 
--- special keys
-O.mapleader = " "
-
 -- if you don't want all the parsers change this to a table of the ones you want
 O.treesitter.ensure_installed = "all"
 O.treesitter.ignore_install = {}
