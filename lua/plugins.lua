@@ -61,7 +61,7 @@ lazy.setup({
       "plenary.nvim",
       "nvim-neorg/neorg-telescope",
       "max397574/neorg-contexts",
-      { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" }, enabled = false, },
+      { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
     },
     enabled = true,
   },
@@ -137,7 +137,20 @@ lazy.setup({
   -- use("sheerun/vim-polyglot")
 
   -- Icons and visuals
-  "kyazdani42/nvim-web-devicons",
+  {
+    "nvim-tree/nvim-web-devicons",
+    config = function ()
+      require("nvim-web-devicons").setup()
+      require("nvim-web-devicons").set_icon({
+        nvim = {
+          icon = "",
+          color = "#67B25E",
+          cterm_color = "83",
+          name = "Neovim",
+        }
+      })
+    end
+  },
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
@@ -262,6 +275,13 @@ lazy.setup({
     ft = { "vue", "typescript", "javascript" },
     dependencies = "nvim-treesitter",
     enabled = true,
+  },
+  {
+    "OlegGulevskyy/better-ts-errors.nvim",
+    dependencies = { "MunifTanjim/nui.nvim" },
+    config = {
+      keymap = "<leader>dd"
+    }
   },
   {
     "ray-x/lsp_signature.nvim",
@@ -421,6 +441,9 @@ lazy.setup({
     dependencies = {
       "sindrets/diffview.nvim",
       cmd = "DiffviewOpen",
+      config = function ()
+        require("git.diffview").config()
+      end,
     },
     cmd = "Neogit",
     event = "InsertEnter",
@@ -473,6 +496,7 @@ lazy.setup({
     event = "InsertEnter",
     enabled = true,
   },
+  { "folke/neodev.nvim", opts = {} },
   {
     "rcarriga/nvim-dap-ui",
     event = "InsertEnter",
@@ -514,16 +538,21 @@ lazy.setup({
     "mxsdev/nvim-dap-vscode-js",
     dependencies = { "mfussenegger/nvim-dap" },
     config = function ()
-      require("debug.vscode_js")
+      require("debug.vscode_js").config()
     end,
-    ft = { "javascript", "typescript" },
-    enabled = false,
+    ft = { "javascript", "vue", "javascriptreact", "typescriptreact", "typescript" },
+    enabled = true,
   },
   {
     "microsoft/vscode-js-debug",
     lazy = true,
-    build = "pnpm install --legacy-peer-deps && pnpm run compile",
-    enabled = false,
+    build = "npm ci --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+    enabled = true,
+  },
+  {
+    "Joakker/lua-json5",
+    build = "./install.sh",
+    enabled = true,
   },
 
   -- project management
@@ -692,18 +721,9 @@ lazy.setup({
   },
   {
     "akinsho/toggleterm.nvim",
-    -- tag = "*",
+    version = "*",
     config = function ()
-      require("toggleterm").setup({
-        open_mapping = [[<c-\>]],
-        direction = "horizontal",
-        float_lazys = {
-          border = "single",
-          width = 120,
-          height = 30,
-          winblend = 3,
-        },
-      })
+      require("misc.toggleterm").config()
     end,
   },
   {
@@ -890,7 +910,7 @@ lazy.setup({
     -- end,
     enabled = false,
   },
-  -- { "stevearc/dressing.nvim" },
+  { "stevearc/dressing.nvim" },
   {
     "folke/noice.nvim",
     dependencies = {
