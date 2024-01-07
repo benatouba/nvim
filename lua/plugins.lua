@@ -133,7 +133,6 @@ lazy.setup({
     event = "BufReadPost",
     enabled = true,
   },
-  -- use("sheerun/vim-polyglot")
 
   -- Icons and visuals
   {
