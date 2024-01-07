@@ -28,8 +28,6 @@ lazy.setup({
   "nvim-lua/plenary.nvim",  -- most important functions (very important)
   {
     "nvimdev/lspsaga.nvim",
-    -- lazy = true,
-    branch = "main",
     event = "LspAttach",
     config = function ()
       require("lsp.lspsaga").config()
@@ -86,7 +84,8 @@ lazy.setup({
   },
   {
     "nvim-telescope/telescope-fzf-native.nvim",
-    build = "make",
+    build =
+    "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
     -- dependencies = "telescope.nvim",
     -- lazy = true,
     -- cmd = "Telescope",
@@ -165,6 +164,7 @@ lazy.setup({
     dependencies = {
       "nvim-web-devicons",
       -- "nvim-lua/lsp-status.nvim",
+      "AndreM222/copilot-lualine",
       "arkav/lualine-lsp-progress",
     },
     config = function ()
@@ -182,7 +182,7 @@ lazy.setup({
   },
   {
     "echasnovski/mini.bracketed",
-    version = false,
+    version = "*",
     config = function ()
       require("mini.bracketed").setup()
     end,
@@ -303,7 +303,7 @@ lazy.setup({
     config = function ()
       require("lsp.copilot").config()
     end,
-    enabled = false,
+    enabled = true,
   },
   {
     "williamboman/mason.nvim",
@@ -314,17 +314,19 @@ lazy.setup({
     enabled = true,
   },
   { "williamboman/mason-lspconfig.nvim" },
-  { "nvimtools/none-ls.nvim"},
-  { "jay-babu/mason-null-ls.nvim",
+  { "nvimtools/none-ls.nvim" },
+  {
+    "jay-babu/mason-null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
       "nvimtools/none-ls.nvim",
     },
-    config = function()
+    config = function ()
       require("lsp.null-ls").config()
-    end,},
-  {"jay-babu/mason-nvim-dap.nvim"},
+    end,
+  },
+  { "jay-babu/mason-nvim-dap.nvim" },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
