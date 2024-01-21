@@ -16,9 +16,13 @@ local sources = {
   null_ls.builtins.formatting.shfmt,
   null_ls.builtins.formatting.shellharden,
   null_ls.builtins.diagnostics.zsh,
-  null_ls.builtins.formatting.fixjson,
-  null_ls.builtins.formatting.markdownlint,
-  null_ls.builtins.diagnostics.markdownlint,
+  -- null_ls.builtins.formatting.fixjson,
+  null_ls.builtins.formatting.markdownlint.with({
+    filetypes = { "markdown", "markdown.mdx", "pandoc.markdown" }
+  }),
+  null_ls.builtins.diagnostics.markdownlint.with({
+    filetypes = { "markdown", "markdown.mdx", "pandoc.markdown" }
+  }),
   -- null_ls.builtins.diagnostics.alex,
   null_ls.builtins.formatting.djlint.with({
     filetypes = { "django", "jinja.html", "htmldjango", "sls" }
@@ -33,10 +37,10 @@ local sources = {
   -- null_ls.builtins.diagnostics.commitlint.with({
   --   filetypes = { "NeogitCommitMessage" }
   -- }),
-  null_ls.builtins.diagnostics.proselint,
+  -- null_ls.builtins.diagnostics.proselint,
   -- null_ls.builtins.diagnostics.semgrep,
   -- null_ls.builtins.completion.spell,
-  null_ls.builtins.hover.dictionary,
+  -- null_ls.builtins.hover.dictionary,
   -- null_ls.builtins.formatting.docformatter,
   -- null_ls.builtins.formatting.black.with({
   -- 	method = null_ls.methods.FORMAT_ON_SAVE,

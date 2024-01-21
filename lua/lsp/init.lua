@@ -30,7 +30,11 @@ M.config = function ()
     vim.notify("mason not okay in lspconfig")
     return
   end
-  mason.setup({})
+  mason.setup({
+    pip = {
+      upgrade_pip = true,
+    }
+  })
 
   local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
   if not mason_lspconfig_ok then

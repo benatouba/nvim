@@ -10,7 +10,7 @@ M.config = function ()
   ls.config.set_config({
     enable_autosnippets = true,
     history = true,
-    updateevents = "TextChanged,TextChangedI",
+    -- updateevents = "TextChanged,TextChangedI",
     ext_opts = {
       [types.choiceNode] = {
         active = {
