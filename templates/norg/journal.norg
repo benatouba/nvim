@@ -1,0 +1,22 @@
+@document.meta
+
+
+title: {TODAY_OF_FILETREE}
+description: Daily journal entry
+authors: {AUTHOR}
+categories: Journal
+created: {TODAY_OF_FILETREE}
+updated: {TODAY}
+version: 1.1.1
+@end
+
+* {TITLE_INPUT}
+  #weather: {WEATHER}
+  {{:{YESTERDAY_OF_FILETREE}:}}[Yesterday] - {{:{TOMORROW_OF_FILETREE}:}}[Tomorrow]
+
+** Daily Review
+   - {CURSOR}
+
+** Checklist
+   - ( ) Write my daily review
+	 - ( )
