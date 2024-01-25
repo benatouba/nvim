@@ -26,6 +26,7 @@ lazy.setup({
   -- Packer can manage itself as an lazyional plugin
   -- "nvim-lua/popup.nvim", -- handle popup (important)
   "nvim-lua/plenary.nvim", -- most important functions (very important)
+  {"microsoft/python-type-stubs"},
   {
     "nvimdev/lspsaga.nvim",
     event = "LspAttach",
@@ -291,7 +292,7 @@ lazy.setup({
   {
     "OlegGulevskyy/better-ts-errors.nvim",
     dependencies = { "MunifTanjim/nui.nvim" },
-    config = {
+    opts = {
       keymap = "<leader>dd",
     },
   },

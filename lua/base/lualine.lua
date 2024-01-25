@@ -4,23 +4,17 @@ if not ll_ok then
   return
 end
 local lualine_require = require("lualine_require")
-local modules = lualine_require.lazy_require({
+local modules = lualine_require.lazy_require {
   highlight = "lualine.highlight",
   utils = "lualine.utils.utils",
-})
+}
 
-local get_lsp_client = function()
-  local icon, color = "", "red"
+local get_lsp_client = function ()
+  local msg = "LSP Inactive"
   local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
   local clients = vim.lsp.get_active_clients()
   if next(clients) == nil then
-    return {
-      function()
-        return icon
-      end,
-      color = { fg = color },
-      padding = { left = 0, right = 1 },
-    }
+    return msg
   end
   local lsps = ""
   for _, client in ipairs(clients) do
@@ -30,28 +24,15 @@ local get_lsp_client = function()
         lsps = client.name
       else
         if not string.find(lsps, client.name) then
-          lsps = lsps .. " " .. client.name
+          lsps = lsps .. "|" .. client.name
         end
       end
     end
   end
   if lsps == "" then
-    return {
-      function()
-        return icon
-      end,
-      color = { fg = color },
-      padding = { left = 0, right = 1 },
-    }
+    return msg
   else
-    local success_color = "#8ec07c"
-    return {
-      function()
-        return icon .. lsps
-      end,
-      color = { fg = success_color },
-      padding = { left = 0, right = 1 },
-    }
+    return " " .. lsps
   end
 end
 
@@ -61,7 +42,7 @@ local function diff_source()
     return {
       added = gitsigns.added,
       modified = gitsigns.changed,
-      removed = gitsigns.removed,
+      removed = gitsigns.removed
     }
   end
 end
@@ -79,16 +60,8 @@ end
 -- end
 
 local M = {}
-M.config = function()
+M.config = function ()
   local config = ll.get_config()
-  tabline = {
-    lualine_a = { "buffers" },
-    lualine_b = { "branch" },
-    lualine_c = { "filename" },
-    lualine_x = {},
-    lualine_y = {},
-    lualine_z = { "tabs" },
-  }
   config.options.component_separators = { left = "", right = "" }
   config.options.section_separators = { left = "", right = "" }
   config.sections.lualine_a = { window }
@@ -96,9 +69,9 @@ M.config = function()
   config.sections.lualine_c = { { "diff", source = diff_source }, "diagnostics" }
   config.sections.lualine_x = {
     "overseer",
-    { "copilot", show_colors = true },
+    { get_lsp_client },
+    { "copilot", show_colors = true }
   }
-  table.insert(config.sections.lualine_x, get_lsp_client())
   config.sections.lualine_y = {
     "encoding",
     "fileformat",
@@ -110,16 +83,8 @@ M.config = function()
     },
   }
   config.sections.lualine_z = { "progress", "location" }
-  config.options.extensions = {
-    "quickfix",
-    "mason",
-    "lazy",
-    "overseer",
-    "trouble",
-    "nvim-tree",
-    "toggleterm",
-    "nvim-dap-ui",
-  }
+  config.options.extensions = { "quickfix", "mason", "lazy", "overseer", "trouble", "nvim-tree",
+    "toggleterm", "nvim-dap-ui", }
   ll.setup(config)
 end
 

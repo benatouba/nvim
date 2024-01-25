@@ -1,14 +1,18 @@
 local M = {}
 
-M.config = function ()
+M.config = function()
   -- LSP signs default
-  vim.fn.sign_define("DiagnosticSignHint",
-    { texthl = "DiagnosticSignHint", text = "", numhl = "DiagnosticSignHint" })
-  vim.fn.sign_define("DiagnosticSignInfo",
-    { texthl = "DiagnosticSignInfo", text = "", numhl = "DiagnosticSignInfo" })
+  vim.fn.sign_define(
+    "DiagnosticSignHint",
+    { texthl = "DiagnosticSignHint", text = "", numhl = "DiagnosticSignHint" }
+  )
+  vim.fn.sign_define(
+    "DiagnosticSignInfo",
+    { texthl = "DiagnosticSignInfo", text = "", numhl = "DiagnosticSignInfo" }
+  )
   vim.fn.sign_define(
     "DiagnosticSignWarning",
-    { texthl = "DiagnosticSignWarning", text = "", numhl = "DiagnosticSignWarning", }
+    { texthl = "DiagnosticSignWarning", text = "", numhl = "DiagnosticSignWarning" }
   )
   vim.fn.sign_define(
     "DiagnosticSignError",
@@ -33,7 +37,7 @@ M.config = function ()
   mason.setup({
     pip = {
       upgrade_pip = true,
-    }
+    },
   })
 
   local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
@@ -68,7 +72,7 @@ M.config = function ()
   -- }
   -- lspconfig.contextive.setup {}
 
-  local common_on_attach = function (client, bufnr)
+  local common_on_attach = function(client, bufnr)
     -- vim.api.nvim_exec_autocmds("User", { pattern = "LspAttached" })
     local isOk, wk = pcall(require, "which-key")
     if not isOk then
@@ -93,8 +97,10 @@ M.config = function ()
       l = {
         name = "+LSP",
         a = { vim.lsp.buf.code_action, "Code Action" },
-        c = { "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>",
-          "Server Capabilities" },
+        c = {
+          "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>",
+          "Server Capabilities",
+        },
         d = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
         D = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
         l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens" },
@@ -106,7 +112,10 @@ M.config = function ()
         i = { "<cmd>LspInfo<cr>", "Info" },
         q = { "<cmd>Telescope quickfix<cr>", "Quickfix" },
         r = { vim.lsp.buf.rename, "Rename" },
-        R = { "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>", "Refactor" },
+        R = {
+          "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>",
+          "Refactor",
+        },
         v = { "<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>", "Virtual Text" },
         x = { "<cmd>cclose<cr>", "Close Quickfix" },
         w = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", "Workspace" },
@@ -115,7 +124,7 @@ M.config = function ()
           c = { "<cmd>e $HOME/.config/nvim/lua/lsp/init.lua<cr>", "Config" },
           s = { "<cmd>lua vim.lsp.status()<cr>", "Status" },
         },
-      }
+      },
     }
     wk.register(maps, { mode = "n", buffer = bufnr, prefix = "<leader>" })
     local gmaps = {
@@ -129,7 +138,7 @@ M.config = function ()
       s = { vim.lsp.buf.signature_help, "Signature" },
     }
     wk.register(gmaps, {
-      mode = "n",  -- NORMAL mode
+      mode = "n", -- NORMAL mode
       prefix = "g",
     })
 
@@ -157,8 +166,9 @@ M.config = function ()
     flags = {
       debounce_text_changes = 150,
     },
-    capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol
-      .make_client_capabilities()),
+    capabilities = require("cmp_nvim_lsp").default_capabilities(
+      vim.lsp.protocol.make_client_capabilities()
+    ),
     on_attach = common_on_attach,
   }
   -- local ok, wf = pcall(require, "vim.lsp._watchfiles")
@@ -169,33 +179,35 @@ M.config = function ()
   --   end
   -- end
 
-  lspconfig.util.default_config = vim.tbl_deep_extend("force", lspconfig.util.default_config,
-    lsp_defaults)
+  lspconfig.util.default_config =
+    vim.tbl_deep_extend("force", lspconfig.util.default_config, lsp_defaults)
   require("mason-lspconfig").setup_handlers({
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
     -- a dedicated handler.
-    function (server_name)  -- default handler (optional)
+    function(server_name) -- default handler (optional)
       require("lspconfig")[server_name].setup({})
     end,
-    ["bashls"] = function ()
+    ["bashls"] = function()
       lspconfig.bashls.setup({
         filetypes = { "sh", "zsh", "bash", "ksh", "dash" },
       })
     end,
-    ["jedi_language_server"] = function ()
+    ["jedi_language_server"] = function()
       lspconfig.jedi_language_server.setup({
         settings = {
           completion = {
-            enable = false
-          }
-        }
+            enable = false,
+          },
+        },
       })
     end,
-    ["pyright"] = function ()
+    ["pyright"] = function()
       lspconfig.pyright.setup({
-        before_init = function (_, config)
+        before_init = function(_, config)
           config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
+          config.settings.python.analysis.stubPath =
+            vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "python-type-stubs")
         end,
         on_attach = lsp_defaults.on_attach,
         settings = {
@@ -211,20 +223,23 @@ M.config = function ()
               diagnosticMode = "openFilesOnly",
               useLibraryCodeForTypes = true,
               typeCheckingMode = "off",
-            }
-          }
-        }
+            },
+          },
+        },
       })
     end,
-    ["lua_ls"] = function ()
+    ["lua_ls"] = function()
       lspconfig.lua_ls.setup({
-        on_init = function (client)
+        on_init = function(client)
           local path = client.workspace_folders[1].name
-          if not vim.loop.fs_stat(path .. "/.luarc.json") and not vim.loop.fs_stat(path .. "/.luarc.jsonc") then
+          if
+            not vim.loop.fs_stat(path .. "/.luarc.json")
+            and not vim.loop.fs_stat(path .. "/.luarc.jsonc")
+          then
             client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
               Lua = {
                 runtime = {
-                  version = "LuaJIT"
+                  version = "LuaJIT",
                 },
                 workspace = {
                   checkThirdParty = false,
@@ -234,9 +249,9 @@ M.config = function ()
                   --   -- "${3rd}/busted/library",
                   -- }
                   -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-                  library = vim.api.nvim_get_runtime_file("", true)
-                }
-              }
+                  library = vim.api.nvim_get_runtime_file("", true),
+                },
+              },
             })
 
             client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
@@ -246,13 +261,13 @@ M.config = function ()
         settings = {
           Lua = {
             completion = {
-              callSnippet = "Replace"
-            }
-          }
-        }
+              callSnippet = "Replace",
+            },
+          },
+        },
       })
     end,
-    ["pylsp"] = function ()
+    ["pylsp"] = function()
       local lsputil = require("lspconfig/util")
 
       local venv = Get_python_venv()
@@ -261,7 +276,10 @@ M.config = function ()
         filetypes = { "python", "djangopython", "django", "jupynium" },
         capabilities = lsp_defaults.capabilities,
         cmd = { "pylsp", "-v" },
-        cmd_env = { VIRTUAL_ENV = venv, PATH = lsputil.path.join(venv, "bin") .. ":" .. vim.env.PATH },
+        cmd_env = {
+          VIRTUAL_ENV = venv,
+          PATH = lsputil.path.join(venv, "bin") .. ":" .. vim.env.PATH,
+        },
         -- on_attach = lsp_defaults.on_attach,
         single_file_support = true,
         settings = {
@@ -313,7 +331,7 @@ M.config = function ()
                   "manim",
                   "plotly",
                   "dash",
-                  "dash_bootstrap_components"
+                  "dash_bootstrap_components",
                 },
               },
             },
@@ -321,7 +339,7 @@ M.config = function ()
         },
       })
     end,
-    ["sourcery"] = function ()
+    ["sourcery"] = function()
       lspconfig.sourcery.setup({
         init_options = {
           token = require("secrets").sourcery,
@@ -335,12 +353,19 @@ M.config = function ()
         },
       })
     end,
-    ["eslint"] = function ()
+    ["eslint"] = function()
       lspconfig.eslint.setup({
-        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "json" },
+        filetypes = {
+          "typescript",
+          "javascript",
+          "javascriptreact",
+          "typescriptreact",
+          "vue",
+          "json",
+        },
       })
     end,
-    ["volar"] = function ()
+    ["volar"] = function()
       local util = require("lspconfig.util")
       local function get_typescript_server_path(root_dir)
         -- local global_ts = "$PNPM_HOME/global/5"
@@ -411,15 +436,22 @@ M.config = function ()
       lspconfig.volar.setup({
         capabilities = lsp_defaults.capabilities,
         cmd = { "vue-language-server", "--stdio" },
-        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue", "json" },
+        filetypes = {
+          "typescript",
+          "javascript",
+          "javascriptreact",
+          "typescriptreact",
+          "vue",
+          "json",
+        },
         init_options = init_options,
-        on_new_config = function (new_config, new_root_dir)
+        on_new_config = function(new_config, new_root_dir)
           new_config.init_options = init_options
           new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
         end,
       })
     end,
-    ["texlab"] = function ()
+    ["texlab"] = function()
       lspconfig.texlab.setup({
         settings = {
           texlab = {
@@ -447,25 +479,35 @@ M.config = function ()
         },
       })
     end,
-    ["jsonls"] = function ()
+    ["jsonls"] = function()
       lsp_defaults.capabilities.textDocument.completion.completionItem.snippetSupport = true
       lspconfig.jsonls.setup({
         capabilities = lsp_defaults.capabilities,
         on_attach = lsp_defaults.on_attach,
       })
     end,
-    ["ltex"] = function ()
+    ["ltex"] = function()
       lspconfig.ltex.setup({
         capabilities = lsp_defaults.capabilities,
-        filetypes = { "bib", "markdown", "org", "plaintex", "rst", "rnoweb", "tex", "pandoc",
-          "quarto", "rmd" },
-        on_attach = function (client, bufnr)
+        filetypes = {
+          "bib",
+          "markdown",
+          "org",
+          "plaintex",
+          "rst",
+          "rnoweb",
+          "tex",
+          "pandoc",
+          "quarto",
+          "rmd",
+        },
+        on_attach = function(client, bufnr)
           require("ltex_extra").setup({
-            path = vim.fn.expand("~") .. "/.local/share/ltex"
+            path = vim.fn.expand("~") .. "/.local/share/ltex",
           })
         end,
       })
-    end
+    end,
   })
   local watch_type = require("vim._watch").FileChangeType
 
@@ -506,7 +548,7 @@ M.config = function ()
           fields = { "name", "exists", "new" },
         },
       }),
-      stdout = function (_, data)
+      stdout = function(_, data)
         if not data then
           return
         end
@@ -522,7 +564,7 @@ M.config = function ()
       text = true,
     })
 
-    return function ()
+    return function()
       sub:kill("sigint")
     end
   end

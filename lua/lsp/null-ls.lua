@@ -34,6 +34,7 @@ local sources = {
   null_ls.builtins.diagnostics.gitlint.with({
     filetypes = {"NeogitCommitMessage"}
   }),
+  null_ls.builtins.formatting.latexindent,
   -- null_ls.builtins.diagnostics.commitlint.with({
   --   filetypes = { "NeogitCommitMessage" }
   -- }),
