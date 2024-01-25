@@ -26,7 +26,7 @@ lazy.setup({
   -- Packer can manage itself as an lazyional plugin
   -- "nvim-lua/popup.nvim", -- handle popup (important)
   "nvim-lua/plenary.nvim", -- most important functions (very important)
-  {"microsoft/python-type-stubs"},
+  { "microsoft/python-type-stubs" },
   {
     "nvimdev/lspsaga.nvim",
     event = "LspAttach",
@@ -159,7 +159,10 @@ lazy.setup({
     dependencies = {
       "nvim-web-devicons",
       -- "nvim-lua/lsp-status.nvim",
-      "AndreM222/copilot-lualine",
+      {
+        "AndreM222/copilot-lualine",
+        enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18,
+      },
       "arkav/lualine-lsp-progress",
     },
     config = function()
@@ -172,10 +175,12 @@ lazy.setup({
     config = function()
       require("ui.barbar").config()
     end,
-    init = function() vim.g.barbar_auto_setup = false end,
+    init = function()
+      vim.g.barbar_auto_setup = false
+    end,
     dependencies = {
-      'lewis6991/gitsigns.nvim',
-      'nvim-tree/nvim-web-devicons',
+      "lewis6991/gitsigns.nvim",
+      "nvim-tree/nvim-web-devicons",
     },
     lazy = true,
     enabled = true,
@@ -316,7 +321,7 @@ lazy.setup({
     config = function()
       require("lsp.copilot").config()
     end,
-    enabled = true,
+    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18,
   },
   {
     "williamboman/mason.nvim",
@@ -567,7 +572,7 @@ lazy.setup({
   {
     "Joakker/lua-json5",
     build = "./install.sh",
-    enabled = true,
+    enabled = vim.fn.executable("cargo") == 1,
   },
 
   -- project management
@@ -882,7 +887,13 @@ lazy.setup({
     "iamcco/markdown-preview.nvim",
     ft = { "markdown" },
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    build = "cd app && npm install",
+    build = function()
+      if tonumber(string.sub(Capture("node --version"), 2, 3)) >= 16 then
+        return "cd app && npm install"
+      else
+        vim.fn["mkdp#util#install"]()
+      end
+    end,
     enabled = true,
     init = function()
       vim.g.mkdp_filetypes = { "markdown" }

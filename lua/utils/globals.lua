@@ -5,6 +5,17 @@ function IsDir(path)
   return Exists(path .. "/")
 end
 
+function Capture(cmd, raw)
+  local f = assert(io.popen(cmd, 'r'))
+  local s = assert(f:read('*a'))
+  f:close()
+  if raw then return s end
+  s = string.gsub(s, '^%s+', '')
+  s = string.gsub(s, '%s+$', '')
+  s = string.gsub(s, '[\n\r]+', ' ')
+  return s
+end
+
 --- Check if a file or directory exists in this path
 function Exists(file)
   local ok, err, code = os.rename(file, file)
