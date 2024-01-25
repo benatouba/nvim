@@ -882,7 +882,7 @@ lazy.setup({
     "iamcco/markdown-preview.nvim",
     ft = { "markdown" },
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    build = "cd app && pnpm install",
+    build = "cd app && npm install",
     enabled = true,
     init = function()
       vim.g.mkdp_filetypes = { "markdown" }
