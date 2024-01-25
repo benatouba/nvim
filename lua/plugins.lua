@@ -567,7 +567,7 @@ lazy.setup({
     "microsoft/vscode-js-debug",
     lazy = true,
     build = "npm ci --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
-    enabled = true,
+    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18,
   },
   {
     "Joakker/lua-json5",
