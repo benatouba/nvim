@@ -1,16 +1,21 @@
 local utils = require("utils")
 local api = vim.api
-api.nvim_create_autocmd("TextYankPost",
-  { callback = function () vim.highlight.on_yank({ higroup = "IncSearch", timeout = 40 }) end })
-api.nvim_create_autocmd({ "BufRead", "BufNewFile" },
-  { pattern = "*/node_modules/*", command = "lua vim.diagnostic.disable(0)" })
+api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    vim.highlight.on_yank({ higroup = "IncSearch", timeout = 40 })
+  end,
+})
+api.nvim_create_autocmd(
+  { "BufRead", "BufNewFile" },
+  { pattern = "*/node_modules/*", command = "lua vim.diagnostic.disable(0)" }
+)
 api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = { "*.txt", "*.md", "*.tex" },
-  command = "setlocal spell"
+  command = "setlocal spell",
 })
 api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = { "*.txt", "*.md", "*.json" },
-  command = "setlocal conceallevel=0"
+  command = "setlocal conceallevel=0",
 })
 
 utils.add_autocommands({
@@ -34,27 +39,27 @@ utils.add_autocommands({
   },
   _markdown = { { "FileType", "markdown", "setlocal wrap" } },
   _buffer_bindings = {
-    { "FileType", "dashboard", "nnoremap <silent> <buffer> q :q<CR>" },
     { "FileType", "neotest-*", "nnoremap <silent> <buffer> q :q<CR>" },
     { "FileType", "neotest-output-panel", "nnoremap <silent> <buffer> q :q<CR>" },
-    { "FileType", "notify", "nnoremap <silent> <buffer> q :q<CR>" },
-    { "FileType", "lspinfo", "nnoremap <silent> <buffer> q :q<CR>" },
-    { "FileType", "floaterm", "nnoremap <silent> <buffer> q :q<CR>" },
-    { "FileType", "fugitive", "nnoremap <silent> <buffer> q :q<CR>" },
-    { "FileType", "qf", "nnoremap <silent> <buffer> q :q<CR>" },
-    { "FileType", "query", "nnoremap <silent> <buffer> q :q<CR>" },
-    { "FileType", "checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard",
-      "nnoremap <silent> <buffer> q :q<CR>" },
-    { "FileType", "checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard",
-      "nnoremap <silent> <buffer> <esc> :q<CR>" },
+    {
+      "FileType",
+      "checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard,notify,query,floaterm,dashboard",
+      "nnoremap <silent> <buffer> q :q<CR>",
+    },
+    {
+      "FileType",
+      "checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard,notify,query,floaterm,dashboard",
+      "nnoremap <silent> <buffer> <esc> :q<CR>",
+    },
     { "FileType", "nofile", "nnoremap <silent> <buffer> q :q<CR>" },
+    { "FileType", "nofile", "nnoremap <silent> <buffer> <esc> :q<CR>" },
     { "FileType", "norg", ":lua vim.o.conceallevel=2" },
     -- { "FileType", "org", ":lua vim.o.conceallevel=2" },
     { "FileType", "org", ":lua vim.o.concealcursor='nc'" },
   },
   firenvim = {
     { "BufEnter", "*ipynb_er-DIV*.txt", "set filetype=python" },
-    { "BufEnter", "*ipynb_ontainer-DIV*.txt", "set filetype=markdown" }
+    { "BufEnter", "*ipynb_ontainer-DIV*.txt", "set filetype=markdown" },
   },
   -- jupyter = {
   -- 	{"FileType", "ipynb", "\\call jobstart('jupyter qtconsole --JupyterWidget.include_other_output=True')"}
