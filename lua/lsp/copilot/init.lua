@@ -46,6 +46,14 @@ M.config = function()
       svn = false,
       cvs = false,
       TelescopePrompt = false,
+      sls = function()
+        if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), ".*user.*") then
+          -- disable for user files
+          return false
+        end
+        return true
+      end,
+
       sh = function()
         if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
           -- disable for .env files
