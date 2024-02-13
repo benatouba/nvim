@@ -28,6 +28,26 @@ lazy.setup({
   "nvim-lua/plenary.nvim", -- most important functions (very important)
   { "microsoft/python-type-stubs" },
   {
+    "m4xshen/smartcolumn.nvim",
+    opts = {
+      colorcolumn = "101",
+      custom_colorcolumn = {
+        markdown = "121",
+      },
+      disabled_filetypes = {
+        "NvimTree",
+        "lazy",
+        "mason",
+        "help",
+        "checkhealth",
+        "lspinfo",
+        "noice",
+        "Trouble",
+        "text",
+      },
+    },
+  },
+  {
     "nvimdev/lspsaga.nvim",
     event = "LspAttach",
     config = function()
@@ -40,7 +60,7 @@ lazy.setup({
     },
   },
   {
-    "rcarriga/nvim-notify",
+    "ls-devs/nvim-notify",
     config = function()
       vim.notify = require("notify")
       require("telescope").load_extension("notify")
@@ -292,7 +312,7 @@ lazy.setup({
     "JoosepAlviste/nvim-ts-context-commentstring",
     ft = { "vue", "typescript", "javascript" },
     dependencies = "nvim-treesitter",
-    enabled = true,
+    enabled = O.webdev,
   },
   {
     "OlegGulevskyy/better-ts-errors.nvim",
@@ -300,6 +320,7 @@ lazy.setup({
     opts = {
       keymap = "<leader>dd",
     },
+    enabled = O.webdev,
   },
   {
     "ray-x/lsp_signature.nvim",
@@ -321,7 +342,7 @@ lazy.setup({
     config = function()
       require("lsp.copilot").config()
     end,
-    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18,
+    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.copilot,
   },
   {
     "williamboman/mason.nvim",
@@ -561,18 +582,18 @@ lazy.setup({
       require("debug.vscode_js").config()
     end,
     ft = { "javascript", "vue", "javascriptreact", "typescriptreact", "typescript" },
-    enabled = true,
+    enabled = O.webdev,
   },
   {
     "microsoft/vscode-js-debug",
     lazy = true,
     build = "npm ci --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
-    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18,
+    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.webdev,
   },
   {
     "Joakker/lua-json5",
     build = "./install.sh",
-    enabled = vim.fn.executable("cargo") == 1,
+    enabled = vim.fn.executable("cargo") == 1 and O.webdev,
   },
 
   -- project management
@@ -640,7 +661,7 @@ lazy.setup({
           -- ["json"] = { "prettier" },
           -- ["jsonc"] = { "prettier" },
           -- ["yaml"] = { "prettier" },
-          -- ["markdown"] = { "prettier" },
+          ["markdown"] = { "prettier" },
           -- ["markdown.mdx"] = { "prettier" },
           -- ["graphql"] = { "prettier" },
           -- ["handlebars"] = { "prettier" },
@@ -943,7 +964,7 @@ lazy.setup({
     "folke/noice.nvim",
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
+      "ls-devs/nvim-notify",
     },
     config = function()
       require("ui.noice").config()
@@ -961,9 +982,64 @@ lazy.setup({
     "pmizio/typescript-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
     opts = {},
-    enabled = false,
     config = function()
       require("misc.typescript_tools").config()
     end,
+    enabled = O.webdev,
+  },
+  {
+    "rest-nvim/rest.nvim",
+    dependencies = { { "nvim-lua/plenary.nvim" } },
+    config = function()
+      require("rest-nvim").setup({
+        -- Open request results in a horizontal split
+        result_split_horizontal = false,
+        -- Keep the http file buffer above|left when split horizontal|vertical
+        result_split_in_place = false,
+        -- stay in current windows (.http file) or change to results window (default)
+        stay_in_current_window_after_split = false,
+        -- Skip SSL verification, useful for unknown certificates
+        skip_ssl_verification = false,
+        -- Encode URL before making request
+        encode_url = true,
+        -- Highlight request on run
+        highlight = {
+          enabled = true,
+          timeout = 150,
+        },
+        result = {
+          -- toggle showing URL, HTTP info, headers at top the of result window
+          show_url = true,
+          -- show the generated curl command in case you want to launch
+          -- the same request via the terminal (can be verbose)
+          show_curl_command = false,
+          show_http_info = true,
+          show_headers = true,
+          -- table of curl `--write-out` variables or false if disabled
+          -- for more granular control see Statistics Spec
+          show_statistics = false,
+          -- executables or functions for formatting response body [optional]
+          -- set them to false if you want to disable them
+          formatters = {
+            json = "jq",
+            html = function(body)
+              return vim.fn.system({ "tidy", "-i", "-q", "-" }, body)
+            end,
+          },
+        },
+        -- Jump to request line on run
+        jump_to_request = false,
+        env_file = ".env",
+        custom_dynamic_variables = {},
+        yank_dry_run = true,
+        search_back = true,
+      })
+      require("which-key").register({
+        ["<leader>Rr"] = { "<Plug>RestNvim<cr>", "Rest Run" },
+        ["<leader>Rp"] = { "<Plug>RestNvimPreview<cr>", "Rest Run Preview" },
+        ["<leader>Rl"] = { "<Plug>RestNvimLast<cr>", "Rest Run Last" },
+      })
+    end,
+    enabled = O.webdev,
   },
 }, {})

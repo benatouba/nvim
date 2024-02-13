@@ -17,12 +17,6 @@ local sources = {
   null_ls.builtins.formatting.shellharden,
   null_ls.builtins.diagnostics.zsh,
   -- null_ls.builtins.formatting.fixjson,
-  null_ls.builtins.formatting.markdownlint.with({
-    filetypes = { "markdown", "markdown.mdx", "pandoc.markdown" }
-  }),
-  null_ls.builtins.diagnostics.markdownlint.with({
-    filetypes = { "markdown", "markdown.mdx", "pandoc.markdown" }
-  }),
   -- null_ls.builtins.diagnostics.alex,
   null_ls.builtins.formatting.djlint.with({
     filetypes = { "django", "jinja.html", "htmldjango", "sls" }

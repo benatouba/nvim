@@ -8,6 +8,8 @@ an executable
 ]]
 -- general
 O.lsp = true -- boolean, activates lsp packages
+O.webdev = true
+O.copilot = true
 O.language_parsing = true
 O.git = true
 O.format = true
@@ -31,3 +33,4 @@ O.treesitter.highlight.enabled = true
 O.diagnostics.virtual_text.active = true
 O.diagnostics.signs = true
 O.diagnostics.underline = true
+

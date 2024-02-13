@@ -30,6 +30,7 @@ M.config = function ()
     enable_autocmd = false,
   }
   comment.setup({
+    ignore = "^$",
     -- hook for treesitter tsx/jsx
     -- pre_hook = function(ctx)
     --     -- Only calculate commentstring for tsx filetypes

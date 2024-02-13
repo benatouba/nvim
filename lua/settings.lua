@@ -39,7 +39,7 @@ vim.opt.spelllang = "en,de"
 vim.opt.showcmd = true
 
 vim.opt.sidescrolloff = 7
-vim.opt.colorcolumn = "100"
+-- vim.opt.colorcolumn = "100"
 vim.opt.textwidth = 100
 vim.o.scrolloff = 999
 -- vim.o.showtabline = 2 -- Always show tabs
