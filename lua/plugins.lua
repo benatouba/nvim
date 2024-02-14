@@ -590,7 +590,6 @@ lazy.setup({
   -- project management
   {
     "nvim-orgmode/orgmode.nvim",
-    -- keys = "<leader>o",
     config = function()
       require("management.orgmode")
     end,
@@ -993,6 +992,7 @@ lazy.setup({
     config = function()
       require("misc.typescript_tools").config()
     end,
+    ft = { "vue", "typescript", "typescriptreact" },
     enabled = O.webdev or O.typescript,
   },
   {
