@@ -103,7 +103,7 @@ M.config = function()
 			R = { "<cmd>lua require'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
 			s = { "<cmd>lua require'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
 			S = { "<cmd>lua require'gitsigns'.stage_buffer()<cr>", "Stage Buffer" },
-			t = { "<cmd>lua require'gitsigns'.toogle_deleted()<cr>", "Toggle Deleted" },
+			T = { "<cmd>lua require'gitsigns'.toggle_deleted()<cr>", "Toggle Deleted" },
 			u = { "<cmd>lua require'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk" },
 		}
 	}

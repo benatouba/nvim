@@ -6,7 +6,21 @@ if not diffview_ok then
   return
 end
 
-M.config = function ()
+local mappings = {
+  ["t"] = { "<cmd>lua require('git.diffview').DiffviewToggle()<cr>", "Diffview" },
+}
+
+M.DiffviewToggle = function()
+  local lib = require("diffview.lib")
+  local view = lib.get_current_view()
+  if view then
+    vim.cmd(":DiffviewClose")
+  else
+    vim.cmd(":DiffviewOpen")
+  end
+end
+
+M.config = function()
   diffview.setup({
     diff_binaries = false,
     key_bindings = {
@@ -19,13 +33,20 @@ M.config = function ()
       },
       merge_tool = {
         layout = "diff3_mixed",
-        disable_diagnostics =true,
+        disable_diagnostics = true,
       },
       file_history = {
         layout = "diff2_horizontal",
-      }
-    }
+      },
+    },
   })
+
+  local wk_ok, wk = pcall(require, "which-key")
+  if wk_ok then
+    wk.register(mappings, { prefix = "<leader>g" })
+  else
+    vim.notify("Which-key not found in diffview", vim.log.levels.ERROR)
+  end
 end
 
 return M

@@ -1,11 +1,11 @@
 vim.opt.iskeyword:append("-") -- treat dash separated words as a word text object"
 vim.opt.shortmess:append("c") -- Don't pass messages to |ins-completion-menu|.
-vim.opt.fillchars:append('stl: ')
+vim.opt.fillchars:append("stl: ")
 vim.opt.inccommand = "split" -- Make substitution work in realtime
 vim.o.hidden = true -- Required to keep multiple buffers open multiple buffers
 -- vim.o.title = true
 TERMINAL = vim.fn.expand("$TERMINAL")
-DATA_PATH = vim.fn.stdpath('data')
+DATA_PATH = vim.fn.stdpath("data")
 -- vim.cmd('let &titleold="' .. TERMINAL .. '"')
 vim.o.titlestring = "%<%F%=%l/%L - nvim"
 vim.o.exrc = true
@@ -23,12 +23,12 @@ vim.o.splitbelow = true -- Horizontal splits will automatically be below
 vim.o.termguicolors = true -- set term gui colors most terminals support this
 vim.o.splitright = true -- Vertical splits will automatically be to the right
 vim.o.conceallevel = 2 -- So that I can see `` in markdown files
-vim.opt.ts=4 -- Insert 4 spaces for a tab
-vim.opt.sw=4 -- Change the number of space characters inserted for indentation
+vim.opt.ts = 4 -- Insert 4 spaces for a tab
+vim.opt.sw = 4 -- Change the number of space characters inserted for indentation
 vim.opt.list = true
-vim.opt.listchars:append "nbsp:␣,trail:•,extends:⟩,precedes:⟨"
+vim.opt.listchars:append("nbsp:␣,trail:•,extends:⟩,precedes:⟨")
 vim.bo.tabstop = 4
-vim.opt.shiftwidth=4 -- Change the number of space characters inserted for indentation
+vim.opt.shiftwidth = 4 -- Change the number of space characters inserted for indentation
 vim.bo.expandtab = true -- Converts tabs to spaces
 vim.bo.smartindent = true -- Makes indenting smart
 vim.opt.number = true -- set numbered lines
@@ -51,11 +51,11 @@ vim.wo.signcolumn = "yes:1" -- Always show the signcolumn, otherwise it would sh
 vim.o.updatetime = 200 -- Faster completion
 vim.o.timeoutlen = 200 -- By default timeoutlen is 1000 ms
 vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
-vim.opt.foldmethod= "expr"
+vim.opt.foldmethod = "expr"
 vim.opt.foldlevelstart = 50
-vim.opt.formatoptions:remove('c');
-vim.opt.formatoptions:remove('r');
-vim.opt.formatoptions:remove('o');
+vim.opt.formatoptions:remove("c")
+vim.opt.formatoptions:remove("r")
+vim.opt.formatoptions:remove("o")
 vim.opt.hlsearch = true
 
 vim.opt.tabstop = 2
@@ -64,13 +64,13 @@ vim.opt.shiftwidth = 2
 vim.o.ignorecase = true -- ignore case makes searching case insensitive
 vim.o.smartcase = true -- smartcase makes it so that searching becomes case sensitive if you use a capital letter
 if not IsDir(DATA_PATH .. "/backup") then
-	os.execute("mkdir " .. DATA_PATH .. "/backup")
+  os.execute("mkdir " .. DATA_PATH .. "/backup")
 end
-vim.o.backupdir=DATA_PATH .. "/backup" -- set backup directory to be a subdirectory of data to ensure that backups are not written to git repos
-vim.o.undodir=DATA_PATH .. "/undo" -- set undodir to ensure that the undofiles are not saved to git repos.
-vim.o.undofile=true -- enable persistent undo (meaning if you quit Neovim and come back to a file and want to undo previous changes you can)
+vim.o.backupdir = DATA_PATH .. "/backup" -- set backup directory to be a subdirectory of data to ensure that backups are not written to git repos
+vim.o.undodir = DATA_PATH .. "/undo" -- set undodir to ensure that the undofiles are not saved to git repos.
+vim.o.undofile = true -- enable persistent undo (meaning if you quit Neovim and come back to a file and want to undo previous changes you can)
 if not IsDir(DATA_PATH .. "/directory") then
-	os.execute("mkdir " .. DATA_PATH .. "/directory")
+  os.execute("mkdir " .. DATA_PATH .. "/directory")
 end
 vim.o.directory = DATA_PATH .. "/directory" -- Configure 'directory' to ensure that Neovim swap files are not written to repos.
 
@@ -82,7 +82,7 @@ vim.g.tokyonight_sidebars = { "terminal", "packer", "qf", "nvimtree" }
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
 if Exists("/home/ben/.pyenv/versions/3.10.11/bin/python3") then
-	vim.g.python3_host_prog = "/home/ben/.pyenv/versions/3.10.11/bin/python3"
+  vim.g.python3_host_prog = "/home/ben/.pyenv/versions/3.10.11/bin/python3"
 end
 
 vim.diagnostic.config({
@@ -92,30 +92,30 @@ vim.diagnostic.config({
   underline = true,
   severity_sort = true,
   float = {
-        show_header = true,
-        source = true,
-        border = 'rounded',
-        focusable = false,
-    },
+    show_header = true,
+    source = true,
+    border = "rounded",
+    focusable = false,
+  },
 })
 
 -- SET THE LINE NUMBERS TO ABSOLUTE NUMBERS WHEN ENDTERING COMMAND MODE
 local set_cmdline = vim.api.nvim_create_augroup("set_cmdline", { clear = true })
 vim.api.nvim_create_autocmd("CmdlineEnter", {
-	pattern = {"*"},
-	callback = function()
-		-- print("cmdline enter")
-		vim.opt.relativenumber = false
-		vim.cmd('redraw')
-	end,
-	group = set_cmdline
+  pattern = { "*" },
+  callback = function()
+    -- print("cmdline enter")
+    vim.opt.relativenumber = false
+    vim.cmd("redraw")
+  end,
+  group = set_cmdline,
 })
 vim.api.nvim_create_autocmd("CmdlineLeave", {
-	pattern = {"*"},
-	callback = function()
-		-- print("cmdline leave")
-		vim.opt.relativenumber = true
-		vim.cmd('redraw')
-	end,
-	group = set_cmdline
+  pattern = { "*" },
+  callback = function()
+    -- print("cmdline leave")
+    vim.opt.relativenumber = true
+    vim.cmd("redraw")
+  end,
+  group = set_cmdline,
 })
