@@ -11,7 +11,7 @@ if not wk_ok then
   return
 end
 
-M.config = function ()
+M.config = function()
   tt.setup({
     direction = "horizontal",
     float_lazys = {
@@ -22,22 +22,52 @@ M.config = function ()
     },
     winbar = {
       enabled = true,
-      name_formatter = function (term)
+      name_formatter = function(term)
         return term.name
-      end
+      end,
     },
-    on_open = function (term)
+    on_open = function(term)
       vim.cmd("startinsert!")
-      vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<cr>",
-        { noremap = true, silent = true })
-      vim.api.nvim_buf_set_keymap(term.bufnr, "n", "<esc>", "<cmd>close<cr>",
-        { noremap = true, silent = true })
+      vim.api.nvim_buf_set_keymap(
+        term.bufnr,
+        "n",
+        "q",
+        "<cmd>close<cr>",
+        { noremap = true, silent = true }
+      )
+      vim.api.nvim_buf_set_keymap(
+        term.bufnr,
+        "n",
+        "<esc>",
+        "<cmd>close<cr>",
+        { noremap = true, silent = true }
+      )
     end,
   })
 
   wk.register({
     T = { "<cmd>ToggleTerm direction=float<cr>", "Terminal" },
+    ["gL"] = { "<cmd>lua require('misc.toggleterm').LazyGit()<cr>", "LazyGit" },
   }, { prefix = "<leader>" })
+end
+
+M.LazyGit = function()
+  local Terminal = require("toggleterm.terminal").Terminal
+  local lazygit = Terminal:new({
+    cmd = "lazygit",
+    direction = "float",
+    float_opts = {
+      border = "rounded",
+      width = 125,
+      height = 35,
+    },
+    on_open = function(term)
+      local keymap = vim.api.nvim_buf_set_keymap
+      keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
+      keymap(term.bufnr, "t", "<esc>", "<cmd>close<CR>", { noremap = true, silent = true })
+    end,
+  })
+  return lazygit:toggle()
 end
 
 return M

@@ -5,10 +5,14 @@ M.config = function()
   if neodev_ok then
     neodev.setup({
       library = {
+        enabled = true,
         plugins = true,
         types = true,
         runtime = true,
       },
+      setup_jsonls = true,
+      lspconfig = true,
+      pathStrict = true,
       override = function(root_dir, library)
         if root_dir:find("/etc/nixos", 1, true) == 1 then
           library.enabled = true
@@ -246,6 +250,7 @@ M.config = function()
     end,
     ["lua_ls"] = function()
       lspconfig.lua_ls.setup({
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
         settings = {
           Lua = {
             completion = {

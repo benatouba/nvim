@@ -20,8 +20,6 @@ if not lazy_ok then
   return
 end
 
--- vim.cmd("autocmd BufWritePost plugins.lua PackerCompile profile=true")
-
 lazy.setup({
   -- Packer can manage itself as an lazyional plugin
   -- "nvim-lua/popup.nvim", -- handle popup (important)
@@ -94,7 +92,7 @@ lazy.setup({
       "max397574/neorg-contexts",
       { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
     },
-    enabled = O.project_management,
+    enabled = O.project_management and false,
   },
   {
     "epwalsh/obsidian.nvim",
@@ -133,13 +131,13 @@ lazy.setup({
   {
     "nvim-telescope/telescope.nvim",
     config = function()
-      require("base.telescope").config()
+      require("ben.telescope").config()
     end,
   },
   {
     "ahmedkhalf/project.nvim",
     config = function()
-      require("base.project").setup()
+      require("ben.project").setup()
     end,
     dependencies = "telescope.nvim",
     enabled = O.lsp,
@@ -177,7 +175,7 @@ lazy.setup({
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
     config = function()
-      require("base.indent-blankline").config()
+      require("ben.indent-blankline").config()
     end,
     dependencies = "nvim-treesitter",
     event = "BufReadPost",
@@ -197,7 +195,7 @@ lazy.setup({
       },
     },
     config = function()
-      require("base.lualine").config()
+      require("ben.lualine").config()
     end,
     enabled = true,
   },
@@ -229,7 +227,7 @@ lazy.setup({
     lazy = true,
     cmd = "NvimTreeToggle",
     config = function()
-      require("base.nvim-tree").config()
+      require("ben.nvim-tree").config()
     end,
     enabled = true,
   },
@@ -238,17 +236,17 @@ lazy.setup({
   {
     "monaqa/dial.nvim",
     config = function()
-      require("base.dial").config()
+      require("ben.dial").config()
     end,
     keys = { "<C-a>", "<C-x>" },
   }, -- increment/decrement basically everything,
   {
     "numToStr/Comment.nvim",
     config = function()
-      require("base.comment_nvim").config()
+      require("ben.comment_nvim").config()
     end,
     event = { "InsertEnter", "CmdlineEnter", "CursorMoved" },
-    keys = { "gc", "gcc" },
+    keys = { "g", "gc" },
     enabled = true,
   },
   {
@@ -420,7 +418,7 @@ lazy.setup({
     "tpope/vim-dadbod",
     lazy = false,
     -- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"},
-    enabled = O.git and O.databases,
+    enabled = O.git and O.databens,
   },
   {
     "kristijanhusak/vim-dadbod-ui",
@@ -439,7 +437,7 @@ lazy.setup({
       vim.g.db_ui_auto_execute_table_helpers = 1
       vim.g.db_ui_use_nerd_fonts = 1
     end,
-    enabled = O.databases,
+    enabled = O.databens,
   },
   {
     "kristijanhusak/vim-dadbod-completion",
@@ -450,7 +448,7 @@ lazy.setup({
 				  autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
 				]])
     end,
-    enabled = O.databases and O.language_parsing,
+    enabled = O.databens and O.language_parsing,
   },
   {
     "tpope/vim-fugitive",
@@ -462,7 +460,9 @@ lazy.setup({
     "NeogitOrg/neogit",
     dependencies = {
       "sindrets/diffview.nvim",
+      keys = "<leader>g",
       cmd = "DiffviewOpen",
+      event = "BufReadPost",
       config = function()
         require("git.diffview").config()
       end,
@@ -525,6 +525,7 @@ lazy.setup({
   {
     "folke/neodev.nvim",
     opts = {},
+    ft = "lua",
     enabled = O.lsp,
   },
   {
@@ -838,9 +839,9 @@ lazy.setup({
         highlight_groups = {
           TelescopeBorder = { fg = "highlight_high", bg = "none" },
           TelescopeNormal = { bg = "none" },
-          TelescopePromptNormal = { bg = "base" },
+          TelescopePromptNormal = { bg = "ben" },
           TelescopeResultsNormal = { fg = "subtle", bg = "none" },
-          TelescopeSelection = { fg = "text", bg = "base" },
+          TelescopeSelection = { fg = "text", bg = "ben" },
           TelescopeSelectionCaret = { fg = "rose", bg = "rose" },
           Comment = { fg = "foam" },
           VertSplit = { fg = "muted", bg = "muted" },
