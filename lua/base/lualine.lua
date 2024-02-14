@@ -4,10 +4,10 @@ if not ll_ok then
   return
 end
 local lualine_require = require("lualine_require")
-local modules = lualine_require.lazy_require {
+local modules = lualine_require.lazy_require({
   highlight = "lualine.highlight",
   utils = "lualine.utils.utils",
-}
+})
 
 local get_lsp_client = function ()
   local msg = "LSP Inactive"
@@ -42,7 +42,7 @@ local function diff_source()
     return {
       added = gitsigns.added,
       modified = gitsigns.changed,
-      removed = gitsigns.removed
+      removed = gitsigns.removed,
     }
   end
 end
@@ -58,6 +58,19 @@ end
 --   end
 --   return pi.get_status()
 -- end
+local lint_ok, lint = pcall(require, "lint")
+local lint_progress = function ()
+  return false
+end
+if lint_ok then
+  lint_progress = function ()
+    local linters = lint.get_running()
+    if #linters == 0 then
+      return "󰦕"
+    end
+    return "󱉶 " .. table.concat(linters, ", ")
+  end
+end
 
 local M = {}
 M.config = function ()
@@ -70,7 +83,8 @@ M.config = function ()
   config.sections.lualine_x = {
     "overseer",
     { get_lsp_client },
-    { "copilot", show_colors = true }
+    { lint_progress },
+    { "copilot", show_colors = true },
   }
   config.sections.lualine_y = {
     "encoding",
@@ -83,8 +97,16 @@ M.config = function ()
     },
   }
   config.sections.lualine_z = { "progress", "location" }
-  config.options.extensions = { "quickfix", "mason", "lazy", "overseer", "trouble", "nvim-tree",
-    "toggleterm", "nvim-dap-ui", }
+  config.options.extensions = {
+    "quickfix",
+    "mason",
+    "lazy",
+    "overseer",
+    "trouble",
+    "nvim-tree",
+    "toggleterm",
+    "nvim-dap-ui",
+  }
   ll.setup(config)
 end
 
