@@ -1,5 +1,5 @@
 local comment_ok, comment = pcall(require, "Comment")
--- local tsc_ok, tsc = pcall(require, "ts_context_commentstring.utils")
+local tsc_ok, tsc = pcall(require, "ts_context_commentstring.utils")
 if not comment_ok then
   vim.notify("Comment.nvim not ok")
   return
@@ -26,9 +26,11 @@ local M = {}
 -- }
 
 M.config = function ()
-  require("ts_context_commentstring").setup {
-    enable_autocmd = false,
-  }
+  if tsc_ok then
+    tsc.setup {
+      enable_autocmd = false,
+    }
+  end
   comment.setup({
     ignore = "^$",
     -- hook for treesitter tsx/jsx
@@ -55,7 +57,11 @@ M.config = function ()
     --     end
     --
     -- end,
-    pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+    pre_hook = function ()
+      if tsc_ok then
+        return require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
+      end
+    end
   })
   -- wk.register(mappings, { prefix = "g" })
   -- wk.register(mappings_n, { prefix = "<leader>" })
