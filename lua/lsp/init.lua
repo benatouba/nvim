@@ -365,7 +365,7 @@ M.config = function ()
       local util = require("lspconfig.util")
       local function get_typescript_server_path(root_dir)
         -- local global_ts = "$PNPM_HOME/global/5"
-        local global_ts = "/home/ben/.local/share/pnpm/global/5/node_modules/typescript/lib"
+        local global_ts = vim.fn.expand("$HOME/.local/share/pnpm/global/5/node_modules/typescript/lib")
         -- local global_ts = "/usr/local/lib"
         local found_ts = ""
         local function check_dir(path)

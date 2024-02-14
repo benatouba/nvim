@@ -418,7 +418,7 @@ lazy.setup({
     "tpope/vim-dadbod",
     lazy = false,
     -- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"},
-    enabled = O.git and O.databens,
+    enabled = O.git and O.databases,
   },
   {
     "kristijanhusak/vim-dadbod-ui",
@@ -437,7 +437,7 @@ lazy.setup({
       vim.g.db_ui_auto_execute_table_helpers = 1
       vim.g.db_ui_use_nerd_fonts = 1
     end,
-    enabled = O.databens,
+    enabled = O.databases,
   },
   {
     "kristijanhusak/vim-dadbod-completion",
@@ -448,7 +448,7 @@ lazy.setup({
 				  autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
 				]])
     end,
-    enabled = O.databens and O.language_parsing,
+    enabled = O.databases and O.language_parsing,
   },
   {
     "tpope/vim-fugitive",
@@ -839,9 +839,9 @@ lazy.setup({
         highlight_groups = {
           TelescopeBorder = { fg = "highlight_high", bg = "none" },
           TelescopeNormal = { bg = "none" },
-          TelescopePromptNormal = { bg = "ben" },
+          TelescopePromptNormal = { bg = "base" },
           TelescopeResultsNormal = { fg = "subtle", bg = "none" },
-          TelescopeSelection = { fg = "text", bg = "ben" },
+          TelescopeSelection = { fg = "text", bg = "base" },
           TelescopeSelectionCaret = { fg = "rose", bg = "rose" },
           Comment = { fg = "foam" },
           VertSplit = { fg = "muted", bg = "muted" },
