@@ -1,5 +1,5 @@
 local comment_ok, comment = pcall(require, "Comment")
-local tsc_ok, tsc = pcall(require, "ts_context_commentstring.utils")
+local tsc_ok, tsc = pcall(require, "ts_context_commentstring")
 if not comment_ok then
   vim.notify("Comment.nvim not ok")
   return
