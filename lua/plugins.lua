@@ -63,7 +63,7 @@ lazy.setup({
     enabled = O.lsp,
   },
   {
-    "ls-devs/nvim-notify",
+    "rcarriga/nvim-notify",
     config = function()
       require("notify").setup({
         timeout = 3000,
@@ -76,7 +76,7 @@ lazy.setup({
       require("telescope").load_extension("notify")
     end,
     dependencies = "telescope.nvim",
-    enabled = O.misc,
+    enabled = O.misc or O.lsp,
   },
   {
     "nvim-neorg/neorg",
@@ -970,7 +970,7 @@ lazy.setup({
     "folke/noice.nvim",
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "ls-devs/nvim-notify",
+      "rcarriga/nvim-notify",
     },
     config = function()
       require("ui.noice").config()
