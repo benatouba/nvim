@@ -8,27 +8,27 @@ an executable
 ]]
 -- packages
 O.lsp = true -- boolean, activates lsp packages
-O.webdev = false
-O.copilot = false
+O.webdev = true
+O.copilot = true
 O.language_parsing = true
 O.git = true
 O.format = true
-O.test = false
-O.dap = false -- debugging
-O.project_management = false
-O.notebooks = false
-O.misc = false
+O.test = true
+O.dap = true -- debugging
+O.project_management = true
+O.notebooks = true
+O.misc = true
 
 -- language specific
 O.python = true
-O.markdown = false
-O.typescript = false
-O.latex = false
+O.markdown = true
+O.typescript = true
+O.latex = true
 
 -- program adapters
 O.obsidian = false
 O.salt = false
-O.databases = false
+O.databases = true
 
 -- general
 O.auto_complete = true
