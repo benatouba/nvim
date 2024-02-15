@@ -64,7 +64,8 @@ M.config = function ()
   cmp.setup({
     enabled = function ()
       -- enable autocompletion in nvim-dap
-      if require("cmp_dap").is_dap_buffer() then
+      local cmp_dap_ok, cmp_dap = pcall(require, "cmp_dap")
+      if cmp_dap_ok and cmp_dap.is_dap_buffer() then
         return true
       end
 

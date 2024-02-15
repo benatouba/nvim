@@ -1,6 +1,6 @@
 local M = {}
 
-M.config = function()
+M.config = function ()
   local neodev_ok, neodev = pcall(require, "neodev")
   if neodev_ok then
     neodev.setup({
@@ -9,7 +9,7 @@ M.config = function()
         types = true,
         runtime = true,
       },
-      override = function(root_dir, library)
+      override = function (root_dir, library)
         if root_dir:find("/etc/nixos", 1, true) == 1 then
           library.enabled = true
           library.plugins = true
@@ -69,15 +69,18 @@ M.config = function()
     return
   end
 
-  local mason_nvim_dap_ok, mason_nvim_dap = pcall(require, "mason-nvim-dap")
-  if not mason_nvim_dap_ok then
-    vim.notify("mason-nvim-dap not okay in lspconfig")
-    return
+  if O.dap then
+    local mason_nvim_dap_ok, mason_nvim_dap = pcall(require, "mason-nvim-dap")
+    if not mason_nvim_dap_ok then
+      vim.notify("mason-nvim-dap not okay in lspconfig")
+      -- return
+    else
+      mason_nvim_dap.setup({
+        ensure_installed = { "python" },
+        handlers = {},
+      })
+    end
   end
-  mason_nvim_dap.setup({
-    ensure_installed = { "python" },
-    handlers = {},
-  })
 
   -- local lspconfig_configs = require("lspconfig.configs")
   -- lspconfig_configs.contextive = {
@@ -88,7 +91,7 @@ M.config = function()
   -- }
   -- lspconfig.contextive.setup {}
 
-  local common_on_attach = function(client, bufnr)
+  local common_on_attach = function (client, bufnr)
     -- vim.api.nvim_exec_autocmds("User", { pattern = "LspAttached" })
     local isOk, wk = pcall(require, "which-key")
     if not isOk then
@@ -154,7 +157,7 @@ M.config = function()
       s = { vim.lsp.buf.signature_help, "Signature" },
     }
     wk.register(gmaps, {
-      mode = "n", -- NORMAL mode
+      mode = "n",  -- NORMAL mode
       prefix = "g",
     })
 
@@ -201,15 +204,15 @@ M.config = function()
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
     -- a dedicated handler.
-    function(server_name) -- default handler (optional)
+    function (server_name)  -- default handler (optional)
       require("lspconfig")[server_name].setup({})
     end,
-    ["bashls"] = function()
+    ["bashls"] = function ()
       lspconfig.bashls.setup({
         filetypes = { "sh", "zsh", "bash", "ksh", "dash" },
       })
     end,
-    ["jedi_language_server"] = function()
+    ["jedi_language_server"] = function ()
       lspconfig.jedi_language_server.setup({
         settings = {
           completion = {
@@ -218,9 +221,9 @@ M.config = function()
         },
       })
     end,
-    ["pyright"] = function()
+    ["pyright"] = function ()
       lspconfig.pyright.setup({
-        before_init = function(_, config)
+        before_init = function (_, config)
           config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
           config.settings.python.analysis.stubPath =
             vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "python-type-stubs")
@@ -244,7 +247,7 @@ M.config = function()
         },
       })
     end,
-    ["lua_ls"] = function()
+    ["lua_ls"] = function ()
       lspconfig.lua_ls.setup({
         settings = {
           Lua = {
@@ -255,7 +258,7 @@ M.config = function()
         },
       })
     end,
-    ["pylsp"] = function()
+    ["pylsp"] = function ()
       local lsputil = require("lspconfig/util")
 
       local venv = Get_python_venv()
@@ -327,7 +330,7 @@ M.config = function()
         },
       })
     end,
-    ["sourcery"] = function()
+    ["sourcery"] = function ()
       lspconfig.sourcery.setup({
         init_options = {
           token = require("secrets").sourcery,
@@ -341,7 +344,7 @@ M.config = function()
         },
       })
     end,
-    ["eslint"] = function()
+    ["eslint"] = function ()
       lspconfig.eslint.setup({
         filetypes = {
           "typescript",
@@ -353,7 +356,7 @@ M.config = function()
         },
       })
     end,
-    ["volar"] = function()
+    ["volar"] = function ()
       local util = require("lspconfig.util")
       local function get_typescript_server_path(root_dir)
         -- local global_ts = "$PNPM_HOME/global/5"
@@ -433,13 +436,13 @@ M.config = function()
           "json",
         },
         init_options = init_options,
-        on_new_config = function(new_config, new_root_dir)
+        on_new_config = function (new_config, new_root_dir)
           new_config.init_options = init_options
           new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
         end,
       })
     end,
-    ["texlab"] = function()
+    ["texlab"] = function ()
       lspconfig.texlab.setup({
         settings = {
           texlab = {
@@ -467,14 +470,14 @@ M.config = function()
         },
       })
     end,
-    ["jsonls"] = function()
+    ["jsonls"] = function ()
       lsp_defaults.capabilities.textDocument.completion.completionItem.snippetSupport = true
       lspconfig.jsonls.setup({
         capabilities = lsp_defaults.capabilities,
         on_attach = lsp_defaults.on_attach,
       })
     end,
-    ["ltex"] = function()
+    ["ltex"] = function ()
       lspconfig.ltex.setup({
         capabilities = lsp_defaults.capabilities,
         filetypes = {
@@ -489,7 +492,7 @@ M.config = function()
           "quarto",
           "rmd",
         },
-        on_attach = function(client, bufnr)
+        on_attach = function (client, bufnr)
           require("ltex_extra").setup({
             path = vim.fn.expand("~") .. "/.local/share/ltex",
           })
@@ -536,7 +539,7 @@ M.config = function()
           fields = { "name", "exists", "new" },
         },
       }),
-      stdout = function(_, data)
+      stdout = function (_, data)
         if not data then
           return
         end
@@ -552,7 +555,7 @@ M.config = function()
       text = true,
     })
 
-    return function()
+    return function ()
       sub:kill("sigint")
     end
   end

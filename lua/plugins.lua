@@ -344,7 +344,7 @@ lazy.setup({
     end,
     enabled = O.lsp,
   },
-  { "jay-babu/mason-nvim-dap.nvim", enabled = O.lsp },
+  { "jay-babu/mason-nvim-dap.nvim", enabled = O.dap },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -366,8 +366,8 @@ lazy.setup({
     dependencies = {
       "rafamadriz/friendly-snippets",
       "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-nvim-lsp-document-symbol",
+      {"hrsh7th/cmp-nvim-lsp", enabled = O.lsp},
+      {"hrsh7th/cmp-nvim-lsp-document-symbol", enabled = O.lsp},
       -- "hrsh7th/cmp-nvim-lsp-signature-help",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-nvim-lua",
@@ -375,10 +375,10 @@ lazy.setup({
       "hrsh7th/cmp-emoji",
       "hrsh7th/cmp-cmdline",
       "dmitmel/cmp-cmdline-history",
-      "rcarriga/cmp-dap",
-      "petertriho/cmp-git",
+      {"rcarriga/cmp-dap", enabled = O.dap},
+      {"petertriho/cmp-git", enabled = O.git},
       "andersevenrud/cmp-tmux",
-      "ray-x/cmp-treesitter",
+      {"ray-x/cmp-treesitter", enabled = O.language_parsing},
       "lukas-reineke/cmp-under-comparator",
       "lukas-reineke/cmp-rg",
       {
@@ -539,7 +539,7 @@ lazy.setup({
             library = { plugins = { "nvim-dap-ui", "neotest" }, types = true },
           })
         end,
-        enabled = true,
+        enabled = O.lsp,
       },
     },
     config = function()
@@ -847,7 +847,7 @@ lazy.setup({
         },
       })
     end,
-    enabled = O.misc or vim.cmd("colorscheme") == "rose-pine",
+    enabled = O.misc or O.colorscheme == "rose-pine-moon",
   },
   {
     "catppuccin/nvim",
@@ -860,10 +860,10 @@ lazy.setup({
           barbar = true,
           cmp = true,
           dap = {
-            enabled = true,
-            enable_ui = true,
+            enabled = O.dap,
+            enable_ui = O.dap,
           },
-          gitsigns = true,
+          gitsigns = O.git,
           harpoon = true,
           indent_blankline = {
             enabled = true,
@@ -975,7 +975,7 @@ lazy.setup({
     config = function()
       require("ui.noice").config()
     end,
-    enabled = O.misc,
+    enabled =true,
   },
   {
     "lervag/vimtex",
