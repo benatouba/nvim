@@ -51,7 +51,7 @@ lazy.setup({
   },
   {
     "nvimdev/lspsaga.nvim",
-    event = "LspAttach",
+    event = "InsertEnter",
     config = function()
       require("lsp.lspsaga").config()
     end,
@@ -80,8 +80,10 @@ lazy.setup({
   },
   {
     "nvim-neorg/neorg",
-    lazy = false,
-    -- event = { "BufReadPost", "VimEnter" },
+    lazy = true,
+    event = { "InsertEnter" },
+    ft = "norg",
+    keys = { "<leader>", "g" },
     config = function()
       require("management.neorg").config()
     end,
@@ -92,7 +94,7 @@ lazy.setup({
       "max397574/neorg-contexts",
       { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
     },
-    enabled = O.project_management and false,
+    enabled = O.project_management,
   },
   {
     "epwalsh/obsidian.nvim",
@@ -285,6 +287,7 @@ lazy.setup({
       "windwp/nvim-autopairs",
     },
     build = ":TSUpdate",
+    lazy = true,
     config = function()
       require("language_parsing.treesitter").config()
     end,
@@ -293,12 +296,30 @@ lazy.setup({
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     dependencies = "nvim-treesitter",
+    lazy = true,
     enabled = O.language_parsing,
   },
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
-    ft = { "vue", "typescript", "javascript" },
-    dependencies = "nvim-treesitter",
+    ft = { "vue", "svelte", "typescriptreat", "html" },
+    dependencies = { "nvim-treesitter", "Comment.nvim" },
+    config = function()
+      local tsc_ok, tsc = pcall(require, "ts_context_commentstring")
+      if not tsc_ok then
+        vim.notify("TS-Context-Commentstring not ok")
+      end
+      local opts = {
+        ignore = "^$",
+      }
+      if tsc_ok then
+        tsc.setup({
+          enable_autocmd = false,
+        })
+        opts.pre_hook =
+          require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
+      end
+      require("Comment").setup(opts)
+    end,
     enabled = O.webdev and O.language_parsing,
   },
   {
@@ -364,8 +385,8 @@ lazy.setup({
     dependencies = {
       "rafamadriz/friendly-snippets",
       "hrsh7th/cmp-buffer",
-      {"hrsh7th/cmp-nvim-lsp", enabled = O.lsp},
-      {"hrsh7th/cmp-nvim-lsp-document-symbol", enabled = O.lsp},
+      { "hrsh7th/cmp-nvim-lsp", enabled = O.lsp },
+      { "hrsh7th/cmp-nvim-lsp-document-symbol", enabled = O.lsp },
       -- "hrsh7th/cmp-nvim-lsp-signature-help",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-nvim-lua",
@@ -373,10 +394,10 @@ lazy.setup({
       "hrsh7th/cmp-emoji",
       "hrsh7th/cmp-cmdline",
       "dmitmel/cmp-cmdline-history",
-      {"rcarriga/cmp-dap", enabled = O.dap},
-      {"petertriho/cmp-git", enabled = O.git},
+      { "rcarriga/cmp-dap", enabled = O.dap },
+      { "petertriho/cmp-git", enabled = O.git },
       "andersevenrud/cmp-tmux",
-      {"ray-x/cmp-treesitter", enabled = O.language_parsing},
+      { "ray-x/cmp-treesitter", enabled = O.language_parsing },
       "lukas-reineke/cmp-under-comparator",
       "lukas-reineke/cmp-rg",
       {
@@ -593,6 +614,8 @@ lazy.setup({
     config = function()
       require("management.orgmode")
     end,
+    event = { "InsertEnter" },
+    keys = { "<leader>" },
     enabled = O.project_management,
   },
   {
@@ -963,6 +986,7 @@ lazy.setup({
     -- config = function()
     -- 	require("jupynium").setup()
     -- end,
+    ft = "ipynb",
     enabled = O.notebooks,
   },
   { "stevearc/dressing.nvim" },
@@ -975,7 +999,7 @@ lazy.setup({
     config = function()
       require("ui.noice").config()
     end,
-    enabled =true,
+    enabled = true,
   },
   {
     "lervag/vimtex",

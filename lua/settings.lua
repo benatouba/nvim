@@ -120,3 +120,4 @@ vim.api.nvim_create_autocmd("CmdlineLeave", {
   end,
   group = set_cmdline,
 })
+vim.g.skip_ts_context_commentstring_module = true
