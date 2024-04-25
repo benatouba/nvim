@@ -149,7 +149,6 @@ M.config = function ()
       o = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
       p = { "<cmd>Telescope projects<cr>", "Projects" },
       q = { "<cmd>Telescope quickfix<cr>", "Quickfix List" },
-      r = { "<cmd>Telescope frecency<cr>", "Frecency" },
       R = { "<cmd>Telescope registers<cr>", "Registers" },
       t = { "<cmd>Telescope live_grep<cr>", "Text" },
       T = { "<cmd>Telescope treesitter<cr>", "Treesitter Symbols" },

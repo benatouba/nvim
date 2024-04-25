@@ -19,7 +19,7 @@ end
 -- 	filetype = "org",
 -- }
 
-org.setup_ts_grammar()
+-- org.setup_ts_grammar()
 tsc.setup({
 	highlight = {
 		enable = true,

@@ -13,13 +13,15 @@ M.config = function ()
       setup_jsonls = true,
       lspconfig = true,
       pathStrict = true,
-      override = function(root_dir, library)
+      override = function (root_dir, library)
         if root_dir:find("/etc/nixos", 1, true) == 1 then
           library.enabled = true
           library.plugins = true
         end
       end,
     })
+  else
+    vim.notify("neodev not okay")
   end
   -- LSP signs default
   vim.fn.sign_define(
@@ -105,27 +107,23 @@ M.config = function ()
     local maps = {
       s = {
         name = "+Search",
-        l = {
-          name = "+LSP",
-          d = { "<cmd>Telescope lsp_definitions<cr>", "Definitions" },
-          D = { "<cmd>Telescope lsp_declarations<cr>", "Declarations" },
-          i = { "<cmd>Telescope lsp_implementations<cr>", "Implementations" },
-          r = { "<cmd>Telescope lsp_references<cr>", "References" },
-          s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols (LSP)" },
-          S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols (LSP)" },
-          -- s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols (LSP)" },
-          -- S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols (LSP)" },
-        },
+        d = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
+        D = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
+        i = { "<cmd>Telescope lsp_implementations<cr>", "Implementations" },
+        r = { "<cmd>Telescope lsp_references<cr>", "References" },
+        s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols (LSP)" },
+        S = { "<cmd>Telescope lsp_workspace_symbols<cr>", "Workspace Symbols (LSP)" },
       },
       l = {
         name = "+LSP",
         a = { vim.lsp.buf.code_action, "Code Action" },
-        c = {
+        c = { "<cmd>e $HOME/.config/nvim/lua/lsp/init.lua<cr>", "Config" },
+        C = {
           "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>",
           "Server Capabilities",
         },
-        d = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
-        D = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
+        d = { "<cmd>Telescope lsp_definitions<cr>", "Definitions" },
+        D = { "<cmd>Telescope lsp_declarations<cr>", "Declarations" },
         l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens" },
         L = { "<cmd>LspLog<CR>", "Logs" },
         -- f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" }, covered by conform.nvim
@@ -142,11 +140,6 @@ M.config = function ()
         v = { "<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>", "Virtual Text" },
         x = { "<cmd>cclose<cr>", "Close Quickfix" },
         w = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", "Workspace" },
-        s = {
-          name = "+Settings",
-          c = { "<cmd>e $HOME/.config/nvim/lua/lsp/init.lua<cr>", "Config" },
-          s = { "<cmd>lua vim.lsp.status()<cr>", "Status" },
-        },
       },
     }
     wk.register(maps, { mode = "n", buffer = bufnr, prefix = "<leader>" })
@@ -232,7 +225,6 @@ M.config = function ()
           config.settings.python.analysis.stubPath =
             vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "python-type-stubs")
         end,
-        on_attach = lsp_defaults.on_attach,
         settings = {
           pyright = {
             disableOrganizeImports = true,
@@ -244,8 +236,8 @@ M.config = function ()
               autoSearchPaths = true,
               -- logLevel = "Warning",
               diagnosticMode = "openFilesOnly",
-              useLibraryCodeForTypes = true,
-              typeCheckingMode = "off",
+              useLibraryCodeForTypes = false,
+              typeCheckingMode = "standard",
             },
           },
         },
@@ -270,13 +262,11 @@ M.config = function ()
 
       lspconfig.pylsp.setup({
         filetypes = { "python", "djangopython", "django", "jupynium" },
-        capabilities = lsp_defaults.capabilities,
         cmd = { "pylsp", "-v" },
         cmd_env = {
           VIRTUAL_ENV = venv,
           PATH = lsputil.path.join(venv, "bin") .. ":" .. vim.env.PATH,
         },
-        -- on_attach = lsp_defaults.on_attach,
         single_file_support = true,
         settings = {
           pylsp = {
@@ -349,6 +339,25 @@ M.config = function ()
         },
       })
     end,
+    ["tsserver"] = function ()
+      local mason_registry = require("mason-registry")
+      local vue_language_server_path = mason_registry
+        .get_package("vue-language-server")
+        :get_install_path() .. "/node_modules/@vue/language-server"
+      lspconfig.tsserver.setup({
+        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+        init_options = {
+          plugins = {
+            {
+              name = "@vue/typescript-plugin",
+              location = vue_language_server_path,
+              languages = { "vue" },
+            },
+          },
+        },
+      })
+    end,
+
     ["eslint"] = function ()
       lspconfig.eslint.setup({
         filetypes = {
@@ -361,11 +370,12 @@ M.config = function ()
         },
       })
     end,
-    ["volar"] = function ()
+    --[[ ["volar"] = function ()
       local util = require("lspconfig.util")
       local function get_typescript_server_path(root_dir)
         -- local global_ts = "$PNPM_HOME/global/5"
-        local global_ts = vim.fn.expand("$HOME/.local/share/pnpm/global/5/node_modules/typescript/lib")
+        local global_ts =
+          vim.fn.expand("$HOME/.local/share/pnpm/global/5/node_modules/typescript/lib")
         -- local global_ts = "/usr/local/lib"
         local found_ts = ""
         local function check_dir(path)
@@ -383,70 +393,18 @@ M.config = function ()
           return global_ts
         end
       end
-      local init_options = {
-        typescript = {
-          tsdk = "",
-        },
-        languageFeatures = {
-          references = true,
-          implementation = true,
-          definition = true,
-          typeDefinition = true,
-          callHierarchy = true,
-          hover = true,
-          rename = true,
-          renameFileRefactoring = true,
-          signatureHelp = true,
-          completion = {
-            defaultTagNameCase = "both",
-            defaultAttrNameCase = "kebabCase",
-            getDocumentNameCasesRequest = true,
-            getDocumentSelectionRequest = true,
-          },
-          documentHighlight = true,
-          documentLink = true,
-          workspaceSymbol = true,
-          codeLens = true,
-          semanticTokens = true,
-          codeAction = true,
-          diagnostics = true,
-          schemaRequestService = true,
-        },
-        documentFeatures = {
-          allowedLanguageIds = {
-            "javascript",
-            "javascriptreact",
-            "typescript",
-            "typescriptreact",
-            "vue",
-            "json",
-          },
-          selectionRange = true,
-          foldingRange = true,
-          linkedEditingRange = true,
-          documentSymbol = true,
-          documentColor = true,
-          documentFormatting = true,
-        },
-      }
       lspconfig.volar.setup({
-        capabilities = lsp_defaults.capabilities,
-        cmd = { "vue-language-server", "--stdio" },
-        filetypes = {
-          "typescript",
-          "javascript",
-          "javascriptreact",
-          "typescriptreact",
-          "vue",
-          "json",
+        filetypes = { "vue" },
+        init_options = {
+          typescript = {
+            tsdk = get_typescript_server_path(vim.fn.getcwd()),
+          },
+          vue = {
+            hybridMode = true,
+          },
         },
-        init_options = init_options,
-        on_new_config = function (new_config, new_root_dir)
-          new_config.init_options = init_options
-          new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
-        end,
       })
-    end,
+    end, ]]
     ["texlab"] = function ()
       lspconfig.texlab.setup({
         settings = {
@@ -480,6 +438,31 @@ M.config = function ()
       lspconfig.jsonls.setup({
         capabilities = lsp_defaults.capabilities,
         on_attach = lsp_defaults.on_attach,
+        settings = {
+          json = {
+            schemas = require("schemastore").json.schemas(),
+            validate = { enable = true },
+          },
+        },
+      })
+    end,
+    ["yamlls"] = function ()
+      lsp_defaults.capabilities.textDocument.completion.completionItem.snippetSupport = true
+      lspconfig.jsonls.setup({
+        capabilities = lsp_defaults.capabilities,
+        on_attach = lsp_defaults.on_attach,
+        settings = {
+          yaml = {
+            schemaStore = {
+              -- You must disable built-in schemaStore support if you want to use
+              -- this plugin and its advanced options like `ignore`.
+              enable = false,
+              -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+              url = "",
+            },
+            schemas = require("schemastore").yaml.schemas(),
+          },
+        },
       })
     end,
     ["ltex"] = function ()

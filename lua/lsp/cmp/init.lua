@@ -19,7 +19,7 @@ end
 M.config = function ()
   require("luasnip.loaders.from_vscode").lazy_load()
   require("luasnip").filetype_extend("vue",
-    { "html", "javascript", "nuxt_html", "nuxt_js_ts", "vue", })
+    { "html", "nuxt_html", "nuxt_script", "script", "style", "vue", })
   require("luasnip").filetype_extend("python", { "django", "django/django_rest" })
 
   vim.opt.completeopt = { "menu", "menuone", "noselect" }
@@ -446,6 +446,9 @@ M.config = function ()
   end
   cmp_git.setup({
     filetypes = { "gitcommit", "octo", "NeogitCommitMessage", },
+    gitlab = {
+        hosts = { "gitlab.klima.tu-berlin.de", }
+    }
   })
   local sign = function (opts)
     vim.fn.sign_define(opts.name, {

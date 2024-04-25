@@ -9,6 +9,10 @@ api.nvim_create_autocmd(
   { "BufRead", "BufNewFile" },
   { pattern = "*/node_modules/*", command = "lua vim.diagnostic.disable(0)" }
 )
+api.nvim_create_autocmd(
+  { "BufWipeout" },
+  { pattern = "template.tex", command = "!cp template.pdf manuscript.pdf" }
+)
 api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = { "*.txt", "*.md", "*.tex" },
   command = "setlocal spell",

@@ -7,6 +7,11 @@ M.config = function ()
   end
   pi.setup({
     package_manager = "pnpm",
+    colors = {
+        up_to_date = "237",
+        outdated = "173",
+    },
+    hide_up_to_date = true,
   })
   local wk_ok, wk = pcall(require, "which-key")
   if not wk_ok then

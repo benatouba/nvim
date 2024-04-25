@@ -134,7 +134,7 @@ check [lua/plugins.lua](lua/plugins.lua) for the full list
 - A patched font on the machine that is rendering your output (best install NerdFonts)
 - fzf (for good fuzzy file finding)
 - rg (for text matching, requires rust)
-- sqlite3 (for database conns and frecency)
+- sqlite3 (for database conns)
 - python3 with pynvim package
 
 ## How to start using it

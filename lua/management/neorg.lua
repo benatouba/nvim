@@ -118,7 +118,7 @@ M.config = function ()
       },
       ["core.summary"] = {},
       ["core.ui.calendar"] = {},
-      ["external.context"] = {},
+      -- ["external.context"] = {},
       ["core.keybinds"] = {
         config = {
           default_keybinds = true,

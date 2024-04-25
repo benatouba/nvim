@@ -8,7 +8,7 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "--branch=stable",  -- latest stable release
     lazypath,
   })
 end
@@ -23,7 +23,7 @@ end
 lazy.setup({
   -- Packer can manage itself as an lazyional plugin
   -- "nvim-lua/popup.nvim", -- handle popup (important)
-  "nvim-lua/plenary.nvim", -- most important functions (very important)
+  "nvim-lua/plenary.nvim",  -- most important functions (very important)
   {
     "microsoft/python-type-stubs",
     enabled = O.python and O.lsp,
@@ -52,7 +52,7 @@ lazy.setup({
   {
     "nvimdev/lspsaga.nvim",
     event = "InsertEnter",
-    config = function()
+    config = function ()
       require("lsp.lspsaga").config()
     end,
     dependencies = {
@@ -64,7 +64,7 @@ lazy.setup({
   },
   {
     "rcarriga/nvim-notify",
-    config = function()
+    config = function ()
       require("notify").setup({
         timeout = 3000,
         render = "minimal",
@@ -80,16 +80,15 @@ lazy.setup({
   },
   {
     "nvim-neorg/neorg",
-    lazy = true,
-    event = { "InsertEnter" },
+    lazy = false,
+    -- event = { "InsertEnter" },
     ft = "norg",
     keys = { "<leader>", "g" },
-    config = function()
+    config = function ()
       require("management.neorg").config()
     end,
-    build = ":Neorg sync-parsers",
     dependencies = {
-      "plenary.nvim",
+      "luarocks.nvim",
       "nvim-neorg/neorg-telescope",
       "max397574/neorg-contexts",
       { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
@@ -99,23 +98,24 @@ lazy.setup({
   {
     "epwalsh/obsidian.nvim",
     event = { "BufReadPost" },
-    config = function()
+    config = function ()
       require("management.obsidian").config()
     end,
     enabled = O.obsidian,
   },
   {
     "lewis6991/impatient.nvim",
-    config = function()
+    config = function ()
       require("impatient")
     end,
     enabled = vim.fn.has("nvim-0.10") == 0,
   },
   {
     "nvim-telescope/telescope-fzf-native.nvim",
-    build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+    build =
+    "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
     dependencies = "telescope.nvim",
-    config = function()
+    config = function ()
       require("telescope").load_extension("fzf")
     end,
   },
@@ -126,19 +126,19 @@ lazy.setup({
       "tami5/sql.nvim",
     },
     enabled = false,
-    config = function()
+    config = function ()
       require("telescope").load_extension("frecency")
     end,
   },
   {
     "nvim-telescope/telescope.nvim",
-    config = function()
+    config = function ()
       require("ben.telescope").config()
     end,
   },
   {
     "ahmedkhalf/project.nvim",
-    config = function()
+    config = function ()
       require("ben.project").setup()
     end,
     dependencies = "telescope.nvim",
@@ -151,7 +151,7 @@ lazy.setup({
   -- Colorize hex and other colors in code,
   {
     "nvchad/nvim-colorizer.lua",
-    config = function()
+    config = function ()
       require("colorizer").setup()
     end,
     event = "BufReadPost",
@@ -161,7 +161,7 @@ lazy.setup({
   -- Icons and visuals
   {
     "nvim-tree/nvim-web-devicons",
-    config = function()
+    config = function ()
       require("nvim-web-devicons").setup()
       require("nvim-web-devicons").set_icon({
         nvim = {
@@ -174,9 +174,14 @@ lazy.setup({
     end,
   },
   {
+    "stevearc/oil.nvim",
+    opts = {},
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+  {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    config = function()
+    config = function ()
       require("ben.indent-blankline").config()
     end,
     dependencies = "nvim-treesitter",
@@ -196,17 +201,17 @@ lazy.setup({
         enabled = O.lsp,
       },
     },
-    config = function()
+    config = function ()
       require("ben.lualine").config()
     end,
     enabled = true,
   },
   {
     "romgrk/barbar.nvim",
-    config = function()
+    config = function ()
       require("ui.barbar").config()
     end,
-    init = function()
+    init = function ()
       vim.g.barbar_auto_setup = false
     end,
     dependencies = {
@@ -219,7 +224,7 @@ lazy.setup({
   {
     "echasnovski/mini.bracketed",
     version = "*",
-    config = function()
+    config = function ()
       require("mini.bracketed").setup()
     end,
     enabled = O.language_parsing,
@@ -228,23 +233,23 @@ lazy.setup({
     "kyazdani42/nvim-tree.lua",
     lazy = true,
     cmd = "NvimTreeToggle",
-    config = function()
+    config = function ()
       require("ben.nvim-tree").config()
     end,
-    enabled = true,
+    enabled = false,
   },
 
   -- manipulation
   {
     "monaqa/dial.nvim",
-    config = function()
+    config = function ()
       require("ben.dial").config()
     end,
     keys = { "<C-a>", "<C-x>" },
-  }, -- increment/decrement basically everything,
+  },  -- increment/decrement basically everything,
   {
     "numToStr/Comment.nvim",
-    config = function()
+    config = function ()
       require("ben.comment_nvim").config()
     end,
     event = { "InsertEnter", "CmdlineEnter", "CursorMoved" },
@@ -259,7 +264,7 @@ lazy.setup({
   },
   {
     "kylechui/nvim-surround",
-    config = function()
+    config = function ()
       require("nvim-surround").setup({})
     end,
     event = "VeryLazy",
@@ -276,19 +281,24 @@ lazy.setup({
     dependencies = {
       {
         "LiadOz/nvim-dap-repl-highlights",
-        config = function()
+        config = function ()
           require("nvim-dap-repl-highlights").setup()
         end,
-        enabled = O.dap,
+        enabled = false,
       },
-      "RRethy/nvim-treesitter-endwise",
+      -- "RRethy/nvim-treesitter-endwise",
       "nvim-treesitter/nvim-treesitter-refactor",
       "windwp/nvim-ts-autotag",
-      "windwp/nvim-autopairs",
+      {
+        "windwp/nvim-autopairs",
+        config = function ()
+          require("language_parsing.autopairs").config()
+        end,
+      },
     },
     build = ":TSUpdate",
     lazy = true,
-    config = function()
+    config = function ()
       require("language_parsing.treesitter").config()
     end,
     enabled = O.language_parsing,
@@ -303,7 +313,7 @@ lazy.setup({
     "JoosepAlviste/nvim-ts-context-commentstring",
     ft = { "vue", "svelte", "typescriptreat", "html" },
     dependencies = { "nvim-treesitter", "Comment.nvim" },
-    config = function()
+    config = function ()
       local tsc_ok, tsc = pcall(require, "ts_context_commentstring")
       if not tsc_ok then
         vim.notify("TS-Context-Commentstring not ok")
@@ -323,20 +333,42 @@ lazy.setup({
     enabled = O.webdev and O.language_parsing,
   },
   {
-    "OlegGulevskyy/better-ts-errors.nvim",
-    dependencies = { "MunifTanjim/nui.nvim" },
-    config = {
-      keymaps = {
-        toggle = "<leader>at",
-        go_to_definition = "gt",
+    "dmmulroy/ts-error-translator.nvim",
+    config = function ()
+      require("ts-error-translator").setup()
+    end,
+  },
+  {
+    "catgoose/vue-goto-definition.nvim",
+    event = "BufReadPre",
+    opts = {
+      filters = {
+        auto_imports = true,
+        auto_components = true,
+        import_same_file = true,
+        declaration = true,
+        duplicate_filename = true,
       },
+      filetypes = { "vue", "typescript" },
+      detection = {
+        nuxt = function ()
+          return vim.fn.glob(".nuxt/") ~= ""
+        end,
+        vue3 = function ()
+          return vim.fn.filereadable("vite.config.ts") == 1
+            or vim.fn.filereadable("src/app.vue") == 1
+        end,
+        priority = { "nuxt", "vue3" },
+      },
+      lsp = {
+        override_definition = true,  -- override vim.lsp.buf.definition
+      },
+      debounce = 300,
     },
-    ft = { "vue", "typescript", "typescriptreact" },
-    enabled = O.webdev and O.lsp,
   },
   {
     "zbirenbaum/copilot.lua",
-    config = function()
+    config = function ()
       require("lsp.copilot").config()
     end,
     enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.copilot,
@@ -344,37 +376,37 @@ lazy.setup({
   {
     "williamboman/mason.nvim",
     build = ":MasonUpdate",
-    config = function()
-      require("mason").setup()
+    config = function ()
+      require("mason").setup({})
     end,
     enabled = O.lsp,
   },
   { "williamboman/mason-lspconfig.nvim", enabled = O.lsp },
-  { "nvimtools/none-ls.nvim", enabled = O.lsp },
-  {
+  --[[ {
     "jay-babu/mason-null-ls.nvim",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       "williamboman/mason.nvim",
       "nvimtools/none-ls.nvim",
     },
-    config = function()
+    config = function ()
       require("lsp.null-ls").config()
     end,
-    enabled = O.lsp,
-  },
+    enabled = false,
+  }, ]]
   { "jay-babu/mason-nvim-dap.nvim", enabled = O.dap },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
+      "b0o/SchemaStore.nvim",
       { "antosha417/nvim-lsp-file-operations", config = true },
     },
     -- lazy = true,
     event = { "BufReadPre", "BufNewFile", "InsertEnter" },
     -- cmd = {"LspInfo", "LspStart", "LspInstallInfo"},
     -- keys = { "<leader>l", "i"},
-    config = function()
+    config = function ()
       require("lsp").config()
     end,
     enabled = O.lsp,
@@ -403,7 +435,7 @@ lazy.setup({
       {
         "David-Kunz/cmp-npm",
         ft = "json",
-        config = function()
+        config = function ()
           require("cmp-npm").setup({})
         end,
         enabled = false,
@@ -413,7 +445,7 @@ lazy.setup({
         version = "v2.*",
         dependencies = "friendly-snippets",
         build = "make install_jsregexp",
-        config = function()
+        config = function ()
           require("snippets.luasnip").config()
         end,
       },
@@ -424,7 +456,7 @@ lazy.setup({
       -- "octaltree/cmp-look",
       "onsails/lspkind-nvim",
     },
-    config = function()
+    config = function ()
       require("lsp.cmp").config()
     end,
     enabled = O.language_parsing or O.lsp,
@@ -453,7 +485,7 @@ lazy.setup({
       "DBUIAddConnection",
       "DBUIFindBuffer",
     },
-    init = function()
+    init = function ()
       -- Your DBUI configuration
       vim.g.db_ui_auto_execute_table_helpers = 1
       vim.g.db_ui_use_nerd_fonts = 1
@@ -464,7 +496,7 @@ lazy.setup({
     "kristijanhusak/vim-dadbod-completion",
     lazy = true,
     -- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"},
-    config = function()
+    config = function ()
       vim.cmd([[
 				  autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
 				]])
@@ -484,21 +516,22 @@ lazy.setup({
       keys = "<leader>g",
       cmd = "DiffviewOpen",
       event = "BufReadPost",
-      config = function()
+      config = function ()
         require("git.diffview").config()
       end,
     },
+    branch = "nightly",
     cmd = "Neogit",
     event = "InsertEnter",
     keys = "<leader>g",
-    config = function()
+    config = function ()
       require("git.neogit").config()
     end,
     enabled = O.git,
   },
   {
     "lewis6991/gitsigns.nvim",
-    config = function()
+    config = function ()
       require("git.gitsigns").config()
     end,
     event = "BufReadPost",
@@ -517,14 +550,14 @@ lazy.setup({
       "nvim-treesitter/nvim-treesitter",
       -- "antoinemadec/FixCursorHold.nvim",
     },
-    config = function()
+    config = function ()
       require("test.neotest").config()
     end,
     enabled = O.test,
   },
   {
     "vuki656/package-info.nvim",
-    config = function()
+    config = function ()
       require("misc.package_info").config()
     end,
     enabled = O.webdev and O.misc,
@@ -537,7 +570,7 @@ lazy.setup({
     dependencies = {
       "theHamsta/nvim-dap-virtual-text",
     },
-    config = function()
+    config = function ()
       require("debug.dap").config()
     end,
     event = "InsertEnter",
@@ -556,7 +589,7 @@ lazy.setup({
       "mfussenegger/nvim-dap",
       {
         "folke/neodev.nvim",
-        config = function()
+        config = function ()
           require("neodev").setup({
             library = { plugins = { "nvim-dap-ui", "neotest" }, types = true },
           })
@@ -564,7 +597,7 @@ lazy.setup({
         enabled = O.lsp,
       },
     },
-    config = function()
+    config = function ()
       require("debug.dapui").config()
     end,
     enabled = O.dap,
@@ -573,7 +606,7 @@ lazy.setup({
     "jbyuki/one-small-step-for-vimkind",
     dependencies = "nvim-dap",
     ft = "lua",
-    config = function()
+    config = function ()
       require("debug.one_small_step_for_vimkind").config()
     end,
     enabled = O.dap,
@@ -582,7 +615,7 @@ lazy.setup({
     "nvim-telescope/telescope-dap.nvim",
     dependencies = { "nvim-dap", "telescope.nvim" },
     keys = { "<leader>" },
-    config = function()
+    config = function ()
       require("telescope").load_extension("dap")
     end,
     enabled = O.dap,
@@ -590,7 +623,7 @@ lazy.setup({
   {
     "mxsdev/nvim-dap-vscode-js",
     dependencies = { "mfussenegger/nvim-dap" },
-    config = function()
+    config = function ()
       require("debug.vscode_js").config()
     end,
     ft = { "javascript", "vue", "javascriptreact", "typescriptreact", "typescript" },
@@ -600,7 +633,10 @@ lazy.setup({
     "microsoft/vscode-js-debug",
     lazy = true,
     build = "npm ci --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
-    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.webdev and O.dap,
+    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18
+      and O.webdev
+      and O.dap
+      and false,
   },
   {
     "Joakker/lua-json5",
@@ -611,7 +647,7 @@ lazy.setup({
   -- project management
   {
     "nvim-orgmode/orgmode.nvim",
-    config = function()
+    config = function ()
       require("management.orgmode")
     end,
     event = { "InsertEnter" },
@@ -622,7 +658,7 @@ lazy.setup({
     "renerocksai/telekasten.nvim",
     event = "BufReadPost",
     dependencies = { "telescope.nvim", "renerocksai/calendar-vim" },
-    config = function()
+    config = function ()
       require("management.telekasten").config()
     end,
     enabled = false,
@@ -632,23 +668,29 @@ lazy.setup({
   { "kevinhwang91/nvim-bqf", event = "InsertEnter", enabled = O.misc },
   {
     "stevearc/overseer.nvim",
-    config = function()
+    config = function ()
       require("misc.overseer").config()
     end,
     enabled = O.misc,
   },
   {
     "mfussenegger/nvim-lint",
-    config = function()
+    config = function ()
       require("lint").linters_by_ft = {
-        tex = { "vale" },
+        -- tex = { "chktex" },
+        -- latex = { "vale" },
         zsh = { "zsh" },
         jinja = { "djlint" },
         htmldjango = { "djlint" },
         NeogitCommitMessage = { "gitlint" },
+        typescript = { "eslint" },
+        javascript = { "eslint" },
+        javascriptreact = { "eslint" },
+        typescriptreact = { "eslint" },
+        vue = { "eslint" },
       }
-      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-        callback = function()
+      vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "TextChanged" }, {
+        callback = function ()
           require("lint").try_lint()
         end,
       })
@@ -664,26 +706,21 @@ lazy.setup({
   {
     "stevearc/conform.nvim",
     opts = {},
-    config = function()
+    config = function ()
       require("conform").setup({
         formatters_by_ft = {
           python = { "ruff_fix", "ruff_format" },
-          -- ["javascript"] = { "prettier" },
-          -- ["javascriptreact"] = { "prettier" },
-          -- ["typescript"] = { "prettier" },
-          -- ["typescriptreact"] = { "prettier" },
-          -- ["vue"] = { "prettier" },
-          -- ["css"] = { "prettier" },
-          -- ["scss"] = { "prettier" },
-          -- ["less"] = { "prettier" },
-          -- ["html"] = { "prettier" },
-          -- ["json"] = { "prettier" },
-          -- ["jsonc"] = { "prettier" },
-          -- ["yaml"] = { "prettier" },
-          ["markdown"] = { "prettier" },
-          -- ["markdown.mdx"] = { "prettier" },
-          -- ["graphql"] = { "prettier" },
-          -- ["handlebars"] = { "prettier" },
+          javascript = { "prettierd", "prettier" },
+          javascriptreact = { "prettierd", "prettier" },
+          typescript = { "prettierd", "prettier" },
+          typescriptreact = { "prettierd", "prettier" },
+          vue = { "prettierd", "prettier" },
+          css = { "prettierd", "prettier" },
+          scss = { "prettierd", "prettier" },
+          html = { "prettierd", "prettier" },
+          json = { "prettierd", "prettier" },
+          yaml = { "prettierd", "prettier" },
+          markdown = { "prettierd", "prettier" },
         },
       })
       local maps = {
@@ -698,7 +735,7 @@ lazy.setup({
   },
   {
     "andymass/vim-matchup",
-    config = function()
+    config = function ()
       vim.g.matchup_matchparen_offscreen = { method = "popup" }
       vim.g.matchup_surround_enabled = 1
     end,
@@ -709,7 +746,7 @@ lazy.setup({
   {
     "folke/flash.nvim",
     event = "VeryLazy",
-    config = function()
+    config = function ()
       require("flash").setup({
         highlight = {
           backdrop = false,
@@ -775,7 +812,7 @@ lazy.setup({
   },
   {
     "folke/todo-comments.nvim",
-    config = function()
+    config = function ()
       require("todo-comments").setup()
     end,
     event = "InsertEnter",
@@ -784,14 +821,14 @@ lazy.setup({
   {
     "akinsho/toggleterm.nvim",
     version = "*",
-    config = function()
+    config = function ()
       require("misc.toggleterm").config()
     end,
     enabled = O.misc,
   },
   {
     "danymat/neogen",
-    config = function()
+    config = function ()
       require("misc.neogen")
     end,
     dependencies = "nvim-treesitter/nvim-treesitter",
@@ -800,7 +837,7 @@ lazy.setup({
   },
   {
     "hiphish/rainbow-delimiters.nvim",
-    config = function()
+    config = function ()
       -- This module contains a number of default definitions
       local rainbow_delimiters = require("rainbow-delimiters")
 
@@ -831,7 +868,7 @@ lazy.setup({
     "folke/tokyonight.nvim",
     lazy = vim.cmd("colorscheme") ~= "tokyonight",
     priority = 1000,
-    config = function()
+    config = function ()
       require("tokyonight").setup({
         style = "storm",
         transparent = false,
@@ -842,7 +879,7 @@ lazy.setup({
   },
   {
     "rebelot/kanagawa.nvim",
-    config = function()
+    config = function ()
       require("kanagawa").setup({
         compile = true,
         dimInactive = true,
@@ -855,7 +892,7 @@ lazy.setup({
     "rose-pine/neovim",
     name = "rose-pine",
     lazy = vim.cmd("colorscheme") ~= "rose-pine",
-    config = function()
+    config = function ()
       require("rose-pine").setup({
         dim_inactive_windows = true,
         highlight_groups = {
@@ -876,9 +913,15 @@ lazy.setup({
     "catppuccin/nvim",
     name = "catppuccin",
     lazy = vim.cmd("colorscheme") ~= "catppuccin",
-    config = function()
+    config = function ()
       require("catppuccin").setup({
-        flavour = "mocha", -- mocha, macchiato, frappe, latte
+        flavour = "mocha",  -- mocha, macchiato, frappe, latte
+        transparent_background = false,
+        background = {  -- :h background
+          light = "latte",
+          dark = "mocha",
+        },
+        compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
         integrations = {
           barbar = true,
           cmp = true,
@@ -936,7 +979,7 @@ lazy.setup({
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
+    config = function ()
       require("misc.harpoon").config()
       require("misc.harpoon").maps()
     end,
@@ -949,7 +992,7 @@ lazy.setup({
       { "nvim-lua/plenary.nvim" },
       { "nvim-treesitter/nvim-treesitter" },
     },
-    config = function()
+    config = function ()
       require("misc.refactoring").config()
       require("misc.refactoring").maps()
     end,
@@ -959,14 +1002,14 @@ lazy.setup({
     "iamcco/markdown-preview.nvim",
     ft = { "markdown" },
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    build = function()
+    build = function ()
       if tonumber(string.sub(Capture("node --version"), 2, 3)) >= 16 then
         return "cd app && npm install"
       else
         vim.fn["mkdp#util#install"]()
       end
     end,
-    init = function()
+    init = function ()
       vim.g.mkdp_filetypes = { "markdown" }
     end,
     enabled = O.markdown,
@@ -992,11 +1035,12 @@ lazy.setup({
   { "stevearc/dressing.nvim" },
   {
     "folke/noice.nvim",
+    event = "VeryLazy",
     dependencies = {
       "MunifTanjim/nui.nvim",
       "rcarriga/nvim-notify",
     },
-    config = function()
+    config = function ()
       require("ui.noice").config()
     end,
     enabled = true,
@@ -1004,7 +1048,7 @@ lazy.setup({
   {
     "lervag/vimtex",
     ft = "tex",
-    config = function()
+    config = function ()
       require("misc.vimtex").config()
     end,
     enabled = O.latex,
@@ -1012,65 +1056,24 @@ lazy.setup({
   {
     "pmizio/typescript-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {},
-    config = function()
+    config = function ()
       require("misc.typescript_tools").config()
     end,
     ft = { "vue", "typescript", "typescriptreact" },
     enabled = O.webdev or O.typescript,
   },
   {
+    "vhyrro/luarocks.nvim",
+    priority = 1000,
+    config = true,
+  },
+  { "nvim-neotest/nvim-nio" },
+  {
     "rest-nvim/rest.nvim",
-    dependencies = { { "nvim-lua/plenary.nvim" } },
-    config = function()
-      require("rest-nvim").setup({
-        -- Open request results in a horizontal split
-        result_split_horizontal = false,
-        -- Keep the http file buffer above|left when split horizontal|vertical
-        result_split_in_place = false,
-        -- stay in current windows (.http file) or change to results window (default)
-        stay_in_current_window_after_split = false,
-        -- Skip SSL verification, useful for unknown certificates
-        skip_ssl_verification = false,
-        -- Encode URL before making request
-        encode_url = true,
-        -- Highlight request on run
-        highlight = {
-          enabled = true,
-          timeout = 150,
-        },
-        result = {
-          -- toggle showing URL, HTTP info, headers at top the of result window
-          show_url = true,
-          -- show the generated curl command in case you want to launch
-          -- the same request via the terminal (can be verbose)
-          show_curl_command = false,
-          show_http_info = true,
-          show_headers = true,
-          -- table of curl `--write-out` variables or false if disabled
-          -- for more granular control see Statistics Spec
-          show_statistics = false,
-          -- executables or functions for formatting response body [optional]
-          -- set them to false if you want to disable them
-          formatters = {
-            json = "jq",
-            html = function(body)
-              return vim.fn.system({ "tidy", "-i", "-q", "-" }, body)
-            end,
-          },
-        },
-        -- Jump to request line on run
-        jump_to_request = false,
-        env_file = ".env",
-        custom_dynamic_variables = {},
-        yank_dry_run = true,
-        search_back = true,
-      })
-      require("which-key").register({
-        ["<leader>Rr"] = { "<Plug>RestNvim<cr>", "Rest Run" },
-        ["<leader>Rp"] = { "<Plug>RestNvimPreview<cr>", "Rest Run Preview" },
-        ["<leader>Rl"] = { "<Plug>RestNvimLast<cr>", "Rest Run Last" },
-      })
+    dependencies = { "nvim-lua/plenary.nvim", "luarocks.nvim", "telescope.nvim" },
+    ft = "http",
+    config = function ()
+      require("ben.rest").config()
     end,
     enabled = O.webdev and O.misc,
   },

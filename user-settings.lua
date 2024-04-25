@@ -26,13 +26,13 @@ O.typescript = true
 O.latex = true
 
 -- program adapters
-O.obsidian = false
+O.obsidian = true
 O.salt = false
 O.databases = true
 
 -- general
 O.auto_complete = true
-O.colorscheme = "rose-pine-moon"
+O.colorscheme = "catppuccin-mocha"
 O.auto_close_tree = 0
 O.wrap_lines = true
 
