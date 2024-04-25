@@ -218,6 +218,29 @@ M.config = function ()
         },
       })
     end,
+    ["basedpyright"] = function ()
+      lspconfig.basedpyright.setup({
+        before_init = function (_, config)
+          -- config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
+          config.settings.basedpyright.analysis.stubPath =
+            vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "python-type-stubs")
+        end,
+        settings = {
+          basedpyright = {
+            disableOrganizeImports = true,
+            openFilesOnly = true,
+            analysis = {
+              autoImportCompletions = true,
+              autoSearchPaths = true,
+              -- logLevel = "Warning",
+              diagnosticMode = "openFilesOnly",
+              useLibraryCodeForTypes = true,
+              typeCheckingMode = "standard",
+            },
+          },
+        },
+      })
+    end,
     ["pyright"] = function ()
       lspconfig.pyright.setup({
         before_init = function (_, config)
