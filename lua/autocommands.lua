@@ -18,7 +18,7 @@ api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   command = "setlocal spell",
 })
 api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = { "*.txt", "*.md", "*.json" },
+  pattern = { "*.txt", "*.json" },
   command = "setlocal conceallevel=0",
 })
 

@@ -97,7 +97,8 @@ lazy.setup({
   },
   {
     "epwalsh/obsidian.nvim",
-    event = { "BufReadPost" },
+    event = { "BufReadPost", "VimEnter" },
+    version = "*",
     config = function ()
       require("management.obsidian").config()
     end,
