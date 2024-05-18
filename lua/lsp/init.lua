@@ -24,32 +24,20 @@ M.config = function ()
     vim.notify("neodev not okay")
   end
   -- LSP signs default
-  vim.fn.sign_define(
-    "DiagnosticSignHint",
-    { texthl = "DiagnosticSignHint", text = "", numhl = "DiagnosticSignHint" }
-  )
-  vim.fn.sign_define(
-    "DiagnosticSignInfo",
-    { texthl = "DiagnosticSignInfo", text = "", numhl = "DiagnosticSignInfo" }
-  )
-  vim.fn.sign_define(
-    "DiagnosticSignWarning",
-    { texthl = "DiagnosticSignWarning", text = "", numhl = "DiagnosticSignWarning" }
-  )
-  vim.fn.sign_define(
-    "DiagnosticSignError",
-    { texthl = "DiagnosticSignError", text = "", numhl = "DiagnosticSignError" }
-  )
-
-  -- LSP Enable diagnostics
-  -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  --   vim.lsp.diagnostic.on_publish_diagnostics, {
-  --     virtual_text = true,
-  --     underline = true,
-  --     signs = true,
-  --     update_in_insert = true,
-  --     severity_sort = true,
-  --   })
+  vim.diagnostic.config({
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = "",
+        [vim.diagnostic.severity.WARN] = "",
+        [vim.diagnostic.severity.INFO] = "",
+        [vim.diagnostic.severity.HINT] = "",
+      },
+      numhl = {
+        [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+        [vim.diagnostic.severity.WARN] = "WarningMsg",
+      },
+    }
+  })
 
   local mason_ok, mason = pcall(require, "mason")
   if not mason_ok then
@@ -119,7 +107,7 @@ M.config = function ()
         a = { vim.lsp.buf.code_action, "Code Action" },
         c = { "<cmd>e $HOME/.config/nvim/lua/lsp/init.lua<cr>", "Config" },
         C = {
-          "<cmd>lua =vim.lsp.get_active_clients()[2].server_capabilities<cr>",
+          "<cmd>lua =vim.lsp.get_clients()[2].server_capabilities<cr>",
           "Server Capabilities",
         },
         d = { "<cmd>Telescope lsp_definitions<cr>", "Definitions" },

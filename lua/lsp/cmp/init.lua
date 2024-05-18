@@ -43,7 +43,8 @@ M.config = function ()
   -- require("cmp-npm").setup({})
   local compare = cmp.config.compare
   local default_cmp_sources = cmp.config.sources({
-    { name = "copilot", priority = 8 },
+    -- { name = "copilot", priority = 8 },
+    -- { name = "codeium", priority = 1 },
     -- { name = "nvim_lsp_signature_help" },
     { name = "neorg" },
     { name = "npm", priority = 10, keyword_length = 4 },
@@ -169,6 +170,11 @@ M.config = function ()
             vim_item.kind = " LaTeX"
             vim_item.kind_hl_group = "CmpItemKindSnippet"
           end
+          if entry.source.name == "Codeium" then
+            vim_item.kind = " Codeium"
+            vim_item.kind_hl_group = "CmpItemKindCopilot"
+            word = str.oneline(vim_item.abbr)
+          end
 
 
           -- Get the full snippet (and only keep first line)
@@ -248,13 +254,13 @@ M.config = function ()
       ["<C-e>"] = cmp.mapping.abort(),
       ["<C-h>"] = cmp.mapping.abort(),
       ["<C-l>"] = cmp.mapping(function(fallback)
-        local _, cp = pcall(require, "copilot.suggestion")
+        local cp_ok, cp = pcall(require, "copilot.suggestion")
         local entry = cmp.get_selected_entry()
         if cmp.visible() and entry then
           cmp.confirm({
             select = false,
           })
-        elseif cp.is_visible() then
+        elseif cp_ok and cp.is_visible() then
           cp.accept()
         else
           fallback()
@@ -275,24 +281,24 @@ M.config = function ()
         end
       end, { "i", "s", "c" }),
       ["<C-n>"] = cmp.mapping(function (fallback)
-        local _, cp = pcall(require, "copilot.suggestion")
+        local cp_ok, cp = pcall(require, "copilot.suggestion")
         if cmp.visible() then
           cmp.select_next_item()
         elseif luasnip.expand_or_jumpable() then
           luasnip.expand_or_jump()
-        elseif cp.is_visible() then
+        elseif cp_ok and cp.is_visible() then
           cp.next()
         else
           fallback()
         end
       end, { "i", "s", "c" }),
       ["<C-p>"] = cmp.mapping(function (fallback)
-        local _, cp = pcall(require, "copilot.suggestion")
+        local cp_ok, cp = pcall(require, "copilot.suggestion")
         if cmp.visible() then
           cmp.select_prev_item()
         elseif luasnip.expand_or_jumpable() then
           luasnip.expand_or_jump()
-        elseif cp.is_visible() then
+        elseif cp.is_visible() and cp_ok then
           cp.prev()
         else
           fallback()
@@ -301,7 +307,7 @@ M.config = function ()
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
       ["<C-b>"] = cmp.mapping.scroll_docs(-4),
       ["<Tab>"] = cmp.mapping(function (fallback)
-        local _, cp = pcall(require, "copilot.suggestion")
+        local cp_ok, cp = pcall(require, "copilot.suggestion")
         local entry = cmp.get_selected_entry()
         if cmp.visible() and entry then
           cmp.confirm()
@@ -309,7 +315,7 @@ M.config = function ()
           luasnip.expand_or_jump()
         elseif not has_words_before() then
           fallback()
-        elseif cp.is_visible() then
+        elseif cp.is_visible() and cp_ok then
           cp.accept()
         else
           fallback()
@@ -450,18 +456,18 @@ M.config = function ()
         hosts = { "gitlab.klima.tu-berlin.de", }
     }
   })
-  local sign = function (opts)
-    vim.fn.sign_define(opts.name, {
-      texthl = opts.name,
-      text = opts.text,
-      numhl = "",
-    })
-  end
+  -- local sign = function (opts)
+  --   vim.fn.sign_define(opts.name, {
+  --     texthl = opts.name,
+  --     text = opts.text,
+  --     numhl = "",
+  --   })
+  -- end
 
-  sign({ name = "DiagnosticSignError", text = "✘" })
-  sign({ name = "DiagnosticSignWarn", text = "▲" })
-  sign({ name = "DiagnosticSignHint", text = "⚑" })
-  sign({ name = "DiagnosticSignInfo", text = "" })
+  -- sign({ name = "DiagnosticSignError", text = "✘" })
+  -- sign({ name = "DiagnosticSignWarn", text = "▲" })
+  -- sign({ name = "DiagnosticSignHint", text = "⚑" })
+  -- sign({ name = "DiagnosticSignInfo", text = "" })
 
   _ = vim.cmd([[
 	  augroup DadbodSql

@@ -118,9 +118,10 @@ local js_based_languages = {
 }
 
 M.config = function ()
-  vim.fn.sign_define("DapBreakpoint", data.breakpoint)
-  vim.fn.sign_define("DapBreakpointRejected", data.breakpoint_rejected)
-  vim.fn.sign_define("DapStopped", data.stopped)
+
+  -- vim.fn.sign_define("DapBreakpoint", data.breakpoint)
+  -- vim.fn.sign_define("DapBreakpointRejected", data.breakpoint_rejected)
+  -- vim.fn.sign_define("DapStopped", data.stopped)
   vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
   dap.defaults.fallback.terminal_win_cmd = "50vsplit new"

@@ -368,6 +368,58 @@ lazy.setup({
     },
   },
   {
+    "Exafunction/codeium.vim",
+    config = function ()
+      -- Change '<C-g>' here to any keycode you like.
+      vim.keymap.set("i", "<C-l>", function () return vim.fn["codeium#Accept"]() end,
+        { expr = true, silent = true })
+      vim.keymap.set("i", "<c-n>", function () return vim.fn["codeium#CycleCompletions"](1) end,
+        { expr = true, silent = true })
+      vim.keymap.set("i", "<c-p>", function () return vim.fn["codeium#CycleCompletions"](-1) end,
+        { expr = true, silent = true })
+      vim.keymap.set("i", "<c-h>", function () return vim.fn["codeium#Clear"]() end,
+        { expr = true, silent = true })
+    end,
+    enabled = O.codeium,
+  },
+  {
+    "Exafunction/codeium.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+    },
+    config = function ()
+      require("codeium").setup({
+        enable_chat = true,
+        tools = {
+          curl = "/usr/bin/curl",
+          gzip = "/usr/bin/gzip",
+          -- language_server = vim.fn.expand("~") .. "/.local/bin/termium_language_server_linux_x64"
+          language_server = "/home/ben/.local/bin/termium_language_server_linux_x64"
+        }
+      })
+    end,
+    enabled = O.codeium,
+  },
+  {
+    "supermaven-inc/supermaven-nvim",
+    config = function ()
+      require("supermaven-nvim").setup({
+        keymaps = {
+          accept_suggestion = "<C-l>",
+          clear_suggestion = "<C-h>",
+          accept_word = "<C-a>",
+        },
+        ignore_filetypes = { env = true },
+        color = {
+          -- suggestion_color = "#ffffff",
+          cterm = 244,
+        }
+      })
+    end,
+    enabled = O.supermaven,
+  },
+  {
     "zbirenbaum/copilot.lua",
     config = function ()
       require("lsp.copilot").config()
@@ -528,7 +580,7 @@ lazy.setup({
     config = function ()
       require("git.neogit").config()
     end,
-    enabled = O.git,
+    enabled = O.git and false,
   },
   {
     "lewis6991/gitsigns.nvim",
@@ -867,7 +919,9 @@ lazy.setup({
   },
   {
     "folke/tokyonight.nvim",
-    lazy = vim.cmd("colorscheme") ~= "tokyonight",
+    lazy = function()
+      return vim.cmd("colorscheme") ~= "tokyonight"
+    end,
     priority = 1000,
     config = function ()
       require("tokyonight").setup({
@@ -886,13 +940,15 @@ lazy.setup({
         dimInactive = true,
       })
     end,
-    lazy = vim.cmd("colorscheme") ~= "kanagawa",
+    lazy = function ()
+      return vim.cmd("colorscheme") ~= "kanagawa"
+    end,
     enabled = O.misc or vim.cmd("colorscheme") == "kanagawa",
   },
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    lazy = vim.cmd("colorscheme") ~= "rose-pine",
+    lazy = function() return vim.cmd("colorscheme") ~= "rose-pine" end,
     config = function ()
       require("rose-pine").setup({
         dim_inactive_windows = true,
@@ -913,7 +969,9 @@ lazy.setup({
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    lazy = vim.cmd("colorscheme") ~= "catppuccin",
+    lazy = function ()
+      return vim.cmd("colorscheme") ~= "catppuccin"
+    end,
     config = function ()
       require("catppuccin").setup({
         flavour = "mocha",  -- mocha, macchiato, frappe, latte

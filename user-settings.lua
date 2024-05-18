@@ -9,7 +9,9 @@ an executable
 -- packages
 O.lsp = true -- boolean, activates lsp packages
 O.webdev = true
-O.copilot = true
+O.copilot = false
+O.codeium = false
+O.supermaven = true
 O.language_parsing = true
 O.git = true
 O.format = true
