@@ -1,7 +1,3 @@
--- if not package.loaded['nvim-autopairs'] then
-
---   return
--- end
 local status_ok, autopairs = pcall(require, "nvim-autopairs")
 if not status_ok then
   return
@@ -66,8 +62,6 @@ M.config = function()
     ignored_next_char = "[%w%.]",
     fast_wrap = {},
   })
-
-  require("nvim-treesitter.configs").setup({ autopairs = { enable = true } })
 
   local ts_conds = require("nvim-autopairs.ts-conds")
 

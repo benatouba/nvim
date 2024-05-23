@@ -289,18 +289,33 @@ lazy.setup({
       },
       -- "RRethy/nvim-treesitter-endwise",
       "nvim-treesitter/nvim-treesitter-refactor",
-      "windwp/nvim-ts-autotag",
-      {
-        "windwp/nvim-autopairs",
-        config = function ()
-          require("language_parsing.autopairs").config()
-        end,
-      },
     },
     build = ":TSUpdate",
     lazy = true,
     config = function ()
       require("language_parsing.treesitter").config()
+    end,
+    enabled = O.language_parsing,
+  },
+  {
+    "windwp/nvim-ts-autotag",
+    config = function()
+      require('nvim-ts-autotag').setup({
+        opts = {
+          enable_close = true,
+          enable_rename = true,
+          enable_close_on_slash = true,
+        },
+      }
+      )
+    end,
+    enabled = O.language_parsing,
+  },
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = function ()
+      require("language_parsing.autopairs").config()
     end,
     enabled = O.language_parsing,
   },
@@ -580,7 +595,7 @@ lazy.setup({
     config = function ()
       require("git.neogit").config()
     end,
-    enabled = O.git and false,
+    enabled = O.git,
   },
   {
     "lewis6991/gitsigns.nvim",
@@ -919,7 +934,7 @@ lazy.setup({
   },
   {
     "folke/tokyonight.nvim",
-    lazy = function()
+    lazy = function ()
       return vim.cmd("colorscheme") ~= "tokyonight"
     end,
     priority = 1000,
@@ -948,7 +963,7 @@ lazy.setup({
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    lazy = function() return vim.cmd("colorscheme") ~= "rose-pine" end,
+    lazy = function () return vim.cmd("colorscheme") ~= "rose-pine" end,
     config = function ()
       require("rose-pine").setup({
         dim_inactive_windows = true,

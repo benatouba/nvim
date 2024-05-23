@@ -29,7 +29,7 @@ vim.g.maplocalleader = "\\"
 local nmaps = {}
 
 local maps = {
-  ["e"] = { ":NvimTreeToggle<cr>", "Explorer" },
+  ["e"] = { ":Oil<cr>", "Explorer" },
   ["u"] = { ":UndotreeToggle<cr>", "Undotree" },
   -- a is for actions
   a = {
