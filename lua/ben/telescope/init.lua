@@ -16,7 +16,7 @@ M.config = function ()
 	autocmd User TelescopePreviewerLoaded setlocal wrap
 	]])
 
-  local trouble_ok, trouble = pcall(require, "trouble.providers.telescope")
+  local trouble_ok, trouble = pcall(require, "trouble.sources.telescope")
   if not trouble_ok then
     vim.notify("Trouble in trouble in telescope")
     return
@@ -72,7 +72,7 @@ M.config = function ()
           -- To disable a keymap, put [map] = false
           -- So, to not map "<C-n>", just put
           ["<c-h>"] = actions.which_key,
-          ["<c-t>"] = trouble.open_with_trouble,
+          ["<c-t>"] = trouble.open,
 
           -- ["<esc>"] = actions.close,
 
@@ -89,7 +89,7 @@ M.config = function ()
           ["<C-j>"] = actions.move_selection_next,
           ["<C-k>"] = actions.move_selection_previous,
           ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-          ["<c-t>"] = trouble.open_with_trouble,
+          ["<c-t>"] = trouble.open,
           -- ["<C-i>"] = my_cool_custom_action,
         }
       }

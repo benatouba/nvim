@@ -31,6 +31,7 @@ local nmaps = {}
 local maps = {
   ["e"] = { ":Oil<cr>", "Explorer" },
   ["u"] = { ":UndotreeToggle<cr>", "Undotree" },
+  ["<leader>"] = {":bprevious<cr>", "Switch Buffer"},
   -- a is for actions
   a = {
     name = "+Actions",

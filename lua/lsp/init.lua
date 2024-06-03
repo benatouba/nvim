@@ -1,28 +1,6 @@
 local M = {}
 
 M.config = function ()
-  local neodev_ok, neodev = pcall(require, "neodev")
-  if neodev_ok then
-    neodev.setup({
-      library = {
-        enabled = true,
-        plugins = true,
-        types = true,
-        runtime = true,
-      },
-      setup_jsonls = true,
-      lspconfig = true,
-      pathStrict = true,
-      override = function (root_dir, library)
-        if root_dir:find("/etc/nixos", 1, true) == 1 then
-          library.enabled = true
-          library.plugins = true
-        end
-      end,
-    })
-  else
-    vim.notify("neodev not okay")
-  end
   -- LSP signs default
   vim.diagnostic.config({
     signs = {
@@ -91,6 +69,10 @@ M.config = function ()
     if not isOk then
       vim.notify("which-key not okay in lspconfig")
       return
+    end
+    if client.name == "ruff" then
+      -- Disable hover in favor of Pyright
+      client.server_capabilities.hoverProvider = false
     end
     local maps = {
       s = {
@@ -216,13 +198,13 @@ M.config = function ()
         settings = {
           basedpyright = {
             disableOrganizeImports = true,
-            openFilesOnly = true,
+            useLibraryCodeForTypes = true,
             analysis = {
+              ignore = "*",
               autoImportCompletions = true,
               autoSearchPaths = true,
               -- logLevel = "Warning",
-              diagnosticMode = "openFilesOnly",
-              useLibraryCodeForTypes = true,
+              diagnosticMode = "workspace",
               typeCheckingMode = "standard",
             },
           },
@@ -243,6 +225,7 @@ M.config = function ()
           },
           python = {
             analysis = {
+              ignore = "*",
               autoImportCompletions = true,
               autoSearchPaths = true,
               -- logLevel = "Warning",
@@ -293,8 +276,8 @@ M.config = function ()
               pylint = { enabled = false },
               rope_autimport = { enabled = true },
               rope_completion = { enabled = true },
-              ruff = { enabled = false, lineLength = 100 },
-              black = { enabled = true, line_length = 100 },
+              ruff = { enabled = true, lineLength = 100 },
+              black = { enabled = false, line_length = 100 },
               yapf = { enabled = false },
               preload = { modules = { "manim", "numpy", "pandas" } },
               jedi = {

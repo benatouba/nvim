@@ -9,6 +9,8 @@ DATA_PATH = vim.fn.stdpath("data")
 -- vim.cmd('let &titleold="' .. TERMINAL .. '"')
 vim.o.titlestring = "%<%F%=%l/%L - nvim"
 vim.o.exrc = true
+vim.g.lazydev_enabled = true
+---@class for vim.g.loaded
 vim.g.loaded = 1
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1

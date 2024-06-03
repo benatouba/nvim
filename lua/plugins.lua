@@ -588,7 +588,7 @@ lazy.setup({
         require("git.diffview").config()
       end,
     },
-    branch = "nightly",
+    -- branch = "nightly",
     cmd = "Neogit",
     event = "InsertEnter",
     keys = "<leader>g",
@@ -645,25 +645,26 @@ lazy.setup({
     enabled = O.dap,
   },
   {
-    "folke/neodev.nvim",
-    opts = {},
+    "folke/lazydev.nvim",
+    opts = {
+      library = {
+        -- Library items can be absolute paths
+        -- "~/projects/my-awesome-lib",
+        -- Or relative, which means they will be resolved as a plugin
+        -- "LazyVim",
+        -- When relative, you can also provide a path to the library in the plugin dir
+        "luvit-meta/library", -- see below
+      },
+    },
     ft = "lua",
     enabled = O.lsp,
   },
+  { "Bilal2453/luvit-meta", lazy = true, enabled = O.lsp },
   {
     "rcarriga/nvim-dap-ui",
     event = "InsertEnter",
     dependencies = {
       "mfussenegger/nvim-dap",
-      {
-        "folke/neodev.nvim",
-        config = function ()
-          require("neodev").setup({
-            library = { plugins = { "nvim-dap-ui", "neotest" }, types = true },
-          })
-        end,
-        enabled = O.lsp,
-      },
     },
     config = function ()
       require("debug.dapui").config()

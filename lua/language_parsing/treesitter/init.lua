@@ -81,12 +81,6 @@ M.config = function ()
       updatetime = 25,  -- Debounced time for highlighting nodes in the playground from source code
       persist_queries = false,  -- Whether the query persists across vim sessions
     },
-    autotag = {
-      enable = true,
-      enable_rename = true,
-      enable_close = true,
-      enable_close_on_slash = true,
-    },
     rainbow = {
       enable = true,
       extended_mode = true,  -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean

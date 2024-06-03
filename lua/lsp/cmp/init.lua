@@ -46,6 +46,7 @@ M.config = function ()
     -- { name = "copilot", priority = 8 },
     -- { name = "codeium", priority = 1 },
     -- { name = "nvim_lsp_signature_help" },
+    { name = "lazydev", group_index = 0 },
     { name = "neorg" },
     { name = "npm", priority = 10, keyword_length = 4 },
     { name = "path", priority = 4 },
