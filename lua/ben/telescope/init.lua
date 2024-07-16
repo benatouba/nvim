@@ -132,29 +132,26 @@ M.config = function ()
     print("Which-key not okay in telescope")
   end
   local maps = {
-    b = { "<cmd>Telescope buffers theme=dropdown<cr>", "Buffers" },
-    s = {
-      name = "+Search",
-      b = { "<cmd>Telescope git_branches<cr>", "Branches" },
-      B = { "<cmd>Telescope file_browser<cr>", "Browser" },
-      c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-      f = { "<cmd>Telescope find_files hidden=true<cr>", "Find File" },
-      g = { "<cmd>Telescope git_files<cr>", "Git Files" },
-      -- h = { "<cmd>Telescope howdoi<cr>", "How Do I .." },
-      k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
-      m = { "<cmd>Telescope marks<cr>", "Marks" },
-      M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-      n = { "<cmd>Telescope notify theme=ivy<cr>", "Notifications" },
-      N = { "<cmd>Noice telescope<cr>", "Noice Notifications" },
-      o = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
-      p = { "<cmd>Telescope projects<cr>", "Projects" },
-      q = { "<cmd>Telescope quickfix<cr>", "Quickfix List" },
-      R = { "<cmd>Telescope registers<cr>", "Registers" },
-      t = { "<cmd>Telescope live_grep<cr>", "Text" },
-      T = { "<cmd>Telescope treesitter<cr>", "Treesitter Symbols" },
-    },
+    { "<leader>b", "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
+    { "<leader>s", group = "Search" },
+    { "<leader>sB", "<cmd>Telescope file_browser<cr>", desc = "Browser" },
+    { "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man Pages" },
+    { "<leader>sN", "<cmd>Noice telescope<cr>", desc = "Noice Notifications" },
+    { "<leader>sR", "<cmd>Telescope registers<cr>", desc = "Registers" },
+    { "<leader>sT", "<cmd>Telescope treesitter<cr>", desc = "Treesitter Symbols" },
+    { "<leader>sb", "<cmd>Telescope git_branches<cr>", desc = "Branches" },
+    { "<leader>sc", "<cmd>Telescope colorscheme<cr>", desc = "Colorscheme" },
+    { "<leader>sf", "<cmd>Telescope find_files hidden=true<cr>", desc = "Find File" },
+    { "<leader>sg", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
+    { "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
+    { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Marks" },
+    { "<leader>sn", "<cmd>Telescope notify theme=ivy<cr>", desc = "Notifications" },
+    { "<leader>so", "<cmd>Telescope oldfiles<cr>", desc = "Open Recent File" },
+    { "<leader>sp", "<cmd>Telescope projects<cr>", desc = "Projects" },
+    { "<leader>sq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix List" },
+    { "<leader>st", "<cmd>Telescope live_grep<cr>", desc = "Text" },
   }
-  wk.register(maps, { prefix = "<leader>" })
+  wk.add(maps)
 end
 
 return M

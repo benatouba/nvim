@@ -45,32 +45,42 @@ local my_keys = {
 }
 
 local function isLineStartingWithHyphenOrWhitespace()
-    local line = vim.fn.getline('.')
-    return line:match('^%s*%- (') ~= nil
+  local line = vim.fn.getline(".")
+  return line:match("^%s*%- (") ~= nil
 end
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'norg',
-  callback = function()
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "norg",
+  callback = function ()
     M.insertHyphenParentheses()
   end
 })
 
 function M.insertHyphenParentheses()
-    if isLineStartingWithHyphenOrWhitespace() then
-        vim.api.nvim_command('normal! o- ( )')
-    else
-        vim.api.nvim_command('normal! o')
-    end
+  if isLineStartingWithHyphenOrWhitespace() then
+    vim.api.nvim_command("normal! o- ( )")
+  else
+    vim.api.nvim_command("normal! o")
+  end
 end
-
 
 neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function (_, keybinds)
   keybinds.map_event_to_mode("norg", {
-  }, {
-    silent = true,
-    noremap = true,
-  })
+      n = {  -- Bind keys in normal mode
+        { "<localleader>sl", "core.integrations.telescope.find_linkable" },
+        { "<localleader>sh", "core.integrations.telescope.search_headings" },
+        { "<localleader>sb", "core.integrations.telescope.find_backlinks" },
+        { "<localleader>sB", "core.integrations.telescope.find_header_backlinks" },
+      },
+
+      i = {  -- Bind in insert mode
+        { "<C-l>", "core.integrations.telescope.insert_link" },
+      },
+    },
+    {
+      silent = true,
+      noremap = true,
+    })
 end)
 
 M.config = function ()
@@ -117,7 +127,7 @@ M.config = function ()
         },
       },
       ["core.summary"] = {},
-      ["core.ui.calendar"] = {},
+      -- ["core.ui.calendar"] = {},
       -- ["external.context"] = {},
       ["core.keybinds"] = {
         config = {
@@ -135,29 +145,16 @@ M.config = function ()
   })
   local maps = {
     -- o is for organising
-    o = {
-      name = "+Org",
-      b = { "<cmd>Neorg workspace base<CR>", "Base" },
-      i = { "<cmd>Neorg workspace ideas<CR>", "Ideas" },
-      t = { "<cmd>Neorg workspace tech<CR>", "Tech" },
-      p = { "<cmd>Neorg workspace people<CR>", "People" },
-      w = { "<cmd>Neorg workspace projects<CR>", "Work (Projects)" },
-      W = { "<cmd>Neorg return<CR>", "Return" },
-    },
+    { "<leader>o", group = "Org", icon = { icon = "", color = "purple" } },
+    { "<leader>oW", "<cmd>Neorg return<CR>", desc = "Return" },
+    { "<leader>ob", "<cmd>Neorg workspace base<CR>", desc = "Base" },
+    { "<leader>oi", "<cmd>Neorg workspace ideas<CR>", desc = "Ideas" },
+    { "<leader>op", "<cmd>Neorg workspace people<CR>", desc = "People" },
+    { "<leader>ot", "<cmd>Neorg workspace tech<CR>", desc = "Tech" },
+    { "<leader>ow", "<cmd>Neorg workspace projects<CR>", desc = "Work (Projects)" },
+    { "<localleader>c", "<cmd>Neorg toc<CR>", desc = "Contents" },
   }
-  local locmaps = {
-    c = { "<cmd>Neorg toc<CR>", "Contents" },
-  }
-
-  wk.register(maps, {
-    mode = "n",  -- NORMAL mode
-    prefix = "<leader>",
-  })
-
-  wk.register(locmaps, {
-    mode = "n",  -- NORMAL mode
-    prefix = "<localleader>",
-  })
+  wk.add(maps)
 end
 
 return M

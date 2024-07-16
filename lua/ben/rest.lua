@@ -62,14 +62,12 @@ M.config = function()
     -- search_back = true,
   })
 
-  require("which-key").register({
-    R = {
-      name = "+Rest",
-      r = { "<Plug>RestNvim<cr>", "Rest Run" },
-      p = { "<Plug>RestNvimPreview<cr>", "Rest Run Preview" },
-      l = { "<Plug>RestNvimLast<cr>", "Rest Run Last" },
-    },
-  }, { prefix = "<leader>" })
+  require("which-key").add({
+    { "<leader>R", group = "Rest" },
+    { "<leader>Rl", "<Plug>RestNvimLast<cr>", desc = "Rest Run Last" },
+    { "<leader>Rp", "<Plug>RestNvimPreview<cr>", desc = "Rest Run Preview" },
+    { "<leader>Rr", "<Plug>RestNvim<cr>", desc = "Rest Run" },
+  })
 
   require("telescope").load_extension("rest")
 end

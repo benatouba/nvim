@@ -5,33 +5,29 @@ if not wk_ok then
   vim.notify("Which-key not found in overseer", vim.log.levels.ERROR)
 end
 
-local mappings = {
-  -- ["O"] = {
-  --   name = "+Overseer",
-  --   t = { "<cmd>lua require('misc.overseer').OverseerToggle()<cr>", "Toggle" },
-  -- },
-  O = { "<cmd>lua require('misc.overseer').OverseerToggle()<cr>", "Toggle" },
-}
-
-M.config = function()
-	local status_ok, overseer = pcall(require, "overseer")
-	if not status_ok then
-		vim.notify("Overseer.nvim not okay")
-		return
-	end
-	overseer.setup()
-  wk.register(mappings, { prefix = "<leader>" })
+M.config = function ()
+  local status_ok, overseer = pcall(require, "overseer")
+  if not status_ok then
+    vim.notify("Overseer.nvim not okay")
+    return
+  end
+  overseer.setup()
+  wk.add({
+    { "<leader>O", group = "+Overseer" },
+    { "<leader>OO", "<cmd>lua require('misc.overseer').OverseerToggle()<cr>", desc = "Toggle" },
+    { "<leader>Os", "<cmd>lua require('overseer').start()<cr>", desc = "Start" },
+  })
 end
 
 local isOpen = false
-M.OverseerToggle = function()
+M.OverseerToggle = function ()
   if not isOpen then
     vim.cmd(":OverseerToggle")
     if vim.fn.exists(":WindowsDisableAutowidth") ~= 0 then
       vim.cmd(":WindowsDisableAutowidth")
     end
     if vim.fn.exists(":WindowsEqualize") ~= 0 then
-    vim.cmd(":WindowsEqualize")
+      vim.cmd(":WindowsEqualize")
     end
     isOpen = true
   else

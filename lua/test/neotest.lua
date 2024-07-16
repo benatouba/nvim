@@ -68,41 +68,28 @@ M.config = function()
     },
   })
 
-  local mappings = {
-    t = {
-      name = "+test",
-      a = { "<cmd>lua require('neotest').run.attach()<CR>", "Attach to nearest" },
-      A = { "<cmd>lua require('neotest').state.adapter_ids()<CR>", "Adapters" },
-      d = { "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<CR>", "Debug" },
-      D = {
-        "<cmd>lua require('neotest').run.run({ vim.fn.expand('%'), strategy = 'dap' })<CR>",
-        "Debug File",
-      },
-      f = { "<cmd>lua require('neotest').run.run({ vim.fn.expand('%') })<CR>", "File" },
-      l = { "<cmd>lua require('neotest').run.run_last()<CR>", "Last" },
-      L = { "<cmd>lua require('neotest').run.run_last({ strategy = 'dap' })<CR>", "Last (Debug)" },
-      n = { "<cmd>lua require('neotest').run.run()<CR>", "Nearest" },
-      o = { "<cmd>lua require('neotest').output.open({ enter = true })<CR>", "Output" },
-      O = {
-        "<cmd>lua require('neotest').output.open({ enter = true, short = true })<CR>",
-        "Output (short)",
-      },
-      p = { "<cmd>lua require('neotest').output_panel.toggle()<CR>", "Panel" },
-      P = { "<cmd>lua require('test.neotest').NeotestSetupProject()<CR>", "Project" },
-      s = { "<cmd>lua require('neotest').summary.toggle()<CR>", "Summary" },
-      S = { "<cmd>lua require('neotest').run.run({ suite = true })<CR>", "Suite" },
-      t = { "<cmd>lua require('neotest').run.run()<CR>", "Suite" },
-      w = { "<cmd>lua require('neotest').watch.toggle()<CR>", "Watch" },
-      x = { "<cmd>lua require('neotest').run.stop()<CR>", "Stop" },
-    },
-  }
-  require("which-key").register(mappings, { mode = "n", prefix = "<leader>" })
-
-  local jumps = {
-    ["[T"] = { "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<CR>", "Test (failed)" },
-    ["]T"] = { "<cmd>lua require('neotest').jump.next({ status = 'failed' })<CR>", "Test (failed)" },
-  }
-  require("which-key").register(jumps, { mode = "n", prefix = "" })
+  require("which-key").add({
+    { "<leader>t", group = "+Test", icon = { icon = "󰙨", color = "green" } },
+    { "<leader>tA", "<cmd>lua require('neotest').state.adapter_ids()<CR>", desc = "Adapters" },
+    { "<leader>tD", "<cmd>lua require('neotest').run.run({ vim.fn.expand('%'), strategy = 'dap' })<CR>", desc = "Debug File" },
+    { "<leader>tL", "<cmd>lua require('neotest').run.run_last({ strategy = 'dap' })<CR>", desc = "Last (Debug)" },
+    { "<leader>tO", "<cmd>lua require('neotest').output.open({ enter = true, short = true })<CR>", desc = "Output (short)" },
+    { "<leader>tP", "<cmd>lua require('test.neotest').NeotestSetupProject()<CR>", desc = "Project" },
+    { "<leader>tS", "<cmd>lua require('neotest').run.run({ suite = true })<CR>", desc = "Suite" },
+    { "<leader>ta", "<cmd>lua require('neotest').run.attach()<CR>", desc = "Attach to nearest" },
+    { "<leader>td", "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<CR>", desc = "Debug" },
+    { "<leader>tf", "<cmd>lua require('neotest').run.run({ vim.fn.expand('%') })<CR>", desc = "File" },
+    { "<leader>tl", "<cmd>lua require('neotest').run.run_last()<CR>", desc = "Last" },
+    { "<leader>tn", "<cmd>lua require('neotest').run.run()<CR>", desc = "Nearest" },
+    { "<leader>to", "<cmd>lua require('neotest').output.open({ enter = true })<CR>", desc = "Output" },
+    { "<leader>tp", "<cmd>lua require('neotest').output_panel.toggle()<CR>", desc = "Panel" },
+    { "<leader>ts", "<cmd>lua require('neotest').summary.toggle()<CR>", desc = "Summary" },
+    { "<leader>tt", "<cmd>lua require('neotest').run.run()<CR>", desc = "Suite" },
+    { "<leader>tw", "<cmd>lua require('neotest').watch.toggle()<CR>", desc = "Watch" },
+    { "<leader>tx", "<cmd>lua require('neotest').run.stop()<CR>", desc = "Stop" },
+    { "[T", "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<CR>", desc = "Test (failed)" },
+    { "]T", "<cmd>lua require('neotest').jump.next({ status = 'failed' })<CR>", desc = "Test (failed)" },
+  })
 end
 
 M.NeotestSetupProject = function()

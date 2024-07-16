@@ -45,10 +45,10 @@ M.config = function()
     end,
   })
 
-  wk.register({
-    T = { "<cmd>ToggleTerm direction=float<cr>", "Terminal" },
-    ["gL"] = { "<cmd>lua require('misc.toggleterm').LazyGit()<cr>", "LazyGit" },
-  }, { prefix = "<leader>" })
+  wk.add({
+    { "<leader>T", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal" },
+    { "<leader>gL", "<cmd>lua require('misc.toggleterm').LazyGit()<cr>", desc = "LazyGit" },
+  })
 end
 
 M.LazyGit = function()

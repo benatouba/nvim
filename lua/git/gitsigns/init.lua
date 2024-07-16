@@ -87,35 +87,23 @@ M.config = function()
 			})
 		end,
 	})
-	local maps = {
-		["g"] = {
-			name = "+Git",
-			b = { "<cmd>Gitsigns toggle_current_line_blame<cr>", "Blame line (toggle)" },
-			B = { "<cmd>Gitsigns blame_line<cr>", "Blame line" },
-			d = { "<cmd>Gitsigns diffthis<cr>", "Diff this" },
-			D = { "<cmd>Gitsigns diffthis HEAD<cr>", "Diff this HEAD" },
-			h = { "<cmd>lua require'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
-			j = { "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", "Next Hunk" },
-			k = { "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", "Prev Hunk" },
-			l = { "<cmd>Gitsigns setloclist<cr>", "Set loclist" },
-			q = { "<cmd>Gitsigns setqflist<cr>", "Set quickfix" },
-			r = { "<cmd>lua require'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
-			R = { "<cmd>lua require'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
-			s = { "<cmd>lua require'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-			S = { "<cmd>lua require'gitsigns'.stage_buffer()<cr>", "Stage Buffer" },
-			T = { "<cmd>lua require'gitsigns'.toggle_deleted()<cr>", "Toggle Deleted" },
-			u = { "<cmd>lua require'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk" },
-		}
-	}
-	local opts = {
-		mode = "n", -- NORMAL mode
-		prefix = "<leader>",
-		-- buffer = nil, -- Global maps. Specify a buffer number for buffer local maps
-		silent = true, -- use `silent` when creating keymaps
-		noremap = true, -- use `remap` when creating keymaps
-		nowait = false, -- use `nowait` when creating keymaps
-	}
-	wk.register(maps, opts)
+	wk.add({
+    { "<leader>g", group = "Git", nowait = false, remap = false },
+    { "<leader>gB", "<cmd>Gitsigns blame_line<cr>", desc = "Blame line", nowait = false, remap = false },
+    { "<leader>gD", "<cmd>Gitsigns diffthis HEAD<cr>", desc = "Diff this HEAD", nowait = false, remap = false },
+    { "<leader>gR", "<cmd>lua require'gitsigns'.reset_buffer()<cr>", desc = "Reset Buffer", nowait = false, remap = false },
+    { "<leader>gS", "<cmd>lua require'gitsigns'.stage_buffer()<cr>", desc = "Stage Buffer", nowait = false, remap = false },
+    { "<leader>gT", "<cmd>lua require'gitsigns'.toggle_deleted()<cr>", desc = "Toggle Deleted", nowait = false, remap = false },
+    { "<leader>gd", "<cmd>Gitsigns diffthis<cr>", desc = "Diff this", nowait = false, remap = false },
+    { "<leader>gh", "<cmd>lua require'gitsigns'.preview_hunk()<cr>", desc = "Preview Hunk", nowait = false, remap = false },
+    { "<leader>gj", "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", desc = "Next Hunk", nowait = false, remap = false },
+    { "<leader>gk", "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", desc = "Prev Hunk", nowait = false, remap = false },
+    { "<leader>gl", "<cmd>Gitsigns setloclist<cr>", desc = "Set loclist", nowait = false, remap = false },
+    { "<leader>gq", "<cmd>Gitsigns setqflist<cr>", desc = "Set quickfix", nowait = false, remap = false },
+    { "<leader>gr", "<cmd>lua require'gitsigns'.reset_hunk()<cr>", desc = "Reset Hunk", nowait = false, remap = false },
+    { "<leader>gs", "<cmd>lua require'gitsigns'.stage_hunk()<cr>", desc = "Stage Hunk", nowait = false, remap = false },
+    { "<leader>gu", "<cmd>lua require'gitsigns'.undo_stage_hunk()<cr>", desc = "Undo Stage Hunk", nowait = false, remap = false },
+  })
 end
 
 return M

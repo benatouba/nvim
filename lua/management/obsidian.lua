@@ -82,39 +82,28 @@ M.config = function ()
     end,
     { noremap = false, expr = true }
   )
-  local opts = { mode = "n", prefix = "<leader>", silent = true, noremap = true }
-  local maps = {
-    v = {
-      name = "Vivere",
-      b = { "<cmd>ObsidianBacklinks<CR>", "Backlinks" },
-      f = { "<cmd>ObsidianFollowLink<CR>", "Follow link" },
-      n = { "<cmd>ObsidianNew<CR>", "New note" },
-      o = { "<cmd>ObsidianOpen<CR>", "Open Obsidian" },
-      p = { "<cmd>ObsidianPasteImg<CR>", "Paste image" },
-      q = { "<cmd>ObsidianQuickSwitch<CR>", "Quick switch" },
-      r = { "<cmd>ObsidianRename<CR>", "Rename" },
-      s = {
-        name = "+Obsidian",
-        d = { "<cmd>ObsidianDailies<CR>", "Dailies" },
-        l = { "<cmd>ObsidianLinks<CR>", "Links" },
-        s = { "<cmd>ObsidianSearch<CR>", "Search" },
-        t = { "<cmd>ObsidianTags<CR>", "Tags" },
-      },
-      t = { "<cmd>ObsidianToday<CR>", "Today" },
-      T = { "<cmd>ObsidianTemplate<CR>", "Template" },
-      v = { "<cmd>ObsidianWorkspace vivere<CR>", "Vivere (Workspace)" },
-      w = { "<cmd>ObsidianWorkspace work<CR>", "Work (Workspace)" },
-      y = { "<cmd>ObsidianYesterday<CR>", "Yesterday" },
-    }
-  }
-  local vmaps = {
-    v = {
-      name = "+Vivere",
-      l = { "<cmd>ObsidianLink<CR>", "Link" },
-    }
-  }
-  wk.register(maps, opts)
-  wk.register(vmaps, { mode = "v", prefix = "<leader>", silent = true, noremap = true })
+  wk.add({
+    { "<leader>v", group = "+Vivere", remap = false },
+    { "<leader>vT", "<cmd>ObsidianTemplate<CR>", desc = "Template", remap = false },
+    { "<leader>vb", "<cmd>ObsidianBacklinks<CR>", desc = "Backlinks", remap = false },
+    { "<leader>vf", "<cmd>ObsidianFollowLink<CR>", desc = "Follow link", remap = false },
+    { "<leader>vn", "<cmd>ObsidianNew<CR>", desc = "New note", remap = false },
+    { "<leader>vo", "<cmd>ObsidianOpen<CR>", desc = "Open Obsidian", remap = false },
+    { "<leader>vp", "<cmd>ObsidianPasteImg<CR>", desc = "Paste image", remap = false },
+    { "<leader>vq", "<cmd>ObsidianQuickSwitch<CR>", desc = "Quick switch", remap = false },
+    { "<leader>vr", "<cmd>ObsidianRename<CR>", desc = "Rename", remap = false },
+    { "<leader>vs", group = "+Obsidian", remap = false },
+    { "<leader>vsd", "<cmd>ObsidianDailies<CR>", desc = "Dailies", remap = false },
+    { "<leader>vsl", "<cmd>ObsidianLinks<CR>", desc = "Links", remap = false },
+    { "<leader>vss", "<cmd>ObsidianSearch<CR>", desc = "Search", remap = false },
+    { "<leader>vst", "<cmd>ObsidianTags<CR>", desc = "Tags", remap = false },
+    { "<leader>vt", "<cmd>ObsidianToday<CR>", desc = "Today", remap = false },
+    { "<leader>vv", "<cmd>ObsidianWorkspace vivere<CR>", desc = "Vivere (Workspace)", remap = false },
+    { "<leader>vw", "<cmd>ObsidianWorkspace work<CR>", desc = "Work (Workspace)", remap = false },
+    { "<leader>vy", "<cmd>ObsidianYesterday<CR>", desc = "Yesterday", remap = false },
+    { "<leader>v", group = "+Vivere", mode = "v", remap = false },
+    { "<leader>vl", "<cmd>ObsidianLink<CR>", desc = "Link", mode = "v", remap = false },
+  })
 end
 
 return M

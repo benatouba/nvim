@@ -29,17 +29,15 @@ M.config = function()
     callback({ type = 'server', host = config.host, port = config.port })
   end
 
-  local which_key_ok, which_key = pcall(require, 'which-key')
-  if not which_key_ok then
+  local wk_ok, wk = pcall(require, 'which-key')
+  if not wk_ok then
     return
   end
-  which_key.register({
-    v = {
-      name = "vimkind",
-      d = {"<cmd>lua require'osv'.run_this()<cr>", "this file"},
-      S = {"<cmd>lua require'osv'.launch()<cr>", "Start server"}
-    }
-  }, {prefix = "<leader>d"})
+  wk.add({
+    { "<leader>dv", group = "vimkind" },
+    { "<leader>dvS", "<cmd>lua require'osv'.launch()<cr>", desc = "Start server" },
+    { "<leader>dvd", "<cmd>lua require'osv'.run_this()<cr>", desc = "this file" },
+  })
 
 end
 

@@ -19,18 +19,16 @@ M.config = function ()
     return
   end
   local maps = {
-    ["p"] = {
-      name= "+Packages",
-      ["a"] = {"<cmd>lua require('package-info').install()<cr>", "Add"},
-      ["c"] = {"<cmd>lua require('package-info').change_version()<cr>", "Change version"},
-      ["d"] = {"<cmd>lua require('package-info').delete()<cr>", "Delete"},
-      ["h"] = {"<cmd>lua require('package-info').hide()<cr>", "Hide"},
-      ["i"] = {"<cmd>lua require('package-info').install()<cr>", "Install"},
-      ["s"] = {"<cmd>lua require('package-info').show()<cr>", "Show"},
-      ["t"] = {"<cmd>lua require('package-info').toggle()<cr>", "Toggle"},
-      ["u"] = {"<cmd>lua require('package-info').update()<cr>", "Update"},
-    }
+    { "<leader>lp", group = "Packages", icon = { icon = "", color = "red" } },
+    { "<leader>lpa", "<cmd>lua require('package-info').install()<cr>", desc = "Add" },
+    { "<leader>lpc", "<cmd>lua require('package-info').change_version()<cr>", desc = "Change version" },
+    { "<leader>lpd", "<cmd>lua require('package-info').delete()<cr>", desc = "Delete" },
+    { "<leader>lph", "<cmd>lua require('package-info').hide()<cr>", desc = "Hide" },
+    { "<leader>lpi", "<cmd>lua require('package-info').install()<cr>", desc = "Install" },
+    { "<leader>lps", "<cmd>lua require('package-info').show()<cr>", desc = "Show" },
+    { "<leader>lpt", "<cmd>lua require('package-info').toggle()<cr>", desc = "Toggle" },
+    { "<leader>lpu", "<cmd>lua require('package-info').update()<cr>", desc = "Update" },
   }
-  wk.register(maps, { prefix = "<leader>l" })
+  wk.add(maps)
 end
 return M

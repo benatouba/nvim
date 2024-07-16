@@ -21,8 +21,34 @@ if not lazy_ok then
 end
 
 lazy.setup({
-  -- Packer can manage itself as an lazyional plugin
-  -- "nvim-lua/popup.nvim", -- handle popup (important)
+  {
+    "chipsenkbeil/distant.nvim",
+    branch = "v0.3",
+    config = function ()
+      require("distant"):setup()
+    end
+  },
+  { "mistweaverco/kulala.nvim", config = function() require("kulala").setup() end },
+  {
+    "epwalsh/pomo.nvim",
+    version = "*",
+    lazy = true,
+    cmd = { "TimerStart", "TimerRepeat" },
+    dependencies = { "rcarriga/nvim-notify" },
+    opts = {},
+    enabled = O.misc
+  },
+  {
+    enabled = false,
+    "amitds1997/remote-nvim.nvim",
+    version = "*",  -- Pin to GitHub releases
+    dependencies = {
+      "nvim-lua/plenary.nvim",  -- For standard functions
+      "MunifTanjim/nui.nvim",  -- To build the plugin UI
+      "nvim-telescope/telescope.nvim",  -- For picking b/w different remote methods
+    },
+    config = true,
+  },
   "nvim-lua/plenary.nvim",  -- most important functions (very important)
   {
     "microsoft/python-type-stubs",
@@ -47,6 +73,14 @@ lazy.setup({
         "text",
       },
     },
+    enabled = O.misc,
+  },
+  {
+    "rachartier/tiny-inline-diagnostic.nvim",
+    event = "VeryLazy",
+    config = function ()
+      require("tiny-inline-diagnostic").setup()
+    end,
     enabled = O.misc,
   },
   {
@@ -138,7 +172,7 @@ lazy.setup({
     end,
   },
   {
-    "ahmedkhalf/project.nvim",
+    "benatouba/project.nvim",
     config = function ()
       require("ben.project").setup()
     end,
@@ -174,11 +208,7 @@ lazy.setup({
       })
     end,
   },
-  {
-    "stevearc/oil.nvim",
-    opts = {},
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-  },
+  require("ben.oil"),
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
@@ -255,7 +285,7 @@ lazy.setup({
     end,
     event = { "InsertEnter", "CmdlineEnter", "CursorMoved" },
     keys = { "g", "gc" },
-    enabled = true,
+    enabled = false,
   },
   {
     "mbbill/undotree",
@@ -299,8 +329,8 @@ lazy.setup({
   },
   {
     "windwp/nvim-ts-autotag",
-    config = function()
-      require('nvim-ts-autotag').setup({
+    config = function ()
+      require("nvim-ts-autotag").setup({
         opts = {
           enable_close = true,
           enable_rename = true,
@@ -328,24 +358,24 @@ lazy.setup({
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
     ft = { "vue", "svelte", "typescriptreat", "html" },
-    dependencies = { "nvim-treesitter", "Comment.nvim" },
-    config = function ()
-      local tsc_ok, tsc = pcall(require, "ts_context_commentstring")
-      if not tsc_ok then
-        vim.notify("TS-Context-Commentstring not ok")
-      end
-      local opts = {
-        ignore = "^$",
-      }
-      if tsc_ok then
-        tsc.setup({
-          enable_autocmd = false,
-        })
-        opts.pre_hook =
-          require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
-      end
-      require("Comment").setup(opts)
-    end,
+    -- dependencies = { "nvim-treesitter", "Comment.nvim" },
+    -- config = function ()
+    --   local tsc_ok, tsc = pcall(require, "ts_context_commentstring")
+    --   if not tsc_ok then
+    --     vim.notify("TS-Context-Commentstring not ok")
+    --   end
+    --   local opts = {
+    --     ignore = "^$",
+    --   }
+    --   if tsc_ok then
+    --     tsc.setup({
+    --       enable_autocmd = false,
+    --     })
+    --     opts.pre_hook =
+    --       require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
+    --   end
+    --   require("Comment").setup(opts)
+    -- end,
     enabled = O.webdev and O.language_parsing,
   },
   {
@@ -357,6 +387,7 @@ lazy.setup({
   {
     "catgoose/vue-goto-definition.nvim",
     event = "BufReadPre",
+    enabled = O.webdev and O.language_parsing,
     opts = {
       filters = {
         auto_imports = true,
@@ -480,6 +511,42 @@ lazy.setup({
     enabled = O.lsp,
   },
   {
+    "R-nvim/R.nvim",
+    lazy = false,
+    ft = { "r", "rmd" },
+    config = function ()
+      -- Create a table with the options to be passed to setup()
+      local opts = {
+        R_args = { "--quiet", "--no-save" },
+        hook = {
+          on_filetype = function ()
+            -- This function will be called at the FileType event
+            -- of files supported by R.nvim. This is an
+            -- opportunity to create mappings local to buffers.
+            vim.api.nvim_buf_set_keymap(0, "n", "<Enter>", "<Plug>RDSendLine", {})
+            vim.api.nvim_buf_set_keymap(0, "v", "<Enter>", "<Plug>RSendSelection", {})
+          end
+        },
+        min_editor_width = 72,
+        rconsole_width = 78,
+        disable_cmds = {
+          "RClearConsole",
+          "RCustomStart",
+          "RSPlot",
+          "RSaveClose",
+        },
+      }
+      -- Check if the environment variable "R_AUTO_START" exists.
+      -- If using fish shell, you could put in your config.fish:
+      -- alias r "R_AUTO_START=true nvim"
+      if vim.env.R_AUTO_START == "true" then
+        opts.auto_start = 1
+        opts.objbr_auto_start = true
+      end
+      require("r").setup(opts)
+    end,
+  },
+  {
     "hrsh7th/nvim-cmp",
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
@@ -487,6 +554,13 @@ lazy.setup({
       "hrsh7th/cmp-buffer",
       { "hrsh7th/cmp-nvim-lsp", enabled = O.lsp },
       { "hrsh7th/cmp-nvim-lsp-document-symbol", enabled = O.lsp },
+      {
+        "hrsh7th/nvim-cmp",
+        config = function ()
+          require("cmp").setup({ sources = { { name = "cmp_r" } } })
+          require("cmp_r").setup({})
+        end,
+      },
       -- "hrsh7th/cmp-nvim-lsp-signature-help",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-nvim-lua",
@@ -653,7 +727,7 @@ lazy.setup({
         -- Or relative, which means they will be resolved as a plugin
         -- "LazyVim",
         -- When relative, you can also provide a path to the library in the plugin dir
-        "luvit-meta/library", -- see below
+        "luvit-meta/library",  -- see below
       },
     },
     ft = "lua",
@@ -779,26 +853,23 @@ lazy.setup({
       require("conform").setup({
         formatters_by_ft = {
           python = { "ruff_fix", "ruff_format" },
-          javascript = { "prettierd", "prettier" },
-          javascriptreact = { "prettierd", "prettier" },
-          typescript = { "prettierd", "prettier" },
-          typescriptreact = { "prettierd", "prettier" },
-          vue = { "prettierd", "prettier" },
-          css = { "prettierd", "prettier" },
-          scss = { "prettierd", "prettier" },
-          html = { "prettierd", "prettier" },
-          json = { "prettierd", "prettier" },
-          yaml = { "prettierd", "prettier" },
-          markdown = { "prettierd", "prettier" },
+          javascript = { { "biome", "prettierd", "prettier" } },
+          javascriptreact = { { "biome", "prettierd", "prettier" } },
+          typescript = { { "biome", "prettierd", "prettier" } },
+          typescriptreact = { { "biome", "prettierd", "prettier" } },
+          vue = { { "prettierd", "prettier" } },
+          css = { { "prettierd", "prettier" } },
+          scss = { { "prettierd", "prettier" } },
+          html = { { "prettierd", "prettier" } },
+          json = { { "prettierd", "prettier" } },
+          yaml = { { "prettierd", "prettier" } },
+          markdown = { { "prettierd", "prettier" } },
         },
       })
       local maps = {
-        f = {
-          "<cmd>lua require('conform').format({ lsp_fallback = 'always', timeout_ms = 1000 })<cr>",
-          "Format",
-        },
+        { "<leader>lf", function() require('conform').format({ lsp_fallback = 'always', timeout_ms = 1000 }) end, desc = "Format" },
       }
-      require("which-key").register(maps, { prefix = "<leader>l" })
+      require("which-key").add(maps)
     end,
     enabled = O.language_parsing,
   },

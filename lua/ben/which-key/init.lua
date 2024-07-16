@@ -4,131 +4,80 @@ if not isOk then
 end
 
 which_key.setup()
-
-local opts = {
-  mode = "n",  -- NORMAL mode
-  prefix = "<leader>",
-  -- buffer = nil, -- Global maps. Specify a buffer number for buffer local maps
-  silent = true,  -- use `silent` when creating keymaps
-  noremap = true,  -- use `remap` when creating keymaps
-  nowait = false,  -- use `nowait` when creating keymaps
-}
-
-local terminal_maps = {}
-local terminal_opts = { mode = "t" }
-local visual_maps = {}
-local visual_opts = { mode = "v" }
-local vmaps = {
-  ["<leader>t"] = { "<cmd>ToggleTermSendVisualLines<cr>", "Send to terminal" }
-}
-which_key.register(vmaps, visual_opts)
 -- Set leader keys
+
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+vim.g.maplocalleader = ","
 
-local nmaps = {}
+which_key.add({
+  { "<leader>t", "<cmd>ToggleTermSendVisualLines<cr>", desc = "Send to terminal", mode = "v" },
+  { "<leader>e", ":Oil<cr>", desc = "Explorer", icon = { icon = " ", color = "yellow" } },
+  { "<leader>u", ":UndotreeToggle<cr>", desc = "Undotree", icon = { icon = "", color = "green" } },
+  -- Buffers
+  { "<leader>b", group = "+Buffers" },
+  { "<leader><leader>", ":bprevious<cr>", desc = "Switch Buffer" },
+  -- Actions
+  { "<leader>a", group = "+Actions", icon = { icon = "", color = "yellow" } },
+  { "<leader>ac", ":BufferClose<CR>", desc = "Close Buffer" },
+  { "<leader>ah", "<cmd>let @/ = ''<cr>", desc = "Highlights" },
+  { "<leader>as", "<cmd>source %<cr>", desc = "Source file" },
+  { "<leader>ar", "<cmd>syntax sync fromstart<cr><cmd>redraw!<cr>", desc = "Redraw" },
+  { "<leader>aw", "<cmd>call TrimWhitespace()<cr>", desc = "Trim Whitespaces" },
+  -- Configuration
+  { "<leader>c", group = "+Configuration", icon = { icon = "", color = "orange" } },
+  { "<leader>cc", "<cmd>e ~/.config/nvim/init.lua<cr>", desc = "Open Config" },
+  { "<leader>cC", "<cmd>ColorizerToggle<cr>", desc = "Colorizer" },
+  { "<leader>ch", "<cmd>set hlsearch!<CR>", desc = "Highlightsearch" },
+  { "<leader>cr", "<cmd>set norelativenumber!<cr>", desc = "Relative line nums" },
+  -- Plugins
+  { "<leader>p", group = "+Plugins" },
+  { "<leader>pc", "<cmd>Lazy clean<cr>", desc = "Clean" },
+  { "<leader>pC", "<cmd>Lazy check<cr>", desc = "Check" },
+  { "<leader>pd", "<cmd>Lazy debug<cr>", desc = "Debug" },
+  { "<leader>ph", "<cmd>Lazy help<cr>", desc = "Help" },
+  { "<leader>pi", "<cmd>Lazy install<cr>", desc = "Install" },
+  { "<leader>pl", "<cmd>Lazy log<cr>", desc = "Log" },
+  { "<leader>pm", "<cmd>Mason<cr>", desc = "Info" },
+  { "<leader>pp", "<cmd>Lazy profile<cr>", desc = "Profile" },
+  { "<leader>pr", "<cmd>Lazy restore<cr>", desc = "Restore" },
+  { "<leader>ps", "<cmd>Lazy sync<cr>", desc = "Sync" },
+  { "<leader>pu", "<cmd>Lazy update<cr>", desc = "Update" },
+  -- Diagnostics
+  { "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>", desc = "Next Diagnostic" },
+  { "]D", "<cmd>lua require('trouble').next({skip_groups = true, desc = jump = true})<cr>" },
+  -- { "]E", "<cmd>lua require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })<cr>", desc = "Next Error" },
+  { "]T", "<cmd>lua require('todo-comments').jump_next()<cr>", desc = "Next todo comment" },
+  { "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>", desc = "Prev Diagnostic" },
+  { "[D", "<cmd>lua require('trouble').previous({skip_groups = true, desc = jump = true})<cr>" },
+  -- { "[E", "<cmd>lua require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })<cr>", desc = "Prev Error" },
+  { "[T", "<cmd>lua require('todo-comments').jump_prev()<cr>", desc = "Previous todo comment" },
+  -- Tabs
+  { "]t", "<cmd>tabNext<cr>", desc = "Next tab" },
+  { "[t", "<cmd>tabprevious<cr>", desc = "Tab" },
+  -- Logs
+  { "<leader>L", group = "+Logs", icon = { icon = " ", color = "green" }  },
+  { "<leader>Ll", "<cmd>LspLog<cr>", desc = "LSP" },
+  { "<leader>Lm", "<cmd>MasonLog<cr>", desc = "Log" },
+  { "<leader>Lp", "<cmd>Lazy profile<cr>", desc = "Lazy Profile" },
+  -- Git
+  { "<leader>g", group = "+Git" },
+  { "<leader>gg", "<cmd>G<cr>", desc = "Fugitive" },
+  { "<leader>gl", "<cmd>Git log<cr>", desc = "Log" },
+  { "<leader>gn", "<cmd>Neogit<cr>", desc = "Neogit" },
+  { "<leader>gn", "<cmd>Neogit commit %<cr>", desc = "(Neogit) Commit Menu" },
+  { "<leader>gp", "<cmd>Git pull<cr>", desc = "Pull" },
+  { "<leader>gp", "<cmd>Git push<cr>", desc = "Push" },
+  -- Generate Annotations
+  { "<leader>n", group = "+Generate Annotations" },
+  { "<leader>nn", "<cmd>lua require('neogen').generate()<CR>", desc = "Auto" },
+  { "<leader>nc", "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", desc = "Class" },
+  { "<leader>nf", "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", desc = "Function" },
+  { "<leader>nt", "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", desc = "Type" },
+  -- Diffmaps
+  -- { "dr", ":diffget RE<CR>", "Diffget remote", group = "+Diffmaps", mode = "n", },
+  -- { "dl", ":diffget LO<CR>", "Diffget local", group = "+Diffmaps", },
+  -- { "db", ":diffget BA<CR>", "Diffget base", group = "+Diffmaps", },
 
-local maps = {
-  ["e"] = { ":Oil<cr>", "Explorer" },
-  ["u"] = { ":UndotreeToggle<cr>", "Undotree" },
-  ["<leader>"] = {":bprevious<cr>", "Switch Buffer"},
-  -- a is for actions
-  a = {
-    name = "+Actions",
-    c = { ":BufferClose<CR>", "Close Buffer" },
-    h = { "<cmd>let @/ = ''<cr>", "Highlights" },
-    s = { "<cmd>source %<cr>", "Source file" },
-    r = { "<cmd>syntax sync fromstart<cr><cmd>redraw!<cr>", "Redraw" },
-    w = { "<cmd>call TrimWhitespace()<cr>", "Trim Whitespaces" },
-  },
-  c = {
-    name = "+Configuration",
-    c = { "<cmd>e ~/.config/nvim/init.lua<cr>", "Open" },
-    C = { "<cmd>ColorizerToggle<cr>", "Colorizer" },
-    h = { "<cmd>set hlsearch!<CR>", "Highlightsearch" },
-    r = { "<cmd>set norelativenumber!<cr>", "Relative line nums" },
-  },
-  p = {
-    name = "+Plugins",
-    c = { "<cmd>Lazy clean<cr>", "Clean" },
-    C = { "<cmd>Lazy check<cr>", "Check" },
-    d = { "<cmd>Lazy debug<cr>", "Debug" },
-    h = { "<cmd>Lazy help<cr>", "Help" },
-    i = { "<cmd>Lazy install<cr>", "Install" },
-    l = { "<cmd>Lazy log<cr>", "Log" },
-    m = { "<cmd>Mason<cr>", "Info" },
-    p = { "<cmd>Lazy profile<cr>", "Profile" },
-    r = { "<cmd>Lazy restore<cr>", "Restore" },
-    s = { "<cmd>Lazy sync<cr>", "Sync" },
-    u = { "<cmd>Lazy update<cr>", "Update" },
-  },
-}
-
-nmaps["]"] = {
-  -- b = { "<cmd>bNext<cr>", "Buffer" },
-  d = { "<cmd>lua vim.diagnostic.goto_next()<cr>", "Next Diagnostic" },
-  D = { "<cmd>lua require('trouble').next({skip_groups = true, jump = true})<cr>", "Next Trouble" },
-  -- E = { "<cmd>lua require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })<cr>", "Next Error" },
-  T = { "<cmd>lua require('todo-comments').jump_next()<cr>", "Next todo comment" },
-  t = { "<cmd>tabNext<cr>", "Next tab" },
-}
-nmaps["["] = {
-  -- b = { "<cmd>bprevious<cr>", "Buffer" },
-  d = { "<cmd>lua vim.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
-  D = { "<cmd>lua require('trouble').previous({skip_groups = true, jump = true})<cr>", "Next Trouble" },
-  -- E = { "<cmd>lua require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })<cr>", "Prev Error" },
-  T = { "<cmd>lua require('todo-comments').jump_prev()<cr>", "Previous todo comment" },
-  t = { "<cmd>tabprevious<cr>", "Tab" },
-}
-
-maps["L"] = {
-  name = "+Logs",
-  c = { "<cmd>LuaCacheProfile<cr>", "CacheProfile" },
-  l = { "<cmd>LspLog<cr>", "LSP" },
-  m = { "<cmd>MasonLog<cr>", "Log" },
-  p = { "<cmd>Lazy profile<cr>", "Lazy Profile" },
-}
-
-maps["g"] = {
-  name = "+Git",
-  c = { "<cmd>Git commit %<cr>", "Commit File" },
-  C = { "<cmd>Git commit<cr>", "Commit staged" },
-  g = { "<cmd>G<cr>", "Fugitive" },
-  l = { "<cmd>Git log<cr>", "Log" },
-  n = { "<cmd>Neogit<cr>", "Neogit" },
-  N = { "<cmd>Neogit commit %<cr>", "(Neogit) Commit Menu" },
-  p = { "<cmd>Git pull<cr>", "pull" },
-  P = { "<cmd>Git push<cr>", "Push" },
-}
-
-maps["n"] = {
-  name = "+Generate Annotations",
-  n = { "<cmd>lua require('neogen').generate()<CR>", "Auto" },
-  c = { "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", "Class" },
-  f = { "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", "Function" },
-  t = { "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", "Type" },
-}
-
-local diffmaps = {
-  ["dr"] = { ":diffget RE<CR>", "Diffget remote" },
-  ["dl"] = { ":diffget LO<CR>", "Diffget local" },
-  ["db"] = { ":diffget BA<CR>", "Diffget base" },
-}
-which_key.register(maps, opts)
-which_key.register(diffmaps, {
-  mode = "n",  -- NORMAL mode
-  -- buffer = nil, -- Global maps. Specify a buffer number for buffer local maps
-})
-which_key.register(terminal_maps, terminal_opts)
-
-local gmaps = {
-  r = { "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", "Rename" },
-}
-which_key.register(gmaps, {
-  mode = "n",  -- NORMAL mode
-  prefix = "g",
-})
-
-which_key.register(nmaps, {
-  mode = "n",  -- NORMAL mode
+  -- gmaps
+  { "gr", "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", desc = "Rename" },
 })

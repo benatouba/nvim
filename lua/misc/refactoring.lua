@@ -41,92 +41,25 @@ M.maps = function ()
     return
   end
 
-  local xmaps = {
-    ["r"] = {
-      name = "+Refactor",
-      b = {
-        function ()
-          require("refactoring").refactor("Extract Block")
-        end,
-        "Extract Block",
-      },
-      B = {
-        function ()
-          require("refactoring").refactor("Extract Block to File")
-        end,
-        "Extract Block To File",
-      },
-      f = {
-        function ()
-          require("refactoring").refactor("Extract Function")
-        end,
-        "Extract Function",
-      },
-      F = {
-        function ()
-          require("refactoring").refactor("Extract Function To File")
-        end,
-        "Extract Function to File",
-      },
-      i = {
-        function ()
-          require("refactoring").refactor("Inline Variable")
-        end,
-        "Inline Variable",
-      },
-      I = {
-        function ()
-          require("refactoring").refactor("Inline Function")
-        end,
-        "Inline Function",
-      },
-      v = {
-        function ()
-          require("refactoring").refactor("Extract Variable")
-        end,
-        "Extract Variable",
-      },
-      t = {
-        function ()
-          require("telescope").extensions.refactoring.refactors()
-        end,
-        "Extract to Telescope",
-      },
-      r = {
-        function ()
-          require("refactoring").select_refactor()
-        end,
-        "Select Refactor",
-      },
+  wk.add({
+    {
+      mode = { "x" },
+      { "<leader>r", group = "+Refactor" },
+      { "<leader>rb", function () require("refactoring").refactor("Extract Block") end, desc = "Extract Block" },
+      { "<leader>rB", function () require("refactoring").refactor("Extract Block to File") end, desc = "Extract Block to File" },
+      { "<leader>rf", function () require("refactoring").refactor("Extract Function") end, desc = "Extract Function" },
+      { "<leader>rF", function () require("refactoring").refactor("Extract Function To File") end, desc = "Extract Function to File" },
+      { "<leader>ri", function () require("refactoring").refactor("Inline Variable") end, desc = "Inline Variable" },
+      { "<leader>rI", function () require("refactoring").refactor("Inline Function") end, desc = "Inline Function" },
+      { "<leader>rv", function () require("refactoring").refactor("Extract Variable") end, desc = "Extract Variable" },
+      { "<leader>rt", function () require("telescope").extensions.refactoring.refactors() end, desc = "Extract to Telescope" },
+      { "<leader>rr", function () require("refactoring").select_refactor() end, desc = "Select Refactor" },
     },
-  }
-  wk.register(xmaps, { expr = false, silent = true, prefix = "<leader>", mode = "x" })
-
-  local nmaps = {
-    ["r"] = {
-      name = "+Refactor",
-      b = {
-        function ()
-          require("refactoring").refactor("Extract Block")
-        end,
-        "Block",
-      },
-      f = {
-        function ()
-          require("refactoring").refactor("Extract Block to File")
-        end,
-        "Block to File",
-      },
-      i = {
-        function ()
-          require("refactoring").refactor("Inline Variable")
-        end,
-        "Inline variable",
-      },
-    },
-  }
-  wk.register(nmaps, { expr = false, silent = true, prefix = "<leader>", mode = "n" })
+    { "<leader>r", group = "+Refactor" },
+    { "<leader>rb", function () require("refactoring").refactor("Extract Block") end, desc = "Extract Block" },
+    { "<leader>rf", function () require("refactoring").refactor("Extract Function") end, desc = "Extract Function" },
+    { "<leader>ri", function () require("refactoring").refactor("Inline Variable") end, desc = "Inline Variable" },
+  })
 end
 
 return M
-

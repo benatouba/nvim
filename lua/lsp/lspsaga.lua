@@ -51,22 +51,15 @@ M.config = function()
 		request_timeout = 5000,
 	})
 
-	local gmaps = {
-		a = { "<cmd>Lspsaga code_action<CR>", "Code Action" },
-		h = { "<cmd>Lspsaga finder<CR>", "Help" },
-		I = { "<cmd>Lspsaga finder imp<CR>", "Implementation" },
-		o = { "<cmd>Lspsaga outline<CR>", "Outline" },
-		p = { "<cmd>Lspsaga peek_definition<CR>", "Peek" },
-	}
-	wk.register(gmaps, { mode = "n", prefix = "g"})
-	local forward_maps = {
-		d = { "<cmd>Lspsaga diagnostic_jump_next<CR>", "Next Diagnostic" },
-	}
-	local backward_maps = {
-		d = { "<cmd>Lspsaga diagnostic_jump_prev<CR>", "Prev Diagnostic" },
-	}
-	wk.register(forward_maps, { mode = "n", prefix = "]"})
-	wk.register(backward_maps, { mode = "n", prefix = "["})
+	wk.add({
+    { "gI", "<cmd>Lspsaga finder imp<CR>", desc = "Implementation" },
+    { "ga", "<cmd>Lspsaga code_action<CR>", desc = "Code Action" },
+    { "gh", "<cmd>Lspsaga finder<CR>", desc = "Help" },
+    { "go", "<cmd>Lspsaga outline<CR>", desc = "Outline" },
+    { "gp", "<cmd>Lspsaga peek_definition<CR>", desc = "Peek" },
+    { "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", desc = "Next Diagnostic" },
+    { "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", desc = "Prev Diagnostic" },
+	})
 	-- vim.keymap.set('n', 'K', '<cmd>Lspsaga hover_doc<cr>')
 end
 

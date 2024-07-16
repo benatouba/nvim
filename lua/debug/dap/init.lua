@@ -57,38 +57,6 @@ local js_attach_with_arguments = function ()
   require("dap").continue()
 end
 
-local mappings = {}
-mappings["d"] = {
-  name = "+Debug",
-  a = { function() js_attach_with_arguments() end, "Run with arguments" },
-  b = { "<cmd>lua require'dap'.toggle_breakpoint()<cr>", "Toggle Breakpoint" },
-  B = { "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('BP Condition: '))<cr>", "Conditional Breakpoint" },
-  c = { "<cmd>lua require'dap'.continue()<cr>", "Continue" },
-  C = { "<cmd>lua require'dap'.run_to_cursor()<cr>", "Run To Cursor" },
-  d = { "<cmd>lua require'dap'.disconnect()<cr>", "Disconnect" },
-  g = { "<cmd>lua require'dap'.session()<cr>", "Get Session" },
-  i = { "<cmd>lua require'dap'.step_into()<cr>", "Step Into" },
-  l = {
-    "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<cr>",
-    "Log Point Message",
-  },
-  o = { "<cmd>lua require'dap'.step_over()<cr>", "Step Over" },
-  O = { "<cmd>lua require'dap'.step_out()<cr>", "Step Out" },
-  p = { "<cmd>lua require'dap'.pause.toggle()<cr>", "Pause" },
-  q = { "<cmd>lua require'dap'.close()<cr>", "Quit" },
-  r = { "<cmd>lua require'dap'.repl.toggle()<cr>", "Toggle Repl" },
-  S = { "<cmd>lua require'dap'.step_back()<cr>", "Step Back" },
-  s = {
-    name = "search",
-    b = { "<cmd>lua require'telescope'.extensions.dap.list_breakpoints{}<cr>", "Breakpoints" },
-    c = { "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", "Commands" },
-    C = { "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", "Configurations" },
-    f = { "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", "frames" },
-    v = { "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", "Variables" },
-  },
-  x = { "<cmd>lua require'dap'.clear_breakpoints()<cr>", "Toggle Repl" },
-}
-
 local M = {}
 M.vt_config = function ()
   dap_vt.setup({
@@ -129,7 +97,31 @@ M.config = function ()
     virt_text_pos = vim.fn.has "nvim-0.10" == 1 and "inline" or "eol",
     all_frames = true,
   })
-  require("which-key").register(mappings, { mode = "n", prefix = "<leader>" })
+  require("which-key").add({
+    { "<leader>d", group = "+Debug" },
+    { "<leader>dB", "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('BP Condition: '))<cr>", desc = "Conditional Breakpoint" },
+    { "<leader>dC", "<cmd>lua require'dap'.run_to_cursor()<cr>", desc = "Run To Cursor" },
+    { "<leader>dO", "<cmd>lua require'dap'.step_out()<cr>", desc = "Step Out" },
+    { "<leader>dS", "<cmd>lua require'dap'.step_back()<cr>", desc = "Step Back" },
+    { "<leader>da", function() js_attach_with_arguments() end, desc = "Run with arguments" },
+    { "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", desc = "Toggle Breakpoint" },
+    { "<leader>dc", "<cmd>lua require'dap'.continue()<cr>", desc = "Continue" },
+    { "<leader>dd", "<cmd>lua require'dap'.disconnect()<cr>", desc = "Disconnect" },
+    { "<leader>dg", "<cmd>lua require'dap'.session()<cr>", desc = "Get Session" },
+    { "<leader>di", "<cmd>lua require'dap'.step_into()<cr>", desc = "Step Into" },
+    { "<leader>dl", "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<cr>", desc = "Log Point Message" },
+    { "<leader>do", "<cmd>lua require'dap'.step_over()<cr>", desc = "Step Over" },
+    { "<leader>dp", "<cmd>lua require'dap'.pause.toggle()<cr>", desc = "Pause" },
+    { "<leader>dq", "<cmd>lua require'dap'.close()<cr>", desc = "Quit" },
+    { "<leader>dr", "<cmd>lua require'dap'.repl.toggle()<cr>", desc = "Toggle Repl" },
+    { "<leader>ds", group = "+Search" },
+    { "<leader>dsC", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", desc = "Configurations" },
+    { "<leader>dsb", "<cmd>lua require'telescope'.extensions.dap.list_breakpoints{}<cr>", desc = "Breakpoints" },
+    { "<leader>dsc", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", desc = "Commands" },
+    { "<leader>dsf", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", desc = "frames" },
+    { "<leader>dsv", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", desc = "Variables" },
+    { "<leader>dx", "<cmd>lua require'dap'.clear_breakpoints()<cr>", desc = "Toggle Repl" },
+})
 
   local mason_debugpy = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
   dap.adapters.python = {

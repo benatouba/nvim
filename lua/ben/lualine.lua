@@ -8,6 +8,7 @@ local modules = lualine_require.lazy_require({
   highlight = "lualine.highlight",
   utils = "lualine.utils.utils",
 })
+local remote_ok, remote = pcall(require, "remote-nvim")
 
 local get_lsp_client = function ()
   local msg = "LSP Inactive"
@@ -34,6 +35,33 @@ local get_lsp_client = function ()
   else
     return " " .. lsps
   end
+end
+
+local rstt =
+{
+  { "-", "#aaaaaa" },  -- 1: ftplugin/* sourced, but nclientserver not started yet.
+  { "S", "#757755" },  -- 2: nclientserver started, but not ready yet.
+  { "S", "#117711" },  -- 3: nclientserver is ready.
+  { "S", "#ff8833" },  -- 4: nclientserver started the TCP server
+  { "S", "#3388ff" },  -- 5: TCP server is ready
+  { "R", "#ff8833" },  -- 6: R started, but nvimcom was not loaded yet.
+  { "R", "#3388ff" },  -- 7: nvimcom is loaded.
+}
+
+local rstatus = function ()
+  if not vim.g.R_Nvim_status or vim.g.R_Nvim_status == 0 then
+    -- No R file type (R, Quarto, Rmd, Rhelp) opened yet
+    return ""
+  end
+  return rstt[vim.g.R_Nvim_status][1]
+end
+
+local rsttcolor = function ()
+  if not vim.g.R_Nvim_status or vim.g.R_Nvim_status == 0 then
+    -- No R file type (R, Quarto, Rmd, Rhelp) opened yet
+    return { fg = "#000000" }
+  end
+  return { fg = rstt[vim.g.R_Nvim_status][2] }
 end
 
 local function diff_source()
@@ -79,7 +107,16 @@ M.config = function ()
   config.options.section_separators = { left = "", right = "" }
   config.sections.lualine_a = { window }
   config.sections.lualine_b = { { "b:gitsigns_head", icon = "" } }
-  config.sections.lualine_c = { { "diff", source = diff_source }, "diagnostics" }
+  if remote_ok then
+    table.insert(config.sections.lualine_b, {
+      function ()
+        return vim.g.remote_neovim_host and ("Remote: %s"):format(vim.uv.os_gethostname()) or ""
+      end,
+      padding = { right = 1, left = 1 },
+      separator = { left = "", right = "" },
+    })
+  end
+  config.sections.lualine_c = { { "diff", source = diff_source }, "diagnostics", }
   config.sections.lualine_x = {
     "overseer",
     { get_lsp_client },
@@ -89,6 +126,7 @@ M.config = function ()
   config.sections.lualine_y = {
     "encoding",
     "fileformat",
+    { rstatus, color = rsttcolor },
     "filetype",
     {
       require("noice").api.status.mode.get,
@@ -106,6 +144,7 @@ M.config = function ()
     "nvim-tree",
     "toggleterm",
     "nvim-dap-ui",
+    "oil",
   }
   ll.setup(config)
 end

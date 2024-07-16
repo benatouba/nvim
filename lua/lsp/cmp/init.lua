@@ -222,16 +222,15 @@ M.config = function ()
       comparators = {
         -- require("copilot_cmp").comparators.prioritize,
         -- require("copilot_cmp.comparators").score,
-        require("cmp-under-comparator").under,
-        compare.score,
         compare.locality,
-        compare.recently_used,
+        compare.score,
         compare.offset,
+        compare.exact,
+        -- require("cmp-under-comparator").under,
+        compare.kind,
+        compare.sort_text,
+        -- compare.recently_used,
         compare.order,
-        -- compare.exact,
-        -- compare.kind,
-        -- compare.sort_text,
-        -- compare.length,
       },
     },
     mapping = cmp.mapping.preset.insert({
@@ -310,8 +309,11 @@ M.config = function ()
       ["<Tab>"] = cmp.mapping(function (fallback)
         local cp_ok, cp = pcall(require, "copilot.suggestion")
         local entry = cmp.get_selected_entry()
+        local supermaven_ok, supermaven = pcall(require, "supermaven-nvim.completion_preview")
         if cmp.visible() and entry then
           cmp.confirm()
+        elseif supermaven_ok and supermaven.has_suggestion() then
+          supermaven.on_accept_suggestion()
         elseif luasnip.expand_or_jumpable() then
           luasnip.expand_or_jump()
         elseif not has_words_before() then
