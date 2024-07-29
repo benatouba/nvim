@@ -44,7 +44,6 @@ M.config = function ()
   local compare = cmp.config.compare
   local default_cmp_sources = cmp.config.sources({
     -- { name = "copilot", priority = 8 },
-    -- { name = "codeium", priority = 1 },
     -- { name = "nvim_lsp_signature_help" },
     { name = "lazydev", group_index = 0 },
     { name = "neorg" },
@@ -62,6 +61,10 @@ M.config = function ()
     -- { name = "vim-dadbod-completion" },
     { name = "rg", priority = 1, keyword_length = 3, max_item_count = 7 },
   })
+
+  if O.codeium then
+    table.insert(default_cmp_sources, { name = "codeium", priority = 1 })
+  end
 
   cmp.setup({
     enabled = function ()
@@ -172,7 +175,7 @@ M.config = function ()
             vim_item.kind_hl_group = "CmpItemKindSnippet"
           end
           if entry.source.name == "Codeium" then
-            vim_item.kind = " Codeium"
+            vim_item.kind = " Codeium"
             vim_item.kind_hl_group = "CmpItemKindCopilot"
             word = str.oneline(vim_item.abbr)
           end

@@ -73,9 +73,10 @@ M.config = function ()
 		if client.name == "ruff" then
 			-- Disable hover in favor of Pyright
 			client.server_capabilities.hoverProvider = false
+			client.server_capabilities.definitionProvider = false
 		end
 		if client.name == "volar" then
-			client.server_capabilities.documentFormattingProvider = false
+			client.server_capabilities.documentFormattingProvider = true
 			client.server_capabilities.documentRangeFormattingProvider = false
 			client.server_capabilities.definitionProvider = false
 		end

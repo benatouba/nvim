@@ -28,7 +28,7 @@ lazy.setup({
       require("distant"):setup()
     end
   },
-  { "mistweaverco/kulala.nvim", config = function() require("kulala").setup() end },
+  { "mistweaverco/kulala.nvim", config = function () require("kulala").setup() end },
   {
     "epwalsh/pomo.nvim",
     version = "*",
@@ -116,13 +116,13 @@ lazy.setup({
     "nvim-neorg/neorg",
     lazy = false,
     -- event = { "InsertEnter" },
+    version = "*",
     ft = "norg",
     keys = { "<leader>", "g" },
     config = function ()
       require("management.neorg").config()
     end,
     dependencies = {
-      "luarocks.nvim",
       "nvim-neorg/neorg-telescope",
       "max397574/neorg-contexts",
       { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
@@ -416,8 +416,13 @@ lazy.setup({
   {
     "Exafunction/codeium.vim",
     config = function ()
+      vim.g.codeium_disable_bindings = 1
       -- Change '<C-g>' here to any keycode you like.
       vim.keymap.set("i", "<C-l>", function () return vim.fn["codeium#Accept"]() end,
+        { expr = true, silent = true })
+      vim.keymap.set("i", "<C-a>", function () return vim.fn["codeium#AcceptNextWord"]() end,
+        { expr = true, silent = true })
+      vim.keymap.set("i", "<C-S-a>", function () return vim.fn["codeium#AcceptNextLine"]() end,
         { expr = true, silent = true })
       vim.keymap.set("i", "<c-n>", function () return vim.fn["codeium#CycleCompletions"](1) end,
         { expr = true, silent = true })
@@ -441,11 +446,11 @@ lazy.setup({
           curl = "/usr/bin/curl",
           gzip = "/usr/bin/gzip",
           -- language_server = vim.fn.expand("~") .. "/.local/bin/termium_language_server_linux_x64"
-          language_server = "/home/ben/.local/bin/termium_language_server_linux_x64"
+          -- language_server = "/home/ben/.local/bin/termium_language_server_linux_x64"
         }
       })
     end,
-    enabled = O.codeium,
+    enabled = O.codeium and false,
   },
   {
     "supermaven-inc/supermaven-nvim",
@@ -848,26 +853,25 @@ lazy.setup({
   },
   {
     "stevearc/conform.nvim",
-    opts = {},
     config = function ()
       require("conform").setup({
         formatters_by_ft = {
-          python = { "ruff_fix", "ruff_format" },
-          javascript = { { "biome", "prettierd", "prettier" } },
-          javascriptreact = { { "biome", "prettierd", "prettier" } },
-          typescript = { { "biome", "prettierd", "prettier" } },
-          typescriptreact = { { "biome", "prettierd", "prettier" } },
-          vue = { { "prettierd", "prettier" } },
-          css = { { "prettierd", "prettier" } },
-          scss = { { "prettierd", "prettier" } },
-          html = { { "prettierd", "prettier" } },
-          json = { { "prettierd", "prettier" } },
-          yaml = { { "prettierd", "prettier" } },
-          markdown = { { "prettierd", "prettier" } },
-        },
+          python = { "ruff_fix", "ruff_format", stop_after_first = false },
+          javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
+          javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
+          typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
+          typescriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
+          vue = { "prettierd", "prettier", stop_after_first = true },
+          css = { "prettierd", "prettier", stop_after_first = true },
+          scss = { "prettierd", "prettier", stop_after_first = true },
+          html = { "prettierd", "prettier", stop_after_first = true },
+          json = { "prettierd", "prettier", stop_after_first = true },
+          yaml = { "prettierd", "prettier", stop_after_first = true },
+          markdown = { "prettierd", "prettier", stop_after_first = true },
+        }
       })
       local maps = {
-        { "<leader>lf", function() require('conform').format({ lsp_fallback = 'always', timeout_ms = 1000 }) end, desc = "Format" },
+        { "<leader>lf", function () require("conform").format({ lsp_format = "fallback", timeout_ms = 1000 }) end, desc = "Format" },
       }
       require("which-key").add(maps)
     end,
@@ -1221,6 +1225,6 @@ lazy.setup({
     config = function ()
       require("ben.rest").config()
     end,
-    enabled = O.webdev and O.misc,
+    enabled = O.webdev and O.misc and false,
   },
 }, {})

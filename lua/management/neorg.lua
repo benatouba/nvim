@@ -13,7 +13,7 @@ end
 
 local M = {}
 
-local neorg_callbacks = require("neorg.core.callbacks")
+-- local neorg_callbacks = require("neorg.core.callbacks")
 
 local function imports()
   return require("luasnip"), require("neorg.modules.external.templates.default_snippets")
@@ -64,24 +64,24 @@ function M.insertHyphenParentheses()
   end
 end
 
-neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function (_, keybinds)
-  keybinds.map_event_to_mode("norg", {
-      n = {  -- Bind keys in normal mode
-        { "<localleader>sl", "core.integrations.telescope.find_linkable" },
-        { "<localleader>sh", "core.integrations.telescope.search_headings" },
-        { "<localleader>sb", "core.integrations.telescope.find_backlinks" },
-        { "<localleader>sB", "core.integrations.telescope.find_header_backlinks" },
-      },
-
-      i = {  -- Bind in insert mode
-        { "<C-l>", "core.integrations.telescope.insert_link" },
-      },
-    },
-    {
-      silent = true,
-      noremap = true,
-    })
-end)
+-- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function (_, keybinds)
+--   keybinds.map_event_to_mode("norg", {
+--       n = {  -- Bind keys in normal mode
+--         { "<localleader>sl", "core.integrations.telescope.find_linkable" },
+--         { "<localleader>sh", "core.integrations.telescope.search_headings" },
+--         { "<localleader>sb", "core.integrations.telescope.find_backlinks" },
+--         { "<localleader>sB", "core.integrations.telescope.find_header_backlinks" },
+--       },
+--
+--       i = {  -- Bind in insert mode
+--         { "<C-l>", "core.integrations.telescope.insert_link" },
+--       },
+--     },
+--     {
+--       silent = true,
+--       noremap = true,
+--     })
+-- end)
 
 M.config = function ()
   neorg.setup({
@@ -132,7 +132,7 @@ M.config = function ()
       ["core.keybinds"] = {
         config = {
           default_keybinds = true,
-          neorg_leader = "<localleader>",
+          -- neorg_leader = "<localleader>",
         },
       },
       ["external.templates"] = {
@@ -143,7 +143,7 @@ M.config = function ()
       },
     }
   })
-  local maps = {
+  wk.add({
     -- o is for organising
     { "<leader>o", group = "Org", icon = { icon = "", color = "purple" } },
     { "<leader>oW", "<cmd>Neorg return<CR>", desc = "Return" },
@@ -153,8 +153,7 @@ M.config = function ()
     { "<leader>ot", "<cmd>Neorg workspace tech<CR>", desc = "Tech" },
     { "<leader>ow", "<cmd>Neorg workspace projects<CR>", desc = "Work (Projects)" },
     { "<localleader>c", "<cmd>Neorg toc<CR>", desc = "Contents" },
-  }
-  wk.add(maps)
+  })
 end
 
 return M
