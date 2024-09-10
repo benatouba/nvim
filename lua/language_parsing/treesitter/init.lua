@@ -46,6 +46,7 @@ M.config = function ()
 
   ts.setup({
     ensure_installed = "all",
+    ignore_install = { "org" },
     -- sync_install = false,
     highlight = {
       enable = true,

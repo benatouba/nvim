@@ -21,39 +21,12 @@ if not lazy_ok then
 end
 
 lazy.setup({
-  {
-    "chipsenkbeil/distant.nvim",
-    branch = "v0.3",
-    config = function ()
-      require("distant"):setup()
-    end
-  },
   { "mistweaverco/kulala.nvim", config = function () require("kulala").setup() end },
-  {
-    "epwalsh/pomo.nvim",
-    version = "*",
-    lazy = true,
-    cmd = { "TimerStart", "TimerRepeat" },
-    dependencies = { "rcarriga/nvim-notify" },
-    opts = {},
-    enabled = O.misc
-  },
-  {
-    enabled = false,
-    "amitds1997/remote-nvim.nvim",
-    version = "*",  -- Pin to GitHub releases
-    dependencies = {
-      "nvim-lua/plenary.nvim",  -- For standard functions
-      "MunifTanjim/nui.nvim",  -- To build the plugin UI
-      "nvim-telescope/telescope.nvim",  -- For picking b/w different remote methods
-    },
-    config = true,
-  },
   "nvim-lua/plenary.nvim",  -- most important functions (very important)
-  {
-    "microsoft/python-type-stubs",
-    enabled = O.python and O.lsp,
-  },
+  -- {
+  --   "microsoft/python-type-stubs",
+  --   enabled = O.python and O.lsp,
+  -- },
   {
     "m4xshen/smartcolumn.nvim",
     opts = {
@@ -66,6 +39,8 @@ lazy.setup({
         "lazy",
         "mason",
         "help",
+        "latex",
+        "tex",
         "checkhealth",
         "lspinfo",
         "noice",
@@ -99,9 +74,25 @@ lazy.setup({
   {
     "rcarriga/nvim-notify",
     config = function ()
+      ---@diagnostic disable-next-line: missing-fields
       require("notify").setup({
         timeout = 3000,
         render = "minimal",
+        level = 2,
+        stages = "fade_in_slide_out",
+        icons = {
+          DEBUG = "",
+          ERROR = "",
+          INFO = "",
+          TRACE = "✎",
+          WARN = ""
+        },
+        time_formats = {
+          notification = "%T",
+          notification_history = "%FT%T"
+        },
+        minimum_width = 50,
+        fps = 30,
         max_width = 80,
         max_height = 10,
         top_down = false,
@@ -125,6 +116,8 @@ lazy.setup({
     dependencies = {
       "nvim-neorg/neorg-telescope",
       "max397574/neorg-contexts",
+      "benlubas/neorg-se",
+      "benlubas/neorg-interim-ls",
       { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
     },
     enabled = O.project_management,
@@ -187,7 +180,7 @@ lazy.setup({
   {
     "nvchad/nvim-colorizer.lua",
     config = function ()
-      require("colorizer").setup()
+      require("colorizer").setup({})
     end,
     event = "BufReadPost",
     enabled = O.misc,
@@ -715,7 +708,12 @@ lazy.setup({
   {
     "mfussenegger/nvim-dap",
     dependencies = {
-      "theHamsta/nvim-dap-virtual-text",
+      {
+        "theHamsta/nvim-dap-virtual-text",
+        config = function ()
+          require("nvim-dap-virtual-text").setup({})
+        end
+      },
     },
     config = function ()
       require("debug.dap").config()
@@ -744,6 +742,7 @@ lazy.setup({
     event = "InsertEnter",
     dependencies = {
       "mfussenegger/nvim-dap",
+      "nvim-neotest/nvim-nio"
     },
     config = function ()
       require("debug.dapui").config()
@@ -794,13 +793,17 @@ lazy.setup({
 
   -- project management
   {
-    "nvim-orgmode/orgmode.nvim",
+    "nvim-orgmode/orgmode",
     config = function ()
       require("management.orgmode")
     end,
-    event = { "InsertEnter" },
+    event = "VeryLazy",
+    ft = { "org" },
     keys = { "<leader>" },
     enabled = O.project_management,
+    config = function ()
+      require("management.orgmode").config()
+    end,
   },
   {
     "renerocksai/telekasten.nvim",
@@ -856,7 +859,7 @@ lazy.setup({
     config = function ()
       require("conform").setup({
         formatters_by_ft = {
-          python = { "ruff_fix", "ruff_format", stop_after_first = false },
+          python = { "ast-grep", "ruff_fix", "ruff_format", stop_after_first = false },
           javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
           javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
           typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
@@ -1075,10 +1078,8 @@ lazy.setup({
         integrations = {
           barbar = true,
           cmp = true,
-          dap = {
-            enabled = O.dap,
-            enable_ui = O.dap,
-          },
+          dap = O.dap,
+          dap_ui = O.dap,
           gitsigns = O.git,
           harpoon = true,
           indent_blankline = {

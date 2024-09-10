@@ -6,7 +6,7 @@ end
 
 local M = {}
 
-M.config = function()
+M.config = function ()
   neotest.setup({
     log_level = vim.log.levels.WARN,
     status = {
@@ -60,12 +60,12 @@ M.config = function()
         ignore_file_types = { "python" },
       }),
     },
-    consumers = {
-      overseer = require("neotest.consumers.overseer"),
-    },
-    overseer = {
-      enabled = true,
-    },
+    -- consumers = {
+    --   overseer = require("neotest.consumers.overseer"),
+    -- },
+    -- overseer = {
+    --   enabled = true,
+    -- },
   })
 
   require("which-key").add({
@@ -92,10 +92,10 @@ M.config = function()
   })
 end
 
-M.NeotestSetupProject = function()
+M.NeotestSetupProject = function ()
   vim.ui.select({ "neotest-jest", "neotest-playwright", "neotest-vim-test", "neotest-vitest" }, {
     prompt = "Choose Adapter",
-  }, function(choice)
+  }, function (choice)
     local neotestDefault = {
       output = {
         enabled = true,
@@ -115,7 +115,7 @@ M.NeotestSetupProject = function()
       prompt = "Working directory",
       default = vim.fn.getcwd(),
       completion = "dir",
-    }, function(input)
+    }, function (input)
       vim.cmd("cd " .. input)
       if choice == "neotest-jest" then
         local jestConf = vim.tbl_deep_extend("force", neotestDefault, {
@@ -123,7 +123,7 @@ M.NeotestSetupProject = function()
           adapters = {
             require("neotest-jest")({
               jestCommand = "npm test --",
-              jestConfigFile = function()
+              jestConfigFile = function ()
                 local file = vim.fn.expand("%:p")
                 if string.find(file, "/packages/") then
                   return string.match(file, "(.-/[^/]+/)src") .. "jest.config.ts"
@@ -133,7 +133,7 @@ M.NeotestSetupProject = function()
               end,
               jest_test_discovery = false,
               env = { CI = true },
-              cwd = function()
+              cwd = function ()
                 local file = vim.fn.expand("%:p")
                 if string.find(file, "/packages/") then
                   return string.match(file, "(.-/[^/]+/)src")

@@ -64,25 +64,6 @@ function M.insertHyphenParentheses()
   end
 end
 
--- neorg_callbacks.on_event("core.keybinds.events.enable_keybinds", function (_, keybinds)
---   keybinds.map_event_to_mode("norg", {
---       n = {  -- Bind keys in normal mode
---         { "<localleader>sl", "core.integrations.telescope.find_linkable" },
---         { "<localleader>sh", "core.integrations.telescope.search_headings" },
---         { "<localleader>sb", "core.integrations.telescope.find_backlinks" },
---         { "<localleader>sB", "core.integrations.telescope.find_header_backlinks" },
---       },
---
---       i = {  -- Bind in insert mode
---         { "<C-l>", "core.integrations.telescope.insert_link" },
---       },
---     },
---     {
---       silent = true,
---       noremap = true,
---     })
--- end)
-
 M.config = function ()
   neorg.setup({
     load = {
@@ -99,6 +80,13 @@ M.config = function ()
         }
       },  -- Adds pretty icons to your documents
       ["core.completion"] = { config = { engine = "nvim-cmp", name = " Neorg" } },
+      ["core.journal"] = {
+        config = {
+          strategy = "flat",
+          workspace = "base",
+          use_template = false,
+        }
+      },
       ["core.dirman"] = {  -- Manages Neorg workspaces
         config = {
           workspaces = {
@@ -128,7 +116,21 @@ M.config = function ()
       },
       ["core.summary"] = {},
       -- ["core.ui.calendar"] = {},
-      -- ["external.context"] = {},
+      ["external.context"] = {},
+      ["external.search"] = {
+        config = {
+          index_on_start = true,
+        }
+      },
+      ["external.interim-ls"] = {
+        config = {
+          completion_provider = {
+            enable = true,
+            -- Try to complete categories. Requires benlubas/neorg-se
+            categories = true,
+          }
+        }
+      },
       ["core.keybinds"] = {
         config = {
           default_keybinds = true,
