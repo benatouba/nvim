@@ -1,7 +1,7 @@
 local M = {}
 
 M.config = function ()
-  -- LSP signs efault
+  -- LSP signs default
   vim.diagnostic.config({
     signs = {
       -- text = {
@@ -174,6 +174,19 @@ M.config = function ()
     ),
     on_attach = common_on_attach,
   }
+  lspconfig.util.default_config = vim.tbl_extend(
+    "force",
+    lspconfig.util.default_config,
+    {
+      capabilities = vim.tbl_deep_extend(
+        "force",
+        vim.lsp.protocol.make_client_capabilities(),
+        -- returns configured operations if setup() was already called
+        -- or default operations if not
+        require("lsp-file-operations").default_capabilities()
+      )
+    }
+  )
   -- local ok, wf = pcall(require, "vim.lsp._watchfiles")
   -- if ok then
   --   -- wf._watchfunc = function(_, _, _) return true end
@@ -220,24 +233,20 @@ M.config = function ()
           -- config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
           config.settings.basedpyright.analysis.stubPath =
             vim.fs.joinpath(
-              vim.fn.expand(vim.fn.stdpath("data")),
-              "lazy",
-              "python-type-stubs",
-              "stubs"
+            -- vim.fn.expand(vim.fn.stdpath("data")),
+            -- "lazy",
+            -- "python-type-stubs",
+            -- "stubs"
+              vim.fs.joinpath(vim.fn.expand("~"), ".local", "src", "python-type-stubs", "stubs")
             )
         end,
         settings = {
           basedpyright = {
             disableOrganizeImports = true,
             useLibraryCodeForTypes = true,
-            analysis = {
-              ignore = "*",
-              autoImportCompletions = true,
-              autoSearchPaths = true,
-              logLevel = "Warning",
-              diagnosticMode = "workspace",
-              typeCheckingMode = "standard",
-            },
+            autoImportCompletions = true,
+            autoSearchPaths = true,
+            typeCheckingMode = "standard",
           },
         },
       })
@@ -247,7 +256,7 @@ M.config = function ()
         before_init = function (_, config)
           config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
           config.settings.python.analysis.stubPath =
-            vim.fs.joinpath(vim.fn.expand(vim.fn.stdpath("data")), "lazy", "python-type-stubs")
+            vim.fs.joinpath(vim.fn.expand("~"), ".local", "src", "python-type-stubs", "stubs")
         end,
       })
     end,
@@ -456,7 +465,7 @@ M.config = function ()
             },
             latexFormatter = "latexindent",
             latexindent = {
-              modifyLineBreaks = false,
+              modifyLineBreaks = true,
             },
           },
         },
@@ -512,6 +521,9 @@ M.config = function ()
         settings = {
           ltex = {
             language = "en-GB",
+            additionalRules = {
+              motherTongue = "de-DE",
+            }
           },
         },
         on_attach = function (client, bufnr)

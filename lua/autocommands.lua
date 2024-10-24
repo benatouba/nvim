@@ -57,7 +57,7 @@ utils.add_autocommands({
     },
     { "FileType", "nofile,httpResult", "nnoremap <silent> <buffer> q :q<CR>" },
     { "FileType", "nofile,httpResult", "nnoremap <silent> <buffer> <esc> :q<CR>" },
-    { "FileType", "norg", ":lua vim.o.conceallevel=2" },
+    -- { "FileType", "norg", ":lua vim.o.conceallevel=2" },
     -- { "FileType", "org", ":lua vim.o.conceallevel=2" },
     { "FileType", "org", ":lua vim.o.concealcursor='nc'" },
   },

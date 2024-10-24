@@ -76,20 +76,20 @@ M.config = function()
     end))
 
   autopairs.add_rules(
-    {
-      rule("$", "$", { "tex", "latex" })
-        -- don't add a pair if the next character is %
-        -- :with_pair(
-        --   cond.not_after_regex("$$")
-        -- )
-        -- :with_pair(cond.not_before_regex("$$", 2))
-        -- -- don't move right when repeat character
-        :with_move(function() return true end)
-        -- -- don't delete if the next character is xx
-        -- :with_del(cond.none()),
-        -- -- disable adding a newline when you press <cr>
-        -- :with_cr(cond.none()),
-    },
+    -- {
+    --   rule("$", "$", { "tex", "latex" })
+    --     -- don't add a pair if the next character is %
+    --     -- :with_pair(
+    --     --   cond.not_after_regex("$$")
+    --     -- )
+    --     -- :with_pair(cond.not_before_regex("$$", 2))
+    --     -- -- don't move right when repeat character
+    --     :with_move(function() return true end)
+    --     -- -- don't delete if the next character is xx
+    --     -- :with_del(cond.none()),
+    --     -- -- disable adding a newline when you press <cr>
+    --     -- :with_cr(cond.none()),
+    -- },
     {
       rule("%(.*%)%s*%=>$", " {  }", { "typescript", "typescriptreact", "javascript", "vue" })
         :use_regex(true)

@@ -21,7 +21,7 @@ if not lazy_ok then
 end
 
 lazy.setup({
-  { "mistweaverco/kulala.nvim", config = function () require("kulala").setup() end },
+  { "mistweaverco/kulala.nvim", config = function () require("kulala").setup() end, enabled = false, },
   "nvim-lua/plenary.nvim",  -- most important functions (very important)
   -- {
   --   "microsoft/python-type-stubs",
@@ -105,8 +105,9 @@ lazy.setup({
   },
   {
     "nvim-neorg/neorg",
+    -- event = "VeryLazy",
     lazy = false,
-    -- event = { "InsertEnter" },
+    event = { "BufReadPost", "BufNewFile", "VimEnter" },
     version = "*",
     ft = "norg",
     keys = { "<leader>", "g" },
@@ -271,15 +272,15 @@ lazy.setup({
     end,
     keys = { "<C-a>", "<C-x>" },
   },  -- increment/decrement basically everything,
-  {
-    "numToStr/Comment.nvim",
-    config = function ()
-      require("ben.comment_nvim").config()
-    end,
-    event = { "InsertEnter", "CmdlineEnter", "CursorMoved" },
-    keys = { "g", "gc" },
-    enabled = false,
-  },
+  -- {
+  --   "numToStr/Comment.nvim",
+  --   config = function ()
+  --     require("ben.comment_nvim").config()
+  --   end,
+  --   event = { "InsertEnter", "CmdlineEnter", "CursorMoved" },
+  --   keys = { "g", "gc" },
+  --   enabled = false,
+  -- },
   {
     "mbbill/undotree",
     lazy = true,
@@ -497,7 +498,19 @@ lazy.setup({
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "b0o/SchemaStore.nvim",
-      { "antosha417/nvim-lsp-file-operations", config = true },
+      {
+        "antosha417/nvim-lsp-file-operations",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          -- Uncomment whichever supported plugin(s) you use
+          -- "nvim-tree/nvim-tree.lua",
+          -- "nvim-neo-tree/neo-tree.nvim",
+          -- "simonmclean/triptych.nvim"
+        },
+        config = function ()
+          require("lsp-file-operations").setup()
+        end
+      },
     },
     -- lazy = true,
     event = { "BufReadPre", "BufNewFile", "InsertEnter" },

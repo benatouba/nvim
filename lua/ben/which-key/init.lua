@@ -14,7 +14,7 @@ which_key.add({
   { "<leader>e", ":Oil<cr>", desc = "Explorer", icon = { icon = " ", color = "yellow" } },
   { "<leader>u", ":UndotreeToggle<cr>", desc = "Undotree", icon = { icon = "", color = "green" } },
   -- Buffers
-  { "<leader>b", group = "+Buffers" },
+  -- { "<leader>b", group = "+Buffers" },
   { "<leader><leader>", ":bprevious<cr>", desc = "Switch Buffer" },
   -- Actions
   { "<leader>a", group = "+Actions", icon = { icon = "", color = "yellow" } },
@@ -64,9 +64,9 @@ which_key.add({
   { "<leader>gg", "<cmd>G<cr>", desc = "Fugitive" },
   { "<leader>gl", "<cmd>Git log<cr>", desc = "Log" },
   { "<leader>gn", "<cmd>Neogit<cr>", desc = "Neogit" },
-  { "<leader>gn", "<cmd>Neogit commit %<cr>", desc = "(Neogit) Commit Menu" },
+  { "<leader>gN", "<cmd>Neogit commit %<cr>", desc = "(Neogit) Commit Menu" },
   { "<leader>gp", "<cmd>Git pull<cr>", desc = "Pull" },
-  { "<leader>gp", "<cmd>Git push<cr>", desc = "Push" },
+  { "<leader>gP", "<cmd>Git push<cr>", desc = "Push" },
   -- Generate Annotations
   { "<leader>n", group = "+Generate Annotations" },
   { "<leader>nn", "<cmd>lua require('neogen').generate()<CR>", desc = "Auto" },
@@ -79,5 +79,5 @@ which_key.add({
   -- { "db", ":diffget BA<CR>", "Diffget base", group = "+Diffmaps", },
 
   -- gmaps
-  { "gr", "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", desc = "Rename" },
+  -- { "gr", "<cmd>lua require('nvim-treesitter-refactor.smart_rename')<cr>", desc = "Rename" },
 })

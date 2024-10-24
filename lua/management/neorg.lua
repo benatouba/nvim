@@ -79,7 +79,12 @@ M.config = function ()
           }
         }
       },  -- Adds pretty icons to your documents
-      ["core.completion"] = { config = { engine = "nvim-cmp", name = " Neorg" } },
+      ["core.completion"] = {
+        config = {
+          engine = "nvim-cmp",
+          -- name = " Neorg"
+        }
+      },
       ["core.journal"] = {
         config = {
           strategy = "flat",
