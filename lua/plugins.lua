@@ -498,19 +498,6 @@ lazy.setup({
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "b0o/SchemaStore.nvim",
-      {
-        "antosha417/nvim-lsp-file-operations",
-        dependencies = {
-          "nvim-lua/plenary.nvim",
-          -- Uncomment whichever supported plugin(s) you use
-          -- "nvim-tree/nvim-tree.lua",
-          -- "nvim-neo-tree/neo-tree.nvim",
-          -- "simonmclean/triptych.nvim"
-        },
-        config = function ()
-          require("lsp-file-operations").setup()
-        end
-      },
     },
     -- lazy = true,
     event = { "BufReadPre", "BufNewFile", "InsertEnter" },
@@ -585,6 +572,7 @@ lazy.setup({
       { "ray-x/cmp-treesitter", enabled = O.language_parsing },
       "lukas-reineke/cmp-under-comparator",
       "lukas-reineke/cmp-rg",
+      "R-nvim/cmp-r",
       {
         "David-Kunz/cmp-npm",
         ft = "json",

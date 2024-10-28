@@ -43,7 +43,7 @@ local git_status = new_git_status()
 -- Clear git status cache on refresh
 local refresh = {
   desc = "Refresh current directory list",
-  callback = function(opts)
+  callback = function (opts)
     opts = opts or {}
     if vim.bo.modified and not opts.force then
       local ok, choice = pcall(vim.fn.confirm, "Discard changes?", "No\nYes")
@@ -89,7 +89,19 @@ return {
       wrap = true,
       winbar = "%!v:lua.get_oil_winbar()",
     },
-    experimental_watch_for_changes = true,
+    watch_for_changes = true,
+    git = {
+      -- Return true to automatically git add/mv/rm files
+      add = function (path)
+        return true
+      end,
+      mv = function (src_path, dest_path)
+        return true
+      end,
+      rm = function (path)
+        return true
+      end,
+    },
     view_options = {
       show_hidden = false,
       is_hidden_file = function (name, bufnr)
@@ -123,6 +135,10 @@ return {
           end
         end,
       },
+      ["<C-v>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
+      ["<C-x>"] = { "actions.select", opts = { horizontal = true }, desc = "Open the entry in a horizontal split" },
+      ["<q>"] = { "actions.close", mode = "n", desc = "Close the entry" },
+      ["<esc>"] = { "<cmd>q<cr>", desc = "Close neovim" },
     },
   },
   dependencies = { "nvim-tree/nvim-web-devicons" },

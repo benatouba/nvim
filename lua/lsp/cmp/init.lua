@@ -277,8 +277,8 @@ M.config = function ()
             -- behavior = cmp.ConfirmBehavior.Replace,
             select = false,
           })
-        -- elseif cp.is_visible() then
-        --   cp.accept()
+          -- elseif cp.is_visible() then
+          --   cp.accept()
         else
           fallback()
         end
@@ -363,6 +363,11 @@ M.config = function ()
       { name = "path" },
       { name = "emoji", max_item_count = 5 },
     })
+  })
+
+  local r_sources = vim.tbl_extend("force", { name = "cmp_r" }, default_cmp_sources)
+  cmp.setup.filetype({ "r", "rmd", "rmarkdown" }, {
+    sources = cmp.config.sources(r_sources),
   })
 
   cmp.setup.filetype({ "org", "orgagenda" }, {
@@ -459,7 +464,7 @@ M.config = function ()
   cmp_git.setup({
     filetypes = { "gitcommit", "octo", "NeogitCommitMessage", },
     gitlab = {
-        hosts = { "gitlab.klima.tu-berlin.de", }
+      hosts = { "gitlab.klima.tu-berlin.de", }
     }
   })
   -- local sign = function (opts)
