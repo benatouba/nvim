@@ -96,6 +96,10 @@ M.config = function ()
       client.server_capabilities.documentFormattingProvider = false
       client.server_capabilities.documentRangeFormattingProvider = false
       client.server_capabilities.definitionProvider = true
+      -- elseif client.name == "texlab" then
+      --   -- Disable in favor of Conform
+      --   client.server_capabilities.documentFormattingProvider = true
+      --   client.server_capabilities.documentRangeFormattingProvider = true
     elseif client.name == "ruff" then
       -- Disable hover in favor of Pyright
       client.server_capabilities.hoverProvider = false
@@ -150,7 +154,7 @@ M.config = function ()
       }
     })
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
-    -- vim.lsp.inlay_hint.enable()
+    vim.lsp.inlay_hint.enable()
 
     -- -- Highlights occurences of the word under the cursor
     -- vim.api.nvim_create_augroup("LspHighlighting", {})
@@ -216,19 +220,33 @@ M.config = function ()
     end,
     ["basedpyright"] = function ()
       lspconfig.basedpyright.setup({
-        before_init = function (_, config)
-          -- config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
-          config.settings.basedpyright.analysis.stubPath =
-            vim.fs.joinpath(
-            -- vim.fn.expand(vim.fn.stdpath("data")),
-            -- "lazy",
-            -- "python-type-stubs",
-            -- "stubs"
-              vim.fs.joinpath(vim.fn.expand("~"), ".local", "src", "python-type-stubs", "stubs")
-            )
-        end,
+        -- before_init = function (_, config)
+        --   -- config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
+        --   config.settings.basedpyright.analysis.stubPath =
+        --     vim.fs.joinpath(
+        --     -- vim.fn.expand(vim.fn.stdpath("data")),
+        --     -- "lazy",
+        --     -- "python-type-stubs",
+        --     -- "stubs"
+        --       vim.fs.joinpath(vim.fn.expand("~"), ".local", "src", "python-type-stubs", "stubs")
+        --     )
+        -- end,
         settings = {
           basedpyright = {
+            analysis = {
+              inlayHints = {
+                typeHints = true,
+                parameterHints = true,
+                chainedCallHints = true,
+                variableTypeHints = true,
+                memberVariableTypeHints = true,
+              },
+              autoSearchPaths = true,
+              useLibraryCodeForTypes = true,
+              diagnosticMode = "workspace",
+              autoImportCompletions = true,
+              disableOrganizeImports = true,
+            },
             disableOrganizeImports = true,
             useLibraryCodeForTypes = true,
             autoImportCompletions = true,
@@ -435,7 +453,7 @@ M.config = function ()
         settings = {
           texlab = {
             build = {
-              args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
+              args = { "-pdf", "-interaction", "nonstopmode", "-synctex", "1", "%f" },
               executable = "latexmk",
               forwardSearchAfter = false,
               onSave = false,
@@ -448,11 +466,13 @@ M.config = function ()
             forwardSearch = {
               args = {},
               executable = "zathura",
-              onSave = true,
+              onSave = false,
             },
+            formatterLineLength = 120,
             latexFormatter = "latexindent",
             latexindent = {
-              modifyLineBreaks = true,
+              modifyLineBreaks = false,
+              replacement = "-rv",
             },
           },
         },

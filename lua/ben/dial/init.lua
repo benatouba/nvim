@@ -14,13 +14,12 @@ M.config = function()
 
   config.augends:register_group({
     default = {
-      augend.integer.alias.decimal_int,
+      augend.integer.alias.decimal,
       augend.constant.alias.bool,
       augend.constant.alias.de_weekday,
       augend.constant.alias.de_weekday_full,
       augend.date.alias["%m/%d"],
       augend.date.alias["%Y/%m/%d"],
-      augend.constant.alias.alpha,
       augend.constant.new({ elements = { "yes", "no" } }),
       augend.constant.new({ elements = { "let", "const", "var" } }),
       augend.constant.new({ elements = { "T", "F" } }),
@@ -28,17 +27,15 @@ M.config = function()
       augend.constant.new({ elements = { "TRUE", "FALSE" } }),
       augend.constant.new({ elements = { "def", "class" } }),
       augend.hexcolor.new({ case = "lower" }),
-      augend.constant.new({ elements = { "and", "or" }, word = true, cyclic = true }),
-      augend.constant.new({ elements = { "&&", "||" }, word = false, cyclic = true }),
+      -- augend.constant.new({ elements = { "and", "or" }, word = true, cyclic = true }),
+      -- augend.constant.new({ elements = { "&&", "||" }, word = false, cyclic = true }),
+      -- augend.constant,
       augend.semver.alias.semver,
-      augend.constant.alias.Alpha,
     },
     visual = {
       augend.integer.alias.decimal,
       augend.integer.alias.hex,
       augend.date.alias["%Y/%m/%d"],
-      augend.constant.alias.alpha,
-      augend.constant.alias.Alpha,
     },
     markdown = {
       augend.constant.new({ elements = { "[ ]", "[x]" }, word = false, cyclic = true }),

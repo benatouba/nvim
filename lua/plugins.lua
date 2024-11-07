@@ -117,8 +117,8 @@ lazy.setup({
     dependencies = {
       "nvim-neorg/neorg-telescope",
       "max397574/neorg-contexts",
-      "benlubas/neorg-se",
-      "benlubas/neorg-interim-ls",
+      -- "benlubas/neorg-se",
+      -- "benlubas/neorg-interim-ls",
       { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
     },
     enabled = O.project_management,
@@ -533,9 +533,10 @@ lazy.setup({
           "RSPlot",
           "RSaveClose",
         },
+        auto_start = "always",
+        -- csv_app = ":TermExec cmd='vd %'",
+        csv_app = "terminal:vd",
       }
-      -- Check if the environment variable "R_AUTO_START" exists.
-      -- If using fish shell, you could put in your config.fish:
       -- alias r "R_AUTO_START=true nvim"
       if vim.env.R_AUTO_START == "true" then
         opts.auto_start = 1
@@ -560,6 +561,7 @@ lazy.setup({
         end,
       },
       -- "hrsh7th/cmp-nvim-lsp-signature-help",
+      "micangl/cmp-vimtex",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-calc",
@@ -865,6 +867,7 @@ lazy.setup({
           javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
           typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
           typescriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
+          -- tex = { "latexindent", "llf", stop_after_first = true },
           vue = { "prettierd", "prettier", stop_after_first = true },
           css = { "prettierd", "prettier", stop_after_first = true },
           scss = { "prettierd", "prettier", stop_after_first = true },
@@ -1218,6 +1221,49 @@ lazy.setup({
     "vhyrro/luarocks.nvim",
     priority = 1000,
     config = true,
+    opts = {
+      "magick",
+    }
+  },
+  {
+    "3rd/image.nvim",
+    dependencies = { "luarocks.nvim" },
+    config = function ()
+      require("image").setup({
+        backend = "ueberzug",
+        integrations = {
+          markdown = {
+            enabled = true,
+            clear_in_insert_mode = false,
+            download_remote_images = true,
+            only_render_image_at_cursor = false,
+            filetypes = { "markdown", "vimwiki" },  -- markdown extensions (ie. quarto) can go here
+          },
+          neorg = {
+            enabled = true,
+            clear_in_insert_mode = false,
+            download_remote_images = true,
+            only_render_image_at_cursor = false,
+            filetypes = { "norg" },
+          },
+          html = {
+            enabled = true,
+          },
+          css = {
+            enabled = true,
+          },
+        },
+        max_width = nil,
+        max_height = nil,
+        max_width_window_percentage = nil,
+        max_height_window_percentage = 50,
+        window_overlap_clear_enabled = false,  -- toggles images when windows are overlapped
+        window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
+        editor_only_render_when_focused = false,  -- auto show/hide images when the editor gains/looses focus
+        tmux_show_only_in_active_window = false,  -- auto show/hide images in the correct Tmux window (needs visual-activity off)
+        hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.avif" },  -- render image files as images when opened
+      })
+    end
   },
   { "nvim-neotest/nvim-nio" },
   {
