@@ -56,7 +56,7 @@ lazy.setup({
     config = function ()
       require("tiny-inline-diagnostic").setup()
     end,
-    enabled = O.misc,
+    enabled = O.misc and false,
   },
   {
     "nvimdev/lspsaga.nvim",
@@ -71,6 +71,7 @@ lazy.setup({
     },
     enabled = O.lsp,
   },
+  { 'echasnovski/mini.notify', version = false },
   {
     "rcarriga/nvim-notify",
     config = function ()
@@ -101,13 +102,13 @@ lazy.setup({
       require("telescope").load_extension("notify")
     end,
     dependencies = "telescope.nvim",
-    enabled = O.misc or O.lsp,
+    enabled = O.misc and O.lsp,
   },
   {
     "nvim-neorg/neorg",
     -- event = "VeryLazy",
-    lazy = false,
-    event = { "BufReadPost", "BufNewFile", "VimEnter" },
+    -- lazy = false,
+    -- event = { "BufReadPost", "BufNewFile", "VimEnter" },
     version = "*",
     ft = "norg",
     keys = { "<leader>", "g" },
@@ -117,15 +118,15 @@ lazy.setup({
     dependencies = {
       "nvim-neorg/neorg-telescope",
       "max397574/neorg-contexts",
-      -- "benlubas/neorg-se",
-      -- "benlubas/neorg-interim-ls",
-      { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
+      "benlubas/neorg-se",
+      "benlubas/neorg-interim-ls",
+      -- { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
     },
-    enabled = O.project_management,
+    enabled = O.project_management and false,
   },
   {
     "epwalsh/obsidian.nvim",
-    event = { "BufReadPost", "VimEnter" },
+    event = { "BufReadPost", "InsertEnter" },
     version = "*",
     config = function ()
       require("management.obsidian").config()
@@ -312,7 +313,7 @@ lazy.setup({
         enabled = false,
       },
       -- "RRethy/nvim-treesitter-endwise",
-      "nvim-treesitter/nvim-treesitter-refactor",
+      -- "nvim-treesitter/nvim-treesitter-refactor",
     },
     build = ":TSUpdate",
     lazy = true,
@@ -323,6 +324,7 @@ lazy.setup({
   },
   {
     "windwp/nvim-ts-autotag",
+    event = { "BufReadPost", "BufNewFile" },
     config = function ()
       require("nvim-ts-autotag").setup({
         opts = {
@@ -448,6 +450,7 @@ lazy.setup({
   },
   {
     "supermaven-inc/supermaven-nvim",
+    lazy = true,
     config = function ()
       require("supermaven-nvim").setup({
         keymaps = {
@@ -536,12 +539,14 @@ lazy.setup({
         auto_start = "always",
         -- csv_app = ":TermExec cmd='vd %'",
         csv_app = "terminal:vd",
+        -- csv_app = ":TermExec cmd='vd %s'"
       }
       -- alias r "R_AUTO_START=true nvim"
       if vim.env.R_AUTO_START == "true" then
         opts.auto_start = 1
         opts.objbr_auto_start = true
       end
+      vim.g.rout_follow_colorscheme = true
       require("r").setup(opts)
     end,
   },
@@ -550,16 +555,9 @@ lazy.setup({
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       "rafamadriz/friendly-snippets",
-      "hrsh7th/cmp-buffer",
+      -- "hrsh7th/cmp-buffer",
       { "hrsh7th/cmp-nvim-lsp", enabled = O.lsp },
       { "hrsh7th/cmp-nvim-lsp-document-symbol", enabled = O.lsp },
-      {
-        "hrsh7th/nvim-cmp",
-        config = function ()
-          require("cmp").setup({ sources = { { name = "cmp_r" } } })
-          require("cmp_r").setup({})
-        end,
-      },
       -- "hrsh7th/cmp-nvim-lsp-signature-help",
       "micangl/cmp-vimtex",
       "hrsh7th/cmp-path",
@@ -597,7 +595,10 @@ lazy.setup({
       -- "f3fora/cmp-spell",
       -- "quangnguyen30192/cmp-nvim-tags",
       -- "octaltree/cmp-look",
-      "onsails/lspkind-nvim",
+      {
+        "onsails/lspkind-nvim",
+        lazy = true,
+      },
     },
     config = function ()
       require("lsp.cmp").config()
@@ -797,9 +798,14 @@ lazy.setup({
   -- project management
   {
     "nvim-orgmode/orgmode",
-    config = function ()
-      require("management.orgmode")
-    end,
+    dependencies = {
+      {
+        "akinsho/org-bullets.nvim",
+        config = function ()
+          require("org-bullets").setup()
+        end
+      },
+    },
     event = "VeryLazy",
     ft = { "org" },
     keys = { "<leader>" },
@@ -853,7 +859,7 @@ lazy.setup({
   },
   {
     "barreiroleo/ltex_extra.nvim",
-    ft = { "markdown", "tex" },
+    ft = { "markdown", "tex", "norg", "org" },
     dependencies = { "neovim/nvim-lspconfig" },
     enabled = O.lsp,
   },
@@ -862,7 +868,7 @@ lazy.setup({
     config = function ()
       require("conform").setup({
         formatters_by_ft = {
-          python = { "ast-grep", "ruff_fix", "ruff_format", stop_after_first = false },
+          python = { "ruff_fix", "ruff_format", "ruff_organize_imports", "docformatter", stop_after_first = false },
           javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
           javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
           typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
@@ -875,7 +881,12 @@ lazy.setup({
           json = { "prettierd", "prettier", stop_after_first = true },
           yaml = { "prettierd", "prettier", stop_after_first = true },
           markdown = { "prettierd", "prettier", stop_after_first = true },
-        }
+          ["*"] = { "codespell" },
+          ["_"] = { "trim_whitespace" },
+        },
+        default_format_opts = {
+          lsp_format = "fallback",
+        },
       })
       local maps = {
         { "<leader>lf", function () require("conform").format({ lsp_format = "fallback", timeout_ms = 1000 }) end, desc = "Format" },
@@ -1134,6 +1145,8 @@ lazy.setup({
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim" },
+    event = { "BufReadPost" },
+    keys = { "<leader>", "<localleader>", "m", "'" },
     config = function ()
       require("misc.harpoon").config()
       require("misc.harpoon").maps()
@@ -1169,6 +1182,15 @@ lazy.setup({
     end,
     enabled = O.markdown,
   },
+  {
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },  -- if you prefer nvim-web-devicons
+    ft = { "markdown", "norg", "org" },
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+    enabled = O.markdown,
+  },
   -- { "szw/vim-maximizer", enabled = false },
   -- for notebooks,
   -- use({
@@ -1187,13 +1209,16 @@ lazy.setup({
     ft = "ipynb",
     enabled = O.notebooks,
   },
-  { "stevearc/dressing.nvim" },
+  {
+    "stevearc/dressing.nvim",
+    opts = {},
+  },
   {
     "folke/noice.nvim",
     event = "VeryLazy",
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
+      -- "rcarriga/nvim-notify",
     },
     config = function ()
       require("ui.noice").config()
@@ -1223,11 +1248,13 @@ lazy.setup({
     config = true,
     opts = {
       "magick",
-    }
+    },
+    enabled = false,
   },
   {
     "3rd/image.nvim",
-    dependencies = { "luarocks.nvim" },
+    event = "InsertEnter",
+    ft = { "markdown", "vimwiki", "norg", "org", "typst", "css", "html" },
     config = function ()
       require("image").setup({
         backend = "ueberzug",

@@ -45,6 +45,8 @@ M.config = function ()
   local default_cmp_sources = cmp.config.sources({
     -- { name = "copilot", priority = 8 },
     -- { name = "nvim_lsp_signature_help" },
+    { name = "cmp_r" },
+    { name = "orgmode", priority = 100 },
     { name = "lazydev", group_index = 0 },
     { name = "neorg" },
     { name = "npm", priority = 10, keyword_length = 4 },
@@ -88,6 +90,9 @@ M.config = function ()
           not context.in_syntax_group("Comment")
       end
     end,
+    performance = {
+      max_view_entries = 10,
+    },
     -- view = {
     -- 	entries = { name = "native" },
     -- },
@@ -99,6 +104,12 @@ M.config = function ()
       -- },
       format = lspkind.cmp_format({
         mode = "symbol_text",
+        maxwidth = {
+          menu = 50,  -- leading text (labelDetails)
+          abbr = 50,  -- actual suggestion item
+        },
+        ellipsis_char = '...',
+        show_labelDetails = true,
         before = function (entry, vim_item)
           local word = entry:get_insert_text()
           local strings = vim.split(vim_item.kind, "%s", { trimempty = true })
@@ -110,71 +121,58 @@ M.config = function ()
             vim_item.menu = "Copilot"
             vim_item.kind_hl_group = "CmpItemKindCopilot"
             word = str.oneline(vim_item.abbr)
-          end
-          if entry.source.name == "git" then
+          elseif entry.source.name == "git" then
             vim_item.kind = "󰊢 Git"
             vim_item.kind_hl_group = "CmpItemKindFunction"
             word = str.oneline(vim_item.abbr)
-          end
-          if entry.source.name == "neorg" then
+          elseif entry.source.name == "neorg" then
             vim_item.kind = " Neorg"
             vim_item.kind_hl_group = "CmpItemKindText"
             word = str.oneline(vim_item.abbr)
-          end
-          if entry.source.name == "treesitter" then
+          elseif entry.source.name == "treesitter" then
             vim_item.kind = " Treesitter"
             vim_item.kind_hl_group = "CmpItemKindText"
             word = str.oneline(vim_item.abbr)
-          end
-          if entry.source.name == "dap" then
+          elseif entry.source.name == "dap" then
             vim_item.kind = " DAP"
             vim_item.kind_hl_group = "CmpItemKindText"
-          end
-          if entry.source.name == "tmux" then
+          elseif entry.source.name == "cmp_r" then
+            vim_item.kind = "󰟔 R"
+            -- vim_item.kind_hl_group = "CmpItemKindFunction"
+          elseif entry.source.name == "tmux" then
             vim_item.kind = " Tmux"
             vim_item.kind_hl_group = "CmpItemKindText"
-          end
-          if entry.source.name == "cmdline" then
+          elseif entry.source.name == "cmdline" then
             vim_item.kind = " Cmd"
             vim_item.kind_hl_group = "CmpItemKindFunction"
-          end
-          if entry.source.name == "tags" then
+          elseif entry.source.name == "tags" then
             vim_item.kind = " Tags"
             vim_item.kind_hl_group = "CmpItemKindText"
-          end
-          if entry.source.name == "cmdline_history" then
+          elseif entry.source.name == "cmdline_history" then
             vim_item.kind = " History"
             vim_item.kind_hl_group = "CmpItemKindFunction"
-          end
-          if entry.source.name == "rg" then
+          elseif entry.source.name == "rg" then
             vim_item.kind = " Grep"
             vim_item.kind_hl_group = "CmpItemKindFunction"
-          end
-          if entry.source.name == "Buffer" then
+          elseif entry.source.name == "Buffer" then
             vim_item.kind = " Buffer"
             vim_item.kind_hl_group = "CmpItemKindText"
-          end
-          if vim_item.kind == "String" then
+          elseif vim_item.kind == "String" then
             vim_item.kind = " String"
             vim_item.kind_hl_group = "CmpItemKindText"
-          end
-          if vim_item.kind == "Comment" then
+          elseif vim_item.kind == "Comment" then
             vim_item.kind = " Comment"
             vim_item.kind_hl_group = "CmpItemKindText"
-          end
-          if entry.source.name == "emoji" then
+          elseif entry.source.name == "emoji" then
             vim_item.kind = "ﲃ Emoji"
             vim_item.kind_hl_group = "CmpItemKindCopilot"
-          end
-          if entry.source.name == "npm" then
+          elseif entry.source.name == "npm" then
             vim_item.kind = " npm"
             vim_item.kind_hl_group = "CmpItemKindNpm"
-          end
-          if entry.source.name == "lua-latex-symbols" then
+          elseif entry.source.name == "lua-latex-symbols" then
             vim_item.kind = " LaTeX"
             vim_item.kind_hl_group = "CmpItemKindSnippet"
-          end
-          if entry.source.name == "Codeium" then
+          elseif entry.source.name == "Codeium" then
             vim_item.kind = " Codeium"
             vim_item.kind_hl_group = "CmpItemKindCopilot"
             word = str.oneline(vim_item.abbr)
@@ -256,7 +254,7 @@ M.config = function ()
       end, { "i", "s", "c" }),
       ["<C-e>"] = cmp.mapping.abort(),
       ["<C-h>"] = cmp.mapping.abort(),
-      ["<C-l>"] = cmp.mapping(function(fallback)
+      ["<C-l>"] = cmp.mapping(function (fallback)
         local cp_ok, cp = pcall(require, "copilot.suggestion")
         local entry = cmp.get_selected_entry()
         if cmp.visible() and entry then
@@ -313,15 +311,15 @@ M.config = function ()
         local cp_ok, cp = pcall(require, "copilot.suggestion")
         local entry = cmp.get_selected_entry()
         local supermaven_ok, supermaven = pcall(require, "supermaven-nvim.completion_preview")
-        if cmp.visible() and entry then
-          cmp.confirm()
+        if luasnip.expand_or_jumpable() then
+          luasnip.expand_or_jump()
+        elseif cmp.visible() then
+          cmp.select_next_item()
         elseif supermaven_ok and supermaven.has_suggestion() then
           supermaven.on_accept_suggestion()
-        elseif luasnip.expand_or_jumpable() then
-          luasnip.expand_or_jump()
         elseif not has_words_before() then
           fallback()
-        elseif cp.is_visible() and cp_ok then
+        elseif cp_ok and cp.is_visible() then
           cp.accept()
         else
           fallback()
@@ -356,6 +354,7 @@ M.config = function ()
   cmp.setup.filetype({ "tex", "plaintex" }, {
     sources = cmp.config.sources({
       { name = "lua-latex-symbols", option = { cache = true }, priority = 10 },
+      { name = "vimtex" },
       { name = "luasnip" },
       { name = "nvim_lsp", max_item_count = 5 },
       { name = "treesitter", max_item_count = 5 },
@@ -365,19 +364,28 @@ M.config = function ()
     })
   })
 
-  local r_sources = vim.tbl_extend("force", { name = "cmp_r" }, default_cmp_sources)
-  cmp.setup.filetype({ "r", "rmd", "rmarkdown" }, {
-    sources = cmp.config.sources(r_sources),
-  })
+  -- cmp.setup.filetype({ "r", "rmd", "rmarkdown", "quarto", "rnoweb", "rhelp" }, {
+  --   sources = cmp.config.sources({
+  --     { name = "cmp_r" },
+  --     { name = "path", priority = 4 },
+  --     { name = "luasnip", max_item_count = 4, priority = 10 },
+  --     { name = "treesitter", priority = 4, max_item_count = 7 },
+  --     { name = "calc", priority = 3 },
+  --     { name = "emoji", priority = 3, max_item_count = 7 },
+  --     { name = "tags", priority = 1, keyword_length = 3 },
+  --     { name = "rg", priority = 1, keyword_length = 3, max_item_count = 7 }
+  --   })
+  -- })
 
   cmp.setup.filetype({ "org", "orgagenda" }, {
     sources = cmp.config.sources({
       { name = "orgmode", priority = 100 },
       { name = "luasnip" },
-      { name = "nvim_lsp" },
+      -- { name = "nvim_lsp" },
       { name = "treesitter", max_item_count = 5 },
       { name = "calc" },
       { name = "emoji", max_item_count = 5 },
+      { name = "rg", max_item_count = 5 },
     })
   })
 
@@ -485,6 +493,11 @@ M.config = function ()
 		au!
 		autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer { sources = { { name = 'vim-dadbod-completion' } } }
 	  augroup END
+    augroup Rsources
+    au!
+    "autocmd FileType r,rmd,terminal lua require("cmp_r").setup({filetypes = {"r", "rmd", "quarto", "terminal"},})
+    autocmd FileType r,rmd set conceallevel=0
+    augroup END
 	]])
 
   vim.keymap.set({ "n", "i", "s" }, "<c-f>", function ()
@@ -498,6 +511,7 @@ M.config = function ()
       return "<c-b>"
     end
   end, { silent = true, expr = true })
+  require("cmp_r").setup({ filetypes = { "r", "rmd", "quarto", "terminal" }, })
 end
 
 return M

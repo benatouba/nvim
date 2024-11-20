@@ -143,26 +143,26 @@ M.config = function ()
       },
     },
 
-    refactor = {
-      highlight_definitions = { enable = true },
-      -- highlight_current_scope = { enable = true },
-      navigation = {
-        enable = true,
-        keymaps = {
-          goto_definition_lsp_fallback = "gd",
-          list_definitions = "gld",
-          list_definitions_toc = "gL",
-          goto_next_usage = "]r",
-          goto_previous_usage = "[r",
-        },
-      },
-      smart_rename = {
-        enable = true,
-        keymaps = {
-          smart_rename = "gr",
-        },
-      },
-    },
+    -- refactor = {
+    --   highlight_definitions = { enable = true },
+    --   -- highlight_current_scope = { enable = true },
+    --   navigation = {
+    --     enable = true,
+    --     keymaps = {
+    --       goto_definition_lsp_fallback = "gd",
+    --       list_definitions = "gld",
+    --       list_definitions_toc = "gL",
+    --       goto_next_usage = "]r",
+    --       goto_previous_usage = "[r",
+    --     },
+    --   },
+    --   smart_rename = {
+    --     enable = true,
+    --     keymaps = {
+    --       smart_rename = "gr",
+    --     },
+    --   },
+    -- },
   })
 end
 return M

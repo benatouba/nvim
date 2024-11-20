@@ -1,19 +1,53 @@
 local M = {}
 
 M.config = function ()
+  vim.opt.completeopt = { "menu", "menuone", "noinsert", "noselect" }
+
+  -- Enable inlay hints
+  vim.api.nvim_create_autocmd("LspAttach", {
+    desc = "Enable inlay hints",
+    callback = function (event)
+      local id = vim.tbl_get(event, "data", "client_id")
+      local client = id and vim.lsp.get_client_by_id(id)
+      if client == nil or not client.supports_method("textDocument/inlayHint") then
+        return
+      end
+
+      vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+    end,
+  })
+
+  -- Expand snippet
+  vim.api.nvim_create_autocmd("LspAttach", {
+    desc = "Enable vim.lsp.completion",
+    callback = function (event)
+      local client_id = vim.tbl_get(event, "data", "client_id")
+      if client_id == nil then
+        return
+      end
+
+      -- warning: this api is unstable
+      vim.lsp.completion.enable(true, client_id, event.buf, { autotrigger = false })
+
+      -- warning: this api is unstable
+      -- Trigger lsp completion manually using Ctrl + Space
+      vim.keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.completion.trigger()<cr>")
+    end
+  })
+
   -- LSP signs default
   vim.diagnostic.config({
     signs = {
-      -- text = {
-      --   [vim.diagnostic.severity.ERROR] = "",
-      --   [vim.diagnostic.severity.WARN] = "",
-      --   [vim.diagnostic.severity.INFO] = "",
-      --   [vim.diagnostic.severity.HINT] = "",
-      -- },
-      numhl = {
-        [vim.diagnostic.severity.ERROR] = "ErrorMsg",
-        [vim.diagnostic.severity.WARN] = "WarningMsg",
+      text = {
+        [vim.diagnostic.severity.ERROR] = "✘",
+        [vim.diagnostic.severity.WARN] = "▲",
+        [vim.diagnostic.severity.HINT] = "⚑",
+        [vim.diagnostic.severity.INFO] = "",
       },
+      -- numhl = {
+      --   [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+      --   [vim.diagnostic.severity.WARN] = "WarningMsg",
+      -- },
     }
   })
 
@@ -77,7 +111,7 @@ M.config = function ()
           end,
           timeout = 14000,
         })
-        fn.setreg("+", "Capabilities = " .. vim.inspect(client.server_capabilities))
+        vim.fn.setreg("+", "Capabilities = " .. vim.inspect(client.server_capabilities))
       end
     end
   end, {})
@@ -100,10 +134,15 @@ M.config = function ()
       --   -- Disable in favor of Conform
       --   client.server_capabilities.documentFormattingProvider = true
       --   client.server_capabilities.documentRangeFormattingProvider = true
+    elseif client.name == "mutt_ls" then
+      vim.diagnostic.enable(not vim.diagnostic.is_enabled())
     elseif client.name == "ruff" then
       -- Disable hover in favor of Pyright
       client.server_capabilities.hoverProvider = false
       client.server_capabilities.definitionProvider = false
+    elseif client.name == "r_language_server" then
+      client.server_capabilities.completionProvider = false
+      client.server_capabilities.completionItemResolve = false
     elseif client.name == "volar" then
       client.server_capabilities.documentFormattingProvider = true
       client.server_capabilities.documentRangeFormattingProvider = false
@@ -130,6 +169,7 @@ M.config = function ()
         { "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens" },
         { "<leader>lq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix" },
         { "<leader>lr", vim.lsp.buf.rename, desc = "Rename" },
+        { "<F2>", vim.lsp.buf.rename, desc = "Rename" },
         { "<leader>lv", "<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>", desc = "Virtual Text" },
         { "<leader>lw", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", desc = "Workspace" },
         { "<leader>lx", "<cmd>cclose<cr>", desc = "Close Quickfix" },
@@ -147,14 +187,13 @@ M.config = function ()
           { "gD", vim.lsp.buf.declaration, desc = "Declaration" },
           { "gd", vim.lsp.buf.definition, desc = "Definition" },
           { "gI", vim.lsp.buf.implementation, desc = "Implementations" },
-          { "gR", vim.lsp.buf.references, desc = "References" },
+          { "gr", vim.lsp.buf.references, desc = "References" },
           { "gt", vim.lsp.buf.type_definition, desc = "Type Definition" },
-          { "gs", vim.lsp.buf.signature_help, desc = "Signature" },
+          { "gS", vim.lsp.buf.signature_help, desc = "Signature" },
         }
       }
     })
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
-    vim.lsp.inlay_hint.enable()
 
     -- -- Highlights occurences of the word under the cursor
     -- vim.api.nvim_create_augroup("LspHighlighting", {})
@@ -429,7 +468,7 @@ M.config = function ()
           return found_ts
         else
           util.path.exists(global_ts)
-          vim.notify("Using global typescript")
+          -- vim.notify("Using global typescript")
           return global_ts
         end
       end
@@ -530,7 +569,10 @@ M.config = function ()
             language = "en-GB",
             additionalRules = {
               motherTongue = "de-DE",
-            }
+            },
+            ["ltex-ls"] = {
+              logLevel = "warning",
+            },
           },
         },
         on_attach = function (client, bufnr)

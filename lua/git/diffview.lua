@@ -20,20 +20,21 @@ end
 M.config = function ()
   diffview.setup({
     diff_binaries = false,
-    key_bindings = {
-      disable_defaults = false,
-    },
-    use_icons = true,
+    enhanced_diff_hl = true,
     view = {
       default = {
         layout = "diff2_horizontal",
+        winbar_info = true,
+        disable_diagnostics = true,
       },
       merge_tool = {
-        layout = "diff3_mixed",
+        layout = "diff3_horizontal",
         disable_diagnostics = true,
+        winbar_info = true,
       },
       file_history = {
         layout = "diff2_horizontal",
+        winbar_info = true,
       },
     },
   })

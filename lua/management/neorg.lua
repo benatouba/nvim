@@ -122,20 +122,20 @@ M.config = function ()
       ["core.summary"] = {},
       -- ["core.ui.calendar"] = {},
       ["external.context"] = {},
-      -- ["external.search"] = {
-      --   config = {
-      --     index_on_start = true,
-      --   }
-      -- },
-      -- ["external.interim-ls"] = {
-      --   config = {
-      --     completion_provider = {
-      --       enable = true,
-      --       -- Try to complete categories. Requires benlubas/neorg-se
-      --       categories = true,
-      --     }
-      --   }
-      -- },
+      ["external.search"] = {
+        config = {
+          index_on_start = true,
+        }
+      },
+      ["external.interim-ls"] = {
+        config = {
+          completion_provider = {
+            enable = true,
+            -- Try to complete categories. Requires benlubas/neorg-se
+            categories = true,
+          }
+        }
+      },
       ["core.keybinds"] = {
         config = {
           default_keybinds = true,

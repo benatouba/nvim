@@ -98,7 +98,7 @@ vim.diagnostic.config({
     show_header = true,
     source = true,
     border = "rounded",
-    focusable = false,
+    focusable = true,
   },
 })
 

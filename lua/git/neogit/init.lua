@@ -3,6 +3,10 @@ if not isOk then
   vim.notify("Neogit not okay")
 end
 
+local wkOk, wk = pcall(require, "which-key")
+if not wkOk then
+  vim.notify("Which-key not okay in neogit")
+end
 local M = {}
 
 M.config = function ()
@@ -21,6 +25,20 @@ M.config = function ()
     },
     disable_commit_confirmation = true,
   }
+  wk.add(
+    {
+      { "<leader>g", group = "+Git", nowait = false, remap = false },
+      { "<leader>gb", "<cmd>Neogit branch<cr>", desc = "Branch (Menu)", nowait = false, remap = false },
+      { "<leader>gc", "<cmd>Neogit commit<cr>", desc = "Commit (Menu)", nowait = false, remap = false },
+      { "<leader>gC", "<cmd>Neogit cherry_pick<cr>", desc = "Cherry Pick (Menu)", nowait = false, remap = false },
+      { "<leader>gd", "<cmd>Neogit diff<cr>", desc = "Diff (Menu)", nowait = false, remap = false },
+      { "<leader>gg", "<cmd>Neogit<cr>", desc = "Neogit (alias)", nowait = false, remap = false },
+      { "<leader>gl", "<cmd>NeogitLogCurrent<cr>", desc = "Log", nowait = false, remap = false },
+      { "<leader>gn", "<cmd>Neogit<cr>", desc = "Neogit", nowait = false, remap = false },
+      { "<leader>gp", "<cmd>Neogit pull<cr>", desc = "Pull", nowait = false, remap = false },
+      { "<leader>gP", "<cmd>Neogit push<cr>", desc = "Push", nowait = false, remap = false },
+    }
+  )
 end
 
 return M
