@@ -657,7 +657,7 @@ lazy.setup({
     "NeogitOrg/neogit",
     dependencies = {
       "sindrets/diffview.nvim",
-      keys = "<leader>g",
+      keys = {"<leader>", "g", "<c-o>"},
       cmd = "DiffviewOpen",
       event = "BufReadPost",
       config = function ()
@@ -667,7 +667,7 @@ lazy.setup({
     -- branch = "nightly",
     cmd = "Neogit",
     event = "InsertEnter",
-    keys = "<leader>g",
+    keys = {"<leader>", "g", "<c-o>"},
     config = function ()
       require("git.neogit").config()
     end,

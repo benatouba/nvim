@@ -24,6 +24,7 @@ M.config = function ()
       telescope = tsOk,
     },
     disable_commit_confirmation = true,
+    graph_style = "unicode",
   }
   wk.add(
     {
