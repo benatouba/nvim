@@ -71,7 +71,7 @@ lazy.setup({
     },
     enabled = O.lsp,
   },
-  { 'echasnovski/mini.notify', version = false },
+  { "echasnovski/mini.notify", version = false },
   {
     "rcarriga/nvim-notify",
     config = function ()
@@ -837,7 +837,7 @@ lazy.setup({
     "mfussenegger/nvim-lint",
     config = function ()
       require("lint").linters_by_ft = {
-        -- tex = { "chktex" },
+        tex = { "proselint" },
         -- latex = { "vale" },
         zsh = { "zsh" },
         jinja = { "djlint" },
@@ -881,6 +881,7 @@ lazy.setup({
           json = { "prettierd", "prettier", stop_after_first = true },
           yaml = { "prettierd", "prettier", stop_after_first = true },
           markdown = { "prettierd", "prettier", stop_after_first = true },
+          gitcommit = { "commitmsgfmt", },
           ["*"] = { "codespell" },
           ["_"] = { "trim_whitespace" },
         },
