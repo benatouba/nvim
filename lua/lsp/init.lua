@@ -17,23 +17,6 @@ M.config = function ()
     end,
   })
 
-  -- Expand snippet
-  vim.api.nvim_create_autocmd("LspAttach", {
-    desc = "Enable vim.lsp.completion",
-    callback = function (event)
-      local client_id = vim.tbl_get(event, "data", "client_id")
-      if client_id == nil then
-        return
-      end
-
-      -- warning: this api is unstable
-      vim.lsp.completion.enable(true, client_id, event.buf, { autotrigger = false })
-
-      -- warning: this api is unstable
-      -- Trigger lsp completion manually using Ctrl + Space
-      vim.keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.completion.trigger()<cr>")
-    end
-  })
 
   -- LSP signs default
   vim.diagnostic.config({
@@ -44,10 +27,6 @@ M.config = function ()
         [vim.diagnostic.severity.HINT] = "⚑",
         [vim.diagnostic.severity.INFO] = "",
       },
-      -- numhl = {
-      --   [vim.diagnostic.severity.ERROR] = "ErrorMsg",
-      --   [vim.diagnostic.severity.WARN] = "WarningMsg",
-      -- },
     }
   })
 
