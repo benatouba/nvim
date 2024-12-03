@@ -4,19 +4,38 @@ M.config = function ()
   vim.opt.completeopt = { "menu", "menuone", "noinsert", "noselect" }
 
   -- Enable inlay hints
-  vim.api.nvim_create_autocmd("LspAttach", {
-    desc = "Enable inlay hints",
-    callback = function (event)
-      local id = vim.tbl_get(event, "data", "client_id")
-      local client = id and vim.lsp.get_client_by_id(id)
-      if client == nil or not client.supports_method("textDocument/inlayHint") then
-        return
-      end
+  -- vim.api.nvim_create_autocmd("LspAttach", {
+  --   desc = "Enable inlay hints",
+  --   callback = function (event)
+  --     local id = vim.tbl_get(event, "data", "client_id")
+  --     local client = id and vim.lsp.get_client_by_id(id)
+  --     if client == nil or not client.supports_method("textDocument/inlayHint") then
+  --       return
+  --     end
+  --
+  --     vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+  --   end,
+  -- })
 
-      vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
-    end,
-  })
-
+  -- local lsp_autocommands = vim.api.nvim_create_augroup("LspAutocommands", { clear = true })
+  -- -- Expand snippet
+  -- vim.api.nvim_create_autocmd("LspAttach", {
+  --   group = lsp_autocommands,
+  --   desc = "Enable vim.lsp.completion",
+  --   callback = function (event)
+  --     local client_id = vim.tbl_get(event, "data", "client_id")
+  --     if client_id == nil then
+  --       return
+  --     end
+  --
+  --     -- warning: this api is unstable
+  --     vim.lsp.completion.enable(true, client_id, event.buf, { autotrigger = false })
+  --
+  --     -- warning: this api is unstable
+  --     -- Trigger lsp completion manually using Ctrl + Space
+  --     vim.keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.completion.trigger()<cr>")
+  --   end
+  -- })
 
   -- LSP signs default
   vim.diagnostic.config({
@@ -129,39 +148,39 @@ M.config = function ()
     elseif client.name == "cssmodules_ls" then
       client.server_capabilities.definitionProvider = true
     end
+    vim.keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.completion.trigger()<cr>")
     wk.add({
       {
         { buffer = bufnr },
+        { "<C-K>", vim.lsp.buf.signature_help, desc = "Signature", mode = { "n", "i" } },
+        { "<F2>", vim.lsp.buf.rename, desc = "Rename" },
         { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
-        { "<leader>lC", "<cmd>LspCapabilities<cr>", desc = "Server Capabilities" },
-        { "<leader>lD", "<cmd>Telescope lsp_declarations<cr>", desc = "Declarations" },
-        { "<leader>lF", "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", desc = "Format Document (Sync)" },
-        { "<leader>lL", "<cmd>LspLog<CR>", desc = "Logs", icon = { icon = " ", color = "green" } },
-        { "<leader>lR", "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>", desc = "Refactor" },
         { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action" },
         { "<leader>lc", "<cmd>e $HOME/.config/nvim/lua/lsp/init.lua<cr>", desc = "Config" },
+        { "<leader>lC", "<cmd>LspCapabilities<cr>", desc = "Server Capabilities" },
         { "<leader>ld", "<cmd>Telescope lsp_definitions<cr>", desc = "Definitions" },
-        -- f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" }, covered by conform.nvim
-        -- with lsp_fallback
+        { "<leader>lD", "<cmd>Telescope lsp_declarations<cr>", desc = "Declarations" },
         { "<leader>lh", vim.lsp.buf.hover, desc = "Hover" },
+        { "<leader>lF", "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", desc = "Format Document (Sync)" },
         { "<leader>li", "<cmd>LspInfo<cr>", desc = "Info" },
         { "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens" },
+        { "<leader>lL", "<cmd>LspLog<CR>", desc = "Logs", icon = { icon = " ", color = "green" } },
         { "<leader>lq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix" },
         { "<leader>lr", vim.lsp.buf.rename, desc = "Rename" },
-        { "<F2>", vim.lsp.buf.rename, desc = "Rename" },
+        { "<leader>lR", "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>", desc = "Refactor" },
         { "<leader>lv", "<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>", desc = "Virtual Text" },
         { "<leader>lw", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", desc = "Workspace" },
         { "<leader>lx", "<cmd>cclose<cr>", desc = "Close Quickfix" },
         { "<leader>s", group = "Search" },
-        { "<leader>sD", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document Diagnostics" },
-        { "<leader>sS", "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Workspace Symbols (LSP)" },
         { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "Workspace Diagnostics" },
+        { "<leader>sD", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document Diagnostics" },
         { "<leader>si", "<cmd>Telescope lsp_implementations<cr>", desc = "Implementations" },
         { "<leader>sr", "<cmd>Telescope lsp_references<cr>", desc = "References" },
         { "<leader>sS", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document Symbols (LSP)" },
         { "<leader>ss", "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Workspace Symbols (LSP)" },
         { "K", vim.lsp.buf.hover, desc = "Hover" },
-        { "<C-K>", vim.lsp.buf.signature_help, desc = "Signature", mode = { "n", "i" } },
+        -- f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" }, covered by conform.nvim
+        -- with lsp_fallback
         {
           mode = { "n", "x", "v" },
           { "gD", vim.lsp.buf.declaration, desc = "Declaration" },
@@ -169,7 +188,7 @@ M.config = function ()
           { "gI", vim.lsp.buf.implementation, desc = "Implementations" },
           { "gr", vim.lsp.buf.references, desc = "References" },
           { "gt", vim.lsp.buf.type_definition, desc = "Type Definition" },
-          { "gS", vim.lsp.buf.signature_help, desc = "Signature" },
+          { "gs", vim.lsp.buf.signature_help, desc = "Signature" },
         }
       }
     })
@@ -205,8 +224,8 @@ M.config = function ()
   --   end
   -- end
 
-  lspconfig.util.default_config =
-    vim.tbl_deep_extend("force", lspconfig.util.default_config, lsp_defaults)
+  lspconfig.util.default_config = vim.tbl_deep_extend("force", lspconfig.util.default_config,
+    lsp_defaults)
   require("mason-lspconfig").setup_handlers({
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
