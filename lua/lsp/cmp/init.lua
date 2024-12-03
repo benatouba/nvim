@@ -17,15 +17,9 @@ local bufIsBig = function (bufnr)
 end
 
 M.config = function ()
-  require("luasnip.loaders.from_vscode").lazy_load()
-  require("luasnip").filetype_extend("vue",
-    { "html", "nuxt_html", "nuxt_script", "script", "style", "vue", })
-  require("luasnip").filetype_extend("python", { "django", "django/django_rest" })
-
   vim.opt.completeopt = { "menu", "menuone", "noselect" }
   -- local neogen_ok, neogen = pcall(require, "neogen")
   local cmp_ok, cmp = pcall(require, "cmp")
-  local snip_ok, luasnip = pcall(require, "luasnip")
   local lspkind_ok, lspkind = pcall(require, "lspkind")
   local types = require("cmp.types")
   local str = require("cmp.utils.str")
@@ -35,9 +29,6 @@ M.config = function ()
   end
   if not lspkind_ok then
     vim.notify("lspkind not ok")
-  end
-  if not snip_ok then
-    vim.notify("luasnip not ok")
   end
 
   -- require("cmp-npm").setup({})
@@ -51,7 +42,6 @@ M.config = function ()
     { name = "neorg" },
     { name = "npm", priority = 10, keyword_length = 4 },
     { name = "path", priority = 4 },
-    { name = "luasnip", max_item_count = 4, priority = 10 },
     { name = "nvim_lsp", keyword_length = 0, priority = 9 },
     { name = "treesitter", priority = 4, max_item_count = 7 },
     { name = "calc", priority = 3 },
@@ -201,11 +191,6 @@ M.config = function ()
         end
       }),
     },
-    snippet = {
-      expand = function (args)
-        luasnip.lsp_expand(args.body)
-      end,
-    },
     window = {
       completion = cmp.config.window.bordered({
         autocomplete = true,
@@ -285,8 +270,6 @@ M.config = function ()
         local cp_ok, cp = pcall(require, "copilot.suggestion")
         if cmp.visible() then
           cmp.select_next_item()
-        elseif luasnip.expand_or_jumpable() then
-          luasnip.expand_or_jump()
         elseif cp_ok and cp.is_visible() then
           cp.next()
         else
@@ -297,8 +280,6 @@ M.config = function ()
         local cp_ok, cp = pcall(require, "copilot.suggestion")
         if cmp.visible() then
           cmp.select_prev_item()
-        elseif luasnip.expand_or_jumpable() then
-          luasnip.expand_or_jump()
         elseif cp.is_visible() and cp_ok then
           cp.prev()
         else
@@ -309,11 +290,8 @@ M.config = function ()
       ["<C-b>"] = cmp.mapping.scroll_docs(-4),
       ["<Tab>"] = cmp.mapping(function (fallback)
         local cp_ok, cp = pcall(require, "copilot.suggestion")
-        local entry = cmp.get_selected_entry()
         local supermaven_ok, supermaven = pcall(require, "supermaven-nvim.completion_preview")
-        if luasnip.expand_or_jumpable() then
-          luasnip.expand_or_jump()
-        elseif cmp.visible() then
+        if cmp.visible() then
           cmp.select_next_item()
         elseif supermaven_ok and supermaven.has_suggestion() then
           supermaven.on_accept_suggestion()
@@ -326,19 +304,14 @@ M.config = function ()
         end
       end, { "i", "s", "c" }),
       ["<S-Tab>"] = cmp.mapping(function (fallback)
-        if luasnip.expand_or_jumpable() then
-          luasnip.jump(-1)
-        elseif cmp.visible() then
+        if cmp.visible() then
           cmp.select_prev_item()
-        elseif luasnip.jumpable(-1) then
-          luasnip.jump(-1)
         else
           fallback()
         end
       end, { "i", "s", "c" }),
     }),
     sources = default_cmp_sources,
-    --                 ﬘    m    
   })
   vim.api.nvim_create_autocmd("BufReadPre", {
     callback = function (t)
@@ -355,7 +328,6 @@ M.config = function ()
     sources = cmp.config.sources({
       { name = "lua-latex-symbols", option = { cache = true }, priority = 10 },
       { name = "vimtex" },
-      { name = "luasnip" },
       { name = "nvim_lsp", max_item_count = 5 },
       { name = "treesitter", max_item_count = 5 },
       { name = "calc" },
@@ -380,8 +352,6 @@ M.config = function ()
   cmp.setup.filetype({ "org", "orgagenda" }, {
     sources = cmp.config.sources({
       { name = "orgmode", priority = 100 },
-      { name = "luasnip" },
-      -- { name = "nvim_lsp" },
       { name = "treesitter", max_item_count = 5 },
       { name = "calc" },
       { name = "emoji", max_item_count = 5 },
@@ -392,7 +362,6 @@ M.config = function ()
   cmp.setup.filetype({ "norg", "neorg" }, {
     sources = cmp.config.sources({
       { name = "neorg" },
-      { name = "luasnip" },
       { name = "nvim_lsp" },
       { name = "treesitter", max_item_count = 10 },
       { name = "rg", max_item_count = 5 },
@@ -408,7 +377,6 @@ M.config = function ()
   cmp.setup.filetype({ "ipynb", "jupyter_python", "jupynium" }, {
     sources = cmp.config.sources({
       -- { name = "jupynium",   priority = 1000 },
-      { name = "luasnip" },
       { name = "nvim_lsp" },
       -- { name = "nvim_lsp_signature_help" },
       { name = "treesitter", keyword_length = 3 },
@@ -457,7 +425,6 @@ M.config = function ()
   cmp.setup.filetype({ "gitcommit", "NeogitCommitMessage" }, {
     sources = cmp.config.sources({
       { name = "git", max_item_count = 10 },
-      { name = "luasnip" },
       { name = "treesitter", max_item_count = 5 },
       { name = "calc" },
       { name = "emoji", max_item_count = 10 },

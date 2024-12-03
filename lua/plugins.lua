@@ -120,7 +120,6 @@ lazy.setup({
       "max397574/neorg-contexts",
       "benlubas/neorg-se",
       "benlubas/neorg-interim-ls",
-      -- { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
     },
     enabled = O.project_management and false,
   },
@@ -587,20 +586,7 @@ lazy.setup({
         end,
         enabled = false,
       },
-      {
-        "L3MON4D3/LuaSnip",
-        version = "v2.*",
-        dependencies = "friendly-snippets",
-        build = "make install_jsregexp",
-        config = function ()
-          require("snippets.luasnip").config()
-        end,
-      },
-      "saadparwaiz1/cmp_luasnip",
       "amarakon/nvim-cmp-lua-latex-symbols",
-      -- "f3fora/cmp-spell",
-      -- "quangnguyen30192/cmp-nvim-tags",
-      -- "octaltree/cmp-look",
       {
         "onsails/lspkind-nvim",
         lazy = true,
