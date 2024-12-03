@@ -828,8 +828,9 @@ lazy.setup({
   { "kevinhwang91/nvim-bqf", event = "InsertEnter", enabled = O.misc },
   {
     "stevearc/overseer.nvim",
+    lazy = true,
     config = function ()
-      require("misc.overseer").config()
+      require("overseer.config").config()
     end,
     enabled = O.misc,
   },
