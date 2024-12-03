@@ -179,7 +179,8 @@ M.config = function ()
         { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "Workspace Diagnostics" },
         { "<leader>si", "<cmd>Telescope lsp_implementations<cr>", desc = "Implementations" },
         { "<leader>sr", "<cmd>Telescope lsp_references<cr>", desc = "References" },
-        { "<leader>ss", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document Symbols (LSP)" },
+        { "<leader>sS", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document Symbols (LSP)" },
+        { "<leader>ss", "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Workspace Symbols (LSP)" },
         { "K", vim.lsp.buf.hover, desc = "Hover" },
         { "<C-K>", vim.lsp.buf.signature_help, desc = "Signature", mode = { "n", "i" } },
         {

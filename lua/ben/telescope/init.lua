@@ -28,7 +28,6 @@ M.config = function ()
   telescope.setup {
     defaults = {
       find_command = { "rg", "--hidden", "--line-number", "--column", "--smart-case", "--color" },
-      -- prompt_prefix = " ",
       prompt_prefix = " ",
       selection_caret = " ",
       entry_prefix = " ",
@@ -138,7 +137,7 @@ M.config = function ()
     { "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man Pages" },
     { "<leader>sN", "<cmd>Noice telescope<cr>", desc = "Noice Notifications" },
     { "<leader>sR", "<cmd>Telescope registers<cr>", desc = "Registers" },
-    { "<leader>sT", "<cmd>Telescope treesitter<cr>", desc = "Treesitter Symbols" },
+    -- { "<leader>sT", "<cmd>Telescope treesitter<cr>", desc = "Treesitter Symbols" },
     { "<leader>sb", "<cmd>Telescope git_branches<cr>", desc = "Branches" },
     { "<leader>sc", "<cmd>Telescope colorscheme<cr>", desc = "Colorscheme" },
     { "<leader>sf", "<cmd>Telescope find_files hidden=true<cr>", desc = "Find File" },
