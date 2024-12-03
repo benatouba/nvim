@@ -116,7 +116,7 @@ M.config = function ()
       separator = { left = "", right = "" },
     })
   end
-  config.sections.lualine_c = { { "diff", source = diff_source }, "diagnostics", }
+  config.sections.lualine_c = { { "diff", source = diff_source }, "diagnostics", "oil" }
   config.sections.lualine_x = {
     "overseer",
     { get_lsp_client },

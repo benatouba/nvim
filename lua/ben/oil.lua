@@ -80,11 +80,9 @@ function _G.get_oil_winbar()
   end
 end
 
-return {
-  "stevearc/oil.nvim",
-  ---@module 'oil'
-  ---@type oil.SetupOpts
-  opts = {
+local M = {}
+M.config = function ()
+  require("oil").setup({
     win_options = {
       wrap = true,
       winbar = "%!v:lua.get_oil_winbar()",
@@ -140,6 +138,6 @@ return {
       ["<q>"] = { "actions.close", mode = "n", desc = "Close the entry" },
       ["<esc>"] = { "<cmd>q<cr>", desc = "Close neovim" },
     },
-  },
-  dependencies = { "nvim-tree/nvim-web-devicons" },
-}
+  })
+end
+return M

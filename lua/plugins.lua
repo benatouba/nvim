@@ -203,7 +203,11 @@ lazy.setup({
       })
     end,
   },
-  require("ben.oil"),
+  {
+    "stevearc/oil.nvim",
+    config = function () require("ben.oil").config() end,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
