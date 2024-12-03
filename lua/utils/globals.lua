@@ -48,8 +48,8 @@ end
 
 Get_python_venv = function ()
   local lsputil = require("lspconfig/util")
-  fn.system("pyenv init")
-  fn.system("pyenv init -")
+  -- fn.system("pyenv init")
+  -- fn.system("pyenv init -")
 
   if vim.env.VIRTUAL_ENV then
     return vim.env.VIRTUAL_ENV
