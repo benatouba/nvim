@@ -83,7 +83,7 @@ M.config = function ()
       persist_queries = false,  -- Whether the query persists across vim sessions
     },
     rainbow = {
-      enable = true,
+      enable = false,
       extended_mode = true,  -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
       max_file_lines = 1000,  -- Do not enable for files with more than 1000 lines, int
     },
@@ -95,10 +95,10 @@ M.config = function ()
         lookahead = true,
         keymaps = {
           -- You can use the capture groups defined in textobjects.scm
-          ["af"] = "@function.outer",
-          ["if"] = "@function.inner",
-          ["ac"] = "@class.outer",
-          ["ic"] = "@class.inner",
+          ["af"] = { query = "@function.outer", desc = "around function" },
+          ["if"] = { query = "@function.inner", desc = "in function" },
+          ["ac"] = { query = "@class.outer", desc = "around class" },
+          ["ic"] = { query = "@class.inner", desc = "in class" },
         },
       },
 
@@ -116,8 +116,8 @@ M.config = function ()
         enable = true,
         set_jumps = true,  -- adds movement to the jumplist
         goto_next_start = {
-          ["]m"] = "@function.outer",
-          ["]]"] = "@class.outer",
+          ["]m"] = { query = "@function.outer", desc = "next function" },
+          ["]]"] = { query = "@class.outer", desc = "Next class" },
         },
         goto_next_end = {
           ["]M"] = "@function.outer",
@@ -136,6 +136,7 @@ M.config = function ()
       lsp_interop = {
         enable = true,
         border = "rounded",
+        loating_preview_opts = {},
         peek_definition_code = {
           ["gp"] = "@function.outer",
           ["gP"] = "@class.outer",
@@ -164,5 +165,18 @@ M.config = function ()
     --   },
     -- },
   })
+  local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
+
+  -- Repeat movement with ; and ,
+  -- ensure ; goes forward and , goes backward regardless of the last direction
+  vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
+  vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
+  --
+  -- Optionally, make builtin f, F, t, T also repeatable with ; and ,
+  vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
+  vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
+  vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
+  vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
+  vim.treesitter.language.register('markdown', 'octo')
 end
 return M
