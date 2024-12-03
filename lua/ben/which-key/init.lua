@@ -13,6 +13,7 @@ which_key.add({
   { "<leader>t", "<cmd>ToggleTermSendVisualLines<cr>", desc = "Send to terminal", mode = "v" },
   { "<leader>e", ":Oil<cr>", desc = "Explorer", icon = { icon = " ", color = "yellow" } },
   { "<leader>u", ":UndotreeToggle<cr>", desc = "Undotree", icon = { icon = "", color = "green" } },
+  { "<leader>f", "<cmd>lua P(vim.api.nvim_buf_get_name(0))<cr>", desc = "Show Filename", icon = { icon = "", color = "blue" } },
   -- Buffers
   -- { "<leader>b", group = "+Buffers" },
   { "<leader><leader>", ":bprevious<cr>", desc = "Switch Buffer" },
