@@ -52,7 +52,7 @@ utils.add_autocommands({
     },
     {
       "FileType",
-      "checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard,notify,query,floaterm,dashboard",
+      "acwrite,checkhealth,help,lsp-installer,qf,fugitive,lspinfo,dashboard,notify,query,floaterm,dashboard",
       "nnoremap <silent> <buffer> <esc> :q<CR>",
     },
     { "FileType", "nofile,httpResult", "nnoremap <silent> <buffer> q :q<CR>" },
