@@ -48,22 +48,31 @@ M.config = function()
   wk.add({
     { "<leader>T", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal" },
     { "<leader>gL", "<cmd>lua require('misc.toggleterm').LazyGit()<cr>", desc = "LazyGit" },
+    { "<leader>B", "<cmd>lua require('misc.toggleterm').btop()<cr>", desc = "LazyGit" },
     -- { "<leader>tv", "yi\"<cmd>lua require('misc.toggleterm').VisiData(vim.cmd[[p]])<cr>", desc = "VisiData" },
     { "<leader>tv", "yi\"<cmd>lua P(vim.cmd[[p]])<cr>", desc = "VisiData" },
     { "<leader>tV", "<cmd>lua require('misc.toggleterm').VisiData(vim.api.nvim_buf_get_name(0))<cr>", desc = "VisiData (File)" },
   })
+end
+M.btop = function()
+  local Terminal = require("toggleterm.terminal").Terminal
+  local btop = Terminal:new({
+    cmd = "btop",
+    direction = "tab",
+    on_open = function(term)
+      local keymap = vim.api.nvim_buf_set_keymap
+      keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
+      keymap(term.bufnr, "t", "<esc>", "<cmd>close<CR>", { noremap = true, silent = true })
+    end,
+  })
+  return btop:toggle()
 end
 
 M.LazyGit = function()
   local Terminal = require("toggleterm.terminal").Terminal
   local lazygit = Terminal:new({
     cmd = "lazygit",
-    direction = "float",
-    float_opts = {
-      border = "rounded",
-      width = 125,
-      height = 35,
-    },
+    direction = "tab",
     on_open = function(term)
       local keymap = vim.api.nvim_buf_set_keymap
       keymap(term.bufnr, "n", "q", "<cmd>close<CR>", { noremap = true, silent = true })
