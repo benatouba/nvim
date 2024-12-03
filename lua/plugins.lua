@@ -624,6 +624,18 @@ lazy.setup({
     enabled = O.git and O.databases,
   },
   {
+    "pwntester/octo.nvim",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+      -- OR 'ibhagwan/fzf-lua',
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function ()
+      require "octo".setup()
+    end
+  },
+  {
     "kristijanhusak/vim-dadbod-ui",
     dependencies = {
       { "tpope/vim-dadbod", lazy = true },
@@ -663,7 +675,7 @@ lazy.setup({
     "NeogitOrg/neogit",
     dependencies = {
       "sindrets/diffview.nvim",
-      keys = {"<leader>", "g", "<c-o>"},
+      keys = { "<leader>g", "g", "<c-o>" },
       cmd = "DiffviewOpen",
       event = "BufReadPost",
       config = function ()
@@ -672,8 +684,8 @@ lazy.setup({
     },
     -- branch = "nightly",
     cmd = "Neogit",
-    event = "InsertEnter",
-    keys = {"<leader>", "g", "<c-o>"},
+    event = { "CursorMoved", "InsertEnter" },
+    keys = { "<leader>g", "g", "<c-o>" },
     config = function ()
       require("git.neogit").config()
     end,
@@ -684,12 +696,13 @@ lazy.setup({
     config = function ()
       require("git.gitsigns").config()
     end,
-    event = "BufReadPost",
+    -- event = "BufReadPost",
     enabled = O.git,
   },
   {
     "nvim-neotest/neotest",
-    event = "BufReadPost",
+    event = { "InsertEnter" },
+    keys = { "<leader>t" },
     lazy = true,
     dependencies = {
       "nvim-neotest/neotest-python",
