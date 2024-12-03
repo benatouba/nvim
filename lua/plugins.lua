@@ -23,10 +23,6 @@ end
 lazy.setup({
   { "mistweaverco/kulala.nvim", config = function () require("kulala").setup() end, enabled = false, },
   "nvim-lua/plenary.nvim",  -- most important functions (very important)
-  -- {
-  --   "microsoft/python-type-stubs",
-  --   enabled = O.python and O.lsp,
-  -- },
   {
     "m4xshen/smartcolumn.nvim",
     opts = {
@@ -63,7 +59,6 @@ lazy.setup({
     },
     enabled = O.lsp,
   },
-  -- { "echasnovski/mini.notify", version = false },
   { "echasnovski/mini.ai", version = false },
   {
     "rcarriga/nvim-notify",
@@ -94,15 +89,11 @@ lazy.setup({
       vim.notify = require("notify")
       require("telescope").load_extension("notify")
     end,
-    -- event = "VeryLazy",
     dependencies = "telescope.nvim",
     enabled = O.misc and O.lsp,
   },
   {
     "nvim-neorg/neorg",
-    -- event = "VeryLazy",
-    -- lazy = false,
-    -- event = { "BufReadPost", "BufNewFile", "VimEnter" },
     version = "*",
     ft = "norg",
     keys = { "<leader>o", "g" },
@@ -114,7 +105,6 @@ lazy.setup({
       "max397574/neorg-contexts",
       "benlubas/neorg-se",
       "benlubas/neorg-interim-ls",
-      -- { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } },
     },
     enabled = O.project_management and false,
   },
@@ -226,10 +216,6 @@ lazy.setup({
         "AndreM222/copilot-lualine",
         enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.copilot,
       },
-      -- {
-      --   "arkav/lualine-lsp-progress",
-      --   enabled = O.lsp,
-      -- },
     },
     config = function ()
       require("ben.lualine").config()
@@ -277,15 +263,6 @@ lazy.setup({
     end,
     keys = { "<C-a>", "<C-x>" },
   },  -- increment/decrement basically everything,
-  -- {
-  --   "numToStr/Comment.nvim",
-  --   config = function ()
-  --     require("ben.comment_nvim").config()
-  --   end,
-  --   event = { "InsertEnter", "CmdlineEnter", "CursorMoved" },
-  --   keys = { "g", "gc" },
-  --   enabled = false,
-  -- },
   {
     "mbbill/undotree",
     lazy = true,
@@ -325,8 +302,6 @@ lazy.setup({
   {
     "nvim-treesitter/nvim-treesitter",
     dependencies = {
-      -- "RRethy/nvim-treesitter-endwise",
-      -- "nvim-treesitter/nvim-treesitter-refactor",
       {
         "LiadOz/nvim-dap-repl-highlights",
         config = function ()
@@ -335,8 +310,6 @@ lazy.setup({
       },
     },
     build = ":TSUpdate",
-    -- lazy = true,
-    -- event = "VeryLazy",
     config = function ()
       require("language_parsing.treesitter").config()
     end,
@@ -359,24 +332,6 @@ lazy.setup({
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
     ft = { "vue", "svelte", "typescriptreat", "html" },
-    -- dependencies = { "nvim-treesitter", "Comment.nvim" },
-    -- config = function ()
-    --   local tsc_ok, tsc = pcall(require, "ts_context_commentstring")
-    --   if not tsc_ok then
-    --     vim.notify("TS-Context-Commentstring not ok")
-    --   end
-    --   local opts = {
-    --     ignore = "^$",
-    --   }
-    --   if tsc_ok then
-    --     tsc.setup({
-    --       enable_autocmd = false,
-    --     })
-    --     opts.pre_hook =
-    --       require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook()
-    --   end
-    --   require("Comment").setup(opts)
-    -- end,
     enabled = O.webdev and O.language_parsing,
   },
   {
@@ -447,8 +402,6 @@ lazy.setup({
         tools = {
           curl = "/usr/bin/curl",
           gzip = "/usr/bin/gzip",
-          -- language_server = vim.fn.expand("~") .. "/.local/bin/termium_language_server_linux_x64"
-          -- language_server = "/home/ben/.local/bin/termium_language_server_linux_x64"
         }
       })
     end,
@@ -466,7 +419,6 @@ lazy.setup({
         },
         ignore_filetypes = { "env" },
         color = {
-          -- suggestion_color = "#ffffff",
           cterm = 244,
         }
       })
@@ -508,10 +460,7 @@ lazy.setup({
       "hrsh7th/cmp-nvim-lsp",
       "b0o/SchemaStore.nvim",
     },
-    -- lazy = true,
     event = { "BufReadPre", "BufNewFile", "InsertEnter" },
-    -- cmd = {"LspInfo", "LspStart", "LspInstallInfo"},
-    -- keys = { "<leader>l", "i"},
     config = function ()
       require("lsp").config()
     end,
@@ -564,10 +513,8 @@ lazy.setup({
     dependencies = {
       "rcarriga/cmp-dap",
       "rafamadriz/friendly-snippets",
-      -- "hrsh7th/cmp-buffer",
       { "hrsh7th/cmp-nvim-lsp", enabled = O.lsp },
       { "hrsh7th/cmp-nvim-lsp-document-symbol", enabled = O.lsp },
-      -- "hrsh7th/cmp-nvim-lsp-signature-help",
       "micangl/cmp-vimtex",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-nvim-lua",
@@ -602,14 +549,11 @@ lazy.setup({
   },
   {
     "folke/trouble.nvim",
-    -- cmd = { "TroubleToggle", "Trouble", "Gitsigns setqflist", "Gitsigns setloclist" },
-    -- event = "LspAttach",
     enabled = O.language_parsing or O.lsp,
   },
   {
     "tpope/vim-dadbod",
     lazy = false,
-    -- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"},
     enabled = O.git and O.databases,
   },
   {
@@ -617,7 +561,6 @@ lazy.setup({
     requires = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
-      -- OR 'ibhagwan/fzf-lua',
       "nvim-tree/nvim-web-devicons",
     },
     config = function ()
@@ -646,7 +589,6 @@ lazy.setup({
   {
     "kristijanhusak/vim-dadbod-completion",
     lazy = true,
-    -- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"},
     config = function ()
       vim.cmd([[
 				  autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
@@ -657,7 +599,6 @@ lazy.setup({
   {
     "tpope/vim-fugitive",
     lazy = false,
-    -- cmd = {"G", "Git push", "Git pull", "Gdiffsplit!", "Gvdiffsplit!"},
     enabled = false,
   },
   {
@@ -671,7 +612,6 @@ lazy.setup({
         require("git.diffview").config()
       end,
     },
-    -- branch = "nightly",
     cmd = "Neogit",
     event = { "CursorMoved", "InsertEnter" },
     keys = { "<leader>g", "g", "<c-o>" },
@@ -685,7 +625,6 @@ lazy.setup({
     config = function ()
       require("git.gitsigns").config()
     end,
-    -- event = "BufReadPost",
     enabled = O.git,
   },
   {
@@ -700,7 +639,6 @@ lazy.setup({
       "vim-test/vim-test",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
-      -- "antoinemadec/FixCursorHold.nvim",
     },
     config = function ()
       require("test.neotest").config()
@@ -832,7 +770,6 @@ lazy.setup({
     config = function ()
       require("lint").linters_by_ft = {
         tex = { "proselint" },
-        -- latex = { "vale" },
         zsh = { "zsh" },
         jinja = { "djlint" },
         htmldjango = { "djlint" },
@@ -867,7 +804,6 @@ lazy.setup({
           javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
           typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
           typescriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
-          -- tex = { "latexindent", "llf", stop_after_first = true },
           vue = { "prettierd", "prettier", stop_after_first = true },
           css = { "prettierd", "prettier", stop_after_first = true },
           scss = { "prettierd", "prettier", stop_after_first = true },
@@ -1187,15 +1123,6 @@ lazy.setup({
     opts = {},
     enabled = O.markdown,
   },
-  -- { "szw/vim-maximizer", enabled = false },
-  -- for notebooks,
-  -- use({
-  -- 	"bfredl/nvim-ipy",
-  -- 	ft = "ipynb",
-  -- 	config = function()
-  -- 		require("notebooks.nvim-ipy").config()
-  -- 	end,
-  -- })
   {
     "kiyoon/jupynium.nvim",
     build = "pip3 install --user .",
@@ -1248,7 +1175,6 @@ lazy.setup({
   },
   {
     "3rd/image.nvim",
-    enabled = false,
     event = "InsertEnter",
     ft = { "markdown", "vimwiki", "norg", "org", "typst", "css", "html" },
     config = function ()
@@ -1287,7 +1213,7 @@ lazy.setup({
         hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.avif" },  -- render image files as images when opened
       })
     end,
-    enabled = vim.fn.executable("ueberzugpp") == 1 and O.misc,
+    enabled = vim.fn.executable("ueberzugpp") == 1 and O.misc and false,
   },
   { "nvim-neotest/nvim-nio" },
   {
