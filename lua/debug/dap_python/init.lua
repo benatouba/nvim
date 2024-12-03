@@ -27,14 +27,14 @@ M.config = function()
 	end
 
 	dap_py.setup("python")
-	-- dap_py.test_runner = "unittest"
+	dap_py.test_runner = "pytest"
   local wk_ok, wk = pcall(require, "which-key")
   if not wk_ok then
     vim.notify("which-key not ok in dap-python")
     return
   end
-	wk.register(mappings, { mode = "n", prefix = "<leader>d" })
-	wk.register({
+	wk.add(mappings, { mode = "n", prefix = "<leader>d" })
+	wk.add({
 		["ds"] = { "<ESC><cmd>lua require('dap-python').debug_selection()<CR>", "Debug Selection" },
 	}, { mode = "v", prefix = "" })
 end

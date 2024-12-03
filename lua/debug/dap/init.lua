@@ -8,11 +8,11 @@ if not dap_vt_ok then
   vim.notify("nvim-dap-virtual-text not okay")
   return
 end
-local dap_utils_ok, dap_utils = pcall(require, "dap.utils")
-if not dap_utils_ok then
-  vim.notify("dap.utils not okay")
-  return
-end
+-- local dap_utils_ok, dap_utils = pcall(require, "dap.utils")
+-- if not dap_utils_ok then
+--   vim.notify("dap.utils not okay")
+--   return
+-- end
 
 
 local data = {
@@ -24,7 +24,7 @@ local data = {
     priority = 200,
   },
   breakpoint_rejected = {
-    text = "",
+    text = "R",
     texthl = "LspDiagnosticsSignHint",
     linehl = "",
     numhl = "",
@@ -86,7 +86,6 @@ local js_based_languages = {
 }
 
 M.config = function ()
-
   -- vim.fn.sign_define("DapBreakpoint", data.breakpoint)
   -- vim.fn.sign_define("DapBreakpointRejected", data.breakpoint_rejected)
   -- vim.fn.sign_define("DapStopped", data.stopped)
@@ -103,7 +102,7 @@ M.config = function ()
     { "<leader>dC", "<cmd>lua require'dap'.run_to_cursor()<cr>", desc = "Run To Cursor" },
     { "<leader>dO", "<cmd>lua require'dap'.step_out()<cr>", desc = "Step Out" },
     { "<leader>dS", "<cmd>lua require'dap'.step_back()<cr>", desc = "Step Back" },
-    { "<leader>da", function() js_attach_with_arguments() end, desc = "Run with arguments" },
+    { "<leader>da", function () js_attach_with_arguments() end, desc = "Run with arguments" },
     { "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", desc = "Toggle Breakpoint" },
     { "<leader>dc", "<cmd>lua require'dap'.continue()<cr>", desc = "Continue" },
     { "<leader>dd", "<cmd>lua require'dap'.disconnect()<cr>", desc = "Disconnect" },
@@ -121,7 +120,7 @@ M.config = function ()
     { "<leader>dsf", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", desc = "frames" },
     { "<leader>dsv", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", desc = "Variables" },
     { "<leader>dx", "<cmd>lua require'dap'.clear_breakpoints()<cr>", desc = "Toggle Repl" },
-})
+  })
 
   local mason_debugpy = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
   dap.adapters.python = {
@@ -131,6 +130,22 @@ M.config = function ()
     cwd = vim.fn.getcwd(),
   }
 
+  local function get_python_path()
+    -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
+    -- The code below looks for a `venv` or `.venv` folder in the current directly and uses the python within.
+    -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
+    local cwd = vim.fn.getcwd()
+    local venv = Get_python_venv()
+    if venv and vim.fn.executable(venv .. "/bin/python") == 1 then
+      return venv .. "/bin/python"
+    elseif vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
+      return cwd .. "/venv/bin/python"
+    elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
+      return cwd .. "/.venv/bin/python"
+    else
+      return "python"
+    end
+  end
   dap.configurations.python = {
     {
       type = "python",  -- the type here established the link to the adapter definition: `dap.adapters.python`
@@ -140,22 +155,7 @@ M.config = function ()
 
       program = "${file}",  -- This configuration will launch the current file if used.
       justMyCode = false,
-      pythonPath = function ()
-        -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
-        -- The code below looks for a `venv` or `.venv` folder in the current directly and uses the python within.
-        -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
-        local cwd = vim.fn.getcwd()
-        local venv = Get_python_venv()
-        if venv and vim.fn.executable(venv .. "/bin/python") == 1 then
-          return venv .. "/bin/python"
-        elseif vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
-          return cwd .. "/venv/bin/python"
-        elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
-          return cwd .. "/.venv/bin/python"
-        else
-          return "python"
-        end
-      end,
+      pythonPath = get_python_path(),
       cwd = vim.fn.getcwd(),
     },
     {
@@ -167,22 +167,33 @@ M.config = function ()
       program = "${file}",  -- This configuration will launch the current file if used.
       args = { "-m", "manim", "-pql", },
       justMyCode = false,
-      pythonPath = function ()
-        -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
-        -- The code below looks for a `venv` or `.venv` folder in the current directly and uses the python within.
-        -- You could adapt this - to for example use the `VIRTUAL_ENV` environment variable.
-        local cwd = vim.fn.getcwd()
-        local venv = Get_python_venv()
-        if venv and vim.fn.executable(venv .. "/bin/python") == 1 then
-          return venv .. "/bin/python"
-        elseif vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
-          return cwd .. "/venv/bin/python"
-        elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
-          return cwd .. "/.venv/bin/python"
-        else
-          return "python"
-        end
-      end,
+      pythonPath = get_python_path(),
+      cwd = vim.fn.getcwd(),
+    },
+    {
+      type = "python",
+      request = "launch",
+      name = "cosipy aws2copy",
+      -- program = "${file}",
+      module = "cosipy.utilities.aws2cosipy.aws2cosipy",
+      args = {
+        "-i",
+        "./data/input/Zhadang/Zhadang_ERA5_2009_2018.csv", "-o",
+        "./data/input/Zhadang/Zhadang_ERA5_2009.nc", "-s", "./data/static/Zhadang_static.nc", "-b",
+        "20090101", "-e", "20091231",
+      },
+      justMyCode = true,
+      pythonPath = get_python_path(),
+      cwd = vim.fn.getcwd(),
+    },
+    {
+      type = "python",
+      request = "launch",
+      name = "COSIPY",
+      -- program = "${file}",
+      module = "COSIPY",
+      justMyCode = true,
+      pythonPath = get_python_path(),
       cwd = vim.fn.getcwd(),
     },
   }

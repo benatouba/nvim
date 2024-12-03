@@ -308,28 +308,9 @@ lazy.setup({
 
   -- Treesitter,
   {
-    "nvim-treesitter/nvim-treesitter",
-    dependencies = {
-      {
-        "LiadOz/nvim-dap-repl-highlights",
-        config = function ()
-          require("nvim-dap-repl-highlights").setup()
-        end,
-        enabled = false,
-      },
-      -- "RRethy/nvim-treesitter-endwise",
-      -- "nvim-treesitter/nvim-treesitter-refactor",
-    },
-    build = ":TSUpdate",
-    lazy = true,
-    config = function ()
-      require("language_parsing.treesitter").config()
-    end,
-    enabled = O.language_parsing,
-  },
-  {
     "windwp/nvim-ts-autotag",
-    event = { "BufReadPost", "BufNewFile" },
+    event = { "InsertEnter", "BufNewFile" },
+    ft = { "html", "javascript", "typescript", "vue", "svelte", "markdown", "xml", "php", },
     config = function ()
       require("nvim-ts-autotag").setup({
         opts = {
@@ -339,6 +320,26 @@ lazy.setup({
         },
       }
       )
+    end,
+    enabled = O.language_parsing,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    dependencies = {
+      -- "RRethy/nvim-treesitter-endwise",
+      -- "nvim-treesitter/nvim-treesitter-refactor",
+      {
+        "LiadOz/nvim-dap-repl-highlights",
+        config = function ()
+          require("nvim-dap-repl-highlights").setup()
+        end,
+      },
+    },
+    build = ":TSUpdate",
+    -- lazy = true,
+    -- event = "VeryLazy",
+    config = function ()
+      require("language_parsing.treesitter").config()
     end,
     enabled = O.language_parsing,
   },
@@ -557,8 +558,9 @@ lazy.setup({
   },
   {
     "hrsh7th/nvim-cmp",
-    event = { "InsertEnter", "CmdlineEnter" },
+    event = { "InsertEnter" },
     dependencies = {
+      "rcarriga/cmp-dap",
       "rafamadriz/friendly-snippets",
       -- "hrsh7th/cmp-buffer",
       { "hrsh7th/cmp-nvim-lsp", enabled = O.lsp },
@@ -571,7 +573,6 @@ lazy.setup({
       "hrsh7th/cmp-emoji",
       "hrsh7th/cmp-cmdline",
       "dmitmel/cmp-cmdline-history",
-      { "rcarriga/cmp-dap", enabled = O.dap },
       { "petertriho/cmp-git", enabled = O.git },
       "andersevenrud/cmp-tmux",
       { "ray-x/cmp-treesitter", enabled = O.language_parsing },
@@ -723,6 +724,45 @@ lazy.setup({
           require("nvim-dap-virtual-text").setup({})
         end
       },
+      {
+        "rcarriga/nvim-dap-ui",
+        event = "InsertEnter",
+        dependencies = {
+          "mfussenegger/nvim-dap",
+          "nvim-neotest/nvim-nio"
+        },
+        config = function ()
+          require("debug.dapui").config()
+        end,
+        enabled = O.dap,
+      },
+      {
+        "jbyuki/one-small-step-for-vimkind",
+        dependencies = "nvim-dap",
+        ft = "lua",
+        config = function ()
+          require("debug.one_small_step_for_vimkind").config()
+        end,
+        enabled = O.dap,
+      },
+      {
+        "mxsdev/nvim-dap-vscode-js",
+        dependencies = { "mfussenegger/nvim-dap" },
+        config = function ()
+          require("debug.vscode_js").config()
+        end,
+        ft = { "javascript", "vue", "javascriptreact", "typescriptreact", "typescript" },
+        enabled = O.webdev and O.dap,
+      },
+      {
+        "microsoft/vscode-js-debug",
+        lazy = true,
+        build = "npm ci --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+        enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18
+          and O.webdev
+          and O.dap
+          and false,
+      },
     },
     config = function ()
       require("debug.dap").config()
@@ -746,59 +786,6 @@ lazy.setup({
     enabled = O.lsp,
   },
   { "Bilal2453/luvit-meta", lazy = true, enabled = O.lsp },
-  {
-    "rcarriga/nvim-dap-ui",
-    event = "InsertEnter",
-    dependencies = {
-      "mfussenegger/nvim-dap",
-      "nvim-neotest/nvim-nio"
-    },
-    config = function ()
-      require("debug.dapui").config()
-    end,
-    enabled = O.dap,
-  },
-  {
-    "jbyuki/one-small-step-for-vimkind",
-    dependencies = "nvim-dap",
-    ft = "lua",
-    config = function ()
-      require("debug.one_small_step_for_vimkind").config()
-    end,
-    enabled = O.dap,
-  },
-  {
-    "nvim-telescope/telescope-dap.nvim",
-    dependencies = { "nvim-dap", "telescope.nvim" },
-    keys = { "<leader>" },
-    config = function ()
-      require("telescope").load_extension("dap")
-    end,
-    enabled = O.dap,
-  },
-  {
-    "mxsdev/nvim-dap-vscode-js",
-    dependencies = { "mfussenegger/nvim-dap" },
-    config = function ()
-      require("debug.vscode_js").config()
-    end,
-    ft = { "javascript", "vue", "javascriptreact", "typescriptreact", "typescript" },
-    enabled = O.webdev and O.dap,
-  },
-  {
-    "microsoft/vscode-js-debug",
-    lazy = true,
-    build = "npm ci --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
-    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18
-      and O.webdev
-      and O.dap
-      and false,
-  },
-  {
-    "Joakker/lua-json5",
-    build = "./install.sh",
-    enabled = vim.fn.executable("cargo") == 1 and O.webdev and false,
-  },
 
   -- project management
   {
