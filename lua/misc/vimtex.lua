@@ -6,6 +6,7 @@ M.config = function()
   vim.g.vimtex_mappings_enabled = 1
   vim.g.vimtex_syntax_enabled = 1
   vim.g.matchup_override_vimtex = 1
+  vim.bo.textwidth = 125  -- automatically insert line break after n chars
   vim.g.vimtex_log_ignore = ({
     'Underfull',
     'Overfull',

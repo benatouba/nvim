@@ -10,6 +10,8 @@ DATA_PATH = vim.fn.stdpath("data")
 vim.o.titlestring = "%<%F%=%l/%L - nvim"
 vim.o.exrc = true
 vim.g.lazydev_enabled = true
+vim.g.mapleader = " "
+vim.g.maplocalleader = ","
 ---@class for vim.g.loaded
 vim.g.loaded = 1
 vim.g.loaded_netrw = 1
@@ -42,7 +44,7 @@ vim.opt.showcmd = true
 
 vim.opt.sidescrolloff = 7
 -- vim.opt.colorcolumn = "100"
-vim.opt.textwidth = 100
+-- vim.opt.textwidth = 100
 vim.o.scrolloff = 999
 -- vim.o.showtabline = 2 -- Always show tabs
 vim.o.showmode = false -- We don't need to see things like -- INSERT -- anymore
@@ -89,7 +91,7 @@ if Exists(python_path) then
 end
 
 vim.diagnostic.config({
-  virtual_text = true,
+  virtual_text = false,
   signs = true,
   update_in_insert = false,
   underline = true,
