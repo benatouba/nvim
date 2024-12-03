@@ -172,6 +172,7 @@ lazy.setup({
       require("ben.project").setup()
     end,
     dependencies = "telescope.nvim",
+    event = "VeryLazy",
     enabled = O.lsp,
   },
 
