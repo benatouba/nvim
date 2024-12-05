@@ -272,7 +272,12 @@ lazy.setup({
   {
     "kylechui/nvim-surround",
     config = function ()
-      require("nvim-surround").setup({})
+      require("nvim-surround").setup({
+        keymaps = {
+          normal = "s",
+          normal_cur = "ss",
+        }
+      })
     end,
     event = "VeryLazy",
     enabled = O.language_parsing,
