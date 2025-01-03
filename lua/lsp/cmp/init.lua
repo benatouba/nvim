@@ -166,6 +166,9 @@ M.config = function ()
             vim_item.kind = " Codeium"
             vim_item.kind_hl_group = "CmpItemKindCopilot"
             word = str.oneline(vim_item.abbr)
+          elseif entry.source.name ~= 'vimtex' then
+            vim_item.kind = " Citation"
+            vim_item.kind_hl_group = "CmpItemKindText"
           end
 
 
