@@ -25,7 +25,6 @@ M.config = function ()
         path = "~/projects/fg_doku",
       }
     },
-    completion = { nvim_cmp = true },
     daily_notes = { folder = "calendar/daily" },
     templates = {
       folder = "templates",
@@ -83,7 +82,7 @@ M.config = function ()
     { noremap = false, expr = true }
   )
   wk.add({
-    { "<leader>v", group = "+Vivere", remap = false },
+    { "<leader>v", group = "+Vivere", icon = { icon = "󰇈 ", color = "purple" }, remap = false, mode = { "n", "v" } },
     { "<leader>vT", "<cmd>ObsidianTemplate<CR>", desc = "Template", remap = false },
     { "<leader>vb", "<cmd>ObsidianBacklinks<CR>", desc = "Backlinks", remap = false },
     { "<leader>vf", "<cmd>ObsidianFollowLink<CR>", desc = "Follow link", remap = false },
@@ -92,7 +91,7 @@ M.config = function ()
     { "<leader>vp", "<cmd>ObsidianPasteImg<CR>", desc = "Paste image", remap = false },
     { "<leader>vq", "<cmd>ObsidianQuickSwitch<CR>", desc = "Quick switch", remap = false },
     { "<leader>vr", "<cmd>ObsidianRename<CR>", desc = "Rename", remap = false },
-    { "<leader>vs", group = "+Obsidian", remap = false },
+    { "<leader>vs", group = "+Obsidian", remap = false, icon = { icon = "󰇈 ", color = "purple" } },
     { "<leader>vsd", "<cmd>ObsidianDailies<CR>", desc = "Dailies", remap = false },
     { "<leader>vsl", "<cmd>ObsidianLinks<CR>", desc = "Links", remap = false },
     { "<leader>vss", "<cmd>ObsidianSearch<CR>", desc = "Search", remap = false },
@@ -101,7 +100,6 @@ M.config = function ()
     { "<leader>vv", "<cmd>ObsidianWorkspace vivere<CR>", desc = "Vivere (Workspace)", remap = false },
     { "<leader>vw", "<cmd>ObsidianWorkspace work<CR>", desc = "Work (Workspace)", remap = false },
     { "<leader>vy", "<cmd>ObsidianYesterday<CR>", desc = "Yesterday", remap = false },
-    { "<leader>v", group = "+Vivere", mode = "v", remap = false },
     { "<leader>vl", "<cmd>ObsidianLink<CR>", desc = "Link", mode = "v", remap = false },
   })
 end

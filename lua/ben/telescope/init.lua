@@ -144,7 +144,7 @@ M.config = function ()
     { "<leader>sg", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
     { "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
     { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Marks" },
-    { "<leader>sn", "<cmd>Telescope notify theme=ivy<cr>", desc = "Notifications" },
+    -- { "<leader>sn", "<cmd>Telescope notify theme=ivy<cr>", desc = "Notifications" },
     { "<leader>so", "<cmd>Telescope oldfiles<cr>", desc = "Open Recent File" },
     { "<leader>sp", "<cmd>Telescope projects<cr>", desc = "Projects" },
     { "<leader>sq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix List" },

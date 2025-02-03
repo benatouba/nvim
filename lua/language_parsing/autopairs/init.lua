@@ -5,7 +5,7 @@ end
 local rule = require("nvim-autopairs.rule")
 local cond = require("nvim-autopairs.conds")
 
-local get_closing_for_line = function(line)
+local get_closing_for_line = function (line)
   local i = -1
   local clo = ""
 
@@ -47,7 +47,7 @@ end
 -- skip it, if you use another global object
 local M = {}
 
-M.config = function()
+M.config = function ()
   local cmp_autopairs = require("nvim-autopairs.completion.cmp")
   local cmp = require("cmp")
   cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
@@ -55,41 +55,28 @@ M.config = function()
   autopairs.setup({
     check_ts = true,
     ts_config = {
-      lua = { "string" }, -- it will not add pair on that treesitter node
       javascript = { "template_string" },
     },
     enable_check_bracket_line = true,
     ignored_next_char = "[%w%.]",
-    fast_wrap = {},
+    fast_wrap = {
+      map = "<C-e>",
+    },
   })
 
   local ts_conds = require("nvim-autopairs.ts-conds")
 
   autopairs.add_rule(rule("[%(%{%[]", "")
     :use_regex(true)
-    :replace_endpair(function(opts)
+    :replace_endpair(function (opts)
       return get_closing_for_line(opts.line)
     end)
-    :end_wise(function(opts)
+    :end_wise(function (opts)
       -- Do not endwise if there is no closing
       return get_closing_for_line(opts.line) ~= ""
     end))
 
   autopairs.add_rules(
-    -- {
-    --   rule("$", "$", { "tex", "latex" })
-    --     -- don't add a pair if the next character is %
-    --     -- :with_pair(
-    --     --   cond.not_after_regex("$$")
-    --     -- )
-    --     -- :with_pair(cond.not_before_regex("$$", 2))
-    --     -- -- don't move right when repeat character
-    --     :with_move(function() return true end)
-    --     -- -- don't delete if the next character is xx
-    --     -- :with_del(cond.none()),
-    --     -- -- disable adding a newline when you press <cr>
-    --     -- :with_cr(cond.none()),
-    -- },
     {
       rule("%(.*%)%s*%=>$", " {  }", { "typescript", "typescriptreact", "javascript", "vue" })
         :use_regex(true)

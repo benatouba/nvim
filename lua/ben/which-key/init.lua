@@ -4,10 +4,6 @@ if not isOk then
 end
 
 which_key.setup()
--- Set leader keys
-
-vim.g.mapleader = " "
-vim.g.maplocalleader = ","
 
 which_key.add({
   { "<leader>t", "<cmd>ToggleTermSendVisualLines<cr>", desc = "Send to terminal", mode = "v" },
@@ -32,7 +28,7 @@ which_key.add({
   { "<leader>ch", "<cmd>set hlsearch!<CR>", desc = "Highlightsearch" },
   { "<leader>cr", "<cmd>set norelativenumber!<cr>", desc = "Relative line nums" },
   -- Plugins
-  { "<leader>p", group = "+Plugins" },
+  { "<leader>p", icon = { icon = " ", color = "blue" }, group = "+Plugins" },
   { "<leader>pc", "<cmd>Lazy clean<cr>", desc = "Clean" },
   { "<leader>pC", "<cmd>Lazy check<cr>", desc = "Check" },
   { "<leader>pd", "<cmd>Lazy debug<cr>", desc = "Debug" },
@@ -57,7 +53,7 @@ which_key.add({
   { "]t", "<cmd>tabNext<cr>", desc = "Next tab" },
   { "[t", "<cmd>tabprevious<cr>", desc = "Tab" },
   -- Logs
-  { "<leader>L", group = "+Logs", icon = { icon = " ", color = "green" }  },
+  { "<leader>L", group = "+Logs", icon = { icon = " ", color = "green" } },
   { "<leader>Ll", "<cmd>LspLog<cr>", desc = "LSP" },
   { "<leader>Lm", "<cmd>MasonLog<cr>", desc = "Log" },
   { "<leader>Lp", "<cmd>Lazy profile<cr>", desc = "Lazy Profile" },

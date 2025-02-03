@@ -14,28 +14,11 @@ end
 --   return
 -- end
 
-
-local data = {
-  breakpoint = {
-    text = "",
-    texthl = "LspDiagnosticsSignError",
-    linehl = "",
-    numhl = "",
-    priority = 200,
-  },
-  breakpoint_rejected = {
-    text = "R",
-    texthl = "LspDiagnosticsSignHint",
-    linehl = "",
-    numhl = "",
-  },
-  stopped = {
-    text = "",
-    texthl = "LspDiagnosticsSignInformation",
-    linehl = "DiagnosticUnderlineInfo",
-    numhl = "LspDiagnosticsSignInformation",
-  },
-}
+vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpoint' })
+vim.fn.sign_define('DapBreakpointCondition', { text = '', texthl = 'DapBreakpoint' })
+vim.fn.sign_define('DapBreakpointRejected', { text = '', texthl = 'DapBreakpoint' })
+vim.fn.sign_define('DapLogPoint', { text = '', texthl = 'DapLogPoint' })
+vim.fn.sign_define('DapStopped', { text = '', texthl = 'DapStopped' })
 
 local js_attach_with_arguments = function ()
   local js_based_languages = {
@@ -60,20 +43,20 @@ end
 local M = {}
 M.vt_config = function ()
   dap_vt.setup({
-    enabled = true,  -- enable this plugin (the default)
-    enabled_commands = true,  -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
-    highlight_changed_variables = true,  -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
-    highlight_new_as_changed = false,  -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
-    show_stop_reason = true,  -- show stop reason when stopped for exceptions
-    commented = false,  -- prefix virtual text with comment string
-    only_first_definition = true,  -- only show virtual text at first definition (if there are multiple)
-    all_references = false,  -- show virtual text on all all references of the variable (not only definitions)
-    filter_references_pattern = "<module",  -- filter references (not definitions) pattern when all_references is activated (Lua gmatch pattern, default filters out Python modules)
+    enabled = true,                        -- enable this plugin (the default)
+    enabled_commands = true,               -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
+    highlight_changed_variables = true,    -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
+    highlight_new_as_changed = false,      -- highlight new variables in the same way as changed variables (if highlight_changed_variables)
+    show_stop_reason = true,               -- show stop reason when stopped for exceptions
+    commented = false,                     -- prefix virtual text with comment string
+    only_first_definition = true,          -- only show virtual text at first definition (if there are multiple)
+    all_references = false,                -- show virtual text on all all references of the variable (not only definitions)
+    filter_references_pattern = "<module", -- filter references (not definitions) pattern when all_references is activated (Lua gmatch pattern, default filters out Python modules)
     -- Experimental Features:
-    virt_text_pos = "eol",  -- position of virtual text, see `:h nvim_buf_set_extmark()`
-    all_frames = false,  -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
-    virt_lines = false,  -- show virtual lines instead of virtual text (will flicker!)
-    virt_text_win_col = nil,  -- position the virtual text at a fixed window column (starting from the first text column) ,
+    virt_text_pos = "eol",                 -- position of virtual text, see `:h nvim_buf_set_extmark()`
+    all_frames = false,                    -- show virtual text for all stack frames not only current. Only works for debugpy on my machine.
+    virt_lines = false,                    -- show virtual lines instead of virtual text (will flicker!)
+    virt_text_win_col = nil,               -- position the virtual text at a fixed window column (starting from the first text column) ,
   })
 end
 
@@ -97,29 +80,29 @@ M.config = function ()
     all_frames = true,
   })
   require("which-key").add({
-    { "<leader>d", group = "+Debug" },
-    { "<leader>dB", "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('BP Condition: '))<cr>", desc = "Conditional Breakpoint" },
-    { "<leader>dC", "<cmd>lua require'dap'.run_to_cursor()<cr>", desc = "Run To Cursor" },
-    { "<leader>dO", "<cmd>lua require'dap'.step_out()<cr>", desc = "Step Out" },
-    { "<leader>dS", "<cmd>lua require'dap'.step_back()<cr>", desc = "Step Back" },
-    { "<leader>da", function () js_attach_with_arguments() end, desc = "Run with arguments" },
-    { "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", desc = "Toggle Breakpoint" },
-    { "<leader>dc", "<cmd>lua require'dap'.continue()<cr>", desc = "Continue" },
-    { "<leader>dd", "<cmd>lua require'dap'.disconnect()<cr>", desc = "Disconnect" },
-    { "<leader>dg", "<cmd>lua require'dap'.session()<cr>", desc = "Get Session" },
-    { "<leader>di", "<cmd>lua require'dap'.step_into()<cr>", desc = "Step Into" },
-    { "<leader>dl", "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<cr>", desc = "Log Point Message" },
-    { "<leader>do", "<cmd>lua require'dap'.step_over()<cr>", desc = "Step Over" },
-    { "<leader>dp", "<cmd>lua require'dap'.pause.toggle()<cr>", desc = "Pause" },
-    { "<leader>dq", "<cmd>lua require'dap'.close()<cr>", desc = "Quit" },
-    { "<leader>dr", "<cmd>lua require'dap'.repl.toggle()<cr>", desc = "Toggle Repl" },
-    { "<leader>ds", group = "+Search" },
-    { "<leader>dsC", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", desc = "Configurations" },
-    { "<leader>dsb", "<cmd>lua require'telescope'.extensions.dap.list_breakpoints{}<cr>", desc = "Breakpoints" },
-    { "<leader>dsc", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", desc = "Commands" },
-    { "<leader>dsf", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", desc = "frames" },
-    { "<leader>dsv", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>", desc = "Variables" },
-    { "<leader>dx", "<cmd>lua require'dap'.clear_breakpoints()<cr>", desc = "Toggle Repl" },
+    { "<leader>d",   group = "+Debug" },
+    { "<leader>dB",  "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('BP Condition: '))<cr>",                desc = "Conditional Breakpoint" },
+    { "<leader>dC",  "<cmd>lua require'dap'.run_to_cursor()<cr>",                                               desc = "Run To Cursor" },
+    { "<leader>dO",  "<cmd>lua require'dap'.step_out()<cr>",                                                    desc = "Step Out" },
+    { "<leader>dS",  "<cmd>lua require'dap'.step_back()<cr>",                                                   desc = "Step Back" },
+    { "<leader>da",  function () js_attach_with_arguments() end,                                                desc = "Run with arguments" },
+    { "<leader>db",  "<cmd>lua require'dap'.toggle_breakpoint()<cr>",                                           desc = "Toggle Breakpoint" },
+    { "<leader>dc",  "<cmd>lua require'dap'.continue()<cr>",                                                    desc = "Continue" },
+    { "<leader>dd",  "<cmd>lua require'dap'.disconnect()<cr>",                                                  desc = "Disconnect" },
+    { "<leader>dg",  "<cmd>lua require'dap'.session()<cr>",                                                     desc = "Get Session" },
+    { "<leader>di",  "<cmd>lua require'dap'.step_into()<cr>",                                                   desc = "Step Into" },
+    { "<leader>dl",  "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<cr>", desc = "Log Point Message" },
+    { "<leader>do",  "<cmd>lua require'dap'.step_over()<cr>",                                                   desc = "Step Over" },
+    { "<leader>dp",  "<cmd>lua require'dap'.pause.toggle()<cr>",                                                desc = "Pause" },
+    { "<leader>dq",  "<cmd>lua require'dap'.close()<cr>",                                                       desc = "Quit" },
+    { "<leader>dr",  "<cmd>lua require'dap'.repl.toggle()<cr>",                                                 desc = "Toggle Repl" },
+    { "<leader>ds",  group = "+Search" },
+    { "<leader>dsC", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>",                               desc = "Configurations" },
+    { "<leader>dsb", "<cmd>lua require'telescope'.extensions.dap.list_breakpoints{}<cr>",                       desc = "Breakpoints" },
+    { "<leader>dsc", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>",                               desc = "Commands" },
+    { "<leader>dsf", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>",                               desc = "frames" },
+    { "<leader>dsv", "<cmd>lua require'telescope'.extensions.dap.commands{}<cr>",                               desc = "Variables" },
+    { "<leader>dx",  "<cmd>lua require'dap'.clear_breakpoints()<cr>",                                           desc = "Toggle Repl" },
   })
 
   local mason_debugpy = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
@@ -148,23 +131,23 @@ M.config = function ()
   end
   dap.configurations.python = {
     {
-      type = "python",  -- the type here established the link to the adapter definition: `dap.adapters.python`
+      type = "python", -- the type here established the link to the adapter definition: `dap.adapters.python`
       request = "launch",
       name = "All Code",
       -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
 
-      program = "${file}",  -- This configuration will launch the current file if used.
+      program = "${file}", -- This configuration will launch the current file if used.
       justMyCode = false,
       pythonPath = get_python_path(),
       cwd = vim.fn.getcwd(),
     },
     {
-      type = "python",  -- the type here established the link to the adapter definition: `dap.adapters.python`
+      type = "python", -- the type here established the link to the adapter definition: `dap.adapters.python`
       request = "launch",
       name = "Manim",
       -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
 
-      program = "${file}",  -- This configuration will launch the current file if used.
+      program = "${file}", -- This configuration will launch the current file if used.
       args = { "-m", "manim", "-pql", },
       justMyCode = false,
       pythonPath = get_python_path(),

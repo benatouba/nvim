@@ -2,3 +2,9 @@ plugin/*
 **/packer_compiled.lua
 **/secrets.lua
 lazy-lock.json
+.supermaven/
+after/
+ftdetect/jupynium.vim
+repro.lua
+snippets/python.json
+spell/ltex*

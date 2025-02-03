@@ -84,7 +84,7 @@ M.config = function ()
     { "<leader>to", "<cmd>lua require('neotest').output.open({ enter = true })<CR>", desc = "Output" },
     { "<leader>tp", "<cmd>lua require('neotest').output_panel.toggle()<CR>", desc = "Panel" },
     { "<leader>ts", "<cmd>lua require('neotest').summary.toggle()<CR>", desc = "Summary" },
-    { "<leader>tt", "<cmd>lua require('neotest').run.run()<CR>", desc = "Suite" },
+    { "<leader>tT", "<cmd>lua require('neotest').run.run()<CR>", desc = "Suite" },
     { "<leader>tw", "<cmd>lua require('neotest').watch.toggle()<CR>", desc = "Watch" },
     { "<leader>tx", "<cmd>lua require('neotest').run.stop()<CR>", desc = "Stop" },
     { "[T", "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<CR>", desc = "Test (failed)" },

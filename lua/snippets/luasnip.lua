@@ -21,10 +21,11 @@ M.config = function ()
   })
 
   -- NOTE: For the moment this gets overwritten by cmp
-  vim.keymap.set({ "i", "s" }, "<c-k>", function ()
+  vim.keymap.set({ "i", "s" }, "<c-d>", function ()
     if ls.expand_or_jumpable() then
       return ls.expand_or_jump()
     end
+    return ls.expand_auto()
   end, { silent = true })
 
   vim.keymap.set({ "i", "s" }, "<c-j>", function ()

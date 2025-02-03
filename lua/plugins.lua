@@ -1,6 +1,7 @@
 -- local execute = vim.api.nvim_command
 -- local fn = vim.fn
 
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -8,7 +9,7 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable",  -- latest stable release
+    "--branch=stable", -- latest stable release
     lazypath,
   })
 end
@@ -21,45 +22,35 @@ if not lazy_ok then
 end
 
 lazy.setup({
-  { "mistweaverco/kulala.nvim", config = function () require("kulala").setup() end, enabled = false, },
-  "nvim-lua/plenary.nvim",  -- most important functions (very important)
+  "nvim-lua/plenary.nvim", -- most important functions (very important)
+  { "echasnovski/mini.ai",      version = false },
   {
-    "m4xshen/smartcolumn.nvim",
-    opts = {
-      colorcolumn = "101",
-      custom_colorcolumn = {
-        markdown = "121",
-      },
-      disabled_filetypes = {
-        "NvimTree",
-        "lazy",
-        "mason",
-        "help",
-        "latex",
-        "tex",
-        "checkhealth",
-        "lspinfo",
-        "noice",
-        "Trouble",
-        "text",
-      },
-    },
-    enabled = false,
-  },
-  {
-    "nvimdev/lspsaga.nvim",
-    event = "InsertEnter",
+    'echasnovski/mini.sessions',
+    version = false,
     config = function ()
-      require("lsp.lspsaga").config()
-    end,
-    dependencies = {
-      "nvim-web-devicons",
-      "nvim-treesitter",
-      "nvim-lspconfig",
-    },
-    enabled = O.lsp,
+      require("mini.sessions").setup({
+        autoread = false,
+      })
+      local wk_ok, wk = pcall(require, "which-key")
+      if wk_ok then
+        wk.add({
+          { "<leader>S", icon = " ", group = "+Sessions", remap = false },
+          { "<leader>Sw", "<cmd>lua require('mini.sessions').write()<cr>", icon = " ", desc = "Write Session", remap = false },
+          { "<leader>Sr", "<cmd>lua require('mini.sessions').read()<cr>", icon = " ", desc = "Read Session", remap = false },
+        }, { mode = "n" })
+      else
+        vim.notify("which-key.nvim is not loaded in mini.sessions config")
+      end
+    end
   },
-  { "echasnovski/mini.ai", version = false },
+  {
+    "echasnovski/mini.bracketed",
+    version = "*",
+    config = function ()
+      require("mini.bracketed").setup()
+    end,
+    enabled = O.language_parsing,
+  },
   {
     "rcarriga/nvim-notify",
     config = function ()
@@ -90,27 +81,11 @@ lazy.setup({
       require("telescope").load_extension("notify")
     end,
     dependencies = "telescope.nvim",
-    enabled = O.misc and O.lsp,
-  },
-  {
-    "nvim-neorg/neorg",
-    version = "*",
-    ft = "norg",
-    keys = { "<leader>o", "g" },
-    config = function ()
-      require("management.neorg").config()
-    end,
-    dependencies = {
-      "nvim-neorg/neorg-telescope",
-      "max397574/neorg-contexts",
-      "benlubas/neorg-se",
-      "benlubas/neorg-interim-ls",
-    },
-    enabled = O.project_management and false,
+    enabled = O.misc and O.lsp and false,
   },
   {
     "epwalsh/obsidian.nvim",
-    event = { "InsertEnter" },
+    event = "VeryLazy",
     ft = "markdown",
     lazy = true,
     version = "*",
@@ -167,13 +142,120 @@ lazy.setup({
 
   -- help me find my way  around,
   "folke/which-key.nvim",
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    ---@type snacks.Config
+    config = function ()
+      require("snacks").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+        animate = { enabled = false },
+        bigfile = { enabled = false },
+        dashboard = {
+          enabled = true,
+          preset = {
+            keys = {
+              { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+              { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+              { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+              { icon = " ", key = "o", desc = "Orgmode", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.expand('~') .. '/documents/vivere/org'})" },
+              { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+              { icon = "󱊈 ", key = "m", desc = "Mason", action = ":Mason" },
+              { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+              { icon = " ", key = "p", desc = "Plugins", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+              { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+            },
+          },
+          sections = {
+            { section = "keys", gap = 1, padding = 1 },
+            { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+            { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+            {
+              pane = 2,
+              icon = " ",
+              title = "Git Status",
+              section = "terminal",
+              enabled = function ()
+                return Snacks.git.get_root() ~= nil
+              end,
+              cmd = "git status --short --branch --renames",
+              height = 5,
+              padding = 1,
+              ttl = 5 * 60,
+              indent = 3,
+            },
+            { section = "startup" },
+          },
+        },
+        rename = { enabled = false },
+        indent = { enabled = false },
+        input = { enabled = false },
+        notifier = { enabled = true },
+        notify = { enabled = true },
+        quickfile = { enabled = false },
+        scroll = { enabled = false },
+        statuscolumn = { enabled = false },
+        terminal = { enabled = false },
+        toggle = { enabled = false },
+        win = { enabled = false },
+        words = { enabled = true },
+        zen = { enabled = true },
+      }
+      vim.api.nvim_create_autocmd("LspProgress", {
+        ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+        callback = function (ev)
+          local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+          vim.notify(vim.lsp.status(), "info", {
+            id = "lsp_progress",
+            title = "LSP Progress",
+            opts = function (notif)
+              notif.icon = ev.data.params.value.kind == "end" and " "
+                or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+            end,
+          })
+        end,
+      })
+      local wk_ok, wk = pcall(require, "which-key")
+      if wk_ok then
+        wk.add({
+          { "<leader>sn", "<cmd>lua require('snacks').notifier.show_history()<cr>", desc = "Notifications", remap = false },
+          { "<leader>z",  "<cmd>lua require('snacks').zen.zen()<cr>",               desc = "Zen",           remap = false },
+        }, { mode = "n" })
+      end
+    end,
+  },
 
   -- Colorize hex and other colors in code,
   {
     "nvchad/nvim-colorizer.lua",
     config = function ()
-      require("colorizer").setup({})
+      require("colorizer").setup({
+        lazy_load = false,
+        user_default_options = {
+          names_opts = {
+            uppercase = true,
+          },
+          RRGGBBAA = true,   -- #RRGGBBAA hex codes
+          AARRGGBB = true,   -- 0xAARRGGBB hex codes
+          rgb_fn = true,     -- CSS rgb() and rgba() functions
+          hsl_fn = true,     -- CSS hsl() and hsla() functions
+          css = true,        -- Enable all CSS *features*:
+          -- names, RGB, RGBA, RRGGBB, RRGGBBAA, AARRGGBB, rgb_fn, hsl_fn
+          css_fn = true,     -- Enable all CSS *functions*: rgb_fn, hsl_fn
+          -- Tailwind colors.  boolean|'normal'|'lsp'|'both'.  True sets to 'normal'
+          tailwind = true,   -- Enable tailwind colors
+          tailwind_opts = {   -- Options for highlighting tailwind names
+            update_names = true, -- When using tailwind = 'both', update tailwind names from LSP results.  See tailwind section
+          },
+          -- parsers can contain values used in `user_default_options`
+          sass = { enable = true, parsers = { "css" } }, -- Enable sass colors
+        }
+      })
     end,
+    lazy = true,
     event = "BufReadPost",
     enabled = O.misc,
   },
@@ -237,23 +319,6 @@ lazy.setup({
     lazy = true,
     enabled = O.misc,
   },
-  {
-    "echasnovski/mini.bracketed",
-    version = "*",
-    config = function ()
-      require("mini.bracketed").setup()
-    end,
-    enabled = O.language_parsing,
-  },
-  {
-    "kyazdani42/nvim-tree.lua",
-    lazy = true,
-    cmd = { "NvimTreeToggle" },
-    config = function ()
-      require("ben.nvim-tree").config()
-    end,
-    enabled = false,
-  },
 
   -- manipulation
   {
@@ -262,7 +327,7 @@ lazy.setup({
       require("ben.dial").config()
     end,
     keys = { "<C-a>", "<C-x>" },
-  },  -- increment/decrement basically everything,
+  }, -- increment/decrement basically everything,
   {
     "mbbill/undotree",
     lazy = true,
@@ -273,10 +338,7 @@ lazy.setup({
     "kylechui/nvim-surround",
     config = function ()
       require("nvim-surround").setup({
-        keymaps = {
-          normal = "s",
-          normal_cur = "ss",
-        }
+
       })
     end,
     event = "VeryLazy",
@@ -284,7 +346,7 @@ lazy.setup({
   },
 
   -- language specific,
-  { "saltstack/salt-vim", ft = "sls", enabled = O.salt },
+  { "saltstack/salt-vim",       ft = "sls",               enabled = O.salt },
   { "Glench/Vim-Jinja2-Syntax", ft = { "sls", "Jinja2" }, enabled = O.salt },
 
   -- Treesitter,
@@ -306,6 +368,7 @@ lazy.setup({
   },
   {
     "nvim-treesitter/nvim-treesitter",
+    event = { "BufReadPost", "BufNewFile" },
     dependencies = {
       {
         "LiadOz/nvim-dap-repl-highlights",
@@ -331,7 +394,6 @@ lazy.setup({
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     dependencies = "nvim-treesitter",
-    lazy = true,
     enabled = O.language_parsing,
   },
   {
@@ -370,7 +432,7 @@ lazy.setup({
         priority = { "nuxt", "vue3" },
       },
       lsp = {
-        override_definition = true,  -- override vim.lsp.buf.definition
+        override_definition = true, -- override vim.lsp.buf.definition
       },
       debounce = 300,
     },
@@ -394,23 +456,6 @@ lazy.setup({
         { expr = true, silent = true })
     end,
     enabled = O.codeium,
-  },
-  {
-    "Exafunction/codeium.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
-    },
-    config = function ()
-      require("codeium").setup({
-        enable_chat = true,
-        tools = {
-          curl = "/usr/bin/curl",
-          gzip = "/usr/bin/gzip",
-        }
-      })
-    end,
-    enabled = O.codeium and false,
   },
   {
     "supermaven-inc/supermaven-nvim",
@@ -443,29 +488,61 @@ lazy.setup({
     config = function ()
       require("mason").setup({})
     end,
+    -- keys = { "<leader>" },
+    ft = { "snacks_dashboard" },
+    event = { "VimEnter", "BufReadPost", "BufNewFile", "LspAttach" },
     enabled = O.lsp,
   },
   { "williamboman/mason-lspconfig.nvim", event = "LspAttach", enabled = O.lsp },
-  --[[ {
-    "jay-babu/mason-null-ls.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-      "williamboman/mason.nvim",
-      "nvimtools/none-ls.nvim",
-    },
+  { "jay-babu/mason-nvim-dap.nvim",      enabled = O.dap },
+  {
+    "nvimdev/lspsaga.nvim",
+    event = "InsertEnter",
     config = function ()
-      require("lsp.null-ls").config()
+      require("lsp.lspsaga").config()
     end,
-    enabled = false,
-  }, ]]
-  { "jay-babu/mason-nvim-dap.nvim", enabled = O.dap },
+    dependencies = {
+      "nvim-web-devicons",
+      "nvim-treesitter",
+      "nvim-lspconfig",
+    },
+  },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
+      -- "hrsh7th/cmp-nvim-lsp",
+      -- "saghen/blink.cmp",
       "b0o/SchemaStore.nvim",
+      {
+        "hrsh7th/nvim-cmp",
+        event = { "InsertEnter", "CmdlineEnter" },
+        dependencies = {
+          "rafamadriz/friendly-snippets",
+          "hrsh7th/cmp-nvim-lsp",
+          "hrsh7th/cmp-nvim-lsp-document-symbol",
+          { "micangl/cmp-vimtex", enabled = O.latex },
+          "saadparwaiz1/cmp_luasnip",
+          "hrsh7th/cmp-path",
+          "hrsh7th/cmp-nvim-lua",
+          "hrsh7th/cmp-calc",
+          "hrsh7th/cmp-emoji",
+          "hrsh7th/cmp-cmdline",
+          "dmitmel/cmp-cmdline-history",
+          { "petertriho/cmp-git", enabled = O.git },
+          "andersevenrud/cmp-tmux",
+          "ray-x/cmp-treesitter",
+          "lukas-reineke/cmp-under-comparator",
+          "lukas-reineke/cmp-rg",
+          "R-nvim/cmp-r",
+          "onsails/lspkind-nvim",
+        },
+        config = function ()
+          require("lsp.cmp").config()
+        end,
+        enabled = O.lsp or O.language_parsing,
+      },
     },
-    event = { "BufReadPre", "BufNewFile", "InsertEnter" },
+    event = "BufReadPost",
     config = function ()
       require("lsp").config()
     end,
@@ -513,57 +590,19 @@ lazy.setup({
     end,
   },
   {
-    "hrsh7th/nvim-cmp",
-    event = { "InsertEnter" },
-    dependencies = {
-      "rcarriga/cmp-dap",
-      "rafamadriz/friendly-snippets",
-      { "hrsh7th/cmp-nvim-lsp",                 enabled = O.lsp },
-      { "hrsh7th/cmp-nvim-lsp-document-symbol", enabled = O.lsp },
-      { "micangl/cmp-vimtex",                   enabled = O.lsp and O.latex },
-      "saadparwaiz1/cmp_luasnip",
-      "hrsh7th/cmp-path",
-      "hrsh7th/cmp-nvim-lua",
-      "hrsh7th/cmp-calc",
-      "hrsh7th/cmp-emoji",
-      "hrsh7th/cmp-cmdline",
-      "dmitmel/cmp-cmdline-history",
-      { "petertriho/cmp-git",   enabled = O.git },
-      "andersevenrud/cmp-tmux",
-      { "ray-x/cmp-treesitter", enabled = O.language_parsing },
-      "lukas-reineke/cmp-under-comparator",
-      "lukas-reineke/cmp-rg",
-      "R-nvim/cmp-r",
-      {
-        "David-Kunz/cmp-npm",
-        ft = "json",
-        config = function ()
-          require("cmp-npm").setup({})
-        end,
-        enabled = false,
-      },
-      "amarakon/nvim-cmp-lua-latex-symbols",
-      {
-        "onsails/lspkind-nvim",
-        lazy = true,
-      },
-    },
-    config = function ()
-      require("lsp.cmp").config()
-    end,
-    enabled = O.language_parsing or O.lsp,
+    "L3MON4D3/LuaSnip",
+    -- follow latest release.
+    version = "*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    -- install jsregexp (optional!).
+    build = "make install_jsregexp"
   },
   {
     "folke/trouble.nvim",
     enabled = O.language_parsing or O.lsp,
   },
   {
-    "tpope/vim-dadbod",
-    lazy = false,
-    enabled = O.git and O.databases,
-  },
-  {
     "pwntester/octo.nvim",
+    event = "VeryLazy",
     requires = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
@@ -575,9 +614,15 @@ lazy.setup({
   },
   {
     "kristijanhusak/vim-dadbod-ui",
+    ft = { "sql", "mysql", "plsql" },
     dependencies = {
-      { "tpope/vim-dadbod", lazy = true },
-      { "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true },
+      "tpope/vim-dadbod",
+      {
+        "kristijanhusak/vim-dadbod-completion",
+        ft = { 'sql', 'mysql', 'plsql' },
+        lazy = true,
+        enabled = O.language_parsing,
+      },
     },
     cmd = {
       "DBUI",
@@ -591,21 +636,6 @@ lazy.setup({
       vim.g.db_ui_use_nerd_fonts = 1
     end,
     enabled = O.databases,
-  },
-  {
-    "kristijanhusak/vim-dadbod-completion",
-    lazy = true,
-    config = function ()
-      vim.cmd([[
-				  autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
-				]])
-    end,
-    enabled = O.databases and O.language_parsing,
-  },
-  {
-    "tpope/vim-fugitive",
-    lazy = false,
-    enabled = false,
   },
   {
     "NeogitOrg/neogit",
@@ -663,11 +693,34 @@ lazy.setup({
   -- debug adapter protocol
   {
     "mfussenegger/nvim-dap",
+    config = function ()
+      require("debug.dap").config()
+    end,
+    event = "InsertEnter",
+    enabled = O.dap,
     dependencies = {
       {
         "theHamsta/nvim-dap-virtual-text",
         config = function ()
           require("nvim-dap-virtual-text").setup({})
+        end
+      },
+      {
+        "rcarriga/cmp-dap",
+        ft = { "dap-repl", "dapui_watches", "dapui_hover" },
+        config = function ()
+          local cmp = require("cmp")
+          -- local config = cmp.get_config()
+          -- config.enabled = function()
+          --   return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
+          --       or require("cmp_dap").is_dap_buffer()
+          -- end
+          -- cmp.setup(config)
+          cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+            sources = {
+              { name = "dap" },
+            },
+          })
         end
       },
       {
@@ -689,7 +742,7 @@ lazy.setup({
         config = function ()
           require("debug.one_small_step_for_vimkind").config()
         end,
-        enabled = O.dap,
+        enabled = O.dap and false,
       },
       {
         "mxsdev/nvim-dap-vscode-js",
@@ -710,11 +763,6 @@ lazy.setup({
           and false,
       },
     },
-    config = function ()
-      require("debug.dap").config()
-    end,
-    event = "InsertEnter",
-    enabled = O.dap,
   },
   {
     "folke/lazydev.nvim",
@@ -725,13 +773,13 @@ lazy.setup({
         -- Or relative, which means they will be resolved as a plugin
         -- "LazyVim",
         -- When relative, you can also provide a path to the library in the plugin dir
-        "luvit-meta/library",  -- see below
+        "luvit-meta/library", -- see below
       },
     },
     ft = "lua",
     enabled = O.lsp,
   },
-  { "Bilal2453/luvit-meta", lazy = true, enabled = O.lsp },
+  { "Bilal2453/luvit-meta",  lazy = true,           enabled = O.lsp },
 
   -- project management
   {
@@ -745,7 +793,8 @@ lazy.setup({
       },
     },
     ft = { "org" },
-    keys = { "o" },
+    keys = { "<leader>", "o" },
+    event = "VeryLazy",
     enabled = O.project_management,
     config = function ()
       require("management.orgmode").config()
@@ -766,6 +815,7 @@ lazy.setup({
   {
     "stevearc/overseer.nvim",
     lazy = true,
+    event = "InsertEnter",
     config = function ()
       require("overseer.config").config()
     end,
@@ -796,8 +846,14 @@ lazy.setup({
   },
   {
     "barreiroleo/ltex_extra.nvim",
+    branch = "dev",
     ft = { "markdown", "tex", "norg", "org" },
-    dependencies = { "neovim/nvim-lspconfig" },
+    event = "BufReadPost",
+    dependencies = { "nvim-lspconfig" },
+    opts = {
+      load_langs = { "en-US" },
+      path = vim.fn.stdpath("config") .. "/spell/",
+    },
     enabled = O.lsp,
   },
   {
@@ -815,6 +871,7 @@ lazy.setup({
           scss = { "prettierd", "prettier", stop_after_first = true },
           html = { "prettierd", "prettier", stop_after_first = true },
           json = { "prettierd", "prettier", stop_after_first = true },
+          -- r = { "styler", stop_after_first = true },
           yaml = { "prettierd", "prettier", stop_after_first = true },
           markdown = { "prettierd", "prettier", stop_after_first = true },
           gitcommit = { "commitmsgfmt", },
@@ -826,7 +883,7 @@ lazy.setup({
         },
       })
       local maps = {
-        { "<leader>lf", function () require("conform").format({ lsp_format = "fallback", timeout_ms = 1000 }) end, desc = "Format" },
+        { "<leader>lf", function () require("conform").format({ lsp_format = "fallback", timeout_ms = 5000 }) end, desc = "Format" },
       }
       require("which-key").add(maps)
     end,
@@ -841,74 +898,6 @@ lazy.setup({
     keys = { "%" },
     event = "InsertEnter",
     enabled = O.language_parsing,
-  },
-  {
-    "folke/flash.nvim",
-    enabled = false,
-    event = "VeryLazy",
-    config = function ()
-      require("flash").setup({
-        highlight = {
-          backdrop = false,
-        },
-        label = {
-          uppercase = false,
-        },
-        jump = {
-          nohlsearch = true,
-        },
-        modes = {
-          search = {
-            enabled = false,
-          },
-          char = {
-            highlight = { backdrop = false },
-          },
-          treesitter = {
-            highlight = {
-              backdrop = false,
-            },
-          },
-        },
-      })
-    end,
-    ---@diagnostic disable-next-line: undefined-doc-name
-    ---@type Flash.Config
-    opts = {},
-    -- stylua: ignore
-    keys = {
-      {
-        "<c-s>",
-        mode = { "n", "x", "o" },
-        function () require("flash").jump() end,
-        desc = "Flash"
-      },
-      {
-        "S",
-        mode = { "n", "x", "o" },
-        function () require("flash").treesitter() end,
-        desc = "Flash Treesitter"
-      },
-      {
-        "r",
-        mode = "o",
-        function () require("flash").remote() end,
-        desc = "Remote Flash"
-      },
-      {
-        "R",
-        mode = { "o", "x" },
-        function () require("flash").treesitter_search() end,
-        desc = "Treesitter Search"
-      },
-      {
-        "<c-s>",
-        mode = { "c" },
-        function () require("flash").toggle() end,
-        desc = "Toggle Flash Search"
-      },
-    },
-    enabled = O.misc,
   },
   {
     "folke/todo-comments.nvim",
@@ -1021,16 +1010,16 @@ lazy.setup({
     end,
     config = function ()
       require("catppuccin").setup({
-        flavour = "mocha",  -- mocha, macchiato, frappe, latte
+        flavour = "mocha", -- mocha, macchiato, frappe, latte
         transparent_background = false,
-        background = {  -- :h background
+        background = {     -- :h background
           light = "latte",
           dark = "mocha",
         },
         compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
         integrations = {
           barbar = true,
-          cmp = true,
+          cmp = O.lsp,
           dap = O.dap,
           dap_ui = O.dap,
           gitsigns = O.git,
@@ -1122,7 +1111,7 @@ lazy.setup({
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },  -- if you prefer nvim-web-devicons
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
     ft = { "markdown", "norg", "org", "rmd", "rst" },
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
@@ -1163,21 +1152,12 @@ lazy.setup({
   },
   {
     "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-lspconfig" },
     config = function ()
       require("misc.typescript_tools").config()
     end,
     ft = { "vue", "typescript", "typescriptreact" },
     enabled = O.webdev or O.typescript,
-  },
-  {
-    "vhyrro/luarocks.nvim",
-    priority = 1000,
-    config = true,
-    opts = {
-      "magick",
-    },
-    enabled = false,
   },
   {
     "3rd/image.nvim",
@@ -1192,7 +1172,7 @@ lazy.setup({
             clear_in_insert_mode = false,
             download_remote_images = true,
             only_render_image_at_cursor = false,
-            filetypes = { "markdown", "vimwiki" },  -- markdown extensions (ie. quarto) can go here
+            filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
           },
           neorg = {
             enabled = true,
@@ -1212,11 +1192,11 @@ lazy.setup({
         max_height = nil,
         max_width_window_percentage = nil,
         max_height_window_percentage = 50,
-        window_overlap_clear_enabled = false,  -- toggles images when windows are overlapped
+        window_overlap_clear_enabled = false,                                               -- toggles images when windows are overlapped
         window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
-        editor_only_render_when_focused = false,  -- auto show/hide images when the editor gains/looses focus
-        tmux_show_only_in_active_window = false,  -- auto show/hide images in the correct Tmux window (needs visual-activity off)
-        hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.avif" },  -- render image files as images when opened
+        editor_only_render_when_focused = false,                                            -- auto show/hide images when the editor gains/looses focus
+        tmux_show_only_in_active_window = false,                                            -- auto show/hide images in the correct Tmux window (needs visual-activity off)
+        hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.avif" }, -- render image files as images when opened
       })
     end,
     enabled = vim.fn.executable("ueberzugpp") == 1 and O.misc and false,
@@ -1231,4 +1211,30 @@ lazy.setup({
     end,
     enabled = O.webdev and O.misc and false,
   },
+  {
+    "neo451/feed.nvim",
+    event = "VeryLazy",
+    config = function ()
+      require "feed".setup({
+        feeds = {
+          -- These two styles all work
+          "https://neovim.io/news.xml",
+          -- tags given to a feed to be tagged to all its entries
+          { "https://neovim.io/news.xml", name = "Neovim News", tags = { "tech", "news" } },
+          -- RssHub link is also a first class citizen like http/https
+          -- rsshub://{route} will be the unique identifier in the database and resolved when fetching feeds which instance to use base on your config.rsshub_instance
+          "rsshub://apnews/topics/apf-topnews"
+        }
+      })
+      local wk_ok, wk = pcall(require, "which-key")
+      if wk_ok then
+        wk.add({
+          { "<leader>F", "<cmd>Feed<cr>", desc = "Feed", remap = false },
+        }, { mode = "n" })
+      else
+        vim.notify("which-key.nvim is not loaded in feed.nvim config")
+      end
+    end,
+    enabled = O.misc
+  }
 }, {})

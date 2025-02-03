@@ -11,8 +11,7 @@ vim.o.titlestring = "%<%F%=%l/%L - nvim"
 vim.o.exrc = true
 vim.g.lazydev_enabled = true
 vim.g.mapleader = " "
-vim.g.maplocalleader = ","
----@class for vim.g.loaded
+vim.g.maplocalleader = "\\"
 vim.g.loaded = 1
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -53,7 +52,7 @@ vim.g.cursorhold_updatetime = 100
 vim.o.writebackup = true -- backup files during writing
 vim.wo.signcolumn = "yes:1" -- Always show the signcolumn, otherwise it would shift the text each time
 vim.o.updatetime = 200 -- Faster completion
-vim.o.timeoutlen = 200 -- By default timeoutlen is 1000 ms
+vim.o.timeoutlen = 400 -- By default timeoutlen is 1000 ms
 vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
 vim.opt.foldmethod = "expr"
 vim.opt.foldlevelstart = 50
@@ -85,7 +84,7 @@ vim.g.tokyonight_sidebars = { "terminal", "packer", "qf", "nvimtree" }
 -- vim.g.tokyonight_colors = { hint = "orange", error = "#ff0000" }
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
-local python_path = vim.fn.expand("$HOME/.pyenv/versions/3.10.11/bin/python3")
+local python_path = vim.fn.expand("$HOME/.pyenv/versions/3.12.4/bin/python3")
 if Exists(python_path) then
   vim.g.python3_host_prog = python_path
 end

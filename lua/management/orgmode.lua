@@ -14,12 +14,45 @@ end
 tsc.setup({
   highlight = {
     enable = true,
-    additional_vim_regex_highlighting = { "org" },  -- Required since TS highlighter doesn't support all syntax features (conceal)
+    additional_vim_regex_highlighting = { "org" }, -- Required since TS highlighter doesn't support all syntax features (conceal)
   },
-  ensure_installed = { "org" },  -- Or run :TSUpdate org
+  ensure_installed = { "org" },                    -- Or run :TSUpdate org
 })
 M.config = function ()
   org.setup({
+    ui = {
+      menu = {
+        handler = function (data)
+          -- your handler here, for example:
+          local options = {}
+          local options_by_label = {}
+
+          for _, item in ipairs(data.items) do
+            -- Only MenuOption has `key`
+            -- Also we don't need `Quit` option because we can close the menu with ESC
+            if item.key and item.label:lower() ~= "quit" then
+              table.insert(options, item.label)
+              options_by_label[item.label] = item
+            end
+          end
+
+          local handler = function (choice)
+            if not choice then
+              return
+            end
+
+            local option = options_by_label[choice]
+            if option.action then
+              option.action()
+            end
+          end
+
+          vim.ui.select(options, {
+            propmt = data.propmt,
+          }, handler)
+        end,
+      },
+    },
     org_agenda_files = { "~/documents/vivere/org/**/*", },
     org_default_notes_file = "~/documents/vivere/org/refile.org",
     notifications = {
@@ -83,8 +116,8 @@ M.config = function ()
 
   local maps = {
     { "<leader>o", group = "Org", nowait = false, remap = false, icon = { icon = "", color = "purple" } },
-    { "<leader>oa", "<cmd>lua require('orgmode').action('agenda.prompt')<CR>", desc = "org-Agenda", nowait = false, remap = false },
-    { "<leader>oc", "<cmd>lua require('orgmode').action('capture.prompt')<CR>", desc = "org-Capture", nowait = false, remap = false },
+    { "<leader>oa", "<cmd>lua require('orgmode').action('agenda.prompt')<CR>", desc = "org-Agenda", nowait = true, remap = false },
+    { "<leader>oc", "<cmd>lua require('orgmode').action('capture.prompt')<CR>", desc = "org-Capture", nowait = true, remap = false },
   }
 
   which_key.add(maps)

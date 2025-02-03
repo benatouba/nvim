@@ -7,7 +7,7 @@ local has_words_before = function ()
     vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
 end
 local bufIsBig = function (bufnr)
-  local max_filesize = 100 * 1024  -- 100 KB
+  local max_filesize = 100 * 1024 -- 100 KB
   local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
   if ok and stats and stats.size > max_filesize then
     return true
@@ -17,7 +17,7 @@ local bufIsBig = function (bufnr)
 end
 
 M.config = function ()
-  vim.opt.completeopt = { "menu", "menuone", "noselect" }
+  vim.opt.completeopt = { "menu", "menuone", }
   -- local neogen_ok, neogen = pcall(require, "neogen")
   local cmp_ok, cmp = pcall(require, "cmp")
   local lspkind_ok, lspkind = pcall(require, "lspkind")
@@ -31,11 +31,10 @@ M.config = function ()
     vim.notify("lspkind not ok")
   end
 
-  -- require("cmp-npm").setup({})
-  local compare = cmp.config.compare
   local default_cmp_sources = cmp.config.sources({
     -- { name = "copilot", priority = 8 },
     -- { name = "nvim_lsp_signature_help" },
+    { name = "luasnip" },
     { name = "cmp_r" },
     { name = "orgmode", priority = 100 },
     { name = "lazydev", group_index = 0 },
@@ -60,12 +59,6 @@ M.config = function ()
 
   cmp.setup({
     enabled = function ()
-      -- enable autocompletion in nvim-dap
-      local cmp_dap_ok, cmp_dap = pcall(require, "cmp_dap")
-      if cmp_dap_ok and cmp_dap.is_dap_buffer() then
-        return true
-      end
-
       -- disbable completion in telescope buffers
       if vim.bo.filetype == "TelescopePrompt" then
         return false
@@ -81,7 +74,12 @@ M.config = function ()
       end
     end,
     performance = {
-      max_view_entries = 10,
+      max_view_entries = 15,
+    },
+    snippet = {
+      expand = function (args)
+        require 'luasnip'.lsp_expand(args.body)
+      end,
     },
     -- view = {
     -- 	entries = { name = "native" },
@@ -95,8 +93,8 @@ M.config = function ()
       format = lspkind.cmp_format({
         mode = "symbol_text",
         maxwidth = {
-          menu = 50,  -- leading text (labelDetails)
-          abbr = 50,  -- actual suggestion item
+          menu = 50, -- leading text (labelDetails)
+          abbr = 50, -- actual suggestion item
         },
         ellipsis_char = '...',
         show_labelDetails = true,
@@ -166,9 +164,6 @@ M.config = function ()
             vim_item.kind = " Codeium"
             vim_item.kind_hl_group = "CmpItemKindCopilot"
             word = str.oneline(vim_item.abbr)
-          elseif entry.source.name ~= 'vimtex' then
-            vim_item.kind = " Citation"
-            vim_item.kind_hl_group = "CmpItemKindText"
           end
 
 
@@ -206,22 +201,22 @@ M.config = function ()
         scrollbar = "║",
       }),
     },
-    sorting = {
-      priority_weight = 1.,
-      comparators = {
-        -- require("copilot_cmp").comparators.prioritize,
-        -- require("copilot_cmp.comparators").score,
-        compare.locality,
-        compare.score,
-        compare.offset,
-        compare.exact,
-        -- require("cmp-under-comparator").under,
-        compare.kind,
-        compare.sort_text,
-        -- compare.recently_used,
-        compare.order,
-      },
-    },
+    -- sorting = {
+    --   priority_weight = 1.,
+    --   comparators = {
+    --     -- require("copilot_cmp").comparators.prioritize,
+    --     -- require("copilot_cmp.comparators").score,
+    --     compare.locality,
+    --     compare.score,
+    --     compare.offset,
+    --     compare.exact,
+    --     -- require("cmp-under-comparator").under,
+    --     compare.kind,
+    --     compare.sort_text,
+    --     -- compare.recently_used,
+    --     compare.order,
+    --   },
+    -- },
     mapping = cmp.mapping.preset.insert({
       ["<C-d>"] = function ()
         if not require("noice.lsp").scroll(4) then
@@ -263,13 +258,11 @@ M.config = function ()
             -- behavior = cmp.ConfirmBehavior.Replace,
             select = false,
           })
-          -- elseif cp.is_visible() then
-          --   cp.accept()
         else
           fallback()
         end
-      end, { "i", "s", "c" }),
-      ["<C-n>"] = cmp.mapping(function (fallback)
+      end, { "i", "s" }),
+      ["<C-j>"] = cmp.mapping(function (fallback)
         local cp_ok, cp = pcall(require, "copilot.suggestion")
         if cmp.visible() then
           cmp.select_next_item()
@@ -279,7 +272,7 @@ M.config = function ()
           fallback()
         end
       end, { "i", "s", "c" }),
-      ["<C-p>"] = cmp.mapping(function (fallback)
+      ["<C-k>"] = cmp.mapping(function (fallback)
         local cp_ok, cp = pcall(require, "copilot.suggestion")
         if cmp.visible() then
           cmp.select_prev_item()
@@ -291,11 +284,24 @@ M.config = function ()
       end, { "i", "s", "c" }),
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
       ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+      ["<C-s>"] = cmp.mapping(function (fallback)
+        if cmp.visible() then
+          cmp.select_next_item()
+          cmp.confirm()
+        else
+          fallback()
+        end
+      end, { "i", "s" }),
       ["<Tab>"] = cmp.mapping(function (fallback)
         local cp_ok, cp = pcall(require, "copilot.suggestion")
         local supermaven_ok, supermaven = pcall(require, "supermaven-nvim.completion_preview")
-        if cmp.visible() then
+        local _, ls = pcall(require, "luasnip")
+        local entry = cmp.get_selected_entry()
+        if ls.locally_jumpable(1) then
+          ls.jump(1)
+        elseif cmp.visible() and not entry then
           cmp.select_next_item()
+          cmp.confirm()
         elseif supermaven_ok and supermaven.has_suggestion() then
           supermaven.on_accept_suggestion()
         elseif not has_words_before() then
@@ -307,8 +313,11 @@ M.config = function ()
         end
       end, { "i", "s", "c" }),
       ["<S-Tab>"] = cmp.mapping(function (fallback)
+        local _, luasnip = pcall(require, "luasnip")
         if cmp.visible() then
           cmp.select_prev_item()
+        elseif luasnip.locally_jumpable(1) then
+          luasnip.jump(1)
         else
           fallback()
         end
@@ -327,15 +336,107 @@ M.config = function ()
       }
     end
   })
+
+  cmp.setup.filetype({ "python" }, {
+    sources = default_cmp_sources,
+  })
+
   cmp.setup.filetype({ "tex", "plaintex" }, {
+    -- formatting = {
+    --   format = lspkind.cmp_format({
+    --     mode = "symbol_text",
+    --     maxwidth = {
+    --       menu = 50, -- leading text (labelDetails)
+    --       abbr = 50, -- actual suggestion item
+    --     },
+    --     ellipsis_char = '...',
+    --     show_labelDetails = true,
+    --     before = function (entry, vim_item)
+    --       local word = entry:get_insert_text()
+    --       local strings = vim.split(vim_item.kind, "%s", { trimempty = true })
+    --       vim_item.kind = strings[1]
+    --       vim_item.menu = strings[2]
+    --
+    --       if entry.source.name == "copilot" then
+    --         vim_item.kind = " "
+    --         vim_item.menu = "Copilot"
+    --         vim_item.kind_hl_group = "CmpItemKindCopilot"
+    --         word = str.oneline(vim_item.abbr)
+    --       elseif entry.source.name == "git" then
+    --         vim_item.kind = "󰊢 Git"
+    --         vim_item.kind_hl_group = "CmpItemKindFunction"
+    --         word = str.oneline(vim_item.abbr)
+    --       elseif entry.source.name == "treesitter" then
+    --         vim_item.kind = " Treesitter"
+    --         vim_item.kind_hl_group = "CmpItemKindText"
+    --         word = str.oneline(vim_item.abbr)
+    --       elseif entry.source.name == "tmux" then
+    --         vim_item.kind = " Tmux"
+    --         vim_item.kind_hl_group = "CmpItemKindText"
+    --       elseif entry.source.name == "cmdline" then
+    --         vim_item.kind = " Cmd"
+    --         vim_item.kind_hl_group = "CmpItemKindFunction"
+    --       elseif entry.source.name == "tags" then
+    --         vim_item.kind = " Tags"
+    --         vim_item.kind_hl_group = "CmpItemKindText"
+    --       elseif entry.source.name == "cmdline_history" then
+    --         vim_item.kind = " History"
+    --         vim_item.kind_hl_group = "CmpItemKindFunction"
+    --       elseif entry.source.name == "rg" then
+    --         vim_item.kind = " Grep"
+    --         vim_item.kind_hl_group = "CmpItemKindFunction"
+    --       elseif entry.source.name == "Buffer" then
+    --         vim_item.kind = " Buffer"
+    --         vim_item.kind_hl_group = "CmpItemKindText"
+    --       elseif vim_item.kind == "String" then
+    --         vim_item.kind = " String"
+    --         vim_item.kind_hl_group = "CmpItemKindText"
+    --       elseif vim_item.kind == "Comment" then
+    --         vim_item.kind = " Comment"
+    --         vim_item.kind_hl_group = "CmpItemKindText"
+    --       elseif entry.source.name == "emoji" then
+    --         vim_item.kind = "ﲃ Emoji"
+    --         vim_item.kind_hl_group = "CmpItemKindCopilot"
+    --       elseif entry.source.name == "lua-latex-symbols" then
+    --         vim_item.kind = " LaTeX"
+    --         vim_item.kind_hl_group = "CmpItemKindSnippet"
+    --       elseif entry.source.name == "Codeium" then
+    --         vim_item.kind = " Codeium"
+    --         vim_item.kind_hl_group = "CmpItemKindCopilot"
+    --         word = str.oneline(vim_item.abbr)
+    --       elseif entry.source.name ~= 'vimtex' then
+    --         vim_item.kind = " LaTeX"
+    --       end
+    --
+    --
+    --       word = str.oneline(word)
+    --
+    --       local max = 50
+    --       if string.len(word) >= max then
+    --         local before = string.sub(word, 1, math.floor((max - 3) / 2))
+    --         word = before .. ".."
+    --       end
+    --
+    --       if
+    --         entry.completion_item.insertTextFormat == types.lsp.InsertTextFormat.Snippet
+    --         and string.sub(vim_item.abbr, -1, -1) == "~"
+    --       then
+    --         word = word .. ".."
+    --       end
+    --       vim_item.abbr = word
+    --
+    --       return vim_item
+    --     end
+    --   }),
+    -- },
     sources = cmp.config.sources({
-      { name = "lua-latex-symbols", option = { cache = true }, priority = 10 },
+      { name = "luasnip" },
       { name = "vimtex" },
-      { name = "nvim_lsp", max_item_count = 5 },
+      { name = "nvim_lsp",   max_item_count = 5 },
       { name = "treesitter", max_item_count = 5 },
       { name = "calc" },
       { name = "path" },
-      { name = "emoji", max_item_count = 5 },
+      { name = "emoji",      max_item_count = 5 },
     })
   })
 
@@ -354,11 +455,11 @@ M.config = function ()
 
   cmp.setup.filetype({ "org", "orgagenda" }, {
     sources = cmp.config.sources({
-      { name = "orgmode", priority = 100 },
+      { name = "orgmode",    priority = 100 },
       { name = "treesitter", max_item_count = 5 },
       { name = "calc" },
-      { name = "emoji", max_item_count = 5 },
-      { name = "rg", max_item_count = 5 },
+      { name = "emoji",      max_item_count = 5 },
+      { name = "rg",         max_item_count = 5 },
     })
   })
 
@@ -367,14 +468,9 @@ M.config = function ()
       { name = "neorg" },
       { name = "nvim_lsp" },
       { name = "treesitter", max_item_count = 10 },
-      { name = "rg", max_item_count = 5 },
+      { name = "rg",         max_item_count = 5 },
       { name = "calc" },
-      { name = "emoji", max_item_count = 10 },
-    })
-  })
-  cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-    sources = cmp.config.sources({
-      { name = "dap" },
+      { name = "emoji",      max_item_count = 10 },
     })
   })
   cmp.setup.filetype({ "ipynb", "jupyter_python", "jupynium" }, {
@@ -385,8 +481,8 @@ M.config = function ()
       { name = "treesitter", keyword_length = 3 },
       { name = "calc" },
       { name = "emoji" },
-      { name = "tags", keyword_length = 5, max_item_count = 5 },
-      { name = "rg", keyword_length = 5, max_item_count = 5 },
+      { name = "tags",       keyword_length = 5, max_item_count = 5 },
+      { name = "rg",         keyword_length = 5, max_item_count = 5 },
     }),
   })
 
@@ -420,17 +516,17 @@ M.config = function ()
       completion = cmp.config.window.bordered({ autocomplete = true }),
     },
     sources = cmp.config.sources({
-      { name = "rg", max_item_count = 4 },
+      { name = "rg",              max_item_count = 4 },
       { name = "cmdline_history", max_item_count = 4 },
     }),
   })
 
   cmp.setup.filetype({ "gitcommit", "NeogitCommitMessage" }, {
     sources = cmp.config.sources({
-      { name = "git", max_item_count = 10 },
+      { name = "git",        max_item_count = 10 },
       { name = "treesitter", max_item_count = 5 },
       { name = "calc" },
-      { name = "emoji", max_item_count = 10 },
+      { name = "emoji",      max_item_count = 10 },
     }),
   })
 
@@ -482,6 +578,9 @@ M.config = function ()
     end
   end, { silent = true, expr = true })
   require("cmp_r").setup({ filetypes = { "r", "rmd", "quarto", "terminal" }, })
+  vim.cmd(
+    [[ autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} }) ]]
+  )
 end
 
 return M

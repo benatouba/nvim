@@ -81,7 +81,7 @@ M.config = function ()
             table.insert(capAsList, "- " .. capability)
           end
         end
-        table.sort(capAsList)  -- sorts alphabetically
+        table.sort(capAsList) -- sorts alphabetically
         local msg = "# " .. client.name .. "\n" .. table.concat(capAsList, "\n")
         vim.notify(msg, "trace", {
           on_open = function (win)
@@ -133,7 +133,7 @@ M.config = function ()
     wk.add({
       {
         { buffer = bufnr },
-        { "<C-K>", vim.lsp.buf.signature_help, desc = "Signature", mode = { "n", "i" } },
+        { "<C-K>", vim.lsp.buf.signature_help, desc = "Signature", mode = { "n" } },
         { "<F2>", vim.lsp.buf.rename, desc = "Rename" },
         { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
         { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action" },
@@ -164,18 +164,18 @@ M.config = function ()
         -- with lsp_fallback
         {
           mode = { "n", "x", "v" },
-          { "gD", vim.lsp.buf.declaration, desc = "Declaration" },
-          { "gd", vim.lsp.buf.definition, desc = "Definition" },
-          { "gI", vim.lsp.buf.implementation, desc = "Implementations" },
-          { "gr", vim.lsp.buf.references, desc = "References" },
+          { "gD", vim.lsp.buf.declaration,     desc = "Declaration" },
+          { "gd", vim.lsp.buf.definition,      desc = "Definition" },
+          { "gI", vim.lsp.buf.implementation,  desc = "Implementations" },
+          { "gr", vim.lsp.buf.references,      desc = "References" },
           { "gt", vim.lsp.buf.type_definition, desc = "Type Definition" },
-          { "gs", vim.lsp.buf.signature_help, desc = "Signature" },
+          { "gs", vim.lsp.buf.signature_help,  desc = "Signature" },
         }
       }
     })
     vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
 
-    -- -- Highlights occurences of the word under the cursor
+    -- -- Highlights occurrences of the word under the cursor
     -- vim.api.nvim_create_augroup("LspHighlighting", {})
     -- vim.api.nvim_create_autocmd(
     --   { "CursorHold", "CursorHoldI" }, {
@@ -207,11 +207,191 @@ M.config = function ()
 
   lspconfig.util.default_config = vim.tbl_deep_extend("force", lspconfig.util.default_config,
     lsp_defaults)
+
+
+  local configs = require 'lspconfig/configs'
+  local util = require 'lspconfig/util'
+
+  local Dictionary_file = {
+    ["en-GB"] = { vim.fn.stdpath("config") .. "/spell/en.utf-8.add" }
+  }
+  local DisabledRules_file = {
+    ["en-GB"] = { vim.fn.stdpath("config") .. "/spell/disable.txt" }
+  }
+  local FalsePositives_file = {
+    ["en-GB"] = { vim.fn.stdpath("config") .. "/spell/false.txt" }
+  }
+
+  local function readFiles(files)
+    local dict = {}
+    for _, file in ipairs(files) do
+      if not file then return nil end
+
+      for line in io.lines(file) do
+        table.insert(dict, line)
+      end
+    end
+    return dict
+  end
+
+  local function findLtexLang()
+    local buf_clients = vim.lsp.buf_get_clients()
+    for _, client in ipairs(buf_clients) do
+      if client.name == "ltex" then
+        return client.config.settings.ltex.language
+      end
+    end
+  end
+
+  local function findLtexFiles(filetype, value)
+    local files = nil
+    if filetype == 'dictionary' then
+      files = Dictionary_file[value or findLtexLang()]
+    elseif filetype == 'disable' then
+      files = DisabledRules_file[value or findLtexLang()]
+    elseif filetype == 'falsePositive' then
+      files = FalsePositives_file[value or findLtexLang()]
+    end
+
+    if files then
+      return files
+    else
+      return nil
+    end
+  end
+
+  local function updateConfig(lang, configtype)
+    local buf_clients = vim.lsp.buf_get_clients()
+    local client = nil
+    for _, lsp in ipairs(buf_clients) do
+      if lsp.name == "ltex" then
+        client = lsp
+      end
+    end
+
+    if client then
+      if configtype == 'dictionary' then
+        if client.config.settings.ltex.dictionary then
+          client.config.settings.ltex.dictionary = {
+            [lang] = readFiles(Dictionary_file[lang])
+          };
+          return client.notify('workspace/didChangeConfiguration', client.config.settings)
+        else
+          return vim.notify("Error when reading dictionary config, check it")
+        end
+      elseif configtype == 'disable' then
+        if client.config.settings.ltex.disabledRules then
+          client.config.settings.ltex.disabledRules = {
+            [lang] = readFiles(DisabledRules_file[lang])
+          };
+          return client.notify('workspace/didChangeConfiguration', client.config.settings)
+        else
+          return vim.notify("Error when reading disabledRules config, check it")
+        end
+      elseif configtype == 'falsePositive' then
+        if client.config.settings.ltex.hiddenFalsePositives then
+          client.config.settings.ltex.hiddenFalsePositives = {
+            [lang] = readFiles(FalsePositives_file[lang])
+          };
+          return client.notify('workspace/didChangeConfiguration', client.config.settings)
+        else
+          return vim.notify("Error when reading hiddenFalsePositives config, check it")
+        end
+      end
+    else
+      return nil
+    end
+  end
+
+  local function addToFile(filetype, lang, file, value)
+    file = io.open(file[#file - 0], "a+") -- add only to last file defined.
+    if file then
+      file:write(value .. "\n")
+      file:close()
+    else
+      return print("Failed insert %q", value)
+    end
+    if filetype == 'dictionary' then
+      return updateConfig(lang, "dictionary")
+    elseif filetype == 'disable' then
+      return updateConfig(lang, "disable")
+    elseif filetype == 'falsePositive' then
+      return updateConfig(lang, "disable")
+    end
+  end
+
+  local function addTo(filetype, lang, file, value)
+    local dict = readFiles(file)
+    for _, v in ipairs(dict) do
+      if v == value then
+        return nil
+      end
+    end
+    return addToFile(filetype, lang, file, value)
+  end
+
+  configs.ltex = {
+    default_config = {
+      cmd = { "ltex-ls" };
+      filetypes = { 'tex', 'bib', 'md' };
+      root_dir = function (filename)
+        return util.path.dirname(filename)
+      end;
+      settings = {
+        ltex = {
+          enabled = { "latex", "tex", "bib", "md" },
+          checkFrequency = "save",
+          language = "en-GB",
+          ["ltex-ls"] = {
+            logLevel = "error",
+          },
+          diagnosticSeverity = "warning",
+          setenceCacheSize = 5000,
+          additionalRules = {
+            enablePickyRules = true,
+            motherTongue = "de-DE",
+          },
+          dictionary = {
+            ["en-GB"] = readFiles(Dictionary_file["en-GB"] or {}),
+          },
+          disabledRules = {
+            ["en-GB"] = readFiles(DisabledRules_file["en-GB"] or {}),
+          },
+          hiddenFalsePositives = {
+            ["en-GB"] = readFiles(FalsePositives_file["en-GB"] or {}),
+          },
+        },
+      };
+    };
+  };
+
+  -- lspconfig.ltex_plus.setup({
+  --   settings = {
+  --     ltex = {
+  --       language = "en-GB",
+  --       latex = {
+  --         commands = { ["\\acrlong{}"] = "ignore", ["\\Gls{}"] = "ignore", ["\\glspl{}"] = "ignore", ["\\Acrlong{}"] = "ignore" },
+  --         environments = { ["lstlisting"] = "ignore", ["lstlisting*"] = "ignore" },
+  --       },
+  --       dictionary = {
+  --         ["en-GB"] = readFiles(Dictionary_file["en-GB"] or {}),
+  --       },
+  --       disabledRules = {
+  --         ["en-GB"] = readFiles(DisabledRules_file["en-GB"] or {}),
+  --       },
+  --       hiddenFalsePositives = {
+  --         ["en-GB"] = readFiles(FalsePositives_file["en-GB"] or {}),
+  --       },
+  --       additionalRules = { enablePickyRules = true },
+  --     },
+  --   },
+  -- })
+
   require("mason-lspconfig").setup_handlers({
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
     -- a dedicated handler.
-    function (server_name)  -- default handler (optional)
+    function (server_name) -- default handler (optional)
       require("lspconfig")[server_name].setup({})
     end,
     ["bashls"] = function ()
@@ -286,7 +466,7 @@ M.config = function ()
     end,
     ["lua_ls"] = function ()
       lspconfig.lua_ls.setup({
-        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+        capabilities = lsp_defaults.capabilities,
         settings = {
           Lua = {
             runtime = {
@@ -399,10 +579,6 @@ M.config = function ()
       })
     end,
     ["ts_ls"] = function ()
-      local mason_registry = require("mason-registry")
-      local vue_language_server_path = mason_registry
-        .get_package("vue-language-server")
-        :get_install_path() .. "/node_modules/@vue/language-server"
       lspconfig.ts_ls.setup({
         filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
         init_options = {
@@ -550,16 +726,8 @@ M.config = function ()
             additionalRules = {
               motherTongue = "de-DE",
             },
-            ["ltex-ls"] = {
-              logLevel = "warning",
-            },
           },
         },
-        on_attach = function (client, bufnr)
-          require("ltex_extra").setup({
-            path = vim.fn.expand("~") .. "/.local/share/ltex",
-          })
-        end,
       })
     end,
   })
@@ -625,6 +793,43 @@ M.config = function ()
 
   if vim.fn.executable("watchman") == 1 then
     require("vim.lsp._watchfiles")._watchfunc = watchman
+  end
+  lspconfig.ltex.dictionary_file = Dictionary_file
+  lspconfig.ltex.disabledrules_file = DisabledRules_file
+  lspconfig.ltex.falsepostivies_file = FalsePositives_file
+
+
+  -- https://github.com/neovim/nvim-lspconfig/issues/858 can't intercept,
+  -- override it then.
+  local orig_execute_command = vim.lsp.buf.execute_command
+  vim.lsp.buf.execute_command = function (command)
+    if command.command == '_ltex.addToDictionary' then
+      local arg = command.arguments[1].words -- can I really access like this?
+      for lang, words in pairs(arg) do
+        for _, word in ipairs(words) do
+          local filetype = "dictionary"
+          addTo(filetype, lang, findLtexFiles(filetype, lang), word)
+        end
+      end
+    elseif command.command == '_ltex.disableRules' then
+      local arg = command.arguments[1].ruleIds -- can I really access like this?
+      for lang, rules in pairs(arg) do
+        for _, rule in ipairs(rules) do
+          local filetype = "disable"
+          addTo(filetype, lang, findLtexFiles(filetype, lang), rule)
+        end
+      end
+    elseif command.command == '_ltex.hideFalsePositives' then
+      local arg = command.arguments[1].falsePositives -- can I really access like this?
+      for lang, rules in pairs(arg) do
+        for _, rule in ipairs(rules) do
+          local filetype = "falsePositive"
+          addTo(filetype, lang, findLtexFiles(filetype, lang), rule)
+        end
+      end
+    else
+      orig_execute_command(command)
+    end
   end
 end
 return M

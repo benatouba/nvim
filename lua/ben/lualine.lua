@@ -118,7 +118,7 @@ M.config = function ()
   end
   config.sections.lualine_c = { { "diff", source = diff_source }, "diagnostics", "oil" }
   config.sections.lualine_x = {
-    "overseer",
+    -- "overseer",
     { get_lsp_client },
     { lint_progress },
     { "copilot", show_colors = true },
@@ -139,7 +139,7 @@ M.config = function ()
     "quickfix",
     "mason",
     "lazy",
-    "overseer",
+    -- "overseer",
     "trouble",
     "nvim-tree",
     "toggleterm",

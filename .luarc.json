@@ -8,6 +8,7 @@
         "print",
         "unpack"
     ],
+  "diagnostics.neededFileStatus": { "codestyle-check": "Any" },
     "workspace.library": [
         "/home/ben/.local/share/nvim/site/pack/packer/start/neodev.nvim/types/stable",
         "/usr/share/nvim/runtime/lua",
