@@ -47,16 +47,15 @@ M.config = function ()
   ts.setup({
     ensure_installed = { "python", "markdown", "markdown_inline", "lua", "bash", "json" },
     auto_install = true,
-    ignore_install = { "org" },
     -- sync_install = false,
     highlight = {
       enable = true,
       additional_vim_regex_highlighting = { "markdown" },
-      config = {
-        vue = {
-          style_element = "// %s",
-        },
-      },
+      -- config = {
+      --   vue = {
+      --     style_element = "// %s",
+      --   },
+      -- },
     },
     incremental_selection = {
       enable = true,

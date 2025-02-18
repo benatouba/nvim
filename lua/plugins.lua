@@ -1,7 +1,3 @@
--- local execute = vim.api.nvim_command
--- local fn = vim.fn
-
-
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -52,39 +48,7 @@ lazy.setup({
     enabled = O.language_parsing,
   },
   {
-    "rcarriga/nvim-notify",
-    config = function ()
-      ---@diagnostic disable-next-line: missing-fields
-      require("notify").setup({
-        timeout = 3000,
-        render = "minimal",
-        level = 2,
-        stages = "fade_in_slide_out",
-        icons = {
-          DEBUG = "",
-          ERROR = "",
-          INFO = "",
-          TRACE = "✎",
-          WARN = ""
-        },
-        time_formats = {
-          notification = "%T",
-          notification_history = "%FT%T"
-        },
-        minimum_width = 50,
-        fps = 30,
-        max_width = 80,
-        max_height = 10,
-        top_down = false,
-      })
-      vim.notify = require("notify")
-      require("telescope").load_extension("notify")
-    end,
-    dependencies = "telescope.nvim",
-    enabled = O.misc and O.lsp and false,
-  },
-  {
-    "epwalsh/obsidian.nvim",
+    "benatouba/obsidian.nvim",
     event = "VeryLazy",
     ft = "markdown",
     lazy = true,
@@ -100,17 +64,6 @@ lazy.setup({
       require("impatient")
     end,
     enabled = vim.fn.has("nvim-0.10") == 0,
-  },
-  {
-    "nvim-telescope/telescope-frecency.nvim",
-    dependencies = {
-      "telescope.nvim",
-      "tami5/sql.nvim",
-    },
-    enabled = false,
-    config = function ()
-      require("telescope").load_extension("frecency")
-    end,
   },
   {
     "nvim-telescope/telescope.nvim",
@@ -154,6 +107,9 @@ lazy.setup({
         -- refer to the configuration section below
         animate = { enabled = false },
         bigfile = { enabled = false },
+        keys = {
+              { "<leader>sc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+        },
         dashboard = {
           enabled = true,
           preset = {
@@ -238,16 +194,16 @@ lazy.setup({
           names_opts = {
             uppercase = true,
           },
-          RRGGBBAA = true,   -- #RRGGBBAA hex codes
-          AARRGGBB = true,   -- 0xAARRGGBB hex codes
-          rgb_fn = true,     -- CSS rgb() and rgba() functions
-          hsl_fn = true,     -- CSS hsl() and hsla() functions
-          css = true,        -- Enable all CSS *features*:
+          RRGGBBAA = true,       -- #RRGGBBAA hex codes
+          AARRGGBB = true,       -- 0xAARRGGBB hex codes
+          rgb_fn = true,         -- CSS rgb() and rgba() functions
+          hsl_fn = true,         -- CSS hsl() and hsla() functions
+          css = true,            -- Enable all CSS *features*:
           -- names, RGB, RGBA, RRGGBB, RRGGBBAA, AARRGGBB, rgb_fn, hsl_fn
-          css_fn = true,     -- Enable all CSS *functions*: rgb_fn, hsl_fn
+          css_fn = true,         -- Enable all CSS *functions*: rgb_fn, hsl_fn
           -- Tailwind colors.  boolean|'normal'|'lsp'|'both'.  True sets to 'normal'
-          tailwind = true,   -- Enable tailwind colors
-          tailwind_opts = {   -- Options for highlighting tailwind names
+          tailwind = true,       -- Enable tailwind colors
+          tailwind_opts = {      -- Options for highlighting tailwind names
             update_names = true, -- When using tailwind = 'both', update tailwind names from LSP results.  See tailwind section
           },
           -- parsers can contain values used in `user_default_options`
@@ -326,12 +282,12 @@ lazy.setup({
     config = function ()
       require("ben.dial").config()
     end,
-    keys = { "<C-a>", "<C-x>" },
+    -- keys = { "<C-a>", "<C-x>" },
   }, -- increment/decrement basically everything,
   {
     "mbbill/undotree",
     lazy = true,
-    cmd = "UndotreeToggle",
+    -- cmd = "UndotreeToggle",
     enabled = true,
   },
   {
@@ -397,9 +353,16 @@ lazy.setup({
     enabled = O.language_parsing,
   },
   {
-    "JoosepAlviste/nvim-ts-context-commentstring",
-    ft = { "vue", "svelte", "typescriptreat", "html" },
-    enabled = O.webdev and O.language_parsing,
+    "dmmulroy/tsc.nvim",
+    enabled = O.typescript,
+    ft = { "typescript", "typescriptreact", "vue", },
+    config = function ()
+      require('tsc').setup({
+        use_trouble_qflist = true,
+        use_diagnostics = true,
+      })
+      vim.keymap.set('n', '<leader>lt', ':TSC<CR>')
+    end,
   },
   {
     "dmmulroy/ts-error-translator.nvim",
@@ -508,10 +471,181 @@ lazy.setup({
     },
   },
   {
+    "xzbdmw/colorful-menu.nvim",
+    config = function ()
+      -- You don't need to set these options.
+      require("colorful-menu").setup({
+        ls = {
+          lua_ls = {
+            -- Maybe you want to dim arguments a bit.
+            arguments_hl = "@comment",
+          },
+          gopls = {
+            -- By default, we render variable/function's type in the right most side,
+            -- to make them not to crowd together with the original label.
+
+            -- when true:
+            -- foo             *Foo
+            -- ast         "go/ast"
+
+            -- when false:
+            -- foo *Foo
+            -- ast "go/ast"
+            align_type_to_right = true,
+            -- When true, label for field and variable will format like "foo: Foo"
+            -- instead of go's original syntax "foo Foo". If align_type_to_right is
+            -- true, this option has no effect.
+            add_colon_before_type = false,
+          },
+          -- for lsp_config or typescript-tools
+          ts_ls = {
+            extra_info_hl = "@comment",
+          },
+          vtsls = {
+            extra_info_hl = "@comment",
+          },
+          ["rust-analyzer"] = {
+            -- Such as (as Iterator), (use std::io).
+            extra_info_hl = "@comment",
+            -- Similar to the same setting of gopls.
+            align_type_to_right = true,
+          },
+          clangd = {
+            -- Such as "From <stdio.h>".
+            extra_info_hl = "@comment",
+            -- Similar to the same setting of gopls.
+            align_type_to_right = true,
+            -- the hl group of leading dot of "•std::filesystem::permissions(..)"
+            import_dot_hl = "@comment",
+          },
+          zls = {
+            -- Similar to the same setting of gopls.
+            align_type_to_right = true,
+          },
+          roslyn = {
+            extra_info_hl = "@comment",
+          },
+          -- The same applies to pyright/pylance
+          basedpyright = {
+            -- It is usually import path such as "os"
+            extra_info_hl = "@comment",
+          },
+
+          -- If true, try to highlight "not supported" languages.
+          fallback = true,
+        },
+        -- If the built-in logic fails to find a suitable highlight group,
+        -- this highlight is applied to the label.
+        fallback_highlight = "@variable",
+        -- If provided, the plugin truncates the final displayed text to
+        -- this width (measured in display cells). Any highlights that extend
+        -- beyond the truncation point are ignored. When set to a float
+        -- between 0 and 1, it'll be treated as percentage of the width of
+        -- the window: math.floor(max_width * vim.api.nvim_win_get_width(0))
+        -- Default 60.
+        max_width = 60,
+      })
+    end,
+  },
+  {
     "neovim/nvim-lspconfig",
     dependencies = {
       -- "hrsh7th/cmp-nvim-lsp",
-      -- "saghen/blink.cmp",
+      {
+        'saghen/blink.compat',
+        version = '*',
+        lazy = true,
+        opts = {
+          impersonate_nvim_cmp = false,
+        },
+      },
+      {
+        'saghen/blink.cmp',
+        enabled = true,
+        version = '*',
+        event = { "InsertEnter", "CmdlineEnter" },
+        dependencies = {
+          "rafamadriz/friendly-snippets",
+          "mikavilpas/blink-ripgrep.nvim",
+          "Kaiser-Yang/blink-cmp-git",
+          "hrsh7th/cmp-nvim-lua",
+          "hrsh7th/cmp-calc",
+          "hrsh7th/cmp-emoji",
+          "R-nvim/cmp-r",
+          "onsails/lspkind.nvim",
+          {
+            "rcarriga/cmp-dap",
+            ft = { "dap-repl", "dapui_watches", "dapui_hover" },
+          },
+          {
+            "michhernand/RLDX.nvim",
+            enabled = false,
+            -- lazy = true,
+            -- event = {
+            --   "BufReadPost *.org", "BufNewFile *.org",
+            --   "BufReadPost *.md", "BufNewFile *.md",
+            -- },
+            opts = {
+              filename = os.getenv("HOME") .. "/documents/rolodex_db.json",
+              schema_ver = "latest",
+              encryption = "plaintext",
+            }
+          },
+          {
+            'philosofonusus/ecolog.nvim',
+            branch = 'beta',
+            lazy = false,
+            opts = {
+              integrations = {
+                blink_cmp = true,
+                lspsaga = true,
+                snacks = {
+                  shelter = {
+                    mask_on_copy = false, -- Whether to mask values when copying
+                  },
+                  keys = {
+                    copy_value = "<C-y>",
+                    copy_name = "<C-u>",
+                    append_value = "<C-a>",
+                    append_name = "<CR>",
+                  },
+                  layout = {
+                    preset = "default",
+                    preview = true,
+                  },
+                },
+              },
+              shelter = {
+                configuration = {
+                  partial_mode = {
+                    show_start = 1,
+                    show_end = 1,
+                    min_mask = 3,
+                  },
+                  mask_char = "*",
+                },
+                modules = {
+                  cmp = true,
+                  peek = false,
+                  files = true,
+                  telescope = false,
+                  telescope_previewer = false,
+                  fzf = false,
+                  fzf_previewer = false,
+                  snacks_previewer = false,
+                  snacks = false,
+                }
+              },
+              types = true,
+              path = vim.fn.getcwd(),
+              preferred_environment = "development",
+              provider_patterns = true,
+            },
+          }
+        },
+        opts = require("lsp.blink").opts,
+        opts_extend = { "sources.default" },
+      },
       "b0o/SchemaStore.nvim",
       {
         "hrsh7th/nvim-cmp",
@@ -539,7 +673,7 @@ lazy.setup({
         config = function ()
           require("lsp.cmp").config()
         end,
-        enabled = O.lsp or O.language_parsing,
+        enabled = false,
       },
     },
     event = "BufReadPost",
@@ -595,6 +729,12 @@ lazy.setup({
     version = "*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
     -- install jsregexp (optional!).
     build = "make install_jsregexp"
+  },
+  {
+    "folke/ts-comments.nvim",
+    opts = {},
+    event = "VeryLazy",
+    enabled = vim.fn.has("nvim-0.10.0") == 1,
   },
   {
     "folke/trouble.nvim",
@@ -721,7 +861,8 @@ lazy.setup({
               { name = "dap" },
             },
           })
-        end
+        end,
+        enabled = false,
       },
       {
         "rcarriga/nvim-dap-ui",
@@ -768,23 +909,20 @@ lazy.setup({
     "folke/lazydev.nvim",
     opts = {
       library = {
-        -- Library items can be absolute paths
-        -- "~/projects/my-awesome-lib",
-        -- Or relative, which means they will be resolved as a plugin
-        -- "LazyVim",
-        -- When relative, you can also provide a path to the library in the plugin dir
-        "luvit-meta/library", -- see below
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        { path = "snacks.nvim",        words = { "Snacks" } },
+        { path = "lazy.nvim",          words = { "LazyVim" } },
       },
     },
     ft = "lua",
     enabled = O.lsp,
   },
-  { "Bilal2453/luvit-meta",  lazy = true,           enabled = O.lsp },
 
   -- project management
   {
     "nvim-orgmode/orgmode",
     dependencies = {
+      "danilshvalov/org-modern.nvim",
       {
         "akinsho/org-bullets.nvim",
         config = function ()
@@ -871,6 +1009,7 @@ lazy.setup({
           scss = { "prettierd", "prettier", stop_after_first = true },
           html = { "prettierd", "prettier", stop_after_first = true },
           json = { "prettierd", "prettier", stop_after_first = true },
+          nix = { "nixfmt", stop_after_first = true },
           -- r = { "styler", stop_after_first = true },
           yaml = { "prettierd", "prettier", stop_after_first = true },
           markdown = { "prettierd", "prettier", stop_after_first = true },
@@ -1019,7 +1158,9 @@ lazy.setup({
         compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
         integrations = {
           barbar = true,
+          blink_cmp = true,
           cmp = O.lsp,
+          dadbod_ui = true,
           dap = O.dap,
           dap_ui = O.dap,
           gitsigns = O.git,
@@ -1032,6 +1173,9 @@ lazy.setup({
           lsp_trouble = true,
           markdown = true,
           mason = true,
+          mini = {
+            enabled = true,
+          },
           native_lsp = {
             enabled = true,
             virtual_text = {
@@ -1054,13 +1198,18 @@ lazy.setup({
           neotest = true,
           noice = true,
           notify = true,
+          nvim_surround = true,
           nvimtree = true,
+          octo = true,
+          overseer = true,
+          rainbow_delimiters = true,
+          render_markdown = true,
+          snacks = true,
+          semantic_tokens = true,
           telekasten = true,
           telescope = true,
           treesitter = true,
           treesitter_context = true,
-          ts_rainbow = true,
-          overseer = true,
           vimwiki = false,
           which_key = true,
         },
@@ -1092,22 +1241,6 @@ lazy.setup({
       require("misc.refactoring").maps()
     end,
     enabled = O.language_parsing and O.misc,
-  },
-  {
-    "iamcco/markdown-preview.nvim",
-    ft = { "markdown" },
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    build = function ()
-      if tonumber(string.sub(Capture("node --version"), 2, 3)) >= 16 then
-        return "cd app && npm install"
-      else
-        vim.fn["mkdp#util#install"]()
-      end
-    end,
-    init = function ()
-      vim.g.mkdp_filetypes = { "markdown" }
-    end,
-    enabled = O.markdown and false,
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
@@ -1156,7 +1289,7 @@ lazy.setup({
     config = function ()
       require("misc.typescript_tools").config()
     end,
-    ft = { "vue", "typescript", "typescriptreact" },
+    ft = { "vue", "typescript", "typescriptreact", "javascript", "javascriptreact" },
     enabled = O.webdev or O.typescript,
   },
   {

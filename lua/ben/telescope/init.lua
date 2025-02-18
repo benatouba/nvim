@@ -56,7 +56,7 @@ M.config = function ()
       borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
       color_devicons = true,
       use_less = true,
-      set_env = { ["COLORTERM"] = "truecolor" },  -- default = nil,
+      set_env = { ["COLORTERM"] = "truecolor" }, -- default = nil,
       file_previewer = previewers.vim_buffer_cat.new,
       grep_previewer = previewers.vim_buffer_vimgrep.new,
       qflist_previewer = previewers.vim_buffer_qflist.new,
@@ -118,9 +118,9 @@ M.config = function ()
         },
       },
       fzf = {
-        override_generic_sorter = true,  -- override the generic sorter
-        override_file_sorter = true,  -- override the file sorter
-        case_mode = "smart_case",  -- or "ignore_case" or "respect_case"
+        override_generic_sorter = true, -- override the generic sorter
+        override_file_sorter = true,    -- override the file sorter
+        case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
         -- the default case_mode is "smart_case"
       }
     }
@@ -131,24 +131,23 @@ M.config = function ()
     print("Which-key not okay in telescope")
   end
   local maps = {
-    { "<leader>b", "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
-    { "<leader>s", group = "Search" },
-    { "<leader>sB", "<cmd>Telescope file_browser<cr>", desc = "Browser" },
-    { "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man Pages" },
-    { "<leader>sN", "<cmd>Noice telescope<cr>", desc = "Noice Notifications" },
-    { "<leader>sR", "<cmd>Telescope registers<cr>", desc = "Registers" },
-    -- { "<leader>sT", "<cmd>Telescope treesitter<cr>", desc = "Treesitter Symbols" },
-    { "<leader>sb", "<cmd>Telescope git_branches<cr>", desc = "Branches" },
-    { "<leader>sc", "<cmd>Telescope colorscheme<cr>", desc = "Colorscheme" },
+    { "<leader>b",  "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
+    { "<leader>s",  group = "Search" },
+    { "<leader>sB", "<cmd>Telescope file_browser<cr>",           desc = "Browser" },
+    { "<leader>sM", "<cmd>Telescope man_pages<cr>",              desc = "Man Pages" },
+    { "<leader>sN", "<cmd>Noice telescope<cr>",                  desc = "Noice Notifications" },
+    { "<leader>sR", "<cmd>Telescope registers<cr>",              desc = "Registers" },
+    { "<leader>sb", "<cmd>Telescope git_branches<cr>",           desc = "Branches" },
+    { "<leader>se", "<cmd>EcologSnacks<cr>",                     desc = "Env" },
+    { "<leader>sC", "<cmd>Telescope colorscheme<cr>",            desc = "Colorscheme" },
     { "<leader>sf", "<cmd>Telescope find_files hidden=true<cr>", desc = "Find File" },
-    { "<leader>sg", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
-    { "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
-    { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Marks" },
-    -- { "<leader>sn", "<cmd>Telescope notify theme=ivy<cr>", desc = "Notifications" },
-    { "<leader>so", "<cmd>Telescope oldfiles<cr>", desc = "Open Recent File" },
-    { "<leader>sp", "<cmd>Telescope projects<cr>", desc = "Projects" },
-    { "<leader>sq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix List" },
-    { "<leader>st", "<cmd>Telescope live_grep<cr>", desc = "Text" },
+    { "<leader>sg", "<cmd>Telescope git_files<cr>",              desc = "Git Files" },
+    { "<leader>sk", "<cmd>Telescope keymaps<cr>",                desc = "Keymaps" },
+    { "<leader>sm", "<cmd>Telescope marks<cr>",                  desc = "Marks" },
+    { "<leader>so", "<cmd>Telescope oldfiles<cr>",               desc = "Open Recent File" },
+    { "<leader>sp", "<cmd>Telescope projects<cr>",               desc = "Projects" },
+    { "<leader>sq", "<cmd>Telescope quickfix<cr>",               desc = "Quickfix List" },
+    { "<leader>st", "<cmd>Telescope live_grep<cr>",              desc = "Text" },
   }
   wk.add(maps)
 end

@@ -95,107 +95,122 @@ M.config = function ()
     end
   end, {})
 
-  local common_on_attach = function (client, bufnr)
-    -- vim.api.nvim_exec_autocmds("User", { pattern = "LspAttached" })
-    local isOk, wk = pcall(require, "which-key")
-    if not isOk then
-      vim.notify("which-key not okay in lspconfig")
-      return
-    end
-    if client.server_capabilities.completionProvider then
-      vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
-    end
-    if client.name == "basedpyright" then
-      client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.documentRangeFormattingProvider = false
-      client.server_capabilities.definitionProvider = true
-      -- elseif client.name == "texlab" then
-      --   -- Disable in favor of Conform
-      --   client.server_capabilities.documentFormattingProvider = true
-      --   client.server_capabilities.documentRangeFormattingProvider = true
-    elseif client.name == "mutt_ls" then
-      vim.diagnostic.enable(not vim.diagnostic.is_enabled())
-    elseif client.name == "ruff" then
-      -- Disable hover in favor of Pyright
-      client.server_capabilities.hoverProvider = false
-      client.server_capabilities.definitionProvider = false
-    elseif client.name == "r_language_server" then
-      client.server_capabilities.completionProvider = false
-      client.server_capabilities.completionItemResolve = false
-    elseif client.name == "volar" then
-      client.server_capabilities.documentFormattingProvider = true
-      client.server_capabilities.documentRangeFormattingProvider = false
-      client.server_capabilities.definitionProvider = false
-    elseif client.name == "cssmodules_ls" then
-      client.server_capabilities.definitionProvider = true
-    end
-    vim.keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.completion.trigger()<cr>")
-    wk.add({
-      {
-        { buffer = bufnr },
-        { "<C-K>", vim.lsp.buf.signature_help, desc = "Signature", mode = { "n" } },
-        { "<F2>", vim.lsp.buf.rename, desc = "Rename" },
-        { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
-        { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action" },
-        { "<leader>lc", "<cmd>e $HOME/.config/nvim/lua/lsp/init.lua<cr>", desc = "Config" },
-        { "<leader>lC", "<cmd>LspCapabilities<cr>", desc = "Server Capabilities" },
-        { "<leader>ld", "<cmd>Telescope lsp_definitions<cr>", desc = "Definitions" },
-        { "<leader>lD", "<cmd>Telescope lsp_declarations<cr>", desc = "Declarations" },
-        { "<leader>lh", vim.lsp.buf.hover, desc = "Hover" },
-        { "<leader>lF", "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", desc = "Format Document (Sync)" },
-        { "<leader>li", "<cmd>LspInfo<cr>", desc = "Info" },
-        { "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens" },
-        { "<leader>lL", "<cmd>LspLog<CR>", desc = "Logs", icon = { icon = " ", color = "green" } },
-        { "<leader>lq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix" },
-        { "<leader>lr", vim.lsp.buf.rename, desc = "Rename" },
-        { "<leader>lR", "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>", desc = "Refactor" },
-        { "<leader>lv", "<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>", desc = "Virtual Text" },
-        { "<leader>lw", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", desc = "Workspace" },
-        { "<leader>lx", "<cmd>cclose<cr>", desc = "Close Quickfix" },
-        { "<leader>s", group = "Search" },
-        { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "Workspace Diagnostics" },
-        { "<leader>sD", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document Diagnostics" },
-        { "<leader>si", "<cmd>Telescope lsp_implementations<cr>", desc = "Implementations" },
-        { "<leader>sr", "<cmd>Telescope lsp_references<cr>", desc = "References" },
-        { "<leader>sS", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document Symbols (LSP)" },
-        { "<leader>ss", "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Workspace Symbols (LSP)" },
-        { "K", vim.lsp.buf.hover, desc = "Hover" },
-        -- f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" }, covered by conform.nvim
-        -- with lsp_fallback
+  vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+    callback = function (event)
+      local map = function (keys, func, desc, mode)
+        mode = mode or 'n'
+        vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+      end
+      local bufnr = vim.api.nvim_get_current_buf()
+      local isOk, wk = pcall(require, "which-key")
+      if not isOk then
+        vim.notify("which-key not okay in lspconfig")
+        return
+      end
+      local client = vim.lsp.get_client_by_id(event.data.client_id)
+      if client.server_capabilities.completionProvider then
+        vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+      end
+      if client.name == "basedpyright" then
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
+        client.server_capabilities.definitionProvider = true
+        -- elseif client.name == "texlab" then
+        --   -- Disable in favor of Conform
+        --   client.server_capabilities.documentFormattingProvider = true
+        --   client.server_capabilities.documentRangeFormattingProvider = true
+      elseif client.name == "mutt_ls" then
+        vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+      elseif client.name == "ruff" then
+        -- Disable hover in favor of Pyright
+        client.server_capabilities.hoverProvider = false
+        client.server_capabilities.definitionProvider = false
+      elseif client.name == "r_language_server" then
+        client.server_capabilities.completionProvider = false
+        client.server_capabilities.completionItemResolve = false
+      elseif client.name == "ts_ls" then
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
+        -- elseif client.name == "volar" then
+        --   client.server_capabilities.documentFormattingProvider = true
+        --   client.server_capabilities.documentRangeFormattingProvider = false
+        --   client.server_capabilities.definitionProvider = false
+      elseif client.name == "cssmodules_ls" then
+        client.server_capabilities.definitionProvider = true
+      end
+      vim.keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.completion.trigger()<cr>")
+      wk.add({
         {
-          mode = { "n", "x", "v" },
-          { "gD", vim.lsp.buf.declaration,     desc = "Declaration" },
-          { "gd", vim.lsp.buf.definition,      desc = "Definition" },
-          { "gI", vim.lsp.buf.implementation,  desc = "Implementations" },
-          { "gr", vim.lsp.buf.references,      desc = "References" },
-          { "gt", vim.lsp.buf.type_definition, desc = "Type Definition" },
-          { "gs", vim.lsp.buf.signature_help,  desc = "Signature" },
+          { buffer = bufnr },
+          { "<C-K>", vim.lsp.buf.signature_help, desc = "Signature", mode = { "n" } },
+          { "<F2>", vim.lsp.buf.rename, desc = "Rename" },
+          { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
+          { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action" },
+          { "<leader>lc", "<cmd>e $HOME/.config/nvim/lua/lsp/init.lua<cr>", desc = "Config" },
+          { "<leader>lC", "<cmd>LspCapabilities<cr>", desc = "Server Capabilities" },
+          { "<leader>lD", "<cmd>Telescope lsp_declarations<cr>", desc = "Declarations" },
+          { "<leader>lh", vim.lsp.buf.hover, desc = "Hover" },
+          { "<leader>lF", "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", desc = "Format Document (Sync)" },
+          { "<leader>li", "<cmd>LspInfo<cr>", desc = "Info" },
+          { "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens" },
+          { "<leader>lL", "<cmd>LspLog<CR>", desc = "Logs", icon = { icon = " ", color = "green" } },
+          { "<leader>lq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix" },
+          { "<leader>lr", "<cmd>LspRestart<cr>", desc = "Restart Server" },
+          { "<leader>lR", "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>", desc = "Refactor" },
+          { "<leader>lv", "<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>", desc = "Virtual Text" },
+          { "<leader>lw", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", desc = "Workspace" },
+          { "<leader>lx", "<cmd>cclose<cr>", desc = "Close Quickfix" },
+          { "<leader>s", group = "Search" },
+          { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "Workspace Diagnostics" },
+          { "<leader>sD", "<cmd>Telescope diagnostics bufnr=0<cr>", desc = "Document Diagnostics" },
+          { "<leader>si", "<cmd>Telescope lsp_implementations<cr>", desc = "Implementations" },
+          { "<leader>sr", "<cmd>Telescope lsp_references<cr>", desc = "References" },
+          { "<leader>sS", "<cmd>Telescope lsp_document_symbols<cr>", desc = "Document Symbols (LSP)" },
+          { "<leader>ss", "<cmd>Telescope lsp_workspace_symbols<cr>", desc = "Workspace Symbols (LSP)" },
+          { "K", vim.lsp.buf.hover, desc = "Hover" },
+          -- f = { "<cmd>lua vim.lsp.buf.format()<CR>", "Format Document" }, covered by conform.nvim
+          -- with lsp_fallback
+          {
+            mode = { "n", "x", "v" },
+            { "gD",  vim.lsp.buf.declaration,     desc = "Declaration" },
+            { "gd",  vim.lsp.buf.definition,      desc = "Definition" },
+            { "gI",  vim.lsp.buf.implementation,  desc = "Implementations" },
+            { "gO",  vim.lsp.buf.document_symbol, desc = "Document Symbols" },
+            { "gR",  vim.lsp.buf.references,      desc = "References" },
+            { "grr", vim.lsp.buf.references,      desc = "References" },
+            { "grn", vim.lsp.buf.rename,          desc = "Rename" },
+            { "gra", vim.lsp.buf.code_action,     desc = "Code Action" },
+            { "gri", vim.lsp.buf.implementation,  desc = "Implementations" },
+            { "gt",  vim.lsp.buf.type_definition, desc = "Type Definition" },
+            { "gs",  vim.lsp.buf.signature_help,  desc = "Signature" },
+          }
         }
-      }
-    })
-    vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
+      })
+      vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
+      if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+        local highlight_group = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+        vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' },
+          {
+            buffer = event.buf,
+            group = highlight_group,
+            callback = vim.lsp.buf.document_highlight,
+          })
+        vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+          buffer = event.buf,
+          group = highlight_group,
+          callback = vim.lsp.buf.clear_references,
+        })
+      end
+    end
+  })
 
-    -- -- Highlights occurrences of the word under the cursor
-    -- vim.api.nvim_create_augroup("LspHighlighting", {})
-    -- vim.api.nvim_create_autocmd(
-    --   { "CursorHold", "CursorHoldI" }, {
-    --     group = "LspHighlighting",
-    --     buffer = 0,
-    --     command = "lua vim.lsp.buf.document_highlight()"
-    --   }
-    -- )
-    -- vim.api.nvim_create_autocmd("CursorMoved",
-    --   { group = "LspHighlighting", buffer = 0, command = "lua vim.lsp.buf.clear_references()" })
-  end
-
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
   local lsp_defaults = {
     flags = {
       debounce_text_changes = 150,
     },
-    capabilities = require("cmp_nvim_lsp").default_capabilities(
-      vim.lsp.protocol.make_client_capabilities()
-    ),
-    on_attach = common_on_attach,
+    capabilities = require("blink.cmp").get_lsp_capabilities(capabilities),
   }
   -- local ok, wf = pcall(require, "vim.lsp._watchfiles")
   -- if ok then
@@ -333,7 +348,7 @@ M.config = function ()
   configs.ltex = {
     default_config = {
       cmd = { "ltex-ls" };
-      filetypes = { 'tex', 'bib', 'md' };
+      filetypes = { 'tex', 'bib', };
       root_dir = function (filename)
         return util.path.dirname(filename)
       end;
@@ -365,28 +380,6 @@ M.config = function ()
     };
   };
 
-  -- lspconfig.ltex_plus.setup({
-  --   settings = {
-  --     ltex = {
-  --       language = "en-GB",
-  --       latex = {
-  --         commands = { ["\\acrlong{}"] = "ignore", ["\\Gls{}"] = "ignore", ["\\glspl{}"] = "ignore", ["\\Acrlong{}"] = "ignore" },
-  --         environments = { ["lstlisting"] = "ignore", ["lstlisting*"] = "ignore" },
-  --       },
-  --       dictionary = {
-  --         ["en-GB"] = readFiles(Dictionary_file["en-GB"] or {}),
-  --       },
-  --       disabledRules = {
-  --         ["en-GB"] = readFiles(DisabledRules_file["en-GB"] or {}),
-  --       },
-  --       hiddenFalsePositives = {
-  --         ["en-GB"] = readFiles(FalsePositives_file["en-GB"] or {}),
-  --       },
-  --       additionalRules = { enablePickyRules = true },
-  --     },
-  --   },
-  -- })
-
   require("mason-lspconfig").setup_handlers({
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
@@ -412,7 +405,7 @@ M.config = function ()
       lspconfig.harper_ls.setup({
         settings = {
           ["harper-ls"] = {
-            userDictPath = "~/dict.txt"
+            userDictPath = vim.fn.stdpath("config") .. "/spell/en.utf-8.add",
           }
         },
       })
@@ -579,18 +572,22 @@ M.config = function ()
       })
     end,
     ["ts_ls"] = function ()
-      lspconfig.ts_ls.setup({
-        filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-        init_options = {
-          plugins = {
-            {
-              name = "@vue/typescript-plugin",
-              location = "./node_modules/@vue/typescript-plugin",
-              languages = { "javascript", "typescript", "vue" },
-            },
-          },
-        },
-      })
+      require("misc.typescript_tools").config()
+      -- local mason_registry = require('mason-registry')
+      -- local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path() ..
+      --   '/node_modules/@vue/language-server'
+      -- lspconfig.ts_ls.setup({
+      --   filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+      --   init_options = {
+      --     plugins = {
+      --       {
+      --         name = '@vue/typescript-plugin',
+      --         location = vue_language_server_path,
+      --         languages = { 'vue' },
+      --       },
+      --     },
+      --   },
+      -- })
     end,
 
     ["eslint"] = function ()
@@ -605,44 +602,44 @@ M.config = function ()
         },
       })
     end,
-    ["volar"] = function ()
-      local util = require("lspconfig.util")
-      local get_typescript_server_path = function (root_dir)
-        -- local global_ts = "$PNPM_HOME/global/5"
-        local global_ts =
-          vim.fn.expand("$HOME/.local/share/pnpm/global/5/node_modules/typescript/lib")
-        -- local global_ts = "/usr/local/lib"
-        local found_ts = ""
-        local function check_dir(path)
-          found_ts = util.path.join(path, "node_modules", "typescript", "lib")
-          if util.path.exists(found_ts) then
-            return path
-          end
-        end
-
-        if util.search_ancestors(root_dir, check_dir) then
-          return found_ts
-        else
-          util.path.exists(global_ts)
-          -- vim.notify("Using global typescript")
-          return global_ts
-        end
-      end
-      lspconfig.volar.setup({
-        capabilities = lsp_defaults.capabilities,
-        init_options = {
-          typescript = {
-            tsdk = get_typescript_server_path(vim.fn.getcwd()),
-          },
-          vue = {
-            hybridMode = true,
-          },
-        },
-        on_new_config = function (new_config, new_root_dir)
-          new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
-        end,
-      })
-    end,
+    -- ["volar"] = function ()
+    --   local util = require("lspconfig.util")
+    --   local get_typescript_server_path = function (root_dir)
+    --     -- local global_ts = "$PNPM_HOME/global/5"
+    --     local global_ts =
+    --       vim.fn.expand("$HOME/.local/share/pnpm/global/5/node_modules/typescript/lib")
+    --     -- local global_ts = "/usr/local/lib"
+    --     local found_ts = ""
+    --     local function check_dir(path)
+    --       found_ts = util.path.join(path, "node_modules", "typescript", "lib")
+    --       if util.path.exists(found_ts) then
+    --         return path
+    --       end
+    --     end
+    --
+    --     if util.search_ancestors(root_dir, check_dir) then
+    --       return found_ts
+    --     else
+    --       util.path.exists(global_ts)
+    --       -- vim.notify("Using global typescript")
+    --       return global_ts
+    --     end
+    --   end
+    --   lspconfig.volar.setup({
+    --     capabilities = lsp_defaults.capabilities,
+    --     init_options = {
+    --       typescript = {
+    --         tsdk = get_typescript_server_path(vim.fn.getcwd()),
+    --       },
+    --       vue = {
+    --         hybridMode = true,
+    --       },
+    --     },
+    --     on_new_config = function (new_config, new_root_dir)
+    --       new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
+    --     end,
+    --   })
+    -- end,
     ["texlab"] = function ()
       lspconfig.texlab.setup({
         settings = {
@@ -677,7 +674,6 @@ M.config = function ()
       lsp_defaults.capabilities.textDocument.completion.completionItem.snippetSupport = true
       lspconfig.jsonls.setup({
         capabilities = lsp_defaults.capabilities,
-        on_attach = lsp_defaults.on_attach,
         settings = {
           json = {
             schemas = require("schemastore").json.schemas(),
@@ -690,7 +686,6 @@ M.config = function ()
       lsp_defaults.capabilities.textDocument.completion.completionItem.snippetSupport = true
       lspconfig.jsonls.setup({
         capabilities = lsp_defaults.capabilities,
-        on_attach = lsp_defaults.on_attach,
         settings = {
           yaml = {
             schemaStore = {
@@ -710,7 +705,7 @@ M.config = function ()
         capabilities = lsp_defaults.capabilities,
         filetypes = {
           "bib",
-          "markdown",
+          -- "markdown",
           -- "org",
           "plaintex",
           "rst",

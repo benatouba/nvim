@@ -25,42 +25,39 @@ M.config = function ()
         path = "~/projects/fg_doku",
       }
     },
-    daily_notes = { folder = "calendar/daily" },
+    daily_notes = { folder = "~/documents/vivere/calendar/daily" },
     templates = {
-      folder = "templates",
-      date_format = "%Y-%m-%d-%a",
+      folder = "~/documents/vivere/templates",
+      date_format = "%Y-%m-%d",
       time_format = "%H:%M",
     },
+    completion = {
+      blink = true,
+      min_chars = 3,
+    },
     picker = {
-      -- Set your preferred picker. Can be one of 'telescope.nvim', 'fzf-lua', or 'mini.pick'.
       name = "telescope.nvim",
-      -- Optional, configure key mappings for the picker. These are the defaults.
-      -- Not all pickers support all mappings.
       mappings = {
-        -- Create a new note from your query.
         new = "<C-x>",
-        -- Insert a link to the selected note.
         insert_link = "<C-l>",
       },
     },
     note_id_func = function (title)
-      -- Create note IDs in a Zettelkasten format with a timestamp and a suffix.
       local suffix = ""
       if title ~= nil then
-        -- If title is given, transform it into valid file name.
         suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
       else
-        -- If title is nil, just add 4 random uppercase letters to the suffix.
         for _ = 1, 4 do
           suffix = suffix .. string.char(math.random(65, 90))
         end
       end
       return suffix
     end,
+    wiki_link_func = "prepend_note_id",
     note_frontmatter_func = function (note)
-      local out = { title = note.id, id = note.id, aliases = note.aliases, tags = note.tags }
-      -- `note.metadata` contains any manually added fields in the frontmatter.
-      -- So here we just make sure those fields are kept in the frontmatter.
+      local out = { title = note.title, id = note.id, aliases = note.aliases, tags = note.tags }
+      out.created_at = os.date("%Y-%m-%dT%H:%M")
+      out.modified_at = os.date("%Y-%m-%dT%H:%M")
       if note.metadata ~= nil and require("obsidian").util.table_length(note.metadata) > 0 then
         for k, v in pairs(note.metadata) do
           out[k] = v
@@ -87,11 +84,12 @@ M.config = function ()
     { "<leader>vb", "<cmd>ObsidianBacklinks<CR>", desc = "Backlinks", remap = false },
     { "<leader>vf", "<cmd>ObsidianFollowLink<CR>", desc = "Follow link", remap = false },
     { "<leader>vn", "<cmd>ObsidianNew<CR>", desc = "New note", remap = false },
+    { "<leader>vN", "<cmd>ObsidianNewFromTemplate<CR>", desc = "New note from Template", remap = false },
     { "<leader>vo", "<cmd>ObsidianOpen<CR>", desc = "Open Obsidian", remap = false },
     { "<leader>vp", "<cmd>ObsidianPasteImg<CR>", desc = "Paste image", remap = false },
     { "<leader>vq", "<cmd>ObsidianQuickSwitch<CR>", desc = "Quick switch", remap = false },
     { "<leader>vr", "<cmd>ObsidianRename<CR>", desc = "Rename", remap = false },
-    { "<leader>vs", group = "+Obsidian", remap = false, icon = { icon = "󰇈 ", color = "purple" } },
+    { "<leader>vs", group = "+Search", remap = false, icon = { icon = "󰇈 ", color = "purple" } },
     { "<leader>vsd", "<cmd>ObsidianDailies<CR>", desc = "Dailies", remap = false },
     { "<leader>vsl", "<cmd>ObsidianLinks<CR>", desc = "Links", remap = false },
     { "<leader>vss", "<cmd>ObsidianSearch<CR>", desc = "Search", remap = false },

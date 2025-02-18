@@ -4,52 +4,23 @@ if not org_ok then
   vim.notify("orgmode not okay")
   return
 end
-
-local ts_ok, tsc = pcall(require, "nvim-treesitter.configs")
-if not ts_ok then
-  vim.notify("treesitter not okay in orgmode.nvim")
-  return
+local menu_ok, Menu = pcall(require, "org-modern.menu")
+if not menu_ok then
+  vim.notify("org-modern.menu not okay")
 end
 
-tsc.setup({
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = { "org" }, -- Required since TS highlighter doesn't support all syntax features (conceal)
-  },
-  ensure_installed = { "org" },                    -- Or run :TSUpdate org
-})
 M.config = function ()
   org.setup({
     ui = {
       menu = {
         handler = function (data)
-          -- your handler here, for example:
-          local options = {}
-          local options_by_label = {}
-
-          for _, item in ipairs(data.items) do
-            -- Only MenuOption has `key`
-            -- Also we don't need `Quit` option because we can close the menu with ESC
-            if item.key and item.label:lower() ~= "quit" then
-              table.insert(options, item.label)
-              options_by_label[item.label] = item
-            end
-          end
-
-          local handler = function (choice)
-            if not choice then
-              return
-            end
-
-            local option = options_by_label[choice]
-            if option.action then
-              option.action()
-            end
-          end
-
-          vim.ui.select(options, {
-            propmt = data.propmt,
-          }, handler)
+          Menu:new({
+            window = {
+              margin = { 0, 0, 0, 0 },
+              padding = { 0, 0, 0, 0 },
+              border = false,
+            },
+          }):open(data)
         end,
       },
     },

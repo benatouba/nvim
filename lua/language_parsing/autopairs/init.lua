@@ -48,9 +48,13 @@ end
 local M = {}
 
 M.config = function ()
-  local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-  local cmp = require("cmp")
-  cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+  local cmp_ap_ok, cmp_autopairs = pcall(require, "nvim-autopairs.completion.cmp")
+  local cmp_ok, cmp = pcall(require, "cmp")
+  if cmp_ok and cmp_ap_ok then
+    cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+  else
+    vim.notify("cmp.nvim or nvim-cmp-autopairs.nvim is not loaded")
+  end
 
   autopairs.setup({
     check_ts = true,

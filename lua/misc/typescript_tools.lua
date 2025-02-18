@@ -56,7 +56,25 @@ M.config = function ()
     --   end
     -- end,
     handlers = handlers,
+    on_attach = function (client, bufnr)
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    end,
+    filetypes = {
+      'javascript',
+      'javascriptreact',
+      'typescript',
+      'typescriptreact',
+      'vue',
+    },
     settings = {
+      tsserver_plugins = {
+        '@vue/typescript-plugin',
+      },
+      jsx_close_tag = {
+        enable = true,
+        filetypes = { 'javascriptreact', 'typescriptreact' },
+      },
       separate_diagnostic_server = true,
       tsserver_file_preferences = {
         includeInlayParameterNameHints = "all",
