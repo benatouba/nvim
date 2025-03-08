@@ -182,7 +182,8 @@ M.config = function ()
             { "grn", vim.lsp.buf.rename,          desc = "Rename" },
             { "gra", vim.lsp.buf.code_action,     desc = "Code Action" },
             { "gri", vim.lsp.buf.implementation,  desc = "Implementations" },
-            { "gt",  vim.lsp.buf.type_definition, desc = "Type Definition" },
+            { "gtd", vim.lsp.buf.type_definition, desc = "Type Definition" },
+            { "gth", vim.lsp.buf.typehierarchy,   desc = "Type Hierarchy" },
             { "gs",  vim.lsp.buf.signature_help,  desc = "Signature" },
           }
         }
@@ -400,6 +401,9 @@ M.config = function ()
           },
         },
       })
+    end,
+    ["vale_ls"] = function ()
+      lspconfig.vale_ls.setup({})
     end,
     ["harper_ls"] = function ()
       lspconfig.harper_ls.setup({

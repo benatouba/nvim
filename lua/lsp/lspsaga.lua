@@ -54,8 +54,7 @@ M.config = function ()
   wk.add({
     { "gI",         "<cmd>Lspsaga finder imp<CR>",           desc = "Implementation" },
     { "ga",         "<cmd>Lspsaga code_action<CR>",          desc = "Code Action" },
-    { "gF",         "<cmd>Lspsaga finder<CR>",               desc = "Finder" },
-    { "gh",         "<cmd>Lspsaga hover_doc<CR>",            desc = "Hover Doc" },
+    { "gF",         "<cmd>Lspsaga finder def+ref<CR>",       desc = "Finder" },
     { "go",         "<cmd>Lspsaga outline<CR>",              desc = "Outline" },
     { "gp",         "<cmd>Lspsaga peek_definition<CR>",      desc = "Peek" },
     { "]d",         "<cmd>Lspsaga diagnostic_jump_next<CR>", desc = "Next Diagnostic" },

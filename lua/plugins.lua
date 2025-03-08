@@ -108,7 +108,7 @@ lazy.setup({
         animate = { enabled = false },
         bigfile = { enabled = false },
         keys = {
-              { "<leader>sc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+          { "<leader>sc", function () Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
         },
         dashboard = {
           enabled = true,
@@ -116,12 +116,10 @@ lazy.setup({
             keys = {
               { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
               { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-              { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+              { icon = " ", key = "t", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
               { icon = " ", key = "o", desc = "Orgmode", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.expand('~') .. '/documents/vivere/org'})" },
               { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
-              { icon = "󱊈 ", key = "m", desc = "Mason", action = ":Mason" },
               { icon = " ", key = "s", desc = "Restore Session", section = "session" },
-              { icon = " ", key = "p", desc = "Plugins", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
               { icon = " ", key = "q", desc = "Quit", action = ":qa" },
             },
           },
@@ -149,7 +147,9 @@ lazy.setup({
         rename = { enabled = false },
         indent = { enabled = false },
         input = { enabled = false },
-        notifier = { enabled = true },
+        notifier = {
+          enabled = true,
+        },
         notify = { enabled = true },
         quickfile = { enabled = false },
         scroll = { enabled = false },
@@ -963,17 +963,34 @@ lazy.setup({
     "mfussenegger/nvim-lint",
     config = function ()
       require("lint").linters_by_ft = {
-        tex = { "proselint" },
+        tex = { "proselint", "tex_fmt" },
         zsh = { "zsh" },
         jinja = { "djlint" },
         htmldjango = { "djlint" },
-        NeogitCommitMessage = { "gitlint" },
+        NeogitCommitMessage = { "commitlint" },
+        gitcommit = { "commitlint" },
         typescript = { "eslint" },
-        javascript = { "eslint" },
-        javascriptreact = { "eslint" },
-        typescriptreact = { "eslint" },
-        vue = { "eslint" },
+        javascript = { "eslint", "trivy", },
+        javascriptreact = { "eslint", "trivy", },
+        typescriptreact = { "eslint", "trivy", },
+        markdown = { "alex", "markdownlint" },
+        vue = { "eslint", "trivy", },
+        c = { "trivy", "compiler", },
+        cxx = { "trivy" },
+        docker = { "trivy" },
+        elixir = { "trivy" },
+        go = { "trivy" },
+        helm = { "trivy" },
+        java = { "trivy" },
+        php = { "trivy" },
+        python = { "trivy" },
+        ruby = { "trivy" },
+        rust = { "trivy" },
+        terraform = { "trivy" },
+        [".*/.github/workflows/.*%.yml"] = "yaml.ghaction",
       }
+      local ns = require("lint").get_namespace("commitlint")
+      vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = true }, ns)
       vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "TextChanged" }, {
         callback = function ()
           require("lint").try_lint()
@@ -1245,7 +1262,7 @@ lazy.setup({
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
-    ft = { "markdown", "norg", "org", "rmd", "rst" },
+    ft = { "markdown", "norg", "org", "rmd", "rst", "tex" },
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {},
@@ -1349,14 +1366,20 @@ lazy.setup({
     event = "VeryLazy",
     config = function ()
       require "feed".setup({
+        -- rsshub = {
+        --   instance = "https://rsshub.app"
+        -- },
         feeds = {
-          -- These two styles all work
-          "https://neovim.io/news.xml",
-          -- tags given to a feed to be tagged to all its entries
-          { "https://neovim.io/news.xml", name = "Neovim News", tags = { "tech", "news" } },
-          -- RssHub link is also a first class citizen like http/https
-          -- rsshub://{route} will be the unique identifier in the database and resolved when fetching feeds which instance to use base on your config.rsshub_instance
-          "rsshub://apnews/topics/apf-topnews"
+          -- { "https://neovim.io/news.xml",                                                    name = "Neovim News",                                                  tags = { "tech", "news" } },
+          { "rsshub://sciencedirect/journal/advances-in-climate-change-research",            name = "ScienceDirect Advances in Climate Change Research",            tags = { "science" }, },
+          { "rsshub://sciencedirect/journal/journal-of-the-european-meteorological-society", name = "ScienceDirect Journal of the European Meteorological Society", tags = { "science" }, },
+          { "rsshub://sciencedirect/journal/results-in-earth-sciences",                      name = "ScienceDirect Results in Earth Sciences",                      tags = { "science" }, },
+          { "rsshub://sciencedirect/journal/weather-and-climate-extremes",                   name = "ScienceDirect Weather and Climate Extremes",                   tags = { "science" }, },
+          { "rsshub://nature/research/nclimate",                                             name = "Nature Climate Change",                                        tags = { "science" }, },
+          { "rsshub://nature/research/ngeo",                                                 name = "Nature Geoscience",                                            tags = { "science" }, },
+          { "rsshub://nature/research/natrevearthenviron",                                   name = "Nature Review Earth and Environment",                          tags = { "science" }, },
+          { "rsshub://nature/research/natwater",                                             name = "Nature Water",                                                 tags = { "science" }, },
+          { "rsshub://nature/research/npjclimatsci",                                         name = "npj Climate Science",                                          tags = { "science" }, },
         }
       })
       local wk_ok, wk = pcall(require, "which-key")

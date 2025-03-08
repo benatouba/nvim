@@ -15,6 +15,7 @@ local M = {}
 M.config = function ()
   obsidian.setup({
     -- dir = "~/documents/vivere",
+    ui = { enable = false },
     workspaces = {
       {
         name = "vivere",
