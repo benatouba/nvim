@@ -1,0 +1,26 @@
+{
+  "Frame": {
+    "prefix": "frame",
+    "body": ["\\\\begin{frame}{$1}", "\t$0", "\\\\end{frame}"],
+    "description": "Beamer Frame"
+  },
+  "Columns": {
+    "prefix": "columns",
+    "body": [
+      "\t\\begin{columns}",
+      "\t\t\\begin{column}{0.$3\\textwidth}",
+      "\t\t\t$2",
+      "\t\t\\end{column}",
+      "\t\t\\begin{column}{0.$1\\textwidth}",
+      "\t\t\t$0",
+      "\t\t\\end{column}",
+      "\t\\end{columns}"
+    ],
+    "description": "Beamer columns"
+  },
+  "Column": {
+    "prefix": "column",
+    "body": ["\t\t\\begin{column}{0.$1\\textwidth}", "\t\t\t$0", "\t\t\\end{column}"],
+    "description": "Beamer column"
+  }
+}

@@ -5,7 +5,7 @@ if not copilot_ok then
   return
 end
 
-M.config = function()
+M.config = function ()
   copilot.setup({
     panel = {
       enabled = true,
@@ -27,11 +27,11 @@ M.config = function()
       auto_trigger = true,
       debounce = 75,
       keymap = {
-        accept = "<M-l>",
-        accept_word = false,
+        accept = "<c-l>",
+        accept_word = "<c-a>",
         accept_line = false,
-        next = "<M-]>",
-        prev = "<M-[>",
+        next = "<c-j>",
+        prev = "<c-k>",
         dismiss = "<C-h>",
       },
     },
@@ -46,7 +46,7 @@ M.config = function()
       svn = false,
       cvs = false,
       TelescopePrompt = false,
-      sls = function()
+      sls = function ()
         if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), ".*user.*") then
           -- disable for user files
           return false
@@ -54,7 +54,7 @@ M.config = function()
         return true
       end,
 
-      sh = function()
+      sh = function ()
         if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
           -- disable for .env files
           return false
@@ -66,9 +66,10 @@ M.config = function()
     copilot_node_command = "node", -- Node.js version must be > 16.x
     server_opts_overrides = {},
   })
-  vim.keymap.set("i", "<C-a>",  "<cmd>lua require('copilot.suggestion').accept_word()<cr>", {})
-  vim.keymap.set("i", "<C-l>",  "<cmd>lua require('copilot.suggestion').accept_line()<cr>", {})
-  vim.keymap.set("i", "<C-g>",  "<cmd>lua require('copilot.panel').open()<cr>", {})
+  vim.keymap.set("i", "<C-a>", "<cmd>lua require('copilot.suggestion').accept_word()<cr>", {})
+  vim.keymap.set("i", "<C-l>", "<cmd>lua require('copilot.suggestion').accept_line()<cr>", {})
+  vim.keymap.set("i", "<Tab>", "<cmd>lua require('copilot.suggestion').accept()<cr>", {})
+  vim.keymap.set("i", "<C-g>", "<cmd>lua require('copilot.panel').open()<cr>", {})
 end
 
 return M

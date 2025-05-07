@@ -40,7 +40,7 @@ M.config = function ()
     end
   end, { silent = true })
 
-  require("luasnip.loaders.from_lua").load({paths = vim.fn.stdpath("config") .. "/snippets"})
+  require("luasnip.loaders.from_lua").lazy_load({paths = vim.fn.stdpath("config") .. "/snippets"})
 end
 
 return M

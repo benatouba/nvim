@@ -1,5 +1,5 @@
 {
-  "name": "Manim",
+  "name": "bens-snippets",
   "contributes": {
     "snippets": [
       {
@@ -7,6 +7,12 @@
           "python"
         ],
         "path": "./manim.json"
+      },
+      {
+        "language": [
+          "tex"
+        ],
+        "path": "./tex.json"
       }
     ]
   }

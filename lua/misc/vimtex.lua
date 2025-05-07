@@ -1,37 +1,48 @@
 local M = {}
 
-M.config = function ()
-  vim.g.vimtex_view_method = 'zathura_simple'
+M.config = function()
+  vim.g.vimtex_view_method = "zathura_simple"
   vim.g.vimtex_quickfix_open_on_warning = 0
   vim.g.vimtex_mappings_enabled = 1
   vim.g.vimtex_syntax_enabled = 1
   vim.g.matchup_override_vimtex = 1
   -- vim.bo.textwidth = 125  -- automatically insert line break after n chars
-  vim.g.vimtex_log_ignore = ({
-    'Underfull',
-    'Overfull',
-    'specifier changed to',
-    'Token not allowed in a PDF string',
-  })
+  vim.g.vimtex_log_ignore = {
+    "Underfull",
+    "Overfull",
+    "specifier changed to",
+    "Token not allowed in a PDF string",
+  }
 
   vim.g.vimtex_complete_bib = { simple = 1 }
   vim.g.vimtex_compiler_enabled = 1
   vim.g.vimtex_grammar_vlty = {
     -- lt_directory = "/usr/share/java/languagetool/libs/",
     lt_command = "languagetool",
-    server = 'my',
+    server = "my",
     show_suggestions = 1,
-    shell_options =
-    "--multi-language --packages '*' --quation-punctuation display --single-letters 'i.\\,A.\\|z.\\,B.\\|\\|'"
+    shell_options = "--multi-language --packages '*' --quation-punctuation display --single-letters 'i.\\,A.\\|z.\\,B.\\|\\|'",
   }
-  -- vim.g.vimtex_compiler_latexmk_engines = { _ = '-pdflatex' }
+  -- vim.g.vimtex_compiler_latexmk = {
+  --   options = {
+  --     "-verbose",
+  --     "-file-line-error'",
+  --     "-synctex=1",
+  --     "-interaction=nonstopmode",
+  --     -- "--enable-write18",
+  --   },
+  -- }
   -- vim.g.tex_comment_nospell = 1
   -- vim.g.vimtex_compiler_progname = 'nvr'
   -- vim.g.vimtex_view_general_options = [[--unique file:@pdf\#src:@line@tex]]
   -- vim.g.vimtex_view_general_options_latexmk = '--unique'
   local augroup = vim.api.nvim_create_augroup("VimtexGroup", { clear = true })
-  vim.api.nvim_set_keymap("n", "<F9>", ":w <bar> compiler vlty <bar> make <bar> :cw <cr><esc>",
-    { noremap = true, silent = true })
+  vim.api.nvim_set_keymap(
+    "n",
+    "<F9>",
+    ":w <bar> compiler vlty <bar> make <bar> :cw <cr><esc>",
+    { noremap = true, silent = true }
+  )
   vim.api.nvim_create_autocmd("User", {
     pattern = "VimtexEventInitPost",
     group = augroup,
@@ -41,7 +52,7 @@ M.config = function ()
   local wk = require("which-key")
   wk.add({
     -- buffer = "tex", -- e.g. ev.buf or similar
-    { mode = "n", "<localleader>l", group = "VimTeX", icon = { icon = "", color = "green" }, },
+    { mode = "n", "<localleader>l", group = "VimTeX", icon = { icon = "", color = "green" } },
     {
       "<localleader>l",
       group = "VimTeX",

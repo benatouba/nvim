@@ -4,10 +4,10 @@ local M = {}
 ---@type blink.cmp.Config
 M.opts = {
   keymap = {
-    preset = 'default',
-    ['<CR>'] = { 'accept', 'fallback' },
-    ['<Up>'] = {},
-    ['<Down>'] = {},
+    preset = "default",
+    ["<CR>"] = { "select_and_accept", "fallback" },
+    ["<Up>"] = {},
+    ["<Down>"] = {},
   },
 
   completion = {
@@ -17,16 +17,18 @@ M.opts = {
       },
     },
 
+    trigger = {
+      show_on_trigger_character = true,
+    },
     list = {
       selection = {
-        preselect = function (ctx)
-          return require('blink.cmp').snippet_active({ direction = 1 })
-        end,
+        preselect = true,
+        auto_insert = true,
       },
     },
     menu = {
-      border = 'single',
-      cmdline_position = function ()
+      border = "single",
+      cmdline_position = function()
         if vim.g.ui_cmdline_pos ~= nil then
           local pos = vim.g.ui_cmdline_pos -- (1, 0)-indexed
           return { pos[1] - 1, pos[2] }
@@ -37,65 +39,117 @@ M.opts = {
       -- nvim-cmp style menu
       draw = {
         columns = {
-          { "label",     gap = 1 },
-          { "kind_icon", "source_name" }
+          { "label", gap = 1 },
+          { "kind_icon", "source_name" },
         },
         components = {
           label = {
-            text = function (ctx)
+            text = function(ctx)
               return require("colorful-menu").blink_components_text(ctx)
             end,
-            highlight = function (ctx)
+            highlight = function(ctx)
               return require("colorful-menu").blink_components_highlight(ctx)
             end,
           },
           kind_icon = {
-            text = function (item)
-              local kind = require('lspkind').symbol_map[item.kind] or ''
-              return kind .. ' '
+            text = function(item)
+              local kind = require("lspkind").symbol_map[item.kind] or ""
+              return kind .. " "
             end,
-            highlight = 'CmpItemKind',
+            highlight = "CmpItemKind",
           },
           kind = {
-            text = function (item)
+            text = function(item)
               return item.kind
             end,
-            highlight = 'CmpItemKind',
+            highlight = "CmpItemKind",
           },
         },
       },
     },
-    documentation = { auto_show = true, auto_show_delay_ms = 200, window = { border = 'single' } },
+    documentation = { auto_show = true, auto_show_delay_ms = 200, window = { border = "single" } },
   },
-  signature = { enabled = true, window = { border = 'single' } },
+  signature = { enabled = true, window = { border = "single" } },
   appearance = {
     use_nvim_cmp_as_default = false,
-    nerd_font_variant = 'mono'
+    nerd_font_variant = "mono",
+  },
+  cmdline = {
+    enabled = true,
+    completion = {
+      menu = {
+        auto_show = function(ctx)
+          if ctx.mode == "cmdline" and string.find(ctx.line, "/") ~= nil then
+            return true
+          end
+          return false
+        end,
+      },
+    },
+    keymap = {
+      preset = "cmdline",
+      ["<C-l>"] = { "select_and_accept" },
+    },
   },
   sources = {
-    default = { 'ecolog', 'lsp', 'path', 'snippets', "ripgrep", "calc", "emoji", },
-    per_filetype = {
-      org = { "lsp", 'orgmode', 'path', 'snippets', "ripgrep",  "emoji", "calc", },
-      markdown = { "lsp",  "snippets", "emoji", "calc", },
-      gitcommit = { "lsp", 'git', "snippets", "emoji", "calc", },
-      sql = { "lsp", 'dadbod', "snippets", },
-      lua = { "lsp", 'lazydev', "path", "snippets", "nvim_lua", "calc", },
-      octo = { "lsp", 'git', "emoji", "calc", },
-      r = { "lsp", 'cmp_r', "path", "snippets", "calc", },
-      rmd = { "lsp", 'cmp_r', "path", "snippets", "calc", },
-      quarto = { "lsp", 'cmp_r', "path", "snippets", "calc", },
-      terminal = { "path", "cmp_r" },
-      ["dap-repl"] = { "dap", },
-      ["dapui_watches"] = { "dap", },
-      ["dapui_hover"] = { "dap", },
-    },
+    default = function(ctx)
+      local success, node = pcall(vim.treesitter.get_node)
+      if success and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
+        return { "buffer" }
+      elseif string.find(vim.fn.getcwd(), "nvim") then
+        return {
+          "ecolog",
+          "lsp",
+          "path",
+          "snippets",
+          "dap",
+          "git",
+          "nvim_lua",
+          "lazydev",
+          "ripgrep",
+          "calc",
+          "emoji",
+        }
+      else
+        return {
+          "ecolog",
+          "lsp",
+          "path",
+          "snippets",
+          "dap",
+          "orgmode",
+          "git",
+          "dadbod",
+          "lazydev",
+          "cmp_r",
+          "ripgrep",
+          "calc",
+          "emoji",
+        }
+      end
+    end,
+    -- per_filetype = {
+    --   org = { "lsp", "orgmode", "path", "snippets", "ripgrep", "emoji", "calc" },
+    --   markdown = { "lsp", "snippets", "emoji", "calc" },
+    --   gitcommit = { "lsp", "git", "snippets", "emoji", "calc" },
+    --   sql = { "lsp", "dadbod", "snippets" },
+    --   lua = { "lsp", "lazydev", "path", "snippets", "nvim_lua", "calc" },
+    --   octo = { "lsp", "git", "emoji", "calc" },
+    --   r = { "lsp", "cmp_r", "path", "snippets", "calc" },
+    --   rmd = { "lsp", "cmp_r", "path", "snippets", "calc" },
+    --   quarto = { "lsp", "cmp_r", "path", "snippets", "calc" },
+    --   terminal = { "path", "cmp_r" },
+    --   ["dap-repl"] = { "dap" },
+    --   ["dapui_watches"] = { "dap" },
+    --   ["dapui_hover"] = { "dap" },
+    -- },
     providers = {
       orgmode = {
-        name = 'Orgmode',
-        module = 'orgmode.org.autocompletion.blink',
-        fallbacks = { 'buffer' },
+        name = "Orgmode",
+        module = "orgmode.org.autocompletion.blink",
+        fallbacks = { "buffer" },
       },
-      ecolog = { name = 'ecolog', module = 'ecolog.integrations.cmp.blink_cmp' },
+      ecolog = { name = "ecolog", module = "ecolog.integrations.cmp.blink_cmp" },
       dap = {
         name = "dap",
         module = "blink.compat.source",
@@ -104,8 +158,8 @@ M.opts = {
         name = "cmp_r",
         module = "blink.compat.source",
         opts = {
-          filetypes = { "r", "rmd", "quarto", "terminal" }
-        }
+          filetypes = { "r", "rmd", "quarto", "terminal" },
+        },
       },
       nvim_lua = {
         name = "nvim_lua",
@@ -118,6 +172,13 @@ M.opts = {
       emoji = {
         name = "emoji",
         module = "blink.compat.source",
+      },
+      path = {
+        opts = {
+          get_cwd = function(_)
+            return vim.fn.getcwd()
+          end,
+        },
       },
       -- cmp_rolodex = {
       --   name = "cmp_rolodex",
@@ -135,19 +196,17 @@ M.opts = {
         score_offset = 100,
       },
       git = {
-        module = 'blink-cmp-git',
-        name = 'Git',
-        should_show_items = function ()
-          return vim.o.filetype == 'gitcommit'
+        module = "blink-cmp-git",
+        name = "Git",
+        should_show_items = function()
+          return vim.o.filetype == "gitcommit"
         end,
-        opts = {
-
-        },
+        opts = {},
       },
       snippets = {
-        should_show_items = function (ctx)
-          return ctx.trigger.initial_kind ~= 'trigger_character'
-        end
+        should_show_items = function(ctx)
+          return ctx.trigger.initial_kind ~= "trigger_character"
+        end,
       },
       ripgrep = {
         module = "blink-ripgrep",
@@ -168,7 +227,7 @@ M.opts = {
           additional_paths = {},
           debug = false,
         },
-        transform_items = function (_, items)
+        transform_items = function(_, items)
           for _, item in ipairs(items) do
             item.labelDetails = {
               description = " rg ",

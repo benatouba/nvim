@@ -48,7 +48,7 @@ lazy.setup({
     enabled = O.language_parsing,
   },
   {
-    "benatouba/obsidian.nvim",
+    "obsidian-nvim/obsidian.nvim",
     event = "VeryLazy",
     ft = "markdown",
     lazy = true,
@@ -563,7 +563,8 @@ lazy.setup({
         'saghen/blink.cmp',
         enabled = true,
         version = '*',
-        event = { "InsertEnter", "CmdlineEnter" },
+        build = 'cargo build --release',
+        -- event = { "InsertEnter", "CmdlineEnter" },
         dependencies = {
           "rafamadriz/friendly-snippets",
           "mikavilpas/blink-ripgrep.nvim",
@@ -908,14 +909,17 @@ lazy.setup({
   {
     "folke/lazydev.nvim",
     opts = {
-      library = {
-        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-        { path = "snacks.nvim",        words = { "Snacks" } },
-        { path = "lazy.nvim",          words = { "LazyVim" } },
-      },
+      -- library = {
+      --   { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      --   { path = "snacks.nvim",        words = { "Snacks" } },
+      --   { path = "lazy.nvim",          words = { "LazyVim" } },
+      -- },
     },
     ft = "lua",
-    enabled = O.lsp,
+    enabled = function(root_dir)
+      local direct_enabled = vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
+      return O.lsp and direct_enabled
+    end,
   },
 
   -- project management
@@ -963,7 +967,7 @@ lazy.setup({
     "mfussenegger/nvim-lint",
     config = function ()
       require("lint").linters_by_ft = {
-        tex = { "proselint", "tex_fmt" },
+        tex = { "proselint" },
         zsh = { "zsh" },
         jinja = { "djlint" },
         htmldjango = { "djlint" },
@@ -991,9 +995,17 @@ lazy.setup({
       }
       local ns = require("lint").get_namespace("commitlint")
       vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = true }, ns)
+      vim.api.nvim_create_augroup("lint", { clear = true })
       vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "TextChanged" }, {
+        group = "lint",
         callback = function ()
           require("lint").try_lint()
+        end,
+      })
+      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+        group = "lint",
+        callback = function ()
+          require("lint").try_lint("editorconfig-checker")
         end,
       })
     end,
@@ -1009,7 +1021,7 @@ lazy.setup({
       load_langs = { "en-US" },
       path = vim.fn.stdpath("config") .. "/spell/",
     },
-    enabled = O.lsp,
+    enabled = O.lsp and false,
   },
   {
     "stevearc/conform.nvim",
@@ -1022,11 +1034,13 @@ lazy.setup({
           typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
           typescriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
           vue = { "prettierd", "prettier", stop_after_first = true },
+          lua = { "stylua", stop_after_first = true },
           css = { "prettierd", "prettier", stop_after_first = true },
           scss = { "prettierd", "prettier", stop_after_first = true },
           html = { "prettierd", "prettier", stop_after_first = true },
           json = { "prettierd", "prettier", stop_after_first = true },
           nix = { "nixfmt", stop_after_first = true },
+          tex = { "latexindent", stop_after_first = true },
           -- r = { "styler", stop_after_first = true },
           yaml = { "prettierd", "prettier", stop_after_first = true },
           markdown = { "prettierd", "prettier", stop_after_first = true },
@@ -1392,5 +1406,51 @@ lazy.setup({
       end
     end,
     enabled = O.misc
-  }
+  },
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    version = false, -- Never set this value to "*"! Never!
+    opts = {
+      -- add any opts here
+      -- for example
+      provider = "gemini",
+      gemini = {
+        model = "gemini-2.5-pro-exp-03-25",
+      },
+      openai = {
+        endpoint = "https://api.openai.com/v1",
+        model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
+        timeout = 45000,                    -- Timeout in milliseconds, increase this for reasoning models
+        temperature = 0,
+        max_completion_tokens = 8192,       -- Increase this to include reasoning tokens (for reasoning models)
+        --reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+      },
+      file_selector = {
+        --- @alias FileSelectorProvider "native" | "fzf" | "mini.pick" | "snacks" | "telescope" | string | fun(params: avante.file_selector.IParams|nil): nil
+        provider = "telescope",
+        -- Options override for custom providers
+        provider_opts = {},
+      }
+    },
+    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+    build = "make",
+    -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      --- The below dependencies are optional,
+      "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+      {
+        -- Make sure to set this up properly if you have lazy=true
+        'MeanderingProgrammer/render-markdown.nvim',
+        opts = {
+          file_types = { "markdown", "Avante" },
+        },
+        ft = { "markdown", "Avante" },
+      },
+    },
+  },
 }, {})
