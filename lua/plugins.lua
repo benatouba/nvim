@@ -1196,14 +1196,12 @@ lazy.setup({
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    lazy = function ()
-      return vim.cmd("colorscheme") ~= "catppuccin"
-    end,
-    config = function ()
+    lazy = string.find(O.colorscheme, "catppuccin") ~= nil,
+    config = function()
       require("catppuccin").setup({
         flavour = "mocha", -- mocha, macchiato, frappe, latte
         transparent_background = false,
-        background = {     -- :h background
+        background = { -- :h background
           light = "latte",
           dark = "mocha",
         },
