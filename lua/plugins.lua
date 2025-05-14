@@ -446,12 +446,7 @@ lazy.setup({
     enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.copilot,
   },
   {
-    "williamboman/mason.nvim",
-    build = ":MasonUpdate",
-    config = function ()
-      require("mason").setup({})
-    end,
-    -- keys = { "<leader>" },
+    "mason-org/mason.nvim",
     ft = { "snacks_dashboard" },
     event = { "VimEnter", "BufReadPost", "BufNewFile", "LspAttach" },
     enabled = O.lsp,
