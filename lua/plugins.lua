@@ -1185,23 +1185,13 @@ lazy.setup({
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    lazy = function () return vim.cmd("colorscheme") ~= "rose-pine" end,
-    config = function ()
-      require("rose-pine").setup({
-        dim_inactive_windows = true,
-        highlight_groups = {
-          TelescopeBorder = { fg = "highlight_high", bg = "none" },
-          TelescopeNormal = { bg = "none" },
-          TelescopePromptNormal = { bg = "base" },
-          TelescopeResultsNormal = { fg = "subtle", bg = "none" },
-          TelescopeSelection = { fg = "text", bg = "base" },
-          TelescopeSelectionCaret = { fg = "rose", bg = "rose" },
-          Comment = { fg = "foam" },
-          VertSplit = { fg = "muted", bg = "muted" },
-        },
-      })
+    lazy = string.find(O.colorscheme, "rose-pine") ~= nil,
+    config = function()
+      if string.find(O.colorscheme, "rose-pine") ~= nil then
+        vim.cmd("colorscheme " .. O.colorscheme)
+      end
     end,
-    enabled = O.misc or O.colorscheme == "rose-pine-moon",
+    enabled = O.misc or string.find(O.colorscheme, "rose-pine") ~= nil,
   },
   {
     "catppuccin/nvim",
