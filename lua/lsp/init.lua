@@ -380,169 +380,353 @@ M.config = function()
   --   };
   -- };
 
-  require("mason-lspconfig").setup()
-
-  if false then
-    require("mason-lspconfig").setup_handlers({
-      -- The first entry (without a key) will be the default handler
-      -- and will be called for each installed server that doesn't have
-      -- a dedicated handler.
-      ["bashls"] = function()
-        lspconfig.bashls.setup({
-          filetypes = { "sh", "zsh", "bash", "ksh", "dash" },
-        })
-      end,
-      ["jedi_language_server"] = function()
-        lspconfig.jedi_language_server.setup({
-          settings = {
+  require("mason-lspconfig").setup_handlers({
+    -- The first entry (without a key) will be the default handler
+    -- and will be called for each installed server that doesn't have
+    -- a dedicated handler.
+    function(server_name) -- default handler (optional)
+      require("lspconfig")[server_name].setup({})
+    end,
+    ["bashls"] = function()
+      lspconfig.bashls.setup({
+        filetypes = { "sh", "zsh", "bash", "ksh", "dash" },
+      })
+    end,
+    ["jedi_language_server"] = function()
+      lspconfig.jedi_language_server.setup({
+        settings = {
+          completion = {
+            enable = false,
+          },
+        },
+      })
+    end,
+    ["vale_ls"] = function()
+      lspconfig.vale_ls.setup({})
+    end,
+    ["harper_ls"] = function()
+      lspconfig.harper_ls.setup({
+        settings = {
+          ["harper-ls"] = {
+            userDictPath = vim.fn.stdpath("config") .. "/spell/en.utf-8.add",
+          },
+        },
+      })
+    end,
+    ["basedpyright"] = function()
+      lspconfig.basedpyright.setup({
+        -- before_init = function (_, config)
+        --   -- config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
+        --   config.settings.basedpyright.analysis.stubPath =
+        --     vim.fs.joinpath(
+        --     -- vim.fn.expand(vim.fn.stdpath("data")),
+        --     -- "lazy",
+        --     -- "python-type-stubs",
+        --     -- "stubs"
+        --       vim.fs.joinpath(vim.fn.expand("~"), ".local", "src", "python-type-stubs", "stubs")
+        --     )
+        -- end,
+        settings = {
+          basedpyright = {
+            analysis = {
+              inlayHints = {
+                typeHints = true,
+                parameterHints = true,
+                chainedCallHints = true,
+                variableTypeHints = true,
+                memberVariableTypeHints = true,
+              },
+              autoSearchPaths = true,
+              useLibraryCodeForTypes = true,
+              diagnosticMode = "workspace",
+              autoImportCompletions = true,
+              disableOrganizeImports = true,
+            },
+            disableOrganizeImports = true,
+            useLibraryCodeForTypes = true,
+            autoImportCompletions = true,
+            autoSearchPaths = true,
+            typeCheckingMode = "standard",
+          },
+        },
+      })
+    end,
+    ["pyright"] = function()
+      lspconfig.pyright.setup({
+        before_init = function(_, config)
+          config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
+          config.settings.python.analysis.stubPath =
+            vim.fs.joinpath(vim.fn.expand("~"), ".local", "src", "python-type-stubs", "stubs")
+        end,
+      })
+    end,
+    ["lua_ls"] = function()
+      lspconfig.lua_ls.setup({
+        capabilities = lsp_defaults.capabilities,
+        settings = {
+          Lua = {
+            runtime = {
+              version = "LuaJIT",
+            },
             completion = {
-              enable = false,
+              callSnippet = "Replace",
             },
           },
-        })
-      end,
-      ["vale_ls"] = function()
-        lspconfig.vale_ls.setup({})
-      end,
-      ["harper_ls"] = function()
-        lspconfig.harper_ls.setup({
-          settings = {
-            ["harper-ls"] = {
-              userDictPath = vim.fn.stdpath("config") .. "/spell/en.utf-8.add",
+          diagnostics = { globals = { "vim", "bit", "pcall", "require", "print", "unpack" } },
+          telemetry = { enable = false },
+          workspace = {
+            checkThirdParty = true,
+            maxPreload = 10000,
+            preloadFileSize = 1000,
+            library = {
+              "/usr/share/nvim/runtime/lua",
+              vim.fn.expand("~/.local/share/nvim/site/lazy/"),
+              vim.fn.expand("~/.config/nvim/lua"),
+              "${3rd}/luv/library",
             },
           },
-        })
-      end,
-      ["pyright"] = function()
-        lspconfig.pyright.setup({
-          before_init = function(_, config)
-            config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
-            config.settings.python.analysis.stubPath =
-              vim.fs.joinpath(vim.fn.expand("~"), ".local", "src", "python-type-stubs", "stubs")
-          end,
-        })
-      end,
-      ["pylsp"] = function()
-        local venv = Get_python_venv()
+        },
+      })
+    end,
+    ["pylsp"] = function()
+      local lsputil = require("lspconfig/util")
 
-        lspconfig.pylsp.setup({
-          filetypes = { "python", "djangopython", "django", "jupynium" },
-          cmd = { "pylsp", "-v" },
-          cmd_env = {
-            VIRTUAL_ENV = venv,
-            PATH = vim.fs.joinpath(venv, "bin") .. ":" .. vim.env.PATH,
-          },
-          single_file_support = true,
-          settings = {
-            pylsp = {
-              plugins = {
-                autopep8 = { enabled = false },
-                flake8 = { enabled = false },
-                pycodestyle = { enabled = false, maxLineLength = 100 },
-                pyflakes = { enabled = false },
-                pydocstyle = { enabled = false, convention = "google" },
-                mccabe = { enabled = false },
-                memestra = { enabled = false },
-                mypy = { enabled = false },
-                pylint = { enabled = false },
-                rope_autimport = { enabled = true },
-                rope_completion = { enabled = true },
-                ruff = { enabled = true, lineLength = 100 },
-                black = { enabled = false, line_length = 100 },
-                yapf = { enabled = false },
-                preload = { modules = { "manim", "numpy", "pandas" } },
-                jedi = {
-                  auto_import_modules = {
-                    "numpy",
-                    "pandas",
-                    "salem",
-                    "matplotlib",
-                    "Django",
-                    "djangorestframework",
-                    "manim",
-                    "typing",
-                    "plotly",
-                    "dash",
-                    "dash_bootstrap_components",
-                  },
+      local venv = Get_python_venv()
+
+      lspconfig.pylsp.setup({
+        filetypes = { "python", "djangopython", "django", "jupynium" },
+        cmd = { "pylsp", "-v" },
+        cmd_env = {
+          VIRTUAL_ENV = venv,
+          PATH = lsputil.path.join(venv, "bin") .. ":" .. vim.env.PATH,
+        },
+        single_file_support = true,
+        settings = {
+          pylsp = {
+            plugins = {
+              autopep8 = { enabled = false },
+              flake8 = { enabled = false },
+              pycodestyle = { enabled = false, maxLineLength = 100 },
+              pyflakes = { enabled = false },
+              pydocstyle = { enabled = false, convention = "google" },
+              mccabe = { enabled = false },
+              memestra = { enabled = false },
+              mypy = { enabled = false },
+              pylint = { enabled = false },
+              rope_autimport = { enabled = true },
+              rope_completion = { enabled = true },
+              ruff = { enabled = true, lineLength = 100 },
+              black = { enabled = false, line_length = 100 },
+              yapf = { enabled = false },
+              preload = { modules = { "manim", "numpy", "pandas" } },
+              jedi = {
+                auto_import_modules = {
+                  "numpy",
+                  "pandas",
+                  "salem",
+                  "matplotlib",
+                  "Django",
+                  "djangorestframework",
+                  "manim",
+                  "typing",
+                  "plotly",
+                  "dash",
+                  "dash_bootstrap_components",
                 },
-                jedi_completion = {
-                  enabled = false,
-                  eager = false,
-                  fuzzy = true,
-                  include_class_objects = false,
-                  include_function_objects = false,
-                  cache_for = {
-                    "pandas",
-                    "numpy",
-                    "matplotlib",
-                    "salem",
-                    "Django",
-                    "djangorestframework",
-                    "manim",
-                    "plotly",
-                    "dash",
-                    "dash_bootstrap_components",
-                  },
+              },
+              jedi_completion = {
+                enabled = false,
+                eager = false,
+                fuzzy = true,
+                include_class_objects = false,
+                include_function_objects = false,
+                cache_for = {
+                  "pandas",
+                  "numpy",
+                  "matplotlib",
+                  "salem",
+                  "Django",
+                  "djangorestframework",
+                  "manim",
+                  "plotly",
+                  "dash",
+                  "dash_bootstrap_components",
                 },
               },
             },
           },
-        })
-      end,
-      ["sourcery"] = function()
-        lspconfig.sourcery.setup({
-          init_options = {
-            token = require("secrets").sourcery,
-            extension_version = "vim.lsp",
-            editor_version = "vim",
+        },
+      })
+    end,
+    ["sourcery"] = function()
+      lspconfig.sourcery.setup({
+        init_options = {
+          token = require("secrets").sourcery,
+          extension_version = "vim.lsp",
+          editor_version = "vim",
+        },
+        settings = {
+          sourcery = {
+            metricsEnabled = false,
           },
-          settings = {
-            sourcery = {
-              metricsEnabled = false,
+        },
+      })
+    end,
+    ["ts_ls"] = function()
+      require("misc.typescript_tools").config()
+      -- local mason_registry = require('mason-registry')
+      -- local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path() ..
+      --   '/node_modules/@vue/language-server'
+      -- lspconfig.ts_ls.setup({
+      --   filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+      --   init_options = {
+      --     plugins = {
+      --       {
+      --         name = '@vue/typescript-plugin',
+      --         location = vue_language_server_path,
+      --         languages = { 'vue' },
+      --       },
+      --     },
+      --   },
+      -- })
+    end,
+
+    ["eslint"] = function()
+      lspconfig.eslint.setup({
+        filetypes = {
+          "typescript",
+          "javascript",
+          "javascriptreact",
+          "typescriptreact",
+          "vue",
+          "json",
+        },
+      })
+    end,
+    -- ["volar"] = function ()
+    --   local util = require("lspconfig.util")
+    --   local get_typescript_server_path = function (root_dir)
+    --     -- local global_ts = "$PNPM_HOME/global/5"
+    --     local global_ts =
+    --       vim.fn.expand("$HOME/.local/share/pnpm/global/5/node_modules/typescript/lib")
+    --     -- local global_ts = "/usr/local/lib"
+    --     local found_ts = ""
+    --     local function check_dir(path)
+    --       found_ts = util.path.join(path, "node_modules", "typescript", "lib")
+    --       if util.path.exists(found_ts) then
+    --         return path
+    --       end
+    --     end
+    --
+    --     if util.search_ancestors(root_dir, check_dir) then
+    --       return found_ts
+    --     else
+    --       util.path.exists(global_ts)
+    --       -- vim.notify("Using global typescript")
+    --       return global_ts
+    --     end
+    --   end
+    --   lspconfig.volar.setup({
+    --     capabilities = lsp_defaults.capabilities,
+    --     init_options = {
+    --       typescript = {
+    --         tsdk = get_typescript_server_path(vim.fn.getcwd()),
+    --       },
+    --       vue = {
+    --         hybridMode = true,
+    --       },
+    --     },
+    --     on_new_config = function (new_config, new_root_dir)
+    --       new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
+    --     end,
+    --   })
+    -- end,
+    ["texlab"] = function()
+      lspconfig.texlab.setup({
+        settings = {
+          texlab = {
+            build = {
+              args = { "-pdf", "-interaction", "nonstopmode", "-synctex", "1", "%f" },
+              executable = "latexmk",
+              forwardSearchAfter = false,
+              onSave = false,
+            },
+            chktex = {
+              onEdit = true,
+              onOpenAndSave = true,
+            },
+            diagnosticsDelay = 300,
+            forwardSearch = {
+              args = {},
+              executable = "zathura",
+              onSave = false,
+            },
+            formatterLineLength = 120,
+            latexFormatter = "latexindent",
+            latexindent = {
+              modifyLineBreaks = false,
+              replacement = "-rv",
             },
           },
-        })
-      end,
-      ["eslint"] = function()
-        lspconfig.eslint.setup({
-          filetypes = {
-            "typescript",
-            "javascript",
-            "javascriptreact",
-            "typescriptreact",
-            "vue",
-            "json",
+        },
+      })
+    end,
+    ["jsonls"] = function()
+      lsp_defaults.capabilities.textDocument.completion.completionItem.snippetSupport = true
+      lspconfig.jsonls.setup({
+        capabilities = lsp_defaults.capabilities,
+        settings = {
+          json = {
+            schemas = require("schemastore").json.schemas(),
+            validate = { enable = true },
           },
-        })
-      end,
-      ["ltex"] = function()
-        lspconfig.ltex.setup({
-          capabilities = lsp_defaults.capabilities,
-          filetypes = {
-            "bib",
-            -- "markdown",
-            -- "org",
-            "plaintex",
-            "rst",
-            "rnoweb",
-            "tex",
-            "pandoc",
-            "quarto",
-            "rmd",
+        },
+      })
+    end,
+    ["yamlls"] = function()
+      lsp_defaults.capabilities.textDocument.completion.completionItem.snippetSupport = true
+      lspconfig.jsonls.setup({
+        capabilities = lsp_defaults.capabilities,
+        settings = {
+          yaml = {
+            schemaStore = {
+              -- You must disable built-in schemaStore support if you want to use
+              -- this plugin and its advanced options like `ignore`.
+              enable = false,
+              -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+              url = "",
+            },
+            schemas = require("schemastore").yaml.schemas(),
           },
-          settings = {
-            ltex = {
-              language = "en-GB",
-              additionalRules = {
-                motherTongue = "de-DE",
-              },
+        },
+      })
+    end,
+    ["ltex"] = function()
+      lspconfig.ltex.setup({
+        capabilities = lsp_defaults.capabilities,
+        filetypes = {
+          "bib",
+          -- "markdown",
+          -- "org",
+          "plaintex",
+          "rst",
+          "rnoweb",
+          "tex",
+          "pandoc",
+          "quarto",
+          "rmd",
+        },
+        settings = {
+          ltex = {
+            language = "en-GB",
+            additionalRules = {
+              motherTongue = "de-DE",
             },
           },
-        })
-      end,
-    })
-  end
+        },
+      })
+    end,
+  })
   local watch_type = require("vim._watch").FileChangeType
 
   local function handler(res, callback)
