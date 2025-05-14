@@ -31,8 +31,20 @@ lazy.setup({
       if wk_ok then
         wk.add({
           { "<leader>S", icon = " ", group = "+Sessions", remap = false },
-          { "<leader>Sw", "<cmd>lua require('mini.sessions').write()<cr>", icon = " ", desc = "Write Session", remap = false },
-          { "<leader>Sr", "<cmd>lua require('mini.sessions').read()<cr>", icon = " ", desc = "Read Session", remap = false },
+          {
+            "<leader>Sw",
+            "<cmd>lua require('mini.sessions').write()<cr>",
+            icon = " ",
+            desc = "Write Session",
+            remap = false,
+          },
+          {
+            "<leader>Sr",
+            "<cmd>lua require('mini.sessions').read()<cr>",
+            icon = " ",
+            desc = "Read Session",
+            remap = false,
+          },
         }, { mode = "n" })
       else
         vim.notify("which-key.nvim is not loaded in mini.sessions config")
