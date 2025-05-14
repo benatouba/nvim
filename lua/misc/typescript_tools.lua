@@ -3,8 +3,7 @@ local M = {}
 M.config = function ()
   local baseDefinitionHandler = vim.lsp.handlers["textDocument/definition"]
 
-  local mason_registry = require("mason-registry")
-  local tsserver_path = mason_registry.get_package("typescript-language-server"):get_install_path()
+  local tsserver_path = vim.fn.exepath("typescript-language-server")
   local filter = function (arr, fn)
     if type(arr) ~= "table" then
       return arr

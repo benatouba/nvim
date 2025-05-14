@@ -34,7 +34,7 @@ O.databases = true
 
 -- general
 O.auto_complete = true
-O.colorscheme = "catppuccin-mocha"
+O.colorscheme = "rose-pine"
 O.auto_close_tree = 0
 O.wrap_lines = true
 
