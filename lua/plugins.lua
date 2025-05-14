@@ -120,7 +120,13 @@ lazy.setup({
         animate = { enabled = false },
         bigfile = { enabled = false },
         keys = {
-          { "<leader>sc", function () Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+          {
+            "<leader>sc",
+            function()
+              Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
+            end,
+            desc = "Find Config File",
+          },
         },
         dashboard = {
           enabled = true,
@@ -129,8 +135,18 @@ lazy.setup({
               { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
               { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
               { icon = " ", key = "t", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-              { icon = " ", key = "o", desc = "Orgmode", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.expand('~') .. '/documents/vivere/org'})" },
-              { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+              {
+                icon = " ",
+                key = "o",
+                desc = "Orgmode",
+                action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.expand('~') .. '/documents/vivere/org'})",
+              },
+              {
+                icon = " ",
+                key = "c",
+                desc = "Config",
+                action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
+              },
               { icon = " ", key = "s", desc = "Restore Session", section = "session" },
               { icon = " ", key = "q", desc = "Quit", action = ":qa" },
             },
@@ -189,8 +205,18 @@ lazy.setup({
       local wk_ok, wk = pcall(require, "which-key")
       if wk_ok then
         wk.add({
-          { "<leader>sn", "<cmd>lua require('snacks').notifier.show_history()<cr>", desc = "Notifications", remap = false },
-          { "<leader>z",  "<cmd>lua require('snacks').zen.zen()<cr>",               desc = "Zen",           remap = false },
+          {
+            "<leader>sn",
+            "<cmd>lua require('snacks').notifier.show_history()<cr>",
+            desc = "Notifications",
+            remap = false,
+          },
+          {
+            "<leader>z",
+            "<cmd>lua require('snacks').zen.zen()<cr>",
+            desc = "Zen",
+            remap = false,
+          },
         }, { mode = "n" })
       end
     end,
