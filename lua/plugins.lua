@@ -1158,9 +1158,7 @@ lazy.setup({
   },
   {
     "folke/tokyonight.nvim",
-    lazy = function ()
-      return vim.cmd("colorscheme") ~= "tokyonight"
-    end,
+    lazy = vim.cmd("colorscheme") ~= "tokyonight",
     priority = 1000,
     config = function ()
       require("tokyonight").setup({
