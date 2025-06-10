@@ -4,12 +4,6 @@ if not obsidian_ok then
   return
 end
 
-local wk_ok, wk = pcall(require, "which-key")
-if not wk_ok then
-  vim.notify("which-key not okay in obsidian")
-  return
-end
-
 local M = {}
 
 M.config = function()
@@ -71,28 +65,6 @@ M.config = function()
       end
       return out
     end,
-  })
-
-  wk.add({
-    -- { "<localleader>of", "<cmd>Obsidian follow_link<CR>", desc = "Follow link", remap = false },
-    { "<leader>od", "<cmd>Obsidian dailies<CR>", desc = "Dailies", remap = false },
-    { "<leader>on", "<cmd>Obsidian new<CR>", desc = "New note", remap = false },
-    { "<leader>oN", "<cmd>Obsidian new_from_template<CR>", desc = "New note from Template", remap = false },
-    { "<leader>ot", "<cmd>Obsidian today<CR>", desc = "Today note", remap = false },
-    { "<leader>oT", "<cmd>Obsidian tomorrow<CR>", desc = "Tomorrow note", remap = false },
-    { "<leader>ov", "<cmd>Obsidian workspace vivere<CR>", desc = "Vivere (Workspace)", remap = false },
-    { "<leader>ow", "<cmd>Obsidian workspace work<CR>", desc = "Work (Workspace)", remap = false },
-    { "<leader>oy", "<cmd>Obsidian yesterday<CR>", desc = "Yesterday note", remap = false },
-    { "<leader>v", group = "+Vivere", icon = { icon = "󰇈 ", color = "purple" }, remap = false },
-    { "<localleader>o", group = "+Obsidian", icon = { icon = "󰇈 ", color = "purple" }, mode = { "n", "v" } },
-    { "<localleader>ob", "<cmd>Obsidian backlinks<CR>", desc = "Backlinks", remap = false },
-    { "<localleader>ol", "<cmd>Obsidian links<CR>", desc = "Links", remap = false },
-    { "<localleader>oo", "<cmd>Obsidian open<CR>", desc = "Open in Obsidian", remap = false },
-    { "<localleader>op", "<cmd>Obsidian paste_img<CR>", desc = "Paste image", remap = false },
-    { "<localleader>or", "<cmd>Obsidian rename<CR>", desc = "Rename", remap = false },
-    { "<localleader>os", "<cmd>Obsidian quick_switch<CR>", desc = "Quick switch", remap = false },
-    { "<localleader>ot", "<cmd>Obsidian tags<CR>", desc = "Tags", remap = false },
-    { "<localleader>oT", "<cmd>Obsidian template<CR>", desc = "Template", remap = false },
   })
 end
 

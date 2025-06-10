@@ -79,19 +79,6 @@ M.config = function ()
     }
   })
 
-  local isOk, which_key = pcall(require, "which-key")
-  if not isOk then
-    vim.notify("which-key not okay in orgmode", vim.log.levels.ERROR)
-    return
-  end
-
-  local maps = {
-    { "<leader>o", group = "Org", nowait = false, remap = false, icon = { icon = "", color = "purple" } },
-    { "<leader>oa", "<cmd>lua require('orgmode').action('agenda.prompt')<CR>", desc = "org-Agenda", nowait = true, remap = false },
-    { "<leader>oc", "<cmd>lua require('orgmode').action('capture.prompt')<CR>", desc = "org-Capture", nowait = true, remap = false },
-  }
-
-  which_key.add(maps)
 end
 
 return M
