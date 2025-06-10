@@ -1064,36 +1064,39 @@ lazy.setup({
     "mfussenegger/nvim-lint",
     config = function()
       require("lint").linters_by_ft = {
-        tex = { "proselint" },
-        zsh = { "zsh" },
-        jinja = { "djlint" },
-        htmldjango = { "djlint" },
         NeogitCommitMessage = { "commitlint" },
-        gitcommit = { "commitlint" },
-        typescript = { "eslint" },
-        javascript = { "eslint", "trivy" },
-        javascriptreact = { "eslint", "trivy" },
-        typescriptreact = { "eslint", "trivy" },
-        markdown = { "alex" },
-        vue = { "eslint", "trivy" },
         c = { "trivy", "compiler" },
         cxx = { "trivy" },
         docker = { "trivy" },
         elixir = { "trivy" },
+        gitcommit = { "commitlint" },
         go = { "trivy" },
         helm = { "trivy" },
+        htmldjango = { "djlint" },
         java = { "trivy" },
+        javascript = { "eslint", "trivy" },
+        javascriptreact = { "eslint", "trivy" },
+        jinja = { "djlint" },
+        lua = { "trivy" },
+        markdown = { "alex" },
         php = { "trivy" },
         python = { "trivy" },
         ruby = { "trivy" },
         rust = { "trivy" },
         terraform = { "trivy" },
-        [".*/.github/workflows/.*%.yml"] = "yaml.ghaction",
+        tex = { "proselint" },
+        typescript = { "eslint" },
+        typescriptreact = { "eslint", "trivy" },
+        vue = { "eslint", "trivy" },
+        zsh = { "zsh", "trivy" },
+        [".*/.github/workflows/.*%.yml"] = { "yaml.ghaction" },
       }
+      local trivy = require("lint").linters.trivy
+      trivy.args = { "--scanners", "vuln,misconfig,secret", "--format", "json", "fs" }
       local ns = require("lint").get_namespace("commitlint")
       vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = true }, ns)
       vim.api.nvim_create_augroup("lint", { clear = true })
-      vim.api.nvim_create_autocmd({ "BufWritePost", "TextChanged" }, {
+      vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
         group = "lint",
         callback = function()
           require("lint").try_lint()
@@ -1103,6 +1106,13 @@ lazy.setup({
         group = "lint",
         callback = function()
           require("lint").try_lint("editorconfig-checker")
+        end,
+      })
+      vim.api.nvim_create_autocmd({ "TextChanged" }, {
+        group = "lint",
+        pattern = "*COMMIT_EDITMSG*",
+        callback = function()
+          require("lint").try_lint("commitlint")
         end,
       })
     end,
@@ -1118,37 +1128,37 @@ lazy.setup({
       load_langs = { "en-US" },
       path = vim.fn.stdpath("config") .. "/spell/",
     },
-    enabled = O.lsp and false,
+    enabled = false,
   },
   {
     "stevearc/conform.nvim",
-    config = function()
-      require("conform").setup({
-        formatters_by_ft = {
-          python = { "ruff_fix", "ruff_format", "ruff_organize_imports", "docformatter", stop_after_first = false },
-          javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
-          javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
-          typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
-          typescriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
-          vue = { "prettierd", "prettier", stop_after_first = true },
-          lua = { "stylua", stop_after_first = true },
-          css = { "prettierd", "prettier", stop_after_first = true },
-          scss = { "prettierd", "prettier", stop_after_first = true },
-          html = { "prettierd", "prettier", stop_after_first = true },
-          json = { "prettierd", "prettier", stop_after_first = true },
-          nix = { "nixfmt", stop_after_first = true },
-          tex = { "latexindent", stop_after_first = true },
-          -- r = { "styler", stop_after_first = true },
-          yaml = { "prettierd", "prettier", stop_after_first = true },
-          markdown = { "prettierd", "prettier", stop_after_first = true },
-          gitcommit = { "commitmsgfmt" },
-          ["*"] = { "codespell" },
-          ["_"] = { "trim_whitespace" },
-        },
-        default_format_opts = {
-          lsp_format = "fallback",
-        },
-      })
+    opts = {
+      formatters_by_ft = {
+        python = { "ruff_fix", "ruff_format", "ruff_organize_imports", "docformatter", stop_after_first = false },
+        javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
+        javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
+        typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
+        typescriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
+        vue = { "prettierd", "prettier", stop_after_first = true },
+        lua = { "stylua", stop_after_first = true },
+        css = { "prettierd", "prettier", stop_after_first = true },
+        scss = { "prettierd", "prettier", stop_after_first = true },
+        html = { "prettierd", "prettier", stop_after_first = true },
+        json = { "prettierd", "prettier", stop_after_first = true },
+        nix = { "nixfmt", stop_after_first = true },
+        tex = { "latexindent", stop_after_first = true },
+        -- r = { "styler", stop_after_first = true },
+        yaml = { "prettierd", "prettier", stop_after_first = true },
+        markdown = { "prettierd", "prettier", stop_after_first = true },
+        gitcommit = { "commitmsgfmt" },
+        ["*"] = { "codespell" },
+        ["_"] = { "trim_whitespace" },
+      },
+      default_format_opts = {
+        lsp_format = "fallback",
+      },
+    },
+    init = function()
       vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
       vim.api.nvim_create_autocmd("InsertLeave", {
         pattern = "*COMMIT_EDITMSG*",
