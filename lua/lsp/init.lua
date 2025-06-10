@@ -28,43 +28,6 @@ M.config = function()
       },
     },
   })
-  local mason_ok, mason = pcall(require, "mason")
-  if not mason_ok then
-    vim.notify("mason not okay in lspconfig")
-    return
-  end
-  mason.setup({
-    pip = {
-      upgrade_pip = true,
-    },
-  })
-
-  local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
-  if not mason_lspconfig_ok then
-    vim.notify("mason-lspconfig not okay in lspconfig")
-    return
-  end
-  mason_lspconfig.setup()
-
-  local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
-  if not lspconfig_ok then
-    vim.notify("lspconfig not okay in lspconfig")
-    return
-  end
-
-  if O.dap then
-    local mason_nvim_dap_ok, mason_nvim_dap = pcall(require, "mason-nvim-dap")
-    if not mason_nvim_dap_ok then
-      vim.notify("mason-nvim-dap not okay in lspconfig")
-      -- return
-    else
-      mason_nvim_dap.setup({
-        ensure_installed = { "python" },
-        handlers = {},
-        automatic_installation = true,
-      })
-    end
-  end
 
   vim.api.nvim_create_user_command("LspCapabilities", function()
     local curBuf = vim.api.nvim_get_current_buf()
@@ -128,12 +91,16 @@ M.config = function()
         client.server_capabilities.completionProvider = false
         client.server_capabilities.completionItemResolve = false
       elseif client.name == "ts_ls" then
-        client.server_capabilities.documentFormattingProvider = false
-        client.server_capabilities.documentRangeFormattingProvider = false
-        -- elseif client.name == "volar" then
-        --   client.server_capabilities.documentFormattingProvider = true
+        --   client.server_capabilities.documentFormattingProvider = false
         --   client.server_capabilities.documentRangeFormattingProvider = false
-        --   client.server_capabilities.definitionProvider = false
+        --   client.server_capabilities.documentHighlightProvider = true
+        client.server_capabilities.semanticTokensProvider = false
+      elseif client.name == "vue_ls" then
+        --   client.server_capabilities.documentHighlightProvider = true
+        client.server_capabilities.semanticTokensProvider = false
+      --   client.server_capabilities.documentFormattingProvider = true
+      --   client.server_capabilities.documentRangeFormattingProvider = false
+      --   client.server_capabilities.definitionProvider = false
       elseif client.name == "cssmodules_ls" then
         client.server_capabilities.definitionProvider = true
       end
@@ -207,13 +174,13 @@ M.config = function()
     end,
   })
 
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
-  local lsp_defaults = {
-    flags = {
-      debounce_text_changes = 150,
-    },
-    capabilities = require("blink.cmp").get_lsp_capabilities(capabilities),
-  }
+  -- local capabilities = vim.lsp.protocol.make_client_capabilities()
+  -- local lsp_defaults = {
+  --   flags = {
+  --     debounce_text_changes = 150,
+  --   },
+  --   capabilities = require("blink.cmp").get_lsp_capabilities(capabilities),
+  -- }
   -- local ok, wf = pcall(require, "vim.lsp._watchfiles")
   -- if ok then
   --   -- wf._watchfunc = function(_, _, _) return true end
@@ -222,164 +189,9 @@ M.config = function()
   --   end
   -- end
 
-  lspconfig.util.default_config = vim.tbl_deep_extend("force", lspconfig.util.default_config, lsp_defaults)
+  -- lspconfig.util.default_config = vim.tbl_deep_extend("force", lspconfig.util.default_config, lsp_defaults)
 
-  -- local configs = require 'lspconfig/configs'
-  -- local util = require 'lspconfig/util'
-  --
-  -- local Dictionary_file = {
-  --   ["en-GB"] = { vim.fn.stdpath("config") .. "/spell/en.utf-8.add" }
-  -- }
-  -- local DisabledRules_file = {
-  --   ["en-GB"] = { vim.fn.stdpath("config") .. "/spell/disable.txt" }
-  -- }
-  -- local FalsePositives_file = {
-  --   ["en-GB"] = { vim.fn.stdpath("config") .. "/spell/false.txt" }
-  -- }
-  --
-  -- local function readFiles(files)
-  --   local dict = {}
-  --   for _, file in ipairs(files) do
-  --     if not file then return nil end
-  --
-  --     for line in io.lines(file) do
-  --       table.insert(dict, line)
-  --     end
-  --   end
-  --   return dict
-  -- end
-  --
-  -- local function findLtexLang()
-  --   local buf_clients = vim.lsp.buf_get_clients()
-  --   for _, client in ipairs(buf_clients) do
-  --     if client.name == "ltex" then
-  --       return client.config.settings.ltex.language
-  --     end
-  --   end
-  -- end
-  --
-  -- local function findLtexFiles(filetype, value)
-  --   local files = nil
-  --   if filetype == 'dictionary' then
-  --     files = Dictionary_file[value or findLtexLang()]
-  --   elseif filetype == 'disable' then
-  --     files = DisabledRules_file[value or findLtexLang()]
-  --   elseif filetype == 'falsePositive' then
-  --     files = FalsePositives_file[value or findLtexLang()]
-  --   end
-  --
-  --   if files then
-  --     return files
-  --   else
-  --     return nil
-  --   end
-  -- end
-  --
-  -- local function updateConfig(lang, configtype)
-  --   local buf_clients = vim.lsp.buf_get_clients()
-  --   local client = nil
-  --   for _, lsp in ipairs(buf_clients) do
-  --     if lsp.name == "ltex" then
-  --       client = lsp
-  --     end
-  --   end
-  --
-  --   if client then
-  --     if configtype == 'dictionary' then
-  --       if client.config.settings.ltex.dictionary then
-  --         client.config.settings.ltex.dictionary = {
-  --           [lang] = readFiles(Dictionary_file[lang])
-  --         };
-  --         return client.notify('workspace/didChangeConfiguration', client.config.settings)
-  --       else
-  --         return vim.notify("Error when reading dictionary config, check it")
-  --       end
-  --     elseif configtype == 'disable' then
-  --       if client.config.settings.ltex.disabledRules then
-  --         client.config.settings.ltex.disabledRules = {
-  --           [lang] = readFiles(DisabledRules_file[lang])
-  --         };
-  --         return client.notify('workspace/didChangeConfiguration', client.config.settings)
-  --       else
-  --         return vim.notify("Error when reading disabledRules config, check it")
-  --       end
-  --     elseif configtype == 'falsePositive' then
-  --       if client.config.settings.ltex.hiddenFalsePositives then
-  --         client.config.settings.ltex.hiddenFalsePositives = {
-  --           [lang] = readFiles(FalsePositives_file[lang])
-  --         };
-  --         return client.notify('workspace/didChangeConfiguration', client.config.settings)
-  --       else
-  --         return vim.notify("Error when reading hiddenFalsePositives config, check it")
-  --       end
-  --     end
-  --   else
-  --     return nil
-  --   end
-  -- end
-  --
-  -- local function addToFile(filetype, lang, file, value)
-  --   file = io.open(file[#file - 0], "a+") -- add only to last file defined.
-  --   if file then
-  --     file:write(value .. "\n")
-  --     file:close()
-  --   else
-  --     return print("Failed insert %q", value)
-  --   end
-  --   if filetype == 'dictionary' then
-  --     return updateConfig(lang, "dictionary")
-  --   elseif filetype == 'disable' then
-  --     return updateConfig(lang, "disable")
-  --   elseif filetype == 'falsePositive' then
-  --     return updateConfig(lang, "disable")
-  --   end
-  -- end
-  --
-  -- local function addTo(filetype, lang, file, value)
-  --   local dict = readFiles(file)
-  --   for _, v in ipairs(dict) do
-  --     if v == value then
-  --       return nil
-  --     end
-  --   end
-  --   return addToFile(filetype, lang, file, value)
-  -- end
-
-  -- configs.ltex = {
-  --   default_config = {
-  --     cmd = { "ltex-ls" };
-  --     filetypes = { 'tex', 'bib', };
-  --     root_dir = function (filename)
-  --       return util.path.dirname(filename)
-  --     end;
-  --     settings = {
-  --       ltex = {
-  --         enabled = { "latex", "tex", "bib", "md" },
-  --         checkFrequency = "save",
-  --         language = "en-GB",
-  --         ["ltex-ls"] = {
-  --           logLevel = "error",
-  --         },
-  --         diagnosticSeverity = "warning",
-  --         setenceCacheSize = 5000,
-  --         additionalRules = {
-  --           enablePickyRules = true,
-  --           motherTongue = "de-DE",
-  --         },
-  --         dictionary = {
-  --           ["en-GB"] = readFiles(Dictionary_file["en-GB"] or {}),
-  --         },
-  --         disabledRules = {
-  --           ["en-GB"] = readFiles(DisabledRules_file["en-GB"] or {}),
-  --         },
-  --         hiddenFalsePositives = {
-  --           ["en-GB"] = readFiles(FalsePositives_file["en-GB"] or {}),
-  --         },
-  --       },
-  --     };
-  --   };
-  -- };
-
+  --[[
   require("mason-lspconfig").setup_handlers({
     -- The first entry (without a key) will be the default handler
     -- and will be called for each installed server that doesn't have
@@ -413,44 +225,6 @@ M.config = function()
         },
       })
     end,
-    ["basedpyright"] = function()
-      lspconfig.basedpyright.setup({
-        -- before_init = function (_, config)
-        --   -- config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
-        --   config.settings.basedpyright.analysis.stubPath =
-        --     vim.fs.joinpath(
-        --     -- vim.fn.expand(vim.fn.stdpath("data")),
-        --     -- "lazy",
-        --     -- "python-type-stubs",
-        --     -- "stubs"
-        --       vim.fs.joinpath(vim.fn.expand("~"), ".local", "src", "python-type-stubs", "stubs")
-        --     )
-        -- end,
-        settings = {
-          basedpyright = {
-            analysis = {
-              inlayHints = {
-                typeHints = true,
-                parameterHints = true,
-                chainedCallHints = true,
-                variableTypeHints = true,
-                memberVariableTypeHints = true,
-              },
-              autoSearchPaths = true,
-              useLibraryCodeForTypes = true,
-              diagnosticMode = "workspace",
-              autoImportCompletions = true,
-              disableOrganizeImports = true,
-            },
-            disableOrganizeImports = true,
-            useLibraryCodeForTypes = true,
-            autoImportCompletions = true,
-            autoSearchPaths = true,
-            typeCheckingMode = "standard",
-          },
-        },
-      })
-    end,
     ["pyright"] = function()
       lspconfig.pyright.setup({
         before_init = function(_, config)
@@ -458,34 +232,6 @@ M.config = function()
           config.settings.python.analysis.stubPath =
             vim.fs.joinpath(vim.fn.expand("~"), ".local", "src", "python-type-stubs", "stubs")
         end,
-      })
-    end,
-    ["lua_ls"] = function()
-      lspconfig.lua_ls.setup({
-        capabilities = lsp_defaults.capabilities,
-        settings = {
-          Lua = {
-            runtime = {
-              version = "LuaJIT",
-            },
-            completion = {
-              callSnippet = "Replace",
-            },
-          },
-          diagnostics = { globals = { "vim", "bit", "pcall", "require", "print", "unpack" } },
-          telemetry = { enable = false },
-          workspace = {
-            checkThirdParty = true,
-            maxPreload = 10000,
-            preloadFileSize = 1000,
-            library = {
-              "/usr/share/nvim/runtime/lua",
-              vim.fn.expand("~/.local/share/nvim/site/lazy/"),
-              vim.fn.expand("~/.config/nvim/lua"),
-              "${3rd}/luv/library",
-            },
-          },
-        },
       })
     end,
     ["pylsp"] = function()
@@ -572,24 +318,6 @@ M.config = function()
         },
       })
     end,
-    ["ts_ls"] = function()
-      require("misc.typescript_tools").config()
-      -- local mason_registry = require('mason-registry')
-      -- local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path() ..
-      --   '/node_modules/@vue/language-server'
-      -- lspconfig.ts_ls.setup({
-      --   filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
-      --   init_options = {
-      --     plugins = {
-      --       {
-      --         name = '@vue/typescript-plugin',
-      --         location = vue_language_server_path,
-      --         languages = { 'vue' },
-      --       },
-      --     },
-      --   },
-      -- })
-    end,
 
     ["eslint"] = function()
       lspconfig.eslint.setup({
@@ -600,104 +328,6 @@ M.config = function()
           "typescriptreact",
           "vue",
           "json",
-        },
-      })
-    end,
-    -- ["volar"] = function ()
-    --   local util = require("lspconfig.util")
-    --   local get_typescript_server_path = function (root_dir)
-    --     -- local global_ts = "$PNPM_HOME/global/5"
-    --     local global_ts =
-    --       vim.fn.expand("$HOME/.local/share/pnpm/global/5/node_modules/typescript/lib")
-    --     -- local global_ts = "/usr/local/lib"
-    --     local found_ts = ""
-    --     local function check_dir(path)
-    --       found_ts = util.path.join(path, "node_modules", "typescript", "lib")
-    --       if util.path.exists(found_ts) then
-    --         return path
-    --       end
-    --     end
-    --
-    --     if util.search_ancestors(root_dir, check_dir) then
-    --       return found_ts
-    --     else
-    --       util.path.exists(global_ts)
-    --       -- vim.notify("Using global typescript")
-    --       return global_ts
-    --     end
-    --   end
-    --   lspconfig.volar.setup({
-    --     capabilities = lsp_defaults.capabilities,
-    --     init_options = {
-    --       typescript = {
-    --         tsdk = get_typescript_server_path(vim.fn.getcwd()),
-    --       },
-    --       vue = {
-    --         hybridMode = true,
-    --       },
-    --     },
-    --     on_new_config = function (new_config, new_root_dir)
-    --       new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
-    --     end,
-    --   })
-    -- end,
-    ["texlab"] = function()
-      lspconfig.texlab.setup({
-        settings = {
-          texlab = {
-            build = {
-              args = { "-pdf", "-interaction", "nonstopmode", "-synctex", "1", "%f" },
-              executable = "latexmk",
-              forwardSearchAfter = false,
-              onSave = false,
-            },
-            chktex = {
-              onEdit = true,
-              onOpenAndSave = true,
-            },
-            diagnosticsDelay = 300,
-            forwardSearch = {
-              args = {},
-              executable = "zathura",
-              onSave = false,
-            },
-            formatterLineLength = 120,
-            latexFormatter = "latexindent",
-            latexindent = {
-              modifyLineBreaks = false,
-              replacement = "-rv",
-            },
-          },
-        },
-      })
-    end,
-    ["jsonls"] = function()
-      lsp_defaults.capabilities.textDocument.completion.completionItem.snippetSupport = true
-      lspconfig.jsonls.setup({
-        capabilities = lsp_defaults.capabilities,
-        settings = {
-          json = {
-            schemas = require("schemastore").json.schemas(),
-            validate = { enable = true },
-          },
-        },
-      })
-    end,
-    ["yamlls"] = function()
-      lsp_defaults.capabilities.textDocument.completion.completionItem.snippetSupport = true
-      lspconfig.jsonls.setup({
-        capabilities = lsp_defaults.capabilities,
-        settings = {
-          yaml = {
-            schemaStore = {
-              -- You must disable built-in schemaStore support if you want to use
-              -- this plugin and its advanced options like `ignore`.
-              enable = false,
-              -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
-              url = "",
-            },
-            schemas = require("schemastore").yaml.schemas(),
-          },
         },
       })
     end,
@@ -727,6 +357,7 @@ M.config = function()
       })
     end,
   })
+  ]]
   local watch_type = require("vim._watch").FileChangeType
 
   local function handler(res, callback)

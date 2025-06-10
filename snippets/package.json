@@ -15,7 +15,8 @@
         "path": "./tex.json"
       },{
         "language": [
-          "gitcommit"
+          "gitcommit",
+          "NeogitCommitMessage"
         ],
         "path": "./gitcommit.json"
       }

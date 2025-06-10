@@ -3,7 +3,7 @@ vim.lsp.config("ts_ls", {
     plugins = {
       {
         name = "@vue/typescript-plugin",
-        location = vim.fn.exepath("vue-language-server"),
+        location = "/home/ben/.local/share/pnpm/global/5/node_modules/@vue/typescript-plugin", -- if this is installed locally, local installation will be used
         languages = { "javascript", "typescript", "vue" },
       },
     },

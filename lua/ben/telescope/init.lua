@@ -126,30 +126,30 @@ M.config = function ()
     }
   }
   telescope.load_extension("fzf")
-  local wk_ok, wk = pcall(require, "which-key")
-  if not wk_ok then
-    print("Which-key not okay in telescope")
-  end
-  local maps = {
-    { "<leader>b",  "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
-    { "<leader>s",  group = "Search" },
-    { "<leader>sB", "<cmd>Telescope file_browser<cr>",           desc = "Browser" },
-    { "<leader>sM", "<cmd>Telescope man_pages<cr>",              desc = "Man Pages" },
-    { "<leader>sN", "<cmd>Noice telescope<cr>",                  desc = "Noice Notifications" },
-    { "<leader>sR", "<cmd>Telescope registers<cr>",              desc = "Registers" },
-    { "<leader>sb", "<cmd>Telescope git_branches<cr>",           desc = "Branches" },
-    { "<leader>se", "<cmd>EcologSnacks<cr>",                     desc = "Env" },
-    { "<leader>sC", "<cmd>Telescope colorscheme<cr>",            desc = "Colorscheme" },
-    { "<leader>sf", "<cmd>Telescope find_files hidden=true<cr>", desc = "Find File" },
-    { "<leader>sg", "<cmd>Telescope git_files<cr>",              desc = "Git Files" },
-    { "<leader>sk", "<cmd>Telescope keymaps<cr>",                desc = "Keymaps" },
-    { "<leader>sm", "<cmd>Telescope marks<cr>",                  desc = "Marks" },
-    { "<leader>so", "<cmd>Telescope oldfiles<cr>",               desc = "Open Recent File" },
-    { "<leader>sp", "<cmd>Telescope projects<cr>",               desc = "Projects" },
-    { "<leader>sq", "<cmd>Telescope quickfix<cr>",               desc = "Quickfix List" },
-    { "<leader>st", "<cmd>Telescope live_grep<cr>",              desc = "Text" },
-  }
-  wk.add(maps)
+  -- local wk_ok, wk = pcall(require, "which-key")
+  -- if not wk_ok then
+  --   print("Which-key not okay in telescope")
+  -- end
+  -- local maps = {
+  --   { "<leader>b",  "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
+  --   { "<leader>s",  group = "Search" },
+  --   { "<leader>sB", "<cmd>Telescope file_browser<cr>",           desc = "Browser" },
+  --   { "<leader>sM", "<cmd>Telescope man_pages<cr>",              desc = "Man Pages" },
+  --   { "<leader>sN", "<cmd>Noice telescope<cr>",                  desc = "Noice Notifications" },
+  --   { "<leader>sR", "<cmd>Telescope registers<cr>",              desc = "Registers" },
+  --   { "<leader>sb", "<cmd>Telescope git_branches<cr>",           desc = "Branches" },
+  --   { "<leader>se", "<cmd>EcologSnacks<cr>",                     desc = "Env" },
+  --   { "<leader>sC", "<cmd>Telescope colorscheme<cr>",            desc = "Colorscheme" },
+  --   { "<leader>sf", "<cmd>Telescope find_files hidden=true<cr>", desc = "Find File" },
+  --   { "<leader>sg", "<cmd>Telescope git_files<cr>",              desc = "Git Files" },
+  --   { "<leader>sk", "<cmd>Telescope keymaps<cr>",                desc = "Keymaps" },
+  --   { "<leader>sm", "<cmd>Telescope marks<cr>",                  desc = "Marks" },
+  --   { "<leader>so", "<cmd>Telescope oldfiles<cr>",               desc = "Open Recent File" },
+  --   { "<leader>sp", "<cmd>Telescope projects<cr>",               desc = "Projects" },
+  --   { "<leader>sq", "<cmd>Telescope quickfix<cr>",               desc = "Quickfix List" },
+  --   { "<leader>st", "<cmd>Telescope live_grep<cr>",              desc = "Text" },
+  -- }
+  -- wk.add(maps)
 end
 
 return M

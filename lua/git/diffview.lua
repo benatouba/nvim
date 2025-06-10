@@ -38,15 +38,6 @@ M.config = function ()
       },
     },
   })
-
-  local wk_ok, wk = pcall(require, "which-key")
-  if wk_ok then
-    wk.add({
-      { "<leader>gt", "<cmd>lua require('git.diffview').DiffviewToggle()<cr>", desc = "Diffview" },
-    })
-  else
-    vim.notify("Which-key not found in diffview", vim.log.levels.ERROR)
-  end
 end
 
 return M

@@ -1,5 +1,5 @@
+vim.loader.enable()
 if vim.g.neovide then
-  vim.loader.enable()
   require("user-defaults")
   require("utils.globals")
   require("utils")
@@ -12,10 +12,9 @@ if vim.g.neovide then
   require("colorscheme")
   require("utils.after")
   vim.opt.linespace = 0
-  vim.g.neovide_scale_factor = .9
+  vim.g.neovide_scale_factor = 0.9
   vim.o.guifont = "Source Code Pro:h14"
 else
-  vim.loader.enable()
   require("user-defaults")
   require("utils.globals")
   require("utils")
@@ -31,7 +30,3 @@ else
   require("colorscheme")
   require("utils.after")
 end
-
-require("luasnip.loaders.from_vscode").lazy_load()
-require("luasnip.loaders.from_vscode").load_standalone({ paths = "./snippets/gitcommit.json" })
-require("luasnip.loaders.from_lua").lazy_load({ paths = "./snippets" })

@@ -16,7 +16,7 @@ end
 -- build git status cache
 local function new_git_status()
   return setmetatable({}, {
-    __index = function (self, key)
+    __index = function(self, key)
       local ignore_proc = vim.system(
         { "git", "ls-files", "--ignored", "--exclude-standard", "--others", "--directory" },
         {
@@ -43,7 +43,7 @@ local git_status = new_git_status()
 -- Clear git status cache on refresh
 local refresh = {
   desc = "Refresh current directory list",
-  callback = function (opts)
+  callback = function(opts)
     opts = opts or {}
     if vim.bo.modified and not opts.force then
       local ok, choice = pcall(vim.fn.confirm, "Discard changes?", "No\nYes")
@@ -64,7 +64,7 @@ local refresh = {
   },
 }
 local orig_refresh = refresh.callback
-refresh.callback = function (...)
+refresh.callback = function(...)
   git_status = new_git_status()
   orig_refresh(...)
 end
@@ -81,7 +81,7 @@ function _G.get_oil_winbar()
 end
 
 local M = {}
-M.config = function ()
+M.config = function()
   require("oil").setup({
     win_options = {
       wrap = true,
@@ -90,19 +90,19 @@ M.config = function ()
     watch_for_changes = true,
     git = {
       -- Return true to automatically git add/mv/rm files
-      add = function (path)
+      add = function(path)
         return true
       end,
-      mv = function (src_path, dest_path)
+      mv = function(src_path, dest_path)
         return true
       end,
-      rm = function (path)
+      rm = function(path)
         return true
       end,
     },
     view_options = {
       show_hidden = false,
-      is_hidden_file = function (name, bufnr)
+      is_hidden_file = function(name, bufnr)
         local dir = require("oil").get_current_dir(bufnr)
         local is_dotfile = vim.startswith(name, ".") and name ~= ".."
         -- if no local directory (e.g. for ssh connections), just hide dotfiles
@@ -117,14 +117,14 @@ M.config = function ()
           return git_status[dir].ignored[name]
         end
       end,
-      is_always_hidden = function (name, _)
+      is_always_hidden = function(name, _)
         return vim.startswith(name, "..")
       end,
     },
     keymaps = {
       ["gd"] = {
         desc = "Toggle file detail view",
-        callback = function ()
+        callback = function()
           detail = not detail
           if detail then
             require("oil").set_columns({ "icon", "permissions", "size", "mtime" })
@@ -138,6 +138,9 @@ M.config = function ()
       ["<q>"] = { "actions.close", mode = "n", desc = "Close the entry" },
       ["<esc>"] = { "<cmd>q<cr>", desc = "Close neovim" },
     },
+  })
+  require("which-key").add({
+    { "<leader>e", ":Oil<cr>", desc = "Explorer", icon = { icon = " ", color = "yellow" } },
   })
 end
 return M

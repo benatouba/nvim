@@ -31,31 +31,13 @@ M.config = function()
       -- augend.constant.new({ elements = { "&&", "||" }, word = false, cyclic = true }),
       -- augend.constant,
       augend.semver.alias.semver,
+      augend.constant.new({ elements = { "[ ]", "[x]" }, word = false, cyclic = true }),
     },
     visual = {
       augend.integer.alias.decimal,
       augend.integer.alias.hex,
       augend.date.alias["%Y/%m/%d"],
     },
-    markdown = {
-      augend.constant.new({ elements = { "[ ]", "[x]" }, word = false, cyclic = true }),
-    }
-  })
-
-  vim.api.nvim_set_keymap("n", "<C-a>", require("dial.map").inc_normal(), {})
-  vim.api.nvim_set_keymap("n", "<C-x>", require("dial.map").dec_normal(), {})
-  vim.api.nvim_set_keymap("v", "g<C-a>", require("dial.map").inc_gvisual(), {})
-  vim.api.nvim_set_keymap("v", "g<C-x>", require("dial.map").dec_gvisual(), {})
-  vim.api.nvim_set_keymap("v", "<C-a>", require("dial.map").inc_normal("visual"), {})
-  vim.api.nvim_set_keymap("v", "<C-x>", require("dial.map").dec_normal("visual"), {})
-
-  require("utils").add_autocommands({
-    markdown_dial = {
-      { "FileType", "markdown",
-        "lua vim.api.nvim_buf_set_keymap(0, 'n', '<C-a>', require('dial.map').inc_normal('markdown'), {noremap = true})" },
-      { "FileType", "markdown",
-        "lua vim.api.nvim_buf_set_keymap(0, 'n', '<C-x>', require('dial.map').dec_normal('markdown'), {noremap = true})" }
-    }
   })
 end
 

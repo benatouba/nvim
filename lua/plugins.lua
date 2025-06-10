@@ -19,60 +19,76 @@ end
 
 lazy.setup({
   "nvim-lua/plenary.nvim", -- most important functions (very important)
-  { "echasnovski/mini.ai",      version = false },
+  { "echasnovski/mini.ai", version = false, opts = {} },
   {
-    'echasnovski/mini.sessions',
+    "echasnovski/mini.sessions",
     version = false,
-    config = function ()
+    keys = {
+      { "<leader>S", icon = " ", group = "+Sessions", remap = false, mode = "n" },
+      {
+        "<leader>Sw",
+        "<cmd>lua require('mini.sessions').write()<cr>",
+        icon = " ",
+        desc = "Write Session",
+        remap = false,
+        mode = "n",
+      },
+      {
+        "<leader>Sr",
+        "<cmd>lua require('mini.sessions').read()<cr>",
+        icon = " ",
+        desc = "Read Session",
+        remap = false,
+        mode = "n",
+      },
+    },
+    config = function()
       require("mini.sessions").setup({
         autoread = false,
       })
-      local wk_ok, wk = pcall(require, "which-key")
-      if wk_ok then
-        wk.add({
-          { "<leader>S", icon = " ", group = "+Sessions", remap = false },
-          {
-            "<leader>Sw",
-            "<cmd>lua require('mini.sessions').write()<cr>",
-            icon = " ",
-            desc = "Write Session",
-            remap = false,
-          },
-          {
-            "<leader>Sr",
-            "<cmd>lua require('mini.sessions').read()<cr>",
-            icon = " ",
-            desc = "Read Session",
-            remap = false,
-          },
-        }, { mode = "n" })
-      else
-        vim.notify("which-key.nvim is not loaded in mini.sessions config")
-      end
-    end
+    end,
   },
   {
     "echasnovski/mini.bracketed",
     version = "*",
-    config = function ()
-      require("mini.bracketed").setup()
-    end,
+    opts = {},
     enabled = O.language_parsing,
   },
   {
     "obsidian-nvim/obsidian.nvim",
-    event = "VeryLazy",
     ft = "markdown",
+    keys = {
+      -- { "<localleader>of", "<cmd>Obsidian follow_link<CR>", desc = "Follow link", remap = false },
+      { "<leader>od", "<cmd>Obsidian dailies<CR>", desc = "Dailies", remap = false },
+      { "<leader>on", "<cmd>Obsidian new<CR>", desc = "New note", remap = false },
+      { "<leader>oN", "<cmd>Obsidian new_from_template<CR>", desc = "New note from Template", remap = false },
+      { "<leader>ot", "<cmd>Obsidian today<CR>", desc = "Today note", remap = false },
+      { "<leader>oT", "<cmd>Obsidian tomorrow<CR>", desc = "Tomorrow note", remap = false },
+      { "<leader>ov", "<cmd>Obsidian workspace vivere<CR>", desc = "Vivere (Workspace)", remap = false },
+      { "<leader>ow", "<cmd>Obsidian workspace work<CR>", desc = "Work (Workspace)", remap = false },
+      { "<leader>oy", "<cmd>Obsidian yesterday<CR>", desc = "Yesterday note", remap = false },
+      { "<leader>v", group = "+Vivere", icon = { icon = "󰇈 ", color = "purple" }, remap = false },
+      { "<localleader>o", group = "+Obsidian", icon = { icon = "󰇈 ", color = "purple" }, mode = { "n", "v" } },
+      { "<localleader>ob", "<cmd>Obsidian backlinks<CR>", desc = "Backlinks", remap = false },
+      { "<localleader>ol", "<cmd>Obsidian links<CR>", desc = "Links", remap = false },
+      { "<localleader>oo", "<cmd>Obsidian open<CR>", desc = "Open in Obsidian", remap = false },
+      { "<localleader>op", "<cmd>Obsidian paste_img<CR>", desc = "Paste image", remap = false },
+      { "<localleader>or", "<cmd>Obsidian rename<CR>", desc = "Rename", remap = false },
+      { "<localleader>os", "<cmd>Obsidian quick_switch<CR>", desc = "Quick switch", remap = false },
+      { "<localleader>ot", "<cmd>Obsidian tags<CR>", desc = "Tags", remap = false },
+      { "<localleader>oT", "<cmd>Obsidian template<CR>", desc = "Template", remap = false },
+      { "<C-Space>", "<cmd>Obsidian toggle_checkbox<CR>", desc = "Toggle Checkbox", remap = false },
+    },
     lazy = true,
     version = "*",
-    config = function ()
+    config = function()
       require("management.obsidian").config()
     end,
     enabled = O.obsidian,
   },
   {
     "lewis6991/impatient.nvim",
-    config = function ()
+    config = function()
       require("impatient")
     end,
     enabled = vim.fn.has("nvim-0.10") == 0,
@@ -82,26 +98,45 @@ lazy.setup({
     dependencies = {
       {
         "nvim-telescope/telescope-fzf-native.nvim",
-        build =
-        "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
         dependencies = "telescope.nvim",
-        config = function ()
+        config = function()
           require("telescope").load_extension("fzf")
         end,
       },
     },
     lazy = true,
-    config = function ()
+    keys = {
+      { "<leader>b", "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
+      { "<leader>s", group = "Search" },
+      { "<leader>sB", "<cmd>Telescope file_browser<cr>", desc = "Browser" },
+      { "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man Pages" },
+      { "<leader>sN", "<cmd>Noice telescope<cr>", desc = "Noice Notifications" },
+      { "<leader>sR", "<cmd>Telescope registers<cr>", desc = "Registers" },
+      { "<leader>sb", "<cmd>Telescope git_branches<cr>", desc = "Branches" },
+      { "<leader>sC", "<cmd>Telescope colorscheme<cr>", desc = "Colorscheme" },
+      { "<leader>sf", "<cmd>Telescope find_files hidden=true<cr>", desc = "Find File" },
+      { "<leader>sg", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
+      { "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
+      { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Marks" },
+      { "<leader>so", "<cmd>Telescope oldfiles<cr>", desc = "Open Recent File" },
+      { "<leader>sq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix List" },
+      { "<leader>st", "<cmd>Telescope live_grep<cr>", desc = "Text" },
+    },
+    config = function()
       require("ben.telescope").config()
     end,
   },
   {
     "benatouba/project.nvim",
-    config = function ()
+    config = function()
       require("ben.project").setup()
     end,
+    keys = {
+      { "<leader>s", group = "Search" },
+    },
     dependencies = "telescope.nvim",
-    event = "VeryLazy",
+    event = { "BufReadPost", "BufNewFile" },
     enabled = O.lsp,
   },
 
@@ -112,8 +147,8 @@ lazy.setup({
     priority = 1000,
     lazy = false,
     ---@type snacks.Config
-    config = function ()
-      require("snacks").setup {
+    config = function()
+      require("snacks").setup({
         -- your configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
@@ -160,7 +195,7 @@ lazy.setup({
               icon = " ",
               title = "Git Status",
               section = "terminal",
-              enabled = function ()
+              enabled = function()
                 return Snacks.git.get_root() ~= nil
               end,
               cmd = "git status --short --branch --renames",
@@ -187,15 +222,15 @@ lazy.setup({
         win = { enabled = false },
         words = { enabled = true },
         zen = { enabled = true },
-      }
+      })
       vim.api.nvim_create_autocmd("LspProgress", {
         ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
-        callback = function (ev)
+        callback = function(ev)
           local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
           vim.notify(vim.lsp.status(), "info", {
             id = "lsp_progress",
             title = "LSP Progress",
-            opts = function (notif)
+            opts = function(notif)
               notif.icon = ev.data.params.value.kind == "end" and " "
                 or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
             end,
@@ -217,6 +252,12 @@ lazy.setup({
             desc = "Zen",
             remap = false,
           },
+          {
+            "<leader>sp",
+            "<cmd>lua Snacks.picker.projects()<cr>",
+            icon = " ",
+            desc = "Projects",
+          },
         }, { mode = "n" })
       end
     end,
@@ -225,28 +266,28 @@ lazy.setup({
   -- Colorize hex and other colors in code,
   {
     "nvchad/nvim-colorizer.lua",
-    config = function ()
+    config = function()
       require("colorizer").setup({
         lazy_load = false,
         user_default_options = {
           names_opts = {
             uppercase = true,
           },
-          RRGGBBAA = true,       -- #RRGGBBAA hex codes
-          AARRGGBB = true,       -- 0xAARRGGBB hex codes
-          rgb_fn = true,         -- CSS rgb() and rgba() functions
-          hsl_fn = true,         -- CSS hsl() and hsla() functions
-          css = true,            -- Enable all CSS *features*:
+          RRGGBBAA = true, -- #RRGGBBAA hex codes
+          AARRGGBB = true, -- 0xAARRGGBB hex codes
+          rgb_fn = true, -- CSS rgb() and rgba() functions
+          hsl_fn = true, -- CSS hsl() and hsla() functions
+          css = true, -- Enable all CSS *features*:
           -- names, RGB, RGBA, RRGGBB, RRGGBBAA, AARRGGBB, rgb_fn, hsl_fn
-          css_fn = true,         -- Enable all CSS *functions*: rgb_fn, hsl_fn
+          css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
           -- Tailwind colors.  boolean|'normal'|'lsp'|'both'.  True sets to 'normal'
-          tailwind = true,       -- Enable tailwind colors
-          tailwind_opts = {      -- Options for highlighting tailwind names
+          tailwind = true, -- Enable tailwind colors
+          tailwind_opts = { -- Options for highlighting tailwind names
             update_names = true, -- When using tailwind = 'both', update tailwind names from LSP results.  See tailwind section
           },
           -- parsers can contain values used in `user_default_options`
           sass = { enable = true, parsers = { "css" } }, -- Enable sass colors
-        }
+        },
       })
     end,
     lazy = true,
@@ -257,7 +298,7 @@ lazy.setup({
   -- Icons and visuals
   {
     "nvim-tree/nvim-web-devicons",
-    config = function ()
+    config = function()
       require("nvim-web-devicons").setup()
       require("nvim-web-devicons").set_icon({
         nvim = {
@@ -271,39 +312,44 @@ lazy.setup({
   },
   {
     "stevearc/oil.nvim",
-    config = function () require("ben.oil").config() end,
+    keys = {
+      { "<leader>e", ":Oil<cr>", desc = "Explorer" },
+    },
+    config = function()
+      require("ben.oil").config()
+    end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
   },
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    config = function ()
+    config = function()
       require("ben.indent-blankline").config()
     end,
     dependencies = "nvim-treesitter",
-    event = "InsertEnter",
     enabled = O.language_parsing,
   },
   {
     "nvim-lualine/lualine.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "nvim-web-devicons",
+      -- "nvim-web-devicons",
       {
         "AndreM222/copilot-lualine",
         enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.copilot,
       },
     },
-    config = function ()
+    config = function()
       require("ben.lualine").config()
     end,
     enabled = true,
   },
   {
     "romgrk/barbar.nvim",
-    config = function ()
+    config = function()
       require("ui.barbar").config()
     end,
-    init = function ()
+    init = function()
       vim.g.barbar_auto_setup = false
     end,
     dependencies = {
@@ -317,46 +363,50 @@ lazy.setup({
   -- manipulation
   {
     "monaqa/dial.nvim",
-    config = function ()
+    config = function()
       require("ben.dial").config()
     end,
-    -- keys = { "<C-a>", "<C-x>" },
+    event = { "BufReadPost", "BufNewFile" },
+    ft = { "markdown", "text", "html", "javascript", "typescript", "vue", "svelte", "css", "scss", "less" },
+    keys = {
+      { "<C-a>", "<cmd>DialIncrement<cr>", mode = { "n", "v" }, desc = "Increment" },
+      { "<C-x>", "<cmd>DialDecrement<cr>", mode = { "n", "v" }, desc = "Decrement" },
+      { "g<C-a>", "<cmd>DialIncrement<cr>", mode = { "v" }, desc = "Increment" },
+      { "g<C-x>", "<cmd>DialDecrement<cr>", mode = { "v" }, desc = "Decrement" },
+    },
   }, -- increment/decrement basically everything,
   {
     "mbbill/undotree",
-    lazy = true,
+    -- lazy = true,
     -- cmd = "UndotreeToggle",
     enabled = true,
   },
   {
     "kylechui/nvim-surround",
-    config = function ()
-      require("nvim-surround").setup({
-
-      })
+    config = function()
+      require("nvim-surround").setup({})
     end,
     event = "VeryLazy",
     enabled = O.language_parsing,
   },
 
   -- language specific,
-  { "saltstack/salt-vim",       ft = "sls",               enabled = O.salt },
+  { "saltstack/salt-vim", ft = "sls", enabled = O.salt },
   { "Glench/Vim-Jinja2-Syntax", ft = { "sls", "Jinja2" }, enabled = O.salt },
 
   -- Treesitter,
   {
     "windwp/nvim-ts-autotag",
     event = { "InsertEnter", "BufNewFile" },
-    ft = { "html", "javascript", "typescript", "vue", "svelte", "markdown", "xml", "php", },
-    config = function ()
+    ft = { "html", "javascript", "typescript", "vue", "svelte", "markdown", "xml", "php" },
+    config = function()
       require("nvim-ts-autotag").setup({
         opts = {
           enable_close = true,
           enable_rename = true,
           enable_close_on_slash = true,
         },
-      }
-      )
+      })
     end,
     enabled = O.language_parsing,
   },
@@ -366,13 +416,13 @@ lazy.setup({
     dependencies = {
       {
         "LiadOz/nvim-dap-repl-highlights",
-        config = function ()
+        config = function()
           require("nvim-dap-repl-highlights").setup()
         end,
       },
     },
     build = ":TSUpdate",
-    config = function ()
+    config = function()
       require("language_parsing.treesitter").config()
     end,
     enabled = O.language_parsing,
@@ -380,32 +430,27 @@ lazy.setup({
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
-    config = function ()
+    config = function()
       require("language_parsing.autopairs").config()
     end,
     enabled = O.language_parsing,
   },
   {
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    dependencies = "nvim-treesitter",
-    enabled = O.language_parsing,
-  },
-  {
     "dmmulroy/tsc.nvim",
     enabled = O.typescript,
-    ft = { "typescript", "typescriptreact", "vue", },
-    config = function ()
-      require('tsc').setup({
+    ft = { "typescript", "typescriptreact", "vue" },
+    config = function()
+      require("tsc").setup({
         use_trouble_qflist = true,
         use_diagnostics = true,
       })
-      vim.keymap.set('n', '<leader>lt', ':TSC<CR>')
+      vim.keymap.set("n", "<leader>lt", ":TSC<CR>")
     end,
   },
   {
     "dmmulroy/ts-error-translator.nvim",
     ft = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue" },
-    config = function ()
+    config = function()
       require("ts-error-translator").setup()
     end,
   },
@@ -423,12 +468,11 @@ lazy.setup({
       },
       filetypes = { "vue", "typescript" },
       detection = {
-        nuxt = function ()
+        nuxt = function()
           return vim.fn.glob(".nuxt/") ~= ""
         end,
-        vue3 = function ()
-          return vim.fn.filereadable("vite.config.ts") == 1
-            or vim.fn.filereadable("src/app.vue") == 1
+        vue3 = function()
+          return vim.fn.filereadable("vite.config.ts") == 1 or vim.fn.filereadable("src/app.vue") == 1
         end,
         priority = { "nuxt", "vue3" },
       },
@@ -440,28 +484,34 @@ lazy.setup({
   },
   {
     "Exafunction/codeium.vim",
-    config = function ()
+    config = function()
       vim.g.codeium_disable_bindings = 1
       -- Change '<C-g>' here to any keycode you like.
-      vim.keymap.set("i", "<C-l>", function () return vim.fn["codeium#Accept"]() end,
-        { expr = true, silent = true })
-      vim.keymap.set("i", "<C-a>", function () return vim.fn["codeium#AcceptNextWord"]() end,
-        { expr = true, silent = true })
-      vim.keymap.set("i", "<C-S-a>", function () return vim.fn["codeium#AcceptNextLine"]() end,
-        { expr = true, silent = true })
-      vim.keymap.set("i", "<c-n>", function () return vim.fn["codeium#CycleCompletions"](1) end,
-        { expr = true, silent = true })
-      vim.keymap.set("i", "<c-p>", function () return vim.fn["codeium#CycleCompletions"](-1) end,
-        { expr = true, silent = true })
-      vim.keymap.set("i", "<c-h>", function () return vim.fn["codeium#Clear"]() end,
-        { expr = true, silent = true })
+      vim.keymap.set("i", "<C-l>", function()
+        return vim.fn["codeium#Accept"]()
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<C-a>", function()
+        return vim.fn["codeium#AcceptNextWord"]()
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<C-S-a>", function()
+        return vim.fn["codeium#AcceptNextLine"]()
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-n>", function()
+        return vim.fn["codeium#CycleCompletions"](1)
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-p>", function()
+        return vim.fn["codeium#CycleCompletions"](-1)
+      end, { expr = true, silent = true })
+      vim.keymap.set("i", "<c-h>", function()
+        return vim.fn["codeium#Clear"]()
+      end, { expr = true, silent = true })
     end,
     enabled = O.codeium,
   },
   {
     "supermaven-inc/supermaven-nvim",
     event = { "InsertEnter" },
-    config = function ()
+    config = function()
       require("supermaven-nvim").setup({
         keymaps = {
           accept_suggestion = "<C-l>",
@@ -539,7 +589,7 @@ lazy.setup({
   },
   {
     "xzbdmw/colorful-menu.nvim",
-    config = function ()
+    config = function()
       -- You don't need to set these options.
       require("colorful-menu").setup({
         ls = {
@@ -619,19 +669,19 @@ lazy.setup({
     dependencies = {
       -- "hrsh7th/cmp-nvim-lsp",
       {
-        'saghen/blink.compat',
-        version = '*',
-        lazy = true,
+        "saghen/blink.compat",
+        version = "*",
+        event = "VeryLazy",
         opts = {
           impersonate_nvim_cmp = false,
         },
       },
       {
-        'saghen/blink.cmp',
+        "saghen/blink.cmp",
         enabled = true,
-        version = '*',
-        build = 'cargo build --release',
-        -- event = { "InsertEnter", "CmdlineEnter" },
+        version = "*",
+        build = "cargo build --release",
+        event = "VeryLazy",
         dependencies = {
           "rafamadriz/friendly-snippets",
           "mikavilpas/blink-ripgrep.nvim",
@@ -657,12 +707,18 @@ lazy.setup({
               filename = os.getenv("HOME") .. "/documents/rolodex_db.json",
               schema_ver = "latest",
               encryption = "plaintext",
-            }
+            },
           },
           {
-            'philosofonusus/ecolog.nvim',
-            branch = 'beta',
-            lazy = false,
+            "philosofonusus/ecolog.nvim",
+            branch = "beta",
+            keys = {
+              { "<leader>ge", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
+              { "<leader>ep", "<cmd>EcologPeek<cr>", desc = "Ecolog peek variable" },
+              { "<leader>es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
+              { "<leader>se", "<cmd>EcologSnacks<cr>", desc = "Env" },
+            },
+            event = { "InsertEnter", "CmdlineEnter" },
             opts = {
               integrations = {
                 blink_cmp = true,
@@ -676,10 +732,6 @@ lazy.setup({
                     copy_name = "<C-u>",
                     append_value = "<C-a>",
                     append_name = "<CR>",
-                  },
-                  layout = {
-                    preset = "default",
-                    preview = true,
                   },
                 },
               },
@@ -702,14 +754,14 @@ lazy.setup({
                   fzf_previewer = false,
                   snacks_previewer = false,
                   snacks = false,
-                }
+                },
               },
               types = true,
               path = vim.fn.getcwd(),
               preferred_environment = "development",
               provider_patterns = true,
             },
-          }
+          },
         },
         opts = require("lsp.blink").opts,
         opts_extend = { "sources.default" },
@@ -738,14 +790,14 @@ lazy.setup({
           "R-nvim/cmp-r",
           "onsails/lspkind-nvim",
         },
-        config = function ()
+        config = function()
           require("lsp.cmp").config()
         end,
         enabled = false,
       },
     },
     event = "BufReadPost",
-    config = function ()
+    config = function()
       require("lsp").config()
     end,
     enabled = O.lsp,
@@ -754,18 +806,18 @@ lazy.setup({
     "R-nvim/R.nvim",
     lazy = false,
     ft = { "r", "rmd" },
-    config = function ()
+    config = function()
       -- Create a table with the options to be passed to setup()
       local opts = {
         R_args = { "--quiet", "--no-save" },
         hook = {
-          on_filetype = function ()
+          on_filetype = function()
             -- This function will be called at the FileType event
             -- of files supported by R.nvim. This is an
             -- opportunity to create mappings local to buffers.
             vim.api.nvim_buf_set_keymap(0, "n", "<Enter>", "<Plug>RDSendLine", {})
             vim.api.nvim_buf_set_keymap(0, "v", "<Enter>", "<Plug>RSendSelection", {})
-          end
+          end,
         },
         min_editor_width = 72,
         rconsole_width = 78,
@@ -780,7 +832,7 @@ lazy.setup({
           -- open_app = ":TermExec cmd='vd %'",
           open_app = "terminal:vd",
           -- open_app = ":TermExec cmd='vd %s'"
-        }
+        },
       }
       -- alias r "R_AUTO_START=true nvim"
       if vim.env.R_AUTO_START == "true" then
@@ -790,13 +842,6 @@ lazy.setup({
       vim.g.rout_follow_colorscheme = true
       require("r").setup(opts)
     end,
-  },
-  {
-    "L3MON4D3/LuaSnip",
-    -- follow latest release.
-    version = "*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-    -- install jsregexp (optional!).
-    build = "make install_jsregexp"
   },
   {
     "folke/ts-comments.nvim",
@@ -810,15 +855,18 @@ lazy.setup({
   },
   {
     "pwntester/octo.nvim",
-    event = "VeryLazy",
+    keys = {
+      { "<leader>go", "<cmd>Octo pr list<cr>", desc = "Octo PR List" },
+      { "<leader>gi", "<cmd>Octo issue list<cr>", desc = "Octo Issue List" },
+    },
     requires = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
       "nvim-tree/nvim-web-devicons",
     },
-    config = function ()
-      require "octo".setup()
-    end
+    config = function()
+      require("octo").setup()
+    end,
   },
   {
     "kristijanhusak/vim-dadbod-ui",
@@ -827,7 +875,7 @@ lazy.setup({
       "tpope/vim-dadbod",
       {
         "kristijanhusak/vim-dadbod-completion",
-        ft = { 'sql', 'mysql', 'plsql' },
+        ft = { "sql", "mysql", "plsql" },
         lazy = true,
         enabled = O.language_parsing,
       },
@@ -838,7 +886,7 @@ lazy.setup({
       "DBUIAddConnection",
       "DBUIFindBuffer",
     },
-    init = function ()
+    init = function()
       -- Your DBUI configuration
       vim.g.db_ui_auto_execute_table_helpers = 1
       vim.g.db_ui_use_nerd_fonts = 1
@@ -849,24 +897,36 @@ lazy.setup({
     "NeogitOrg/neogit",
     dependencies = {
       "sindrets/diffview.nvim",
-      keys = { "<leader>g", "g", "<c-o>" },
+      keys = {
+        { "<leader>gd", "<cmd>lua require('git.diffview').DiffviewToggle()<cr>", desc = "Diffview" },
+        { "<leader>gS", "<cmd>DiffviewFileHistory -g --range=stash<cr>", desc = "Check Stash" },
+      },
       cmd = "DiffviewOpen",
       event = "BufReadPost",
-      config = function ()
+      config = function()
         require("git.diffview").config()
       end,
     },
-    cmd = "Neogit",
-    event = { "CursorMoved", "InsertEnter" },
-    keys = { "<leader>g", "g", "<c-o>" },
-    config = function ()
+    keys = {
+      { "<leader>g", group = "+Git", nowait = false, remap = false },
+      { "<leader>gb", "<cmd>Neogit branch<cr>", desc = "Branch (Menu)", nowait = false, remap = false },
+      { "<leader>gc", "<cmd>Neogit commit<cr>", desc = "Commit (Menu)", nowait = false, remap = false },
+      { "<leader>gC", "<cmd>Neogit cherry_pick<cr>", desc = "Cherry Pick (Menu)", nowait = false, remap = false },
+      { "<leader>gD", "<cmd>Neogit diff<cr>", desc = "Diff (Menu)", nowait = false, remap = false },
+      { "<leader>gg", "<cmd>Neogit<cr>", desc = "Neogit (alias)", nowait = false, remap = false },
+      { "<leader>gl", "<cmd>NeogitLogCurrent<cr>", desc = "Log", nowait = false, remap = false },
+      { "<leader>gn", "<cmd>Neogit<cr>", desc = "Neogit", nowait = false, remap = false },
+      { "<leader>gp", "<cmd>Neogit pull<cr>", desc = "Pull", nowait = false, remap = false },
+      { "<leader>gP", "<cmd>Neogit push<cr>", desc = "Push", nowait = false, remap = false },
+    },
+    config = function()
       require("git.neogit").config()
     end,
     enabled = O.git,
   },
   {
     "lewis6991/gitsigns.nvim",
-    config = function ()
+    config = function()
       require("git.gitsigns").config()
     end,
     enabled = O.git,
@@ -908,20 +968,21 @@ lazy.setup({
     },
     dependencies = {
       "nvim-neotest/neotest-python",
+      "shunsambongi/neotest-testthat",
       "marilari88/neotest-vitest",
       "nvim-neotest/neotest-vim-test",
       "vim-test/vim-test",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
     },
-    config = function ()
+    config = function()
       require("test.neotest").config()
     end,
     enabled = O.test,
   },
   {
     "vuki656/package-info.nvim",
-    config = function ()
+    config = function()
       require("misc.package_info").config()
     end,
     enabled = O.webdev and O.misc,
@@ -931,7 +992,7 @@ lazy.setup({
   -- debug adapter protocol
   {
     "mfussenegger/nvim-dap",
-    config = function ()
+    config = function()
       require("debug.dap").config()
     end,
     event = "InsertEnter",
@@ -939,14 +1000,14 @@ lazy.setup({
     dependencies = {
       {
         "theHamsta/nvim-dap-virtual-text",
-        config = function ()
+        config = function()
           require("nvim-dap-virtual-text").setup({})
-        end
+        end,
       },
       {
         "rcarriga/cmp-dap",
         ft = { "dap-repl", "dapui_watches", "dapui_hover" },
-        config = function ()
+        config = function()
           local cmp = require("cmp")
           -- local config = cmp.get_config()
           -- config.enabled = function()
@@ -967,9 +1028,9 @@ lazy.setup({
         event = "InsertEnter",
         dependencies = {
           "mfussenegger/nvim-dap",
-          "nvim-neotest/nvim-nio"
+          "nvim-neotest/nvim-nio",
         },
-        config = function ()
+        config = function()
           require("debug.dapui").config()
         end,
         enabled = O.dap,
@@ -978,7 +1039,7 @@ lazy.setup({
         "jbyuki/one-small-step-for-vimkind",
         dependencies = "nvim-dap",
         ft = "lua",
-        config = function ()
+        config = function()
           require("debug.one_small_step_for_vimkind").config()
         end,
         enabled = O.dap and false,
@@ -986,7 +1047,7 @@ lazy.setup({
       {
         "mxsdev/nvim-dap-vscode-js",
         dependencies = { "mfussenegger/nvim-dap" },
-        config = function ()
+        config = function()
           require("debug.vscode_js").config()
         end,
         ft = { "javascript", "vue", "javascriptreact", "typescriptreact", "typescript" },
@@ -996,10 +1057,7 @@ lazy.setup({
         "microsoft/vscode-js-debug",
         lazy = true,
         build = "npm ci --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
-        enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18
-          and O.webdev
-          and O.dap
-          and false,
+        enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.webdev and O.dap and false,
       },
     },
   },
@@ -1026,16 +1084,31 @@ lazy.setup({
       "danilshvalov/org-modern.nvim",
       {
         "akinsho/org-bullets.nvim",
-        config = function ()
+        config = function()
           require("org-bullets").setup()
-        end
+        end,
       },
     },
     ft = { "org" },
-    keys = { "<leader>", "o" },
-    event = "VeryLazy",
+    keys = {
+      { "<leader>o", group = "Org", nowait = false, remap = false, icon = { icon = "", color = "purple" } },
+      {
+        "<leader>oa",
+        "<cmd>lua require('orgmode').action('agenda.prompt')<CR>",
+        desc = "org-Agenda",
+        nowait = true,
+        remap = false,
+      },
+      {
+        "<leader>oc",
+        "<cmd>lua require('orgmode').action('capture.prompt')<CR>",
+        desc = "org-Capture",
+        nowait = true,
+        remap = false,
+      },
+    },
     enabled = O.project_management,
-    config = function ()
+    config = function()
       require("management.orgmode").config()
     end,
   },
@@ -1043,7 +1116,7 @@ lazy.setup({
     "renerocksai/telekasten.nvim",
     event = "BufReadPost",
     dependencies = { "telescope.nvim", "renerocksai/calendar-vim" },
-    config = function ()
+    config = function()
       require("management.telekasten").config()
     end,
     enabled = false,
@@ -1055,7 +1128,7 @@ lazy.setup({
     "stevearc/overseer.nvim",
     lazy = true,
     event = "InsertEnter",
-    config = function ()
+    config = function()
       require("overseer.config").config()
     end,
     enabled = O.misc,
@@ -1180,7 +1253,7 @@ lazy.setup({
   },
   {
     "andymass/vim-matchup",
-    config = function ()
+    config = function()
       vim.g.matchup_matchparen_offscreen = { method = "popup" }
       vim.g.matchup_surround_enabled = 1
     end,
@@ -1190,7 +1263,7 @@ lazy.setup({
   },
   {
     "folke/todo-comments.nvim",
-    config = function ()
+    config = function()
       require("todo-comments").setup()
     end,
     lazy = true,
@@ -1199,14 +1272,14 @@ lazy.setup({
   {
     "akinsho/toggleterm.nvim",
     version = "*",
-    config = function ()
+    config = function()
       require("misc.toggleterm").config()
     end,
     enabled = O.misc,
   },
   {
     "danymat/neogen",
-    config = function ()
+    config = function()
       require("misc.neogen")
     end,
     dependencies = "nvim-treesitter/nvim-treesitter",
@@ -1215,7 +1288,7 @@ lazy.setup({
   },
   {
     "hiphish/rainbow-delimiters.nvim",
-    config = function ()
+    config = function()
       -- This module contains a number of default definitions
       local rainbow_delimiters = require("rainbow-delimiters")
 
@@ -1244,9 +1317,11 @@ lazy.setup({
   },
   {
     "folke/tokyonight.nvim",
-    lazy = vim.cmd("colorscheme") ~= "tokyonight",
+    lazy = function()
+      return vim.cmd("colorscheme") ~= "tokyonight"
+    end,
     priority = 1000,
-    config = function ()
+    config = function()
       require("tokyonight").setup({
         style = "storm",
         transparent = false,
@@ -1257,13 +1332,13 @@ lazy.setup({
   },
   {
     "rebelot/kanagawa.nvim",
-    config = function ()
+    config = function()
       require("kanagawa").setup({
         compile = true,
         dimInactive = true,
       })
     end,
-    lazy = function ()
+    lazy = function()
       return vim.cmd("colorscheme") ~= "kanagawa"
     end,
     enabled = O.misc or vim.cmd("colorscheme") == "kanagawa",
@@ -1271,7 +1346,6 @@ lazy.setup({
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    lazy = string.find(O.colorscheme, "rose-pine") ~= nil,
     config = function()
       if string.find(O.colorscheme, "rose-pine") ~= nil then
         vim.cmd("colorscheme " .. O.colorscheme)
@@ -1282,7 +1356,9 @@ lazy.setup({
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    lazy = string.find(O.colorscheme, "catppuccin") ~= nil,
+    lazy = function()
+      return string.find(O.colorscheme, "catppuccin") ~= nil
+    end,
     config = function()
       require("catppuccin").setup({
         flavour = "mocha", -- mocha, macchiato, frappe, latte
@@ -1359,7 +1435,7 @@ lazy.setup({
     dependencies = { "nvim-lua/plenary.nvim" },
     event = { "InsertEnter" },
     keys = { "m", "'" },
-    config = function ()
+    config = function()
       require("misc.harpoon").config()
       require("misc.harpoon").maps()
     end,
@@ -1372,7 +1448,7 @@ lazy.setup({
       { "nvim-lua/plenary.nvim" },
       { "nvim-treesitter/nvim-treesitter" },
     },
-    config = function ()
+    config = function()
       require("misc.refactoring").config()
       require("misc.refactoring").maps()
     end,
@@ -1381,10 +1457,12 @@ lazy.setup({
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
-    ft = { "markdown", "norg", "org", "rmd", "rst", "tex" },
+    ft = { "markdown", "norg", "org", "rmd", "rst", "tex", "Avante" },
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
-    opts = {},
+    opts = {
+      file_types = { "markdown", "norg", "org", "rmd", "Avante" },
+    },
     enabled = O.markdown,
   },
   {
@@ -1406,7 +1484,7 @@ lazy.setup({
     dependencies = {
       "MunifTanjim/nui.nvim",
     },
-    config = function ()
+    config = function()
       require("ui.noice").config()
     end,
     enabled = true,
@@ -1414,7 +1492,7 @@ lazy.setup({
   {
     "lervag/vimtex",
     ft = "tex",
-    config = function ()
+    config = function()
       require("misc.vimtex").config()
     end,
     enabled = O.latex,

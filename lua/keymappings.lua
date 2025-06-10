@@ -15,17 +15,6 @@ map("n", "n", "nzzzv", defaultOpts)
 map("n", "N", "Nzzzv", defaultOpts)
 map("n", "<esc>", "<cmd>nohlsearch<CR>")
 
-map("n", "<leader>CR", "", {
-    -- silent = true,
-    desc = "Reload Config",
-    callback = function()
-        vim.cmd([[
-          source $MYVIMRC
-        ]])
-        vim.notify("Nvim config successfully reloaded", vim.log.levels.INFO, { title = "nvim-config" })
-    end,
-})
-
 map("t", "<C-j>", "<C-\\><C-N><C-w>j", { remap = false })
 map("t", "<C-k>", "<C-\\><C-N><C-w>k", { remap = false })
 map("t", "<Esc>", "<C-\\><C-n>", { remap = false })

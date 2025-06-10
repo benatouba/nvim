@@ -46,14 +46,15 @@ M.config = function ()
   })
 
   wk.add({
-    { "<leader>t", group = "+Terminal", remap = false, icon = { icon = " ", color = "green" } },
-    { "<leader>tt", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal", remap = false, icon = { icon = " ", color = "green" } },
+    { "<leader>T", group = "+Terminal", remap = false, icon = { icon = " ", color = "green" } },
+    { "<leader>TT", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal", remap = false, icon = { icon = " ", color = "green" } },
+    { "<leader>Tt", "<cmd>ToggleTerm<cr>", desc = "Terminal (bot)", remap = false, icon = { icon = " ", color = "green" } },
     { "<leader>gL", "<cmd>lua require('misc.toggleterm').LazyGit()<cr>", desc = "LazyGit", remap = false, icon = { icon = " ", color = "cyan" } },
     { "<leader>B", "<cmd>lua require('misc.toggleterm').btop()<cr>", desc = "BTop", remap = false, icon = { icon = " ", color = "orange" } },
     -- { "<leader>tv", "yi\"<cmd>lua require('misc.toggleterm').VisiData(vim.cmd[[p]])<cr>", desc = "VisiData" },
-    { "<leader>tv", "yi\"<cmd>lua P(vim.cmd[[p]])<cr>\"", desc = "VisiData", remap = false, icon = { icon = " ", color = "orange" } },
-    { "<leader>tV", "<cmd>lua require('misc.toggleterm').VisiData(vim.api.nvim_buf_get_name(0))<cr>", desc = "VisiData (File)" },
-    { "<leader>tu", "<cmd>lua require('misc.toggleterm').UpdateProject()<cr>", desc = "Update Project", remap = false, icon = { icon = " ", color = "yellow" } },
+    { "<leader>Tv", "yi\"<cmd>lua P(vim.cmd[[p]])<cr>\"", desc = "VisiData", remap = false, icon = { icon = " ", color = "orange" } },
+    { "<leader>TV", "<cmd>lua require('misc.toggleterm').VisiData(vim.api.nvim_buf_get_name(0))<cr>", desc = "VisiData (File)" },
+    { "<leader>Tu", "<cmd>lua require('misc.toggleterm').UpdateProject()<cr>", desc = "Update Project", remap = false, icon = { icon = " ", color = "yellow" } },
   })
 end
 M.btop = function ()
@@ -121,7 +122,9 @@ local update_project = function ()
   if file_exists("./pyproject.toml") then
     local lines = lines_from("./pyproject.toml")
     for _, v in pairs(lines) do
-      if v == "[tool.poetry]" then
+      if v == "[tool.uv]" then
+        return "uv sync"
+      elseif v == "[tool.poetry]" then
         return "poetry update"
       elseif string.sub(v, 1, 3) == "dep" and file_exists("./.venv/") then
         return "uv sync"

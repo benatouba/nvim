@@ -7,9 +7,13 @@ which_key.setup()
 
 which_key.add({
   { "<leader>t", "<cmd>ToggleTermSendVisualLines<cr>", desc = "Send to terminal", mode = "v" },
-  { "<leader>e", ":Oil<cr>", desc = "Explorer", icon = { icon = " ", color = "yellow" } },
   { "<leader>u", ":UndotreeToggle<cr>", desc = "Undotree", icon = { icon = "", color = "green" } },
-  { "<leader>f", "<cmd>lua P(vim.api.nvim_buf_get_name(0))<cr>", desc = "Show Filename", icon = { icon = "", color = "blue" } },
+  {
+    "<leader>f",
+    "<cmd>lua P(vim.api.nvim_buf_get_name(0))<cr>",
+    desc = "Show Filename",
+    icon = { icon = "", color = "blue" },
+  },
   -- Buffers
   -- { "<leader>b", group = "+Buffers" },
   { "<leader><leader>", ":bprevious<cr>", desc = "Switch Buffer" },
@@ -26,7 +30,15 @@ which_key.add({
   { "<leader>cc", "<cmd>e ~/.config/nvim/init.lua<cr>", desc = "Open Config" },
   { "<leader>cC", "<cmd>ColorizerToggle<cr>", desc = "Colorizer" },
   { "<leader>ch", "<cmd>set hlsearch!<CR>", desc = "Highlightsearch" },
-  { "<leader>cr", "<cmd>set norelativenumber!<cr>", desc = "Relative line nums" },
+  {
+    "<leader>cr",
+    function()
+      vim.cmd([[source $MYVIMRC]])
+      vim.notify("Nvim config successfully reloaded", vim.log.levels.INFO, { title = "nvim-config" })
+    end,
+    desc = "Reload Config",
+  },
+  { "<leader>cR", "<cmd>set norelativenumber!<cr>", desc = "Relative line nums" },
   -- Plugins
   { "<leader>p", icon = { icon = " ", color = "blue" }, group = "+Plugins" },
   { "<leader>pc", "<cmd>Lazy clean<cr>", desc = "Clean" },
@@ -35,7 +47,6 @@ which_key.add({
   { "<leader>ph", "<cmd>Lazy help<cr>", desc = "Help" },
   { "<leader>pi", "<cmd>Lazy install<cr>", desc = "Install" },
   { "<leader>pl", "<cmd>Lazy log<cr>", desc = "Log" },
-  { "<leader>pm", "<cmd>Mason<cr>", desc = "Info" },
   { "<leader>pp", "<cmd>Lazy profile<cr>", desc = "Profile" },
   { "<leader>pr", "<cmd>Lazy restore<cr>", desc = "Restore" },
   { "<leader>ps", "<cmd>Lazy sync<cr>", desc = "Sync" },
@@ -55,7 +66,6 @@ which_key.add({
   -- Logs
   { "<leader>L", group = "+Logs", icon = { icon = " ", color = "green" } },
   { "<leader>Ll", "<cmd>LspLog<cr>", desc = "LSP" },
-  { "<leader>Lm", "<cmd>MasonLog<cr>", desc = "Log" },
   { "<leader>Lp", "<cmd>Lazy profile<cr>", desc = "Lazy Profile" },
   -- Generate Annotations
   { "<leader>n", group = "+Generate Annotations" },

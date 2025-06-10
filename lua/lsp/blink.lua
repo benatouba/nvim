@@ -5,7 +5,8 @@ local M = {}
 M.opts = {
   keymap = {
     preset = "default",
-    ["<CR>"] = { "select_and_accept", "fallback" },
+    -- ["<CR>"] = { "select_and_accept", "fallback" },
+    ["<C-l>"] = { "select_and_accept", "fallback" },
     ["<Up>"] = {},
     ["<Down>"] = {},
   },
@@ -96,20 +97,6 @@ M.opts = {
       local success, node = pcall(vim.treesitter.get_node)
       if success and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
         return { "buffer" }
-      elseif string.find(vim.fn.getcwd(), "nvim") then
-        return {
-          "ecolog",
-          "lsp",
-          "path",
-          "snippets",
-          "dap",
-          "git",
-          "nvim_lua",
-          "lazydev",
-          "ripgrep",
-          "calc",
-          "emoji",
-        }
       else
         return {
           "ecolog",
@@ -117,32 +104,40 @@ M.opts = {
           "path",
           "snippets",
           "dap",
-          "orgmode",
           "git",
-          "dadbod",
-          "lazydev",
-          "cmp_r",
           "ripgrep",
           "calc",
           "emoji",
         }
       end
     end,
-    -- per_filetype = {
-    --   org = { "lsp", "orgmode", "path", "snippets", "ripgrep", "emoji", "calc" },
-    --   markdown = { "lsp", "snippets", "emoji", "calc" },
-    --   gitcommit = { "lsp", "git", "snippets", "emoji", "calc" },
-    --   sql = { "lsp", "dadbod", "snippets" },
-    --   lua = { "lsp", "lazydev", "path", "snippets", "nvim_lua", "calc" },
-    --   octo = { "lsp", "git", "emoji", "calc" },
-    --   r = { "lsp", "cmp_r", "path", "snippets", "calc" },
-    --   rmd = { "lsp", "cmp_r", "path", "snippets", "calc" },
-    --   quarto = { "lsp", "cmp_r", "path", "snippets", "calc" },
-    --   terminal = { "path", "cmp_r" },
-    --   ["dap-repl"] = { "dap" },
-    --   ["dapui_watches"] = { "dap" },
-    --   ["dapui_hover"] = { "dap" },
-    -- },
+    per_filetype = {
+      org = { "lsp", "orgmode", "path", "snippets", "ripgrep", "emoji", "calc" },
+      markdown = function()
+        if string.find(vim.fn.getcwd(), "vivere") then
+          return { "ecolog", "lsp", "path", "snippets", "emoji", "calc" }
+        else
+          return { inherit_defaults = true }
+        end
+      end,
+      gitcommit = { "lsp", "git", "snippets", "emoji", "calc", "path" },
+      sql = { "lsp", "dadbod", "snippets" },
+      lua = function()
+        if string.find(vim.fn.getcwd(), "nvim") then
+          return { "lazydev", inherit_defaults = true }
+        else
+          return { inherit_defaults = true }
+        end
+      end,
+      octo = { "lsp", "git", "emoji", "calc" },
+      r = { inherit_defaults = true, "cmp_r" },
+      rmd = { inherit_defaults = true, "cmp_r" },
+      quarto = { inherit_defaults = true, "cmp_r" },
+      terminal = { "path", "cmp_r" },
+      ["dap-repl"] = { "dap" },
+      ["dapui_watches"] = { "dap" },
+      ["dapui_hover"] = { "dap" },
+    },
     providers = {
       orgmode = {
         name = "Orgmode",
@@ -193,7 +188,7 @@ M.opts = {
       lazydev = {
         name = "LazyDev",
         module = "lazydev.integrations.blink",
-        score_offset = 100,
+        score_offset = 1000,
       },
       git = {
         module = "blink-cmp-git",

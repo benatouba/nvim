@@ -27,12 +27,12 @@ M.config = function ()
       auto_trigger = true,
       debounce = 75,
       keymap = {
-        accept = "<c-l>",
-        accept_word = "<c-a>",
+        accept = "<C-l>",
+        accept_word = "<C-a>",
         accept_line = false,
-        next = "<c-j>",
-        prev = "<c-k>",
-        dismiss = "<C-h>",
+        next = "<M-j>",
+        prev = "<M-k>",
+        dismiss = "<M-e>",
       },
     },
     filetypes = {
@@ -69,7 +69,7 @@ M.config = function ()
   vim.keymap.set("i", "<C-a>", "<cmd>lua require('copilot.suggestion').accept_word()<cr>", {})
   vim.keymap.set("i", "<C-l>", "<cmd>lua require('copilot.suggestion').accept_line()<cr>", {})
   vim.keymap.set("i", "<Tab>", "<cmd>lua require('copilot.suggestion').accept()<cr>", {})
-  vim.keymap.set("i", "<C-g>", "<cmd>lua require('copilot.panel').open()<cr>", {})
+  vim.keymap.set("i", "<M-g>", "<cmd>lua require('copilot.panel').open()<cr>", {})
 end
 
 return M

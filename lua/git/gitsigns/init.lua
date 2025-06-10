@@ -97,7 +97,6 @@ M.config = function ()
     -- { "<leader>gD", "<cmd>Gitsigns diffthis HEAD<cr>", desc = "Diff this HEAD", nowait = false, remap = false },
     { "<leader>gD", "<cmd>Gitsigns diffthis<cr>", desc = "Diff this", nowait = false, remap = false },
     { "<leader>gR", "<cmd>lua require'gitsigns'.reset_buffer()<cr>", desc = "Reset Buffer", nowait = false, remap = false },
-    { "<leader>gS", "<cmd>lua require'gitsigns'.stage_buffer()<cr>", desc = "Stage Buffer", nowait = false, remap = false },
     { "<leader>gT", "<cmd>lua require'gitsigns'.toggle_deleted()<cr>", desc = "Toggle Deleted", nowait = false, remap = false },
     { "<leader>gh", "<cmd>lua require'gitsigns'.preview_hunk()<cr>", desc = "Preview Hunk", nowait = false, remap = false },
     { "<leader>gj", "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", desc = "Next Hunk", nowait = false, remap = false },
