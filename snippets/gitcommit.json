@@ -1,0 +1,42 @@
+{
+    "feat": {
+        "prefix": "feat",
+        "body": ["feat(${1:scope}): ✨ ${2:title}", "", "$0"]
+    },
+    "fix": {
+        "prefix": "fix",
+        "body": ["fix(${1:scope}): 🐛 ${2:title}", "", "$0"]
+    },
+    "style": {
+        "prefix": "style",
+        "body": ["style(${1:scope}): 💅 ${2:title}", "", "$0"]
+    },
+    "build": {
+        "prefix": "build",
+        "body": ["build(${1:scope}): 🏗️ ${2:title}", "", "$0"]
+    },
+    "chore": {
+        "prefix": "chore",
+        "body": ["chore(${1:scope}): ⬛ ${2:title}", "", "$0"]
+    },
+    "ci": {
+        "prefix": "ci",
+        "body": ["ci(${1:scope}): 🚀 ${2:title}", "", "$0"]
+    },
+    "docs": {
+        "prefix": "docs",
+        "body": ["docs(${1:scope}): 📝 ${2:title}", "", "$0"]
+    },
+    "refactor": {
+        "prefix": "refactor",
+        "body": ["refactor(${1:scope}): ♻️ ${2:title}", "", "$0"]
+    },
+    "perf": {
+        "prefix": "perf",
+        "body": ["perf(${1:scope}): ⚡ ${2:title}", "", "$0"]
+    },
+    "test": {
+        "prefix": "test",
+        "body": ["test(${1:scope}): ✅ ${2:title}", "", "$0"]
+    }
+}

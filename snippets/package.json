@@ -13,6 +13,11 @@
           "tex"
         ],
         "path": "./tex.json"
+      },{
+        "language": [
+          "gitcommit"
+        ],
+        "path": "./gitcommit.json"
       }
     ]
   }

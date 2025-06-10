@@ -998,7 +998,7 @@ lazy.setup({
   },
   {
     "mfussenegger/nvim-lint",
-    config = function ()
+    config = function()
       require("lint").linters_by_ft = {
         tex = { "proselint" },
         zsh = { "zsh" },
@@ -1007,12 +1007,12 @@ lazy.setup({
         NeogitCommitMessage = { "commitlint" },
         gitcommit = { "commitlint" },
         typescript = { "eslint" },
-        javascript = { "eslint", "trivy", },
-        javascriptreact = { "eslint", "trivy", },
-        typescriptreact = { "eslint", "trivy", },
-        markdown = { "alex", "markdownlint" },
-        vue = { "eslint", "trivy", },
-        c = { "trivy", "compiler", },
+        javascript = { "eslint", "trivy" },
+        javascriptreact = { "eslint", "trivy" },
+        typescriptreact = { "eslint", "trivy" },
+        markdown = { "alex" },
+        vue = { "eslint", "trivy" },
+        c = { "trivy", "compiler" },
         cxx = { "trivy" },
         docker = { "trivy" },
         elixir = { "trivy" },
@@ -1029,15 +1029,15 @@ lazy.setup({
       local ns = require("lint").get_namespace("commitlint")
       vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = true }, ns)
       vim.api.nvim_create_augroup("lint", { clear = true })
-      vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave", "TextChanged" }, {
+      vim.api.nvim_create_autocmd({ "BufWritePost", "TextChanged" }, {
         group = "lint",
-        callback = function ()
+        callback = function()
           require("lint").try_lint()
         end,
       })
       vim.api.nvim_create_autocmd({ "BufWritePost" }, {
         group = "lint",
-        callback = function ()
+        callback = function()
           require("lint").try_lint("editorconfig-checker")
         end,
       })
@@ -1058,10 +1058,10 @@ lazy.setup({
   },
   {
     "stevearc/conform.nvim",
-    config = function ()
+    config = function()
       require("conform").setup({
         formatters_by_ft = {
-          python = { "ruff_fix", "ruff_format", "ruff_organize_imports", "docformatter", stop_after_first = false, },
+          python = { "ruff_fix", "ruff_format", "ruff_organize_imports", "docformatter", stop_after_first = false },
           javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
           javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
           typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
@@ -1077,7 +1077,7 @@ lazy.setup({
           -- r = { "styler", stop_after_first = true },
           yaml = { "prettierd", "prettier", stop_after_first = true },
           markdown = { "prettierd", "prettier", stop_after_first = true },
-          gitcommit = { "commitmsgfmt", },
+          gitcommit = { "commitmsgfmt" },
           ["*"] = { "codespell" },
           ["_"] = { "trim_whitespace" },
         },
@@ -1085,11 +1085,23 @@ lazy.setup({
           lsp_format = "fallback",
         },
       })
-      local maps = {
-        { "<leader>lf", function () require("conform").format({ lsp_format = "fallback", timeout_ms = 5000 }) end, desc = "Format" },
-      }
-      require("which-key").add(maps)
+      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+      vim.api.nvim_create_autocmd("InsertLeave", {
+        pattern = "*COMMIT_EDITMSG*",
+        callback = function(args)
+          require("conform").format({ bufnr = args.buf, timeout_ms = 2500, lsp_format = "fallback" })
+        end,
+      })
     end,
+    ft = { "gitcommit" },
+    keys = {
+      { "<leader>Lf", "<cmd>ConformInfo<cr>", desc = "Conform Info" },
+      {
+        "<leader>lf",
+        '<cmd>lua require("conform").format({ lsp_format = "fallback", timeout_ms = 5000 })<cr>',
+        desc = "Format",
+      },
+    },
     enabled = O.language_parsing,
   },
   {
