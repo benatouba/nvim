@@ -471,32 +471,66 @@ lazy.setup({
         ignore_filetypes = { "env" },
         color = {
           cterm = 244,
-        }
+        },
       })
     end,
     enabled = O.supermaven,
   },
   {
     "zbirenbaum/copilot.lua",
-    config = function ()
+    event = { "InsertEnter" },
+    config = function()
       require("lsp.copilot").config()
     end,
     enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.copilot,
   },
   {
-    "mason-org/mason.nvim",
-    ft = { "snacks_dashboard" },
-    event = { "VimEnter", "BufReadPost", "BufNewFile", "LspAttach" },
+    "benatouba/mason-lspconfig.nvim",
+    event = "InsertEnter",
+    keys = {
+      { "<leader>pm", "<cmd>Mason<cr>", desc = "Info" },
+      { "<leader>Lm", "<cmd>MasonLog<cr>", desc = "Log" },
+    },
+    dependencies = {
+      {
+        "mason-org/mason.nvim",
+        opts = {
+          pip = {
+            upgrade_pip = true,
+          },
+        },
+      },
+      "neovim/nvim-lspconfig",
+    },
+    opts = {},
     enabled = O.lsp,
   },
-  { "williamboman/mason-lspconfig.nvim", event = "LspAttach", enabled = O.lsp },
-  { "jay-babu/mason-nvim-dap.nvim",      enabled = O.dap },
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    event = "InsertEnter",
+    dependencies = {
+      "mason.nvim",
+    },
+    opts = {
+      ensure_installed = { "python" },
+      handlers = {},
+      automatic_installation = true,
+    },
+    enabled = O.dap,
+  },
   {
     "nvimdev/lspsaga.nvim",
-    event = "InsertEnter",
-    config = function ()
-      require("lsp.lspsaga").config()
-    end,
+    keys = {
+      { "gI", "<cmd>Lspsaga finder imp<CR>", desc = "Implementation" },
+      { "ga", "<cmd>Lspsaga code_action<CR>", desc = "Code Action" },
+      { "gF", "<cmd>Lspsaga finder def+ref<CR>", desc = "Finder" },
+      { "go", "<cmd>Lspsaga outline<CR>", desc = "Outline" },
+      { "gp", "<cmd>Lspsaga peek_definition<CR>", desc = "Peek" },
+      { "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", desc = "Next Diagnostic" },
+      { "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", desc = "Prev Diagnostic" },
+      { "<leader>ld", "<cmd>Lspsaga goto_definition<cr>", desc = "Definitions" },
+    },
+    opts = require("lsp.lspsaga"),
     dependencies = {
       "nvim-web-devicons",
       "nvim-treesitter",
@@ -839,9 +873,39 @@ lazy.setup({
   },
   {
     "nvim-neotest/neotest",
-    event = { "InsertEnter" },
-    keys = { "<leader>t" },
-    lazy = true,
+    keys = {
+      { "<leader>t", group = "+Test", icon = { icon = "󰙨", color = "green" } },
+      { "<leader>tA", "<cmd>lua require('neotest').state.adapter_ids()<CR>", desc = "Adapters" },
+      {
+        "<leader>tD",
+        "<cmd>lua require('neotest').run.run({ vim.fn.expand('%'), strategy = 'dap' })<CR>",
+        desc = "Debug File",
+      },
+      { "<leader>tL", "<cmd>lua require('neotest').run.run_last({ strategy = 'dap' })<CR>", desc = "Last (Debug)" },
+      {
+        "<leader>tO",
+        "<cmd>lua require('neotest').output.open({ enter = true, short = true })<CR>",
+        desc = "Output (short)",
+      },
+      { "<leader>tP", "<cmd>lua require('test.neotest').NeotestSetupProject()<CR>", desc = "Project" },
+      { "<leader>tS", "<cmd>lua require('neotest').run.run({ suite = true })<CR>", desc = "Suite" },
+      { "<leader>ta", "<cmd>lua require('neotest').run.attach()<CR>", desc = "Attach to nearest" },
+      { "<leader>td", "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<CR>", desc = "Debug" },
+      { "<leader>tf", "<cmd>lua require('neotest').run.run({ vim.fn.expand('%') })<CR>", desc = "File" },
+      { "<leader>tl", "<cmd>lua require('neotest').run.run_last()<CR>", desc = "Last" },
+      { "<leader>tj", group = "+Jump" },
+      { "<leader>tjp", "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<CR>", desc = "Previous (failed)" },
+      { "<leader>tjn", "<cmd>lua require('neotest').jump.next({ status = 'failed' })<CR>", desc = "Next (failed)" },
+      { "<leader>tn", "<cmd>lua require('neotest').run.run()<CR>", desc = "Nearest" },
+      { "<leader>to", "<cmd>lua require('neotest').output.open({ enter = true })<CR>", desc = "Output" },
+      { "<leader>tp", "<cmd>lua require('neotest').output_panel.toggle()<CR>", desc = "Panel" },
+      { "<leader>ts", "<cmd>lua require('neotest').summary.toggle()<CR>", desc = "Summary" },
+      { "<leader>tt", "<cmd>lua require('neotest').run.run({ suite = true})<CR>", desc = "Run Tests" },
+      { "<leader>tw", "<cmd>lua require('neotest').watch.toggle()<CR>", desc = "Watch" },
+      { "<leader>tx", "<cmd>lua require('neotest').run.stop()<CR>", desc = "Stop" },
+      { "[T", "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<CR>", desc = "Test (failed)" },
+      { "]T", "<cmd>lua require('neotest').jump.next({ status = 'failed' })<CR>", desc = "Test (failed)" },
+    },
     dependencies = {
       "nvim-neotest/neotest-python",
       "marilari88/neotest-vitest",

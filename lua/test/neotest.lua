@@ -6,12 +6,21 @@ end
 
 local M = {}
 
-M.config = function ()
+M.config = function()
   neotest.setup({
     log_level = vim.log.levels.WARN,
+    output = {
+      enabled = true,
+      open_on_run = "short",
+    },
+    output_panel = {
+      enabled = true,
+      open = "botright split | resize 20",
+    },
+    library = { plugins = { "neotest" }, types = true },
     status = {
       virtual_text = true,
-      signs = false,
+      signs = true,
     },
     icons = {
       running_animated = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" },
@@ -22,10 +31,6 @@ M.config = function ()
       },
     },
     summary = {
-      animated = true,
-      enabled = true,
-      expand_errors = true,
-      follow = true,
       mappings = {
         attach = "a",
         clear_marked = "M",
@@ -34,6 +39,7 @@ M.config = function ()
         debug_marked = "D",
         expand = { "<CR>", "<2-LeftMouse>" },
         expand_all = "e",
+        help = "?",
         jumpto = "i",
         mark = "m",
         next_failed = "J",
@@ -44,20 +50,31 @@ M.config = function ()
         short = "O",
         stop = "u",
         target = "t",
+        watch = "w"
       },
       open = "botright vsplit | vertical resize 50",
     },
     adapters = {
-      require("neotest-python")({
-        dap = { justMyCode = true },
-        args = { "--log-level", "DEBUG" },
-        runner = "pytest",
-      }),
+      require("neotest-python"),
+      require("neotest-testthat"), -- for R language
       require("neotest-vitest")({
-        ignore_file_types = { "python" },
+        filter_dir = function(name, rel_path, root)
+          return name ~= "node_modules"
+        end,
       }),
       require("neotest-vim-test")({
-        ignore_file_types = { "python" },
+        ignore_file_types = {
+          "python",
+          "r",
+          "rmd",
+          "r_rnvim",
+          "typescript",
+          "javascript",
+          "typescriptreact",
+          "javascriptreact",
+          "vue",
+          "svelte",
+        },
       }),
     },
     -- consumers = {
@@ -67,35 +84,12 @@ M.config = function ()
     --   enabled = true,
     -- },
   })
-
-  require("which-key").add({
-    { "<leader>t", group = "+Test", icon = { icon = "󰙨", color = "green" } },
-    { "<leader>tA", "<cmd>lua require('neotest').state.adapter_ids()<CR>", desc = "Adapters" },
-    { "<leader>tD", "<cmd>lua require('neotest').run.run({ vim.fn.expand('%'), strategy = 'dap' })<CR>", desc = "Debug File" },
-    { "<leader>tL", "<cmd>lua require('neotest').run.run_last({ strategy = 'dap' })<CR>", desc = "Last (Debug)" },
-    { "<leader>tO", "<cmd>lua require('neotest').output.open({ enter = true, short = true })<CR>", desc = "Output (short)" },
-    { "<leader>tP", "<cmd>lua require('test.neotest').NeotestSetupProject()<CR>", desc = "Project" },
-    { "<leader>tS", "<cmd>lua require('neotest').run.run({ suite = true })<CR>", desc = "Suite" },
-    { "<leader>ta", "<cmd>lua require('neotest').run.attach()<CR>", desc = "Attach to nearest" },
-    { "<leader>td", "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<CR>", desc = "Debug" },
-    { "<leader>tf", "<cmd>lua require('neotest').run.run({ vim.fn.expand('%') })<CR>", desc = "File" },
-    { "<leader>tl", "<cmd>lua require('neotest').run.run_last()<CR>", desc = "Last" },
-    { "<leader>tn", "<cmd>lua require('neotest').run.run()<CR>", desc = "Nearest" },
-    { "<leader>to", "<cmd>lua require('neotest').output.open({ enter = true })<CR>", desc = "Output" },
-    { "<leader>tp", "<cmd>lua require('neotest').output_panel.toggle()<CR>", desc = "Panel" },
-    { "<leader>ts", "<cmd>lua require('neotest').summary.toggle()<CR>", desc = "Summary" },
-    { "<leader>tT", "<cmd>lua require('neotest').run.run()<CR>", desc = "Suite" },
-    { "<leader>tw", "<cmd>lua require('neotest').watch.toggle()<CR>", desc = "Watch" },
-    { "<leader>tx", "<cmd>lua require('neotest').run.stop()<CR>", desc = "Stop" },
-    { "[T", "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<CR>", desc = "Test (failed)" },
-    { "]T", "<cmd>lua require('neotest').jump.next({ status = 'failed' })<CR>", desc = "Test (failed)" },
-  })
 end
 
-M.NeotestSetupProject = function ()
-  vim.ui.select({ "neotest-jest", "neotest-playwright", "neotest-vim-test", "neotest-vitest" }, {
+M.NeotestSetupProject = function()
+  vim.ui.select({ "neotest-jest", "neotest-playwright", "neotest-vim-test", "neotest-vitest", "neotest-python" }, {
     prompt = "Choose Adapter",
-  }, function (choice)
+  }, function(choice)
     local neotestDefault = {
       output = {
         enabled = true,
@@ -115,7 +109,7 @@ M.NeotestSetupProject = function ()
       prompt = "Working directory",
       default = vim.fn.getcwd(),
       completion = "dir",
-    }, function (input)
+    }, function(input)
       vim.cmd("cd " .. input)
       if choice == "neotest-jest" then
         local jestConf = vim.tbl_deep_extend("force", neotestDefault, {
@@ -123,7 +117,7 @@ M.NeotestSetupProject = function ()
           adapters = {
             require("neotest-jest")({
               jestCommand = "npm test --",
-              jestConfigFile = function ()
+              jestConfigFile = function()
                 local file = vim.fn.expand("%:p")
                 if string.find(file, "/packages/") then
                   return string.match(file, "(.-/[^/]+/)src") .. "jest.config.ts"
@@ -133,7 +127,7 @@ M.NeotestSetupProject = function ()
               end,
               jest_test_discovery = false,
               env = { CI = true },
-              cwd = function ()
+              cwd = function()
                 local file = vim.fn.expand("%:p")
                 if string.find(file, "/packages/") then
                   return string.match(file, "(.-/[^/]+/)src")
@@ -176,6 +170,14 @@ M.NeotestSetupProject = function ()
           },
         })
         return require("neotest").setup_project(vim.fn.getcwd(), vimTestConf)
+      end
+      if choice == "neotest-vim-test" then
+        local pythonConf = vim.tbl_deep_extend("force", neotestDefault, {
+          adapters = {
+            require("neotest-python"),
+          },
+        })
+        return require("neotest").setup_project(vim.fn.getcwd(), pythonConf)
       end
     end)
   end)
