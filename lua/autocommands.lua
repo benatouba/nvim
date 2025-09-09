@@ -13,10 +13,10 @@ api.nvim_create_autocmd(
   { "BufWipeout" },
   { pattern = "template.tex", command = "!cp template.pdf manuscript.pdf" }
 )
-api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  pattern = { "*.txt", "*.md", "*.tex" },
-  command = "setlocal spell",
-})
+-- api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+--   pattern = { "*.txt", "*.md", "*.tex" },
+--   command = "setlocal spell",
+-- })
 api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = { "*.txt", "*.json" },
   command = "setlocal conceallevel=0",

@@ -1,6 +1,6 @@
 local M = {}
 
-M.config = function ()
+M.config = function()
   local ref_ok, ref = pcall(require, "refactoring")
   if not ref_ok then
     vim.notify("Refactoring.nvim not okay")
@@ -10,6 +10,89 @@ M.config = function ()
   -- load refactoring Telescope extension
   require("telescope").load_extension("refactoring")
 end
+M.maps = {
+  {
+    "<leader>Rb",
+    function()
+      require("refactoring").refactor("Extract Block")
+    end,
+    desc = "Extract Block",
+    mode = { "x", "n" },
+    expr = true,
+  },
+  {
+    "<leader>RB",
+    function()
+      require("refactoring").refactor("Extract Block to File")
+    end,
+    desc = "Extract Block to File",
+    mode = { "x", "n" },
+    expr = true,
+  },
+  {
+    "<leader>Rf",
+    function()
+      require("refactoring").refactor("Extract Function")
+    end,
+    desc = "Extract Function",
+    mode = { "x", "n" },
+    expr = true,
+  },
+  {
+    "<leader>RF",
+    function()
+      require("refactoring").refactor("Extract Function To File")
+    end,
+    desc = "Extract Function to File",
+    mode = { "x", "n" },
+    expr = true,
+  },
+  {
+    "<leader>Ri",
+    function()
+      require("refactoring").refactor("Inline Variable")
+    end,
+    desc = "Inline Variable",
+    mode = { "x", "n" },
+    expr = true,
+  },
+  {
+    "<leader>RI",
+    function()
+      require("refactoring").refactor("Inline Function")
+    end,
+    desc = "Inline Function",
+    mode = { "x", "n" },
+    expr = true,
+  },
+  {
+    "<leader>Rv",
+    function()
+      require("refactoring").refactor("Extract Variable")
+    end,
+    desc = "Extract Variable",
+    mode = { "x", "n" },
+    expr = true,
+  },
+  {
+    "<leader>Rt",
+    function()
+      require("telescope").extensions.refactoring.refactors()
+    end,
+    desc = "Extract to Telescope",
+    mode = { "x", "n" },
+    expr = true,
+  },
+  {
+    "<leader>Rr",
+    function()
+      require("refactoring").select_refactor()
+    end,
+    desc = "Select Refactor",
+    mode = { "x", "n" },
+    expr = true,
+  },
+}
 
 -- telescope refactoring helper
 -- local function refactor(prompt_bufnr)
@@ -34,32 +117,5 @@ end
 -- 	}):find()
 -- end
 --
-M.maps = function ()
-  local wk_ok, wk = pcall(require, "which-key")
-  if not wk_ok then
-    vim.notify("which-key not ok in refactoring.nvim")
-    return
-  end
-
-  wk.add({
-    {
-      mode = { "x" },
-      { "<leader>R", group = "+Refactor" },
-      { "<leader>Rb", function () require("refactoring").refactor("Extract Block") end, desc = "Extract Block" },
-      { "<leader>RB", function () require("refactoring").refactor("Extract Block to File") end, desc = "Extract Block to File" },
-      { "<leader>Rf", function () require("refactoring").refactor("Extract Function") end, desc = "Extract Function" },
-      { "<leader>RF", function () require("refactoring").refactor("Extract Function To File") end, desc = "Extract Function to File" },
-      { "<leader>Ri", function () require("refactoring").refactor("Inline Variable") end, desc = "Inline Variable" },
-      { "<leader>RI", function () require("refactoring").refactor("Inline Function") end, desc = "Inline Function" },
-      { "<leader>Rv", function () require("refactoring").refactor("Extract Variable") end, desc = "Extract Variable" },
-      { "<leader>Rt", function () require("telescope").extensions.refactoring.refactors() end, desc = "Extract to Telescope" },
-      { "<leader>Rr", function () require("refactoring").select_refactor() end, desc = "Select Refactor" },
-    },
-    { "<leader>R", group = "+Refactor" },
-    { "<leader>Rb", function () require("refactoring").refactor("Extract Block") end, desc = "Extract Block" },
-    { "<leader>Rf", function () require("refactoring").refactor("Extract Function") end, desc = "Extract Function" },
-    { "<leader>Ri", function () require("refactoring").refactor("Inline Variable") end, desc = "Inline Variable" },
-  })
-end
 
 return M

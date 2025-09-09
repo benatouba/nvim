@@ -1,6 +1,6 @@
 local M = {}
 
-M.config = function ()
+M.config = function()
   local ls_ok, ls = pcall(require, "luasnip")
   if not ls_ok then
     vim.notify("Failed to load luasnip", vim.log.levels.ERROR)
@@ -21,28 +21,24 @@ M.config = function ()
   })
 
   -- NOTE: For the moment this gets overwritten by cmp
-  vim.keymap.set({ "i", "s" }, "<c-d>", function ()
-    if ls.expand_or_jumpable() then
-      return ls.expand_or_jump()
-    end
-    return ls.expand_auto()
-  end, { silent = true })
-
-  vim.keymap.set({ "i", "s" }, "<c-j>", function ()
-    if ls.jumpable(-1) then
-      return ls.jump(-1)
-    end
-  end, { silent = true })
-
-  vim.keymap.set({ "i", "s" }, "<c-l>", function ()
-    if ls.choice_active() then
-      return ls.change_choice(1)
-    end
-  end, { silent = true })
-
-  require("luasnip.loaders.from_vscode").lazy_load()
-  require("luasnip.loaders.from_vscode").load({ paths = "./snippets" })
-  require("luasnip.loaders.from_lua").lazy_load({ paths = "./snippets" })
+  -- vim.keymap.set({ "i", "s" }, "<c-d>", function()
+  --   if ls.expand_or_jumpable() then
+  --     return ls.expand_or_jump()
+  --   end
+  --   return ls.expand_auto()
+  -- end, { silent = true })
+  --
+  -- vim.keymap.set({ "i", "s" }, "<c-j>", function()
+  --   if ls.jumpable(-1) then
+  --     return ls.jump(-1)
+  --   end
+  -- end, { silent = true })
+  --
+  -- vim.keymap.set({ "i", "s" }, "<c-l>", function()
+  --   if ls.choice_active() then
+  --     return ls.change_choice(1)
+  --   end
+  -- end, { silent = true })
 end
 
 return M
