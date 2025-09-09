@@ -34,6 +34,8 @@ M.config = function()
     filename = {
       [".env"] = "dotenv",
       ["vifmrc"] = "vim",
+      [".ledger"] = "ledger",
+      [".hledger"] = "hledger",
     },
     pattern = {
       [".*/waybar/config"] = "jsonc",
@@ -46,15 +48,21 @@ M.config = function()
 
   ts.setup({
     ensure_installed = {
-      "typescript",
-      "javascript",
+      "bash",
       "css",
-      "python",
+      "csv",
+      "dap_repl",
+      "javascript",
+      "json",
+      "latex",
+      "lua",
       "markdown",
       "markdown_inline",
-      "lua",
-      "bash",
-      "json",
+      "python",
+      "r",
+      "rnoweb",
+      "typescript",
+      "yaml",
     },
     auto_install = true,
     -- sync_install = false,
