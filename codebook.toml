@@ -1,0 +1,15 @@
+words = [
+    "augroup",
+    "autocmd",
+    "autoread",
+    "completeopt",
+    "imaps",
+    "keymap",
+    "localleader",
+    "noremap",
+    "quation",
+    "textwidth",
+    "underfull",
+    "vimtex",
+    "vlty",
+]
