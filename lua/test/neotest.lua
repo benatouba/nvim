@@ -50,9 +50,10 @@ M.config = function()
         short = "O",
         stop = "u",
         target = "t",
-        watch = "w"
+        watch = "w",
       },
       open = "botright vsplit | vertical resize 50",
+      follow = true,
     },
     adapters = {
       require("neotest-python"),
@@ -61,20 +62,6 @@ M.config = function()
         filter_dir = function(name, rel_path, root)
           return name ~= "node_modules"
         end,
-      }),
-      require("neotest-vim-test")({
-        ignore_file_types = {
-          "python",
-          "r",
-          "rmd",
-          "r_rnvim",
-          "typescript",
-          "javascript",
-          "typescriptreact",
-          "javascriptreact",
-          "vue",
-          "svelte",
-        },
       }),
     },
     -- consumers = {
@@ -87,7 +74,7 @@ M.config = function()
 end
 
 M.NeotestSetupProject = function()
-  vim.ui.select({ "neotest-jest", "neotest-playwright", "neotest-vim-test", "neotest-vitest", "neotest-python" }, {
+  vim.ui.select({ "neotest-jest", "neotest-playwright", "neotest-vitest", "neotest-python" }, {
     prompt = "Choose Adapter",
   }, function(choice)
     local neotestDefault = {
@@ -163,22 +150,22 @@ M.NeotestSetupProject = function()
         })
         return require("neotest").setup_project(vim.fn.getcwd(), playwrightConf)
       end
-      if choice == "neotest-vim-test" then
-        local vimTestConf = vim.tbl_deep_extend("force", neotestDefault, {
-          adapters = {
-            require("neotest-vim-test"),
-          },
-        })
-        return require("neotest").setup_project(vim.fn.getcwd(), vimTestConf)
-      end
-      if choice == "neotest-vim-test" then
-        local pythonConf = vim.tbl_deep_extend("force", neotestDefault, {
-          adapters = {
-            require("neotest-python"),
-          },
-        })
-        return require("neotest").setup_project(vim.fn.getcwd(), pythonConf)
-      end
+      -- if choice == "neotest-vim-test" then
+      --   local vimTestConf = vim.tbl_deep_extend("force", neotestDefault, {
+      --     adapters = {
+      --       require("neotest-vim-test"),
+      --     },
+      --   })
+      --   return require("neotest").setup_project(vim.fn.getcwd(), vimTestConf)
+      -- end
+      -- if choice == "neotest-vim-test" then
+      --   local pythonConf = vim.tbl_deep_extend("force", neotestDefault, {
+      --     adapters = {
+      --       require("neotest-python"),
+      --     },
+      --   })
+      --   return require("neotest").setup_project(vim.fn.getcwd(), pythonConf)
+      -- end
     end)
   end)
 end
