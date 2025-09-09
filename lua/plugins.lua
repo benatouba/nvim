@@ -19,16 +19,15 @@ end
 
 lazy.setup({
   "nvim-lua/plenary.nvim", -- most important functions (very important)
-  { "echasnovski/mini.ai", version = false, opts = {} },
+  { "nvim-mini/mini.ai", version = false, opts = {} },
   {
-    "echasnovski/mini.sessions",
+    "nvim-mini/mini.sessions",
     version = false,
     keys = {
-      { "<leader>S", icon = " ", group = "+Sessions", remap = false, mode = "n" },
       {
         "<leader>Sw",
         "<cmd>lua require('mini.sessions').write()<cr>",
-        icon = " ",
+        -- icon = " ",
         desc = "Write Session",
         remap = false,
         mode = "n",
@@ -36,7 +35,7 @@ lazy.setup({
       {
         "<leader>Sr",
         "<cmd>lua require('mini.sessions').read()<cr>",
-        icon = " ",
+        -- icon = " ",
         desc = "Read Session",
         remap = false,
         mode = "n",
@@ -49,8 +48,8 @@ lazy.setup({
     end,
   },
   {
-    "echasnovski/mini.bracketed",
-    version = "*",
+    "nvim-mini/mini.bracketed",
+    version = false,
     opts = {},
     enabled = O.language_parsing,
   },
@@ -64,11 +63,10 @@ lazy.setup({
       { "<leader>oN", "<cmd>Obsidian new_from_template<CR>", desc = "New note from Template", remap = false },
       { "<leader>ot", "<cmd>Obsidian today<CR>", desc = "Today note", remap = false },
       { "<leader>oT", "<cmd>Obsidian tomorrow<CR>", desc = "Tomorrow note", remap = false },
+      { "<leader>os", "<cmd>Obsidian search<CR>", desc = "Search Workspace", remap = false },
       { "<leader>ov", "<cmd>Obsidian workspace vivere<CR>", desc = "Vivere (Workspace)", remap = false },
       { "<leader>ow", "<cmd>Obsidian workspace work<CR>", desc = "Work (Workspace)", remap = false },
       { "<leader>oy", "<cmd>Obsidian yesterday<CR>", desc = "Yesterday note", remap = false },
-      { "<leader>v", group = "+Vivere", icon = { icon = "󰇈 ", color = "purple" }, remap = false },
-      { "<localleader>o", group = "+Obsidian", icon = { icon = "󰇈 ", color = "purple" }, mode = { "n", "v" } },
       { "<localleader>ob", "<cmd>Obsidian backlinks<CR>", desc = "Backlinks", remap = false },
       { "<localleader>ol", "<cmd>Obsidian links<CR>", desc = "Links", remap = false },
       { "<localleader>oo", "<cmd>Obsidian open<CR>", desc = "Open in Obsidian", remap = false },
@@ -107,20 +105,21 @@ lazy.setup({
     },
     lazy = true,
     keys = {
-      { "<leader>b", "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
       { "<leader>s", group = "Search" },
+      { "<leader>b", "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
       { "<leader>sB", "<cmd>Telescope file_browser<cr>", desc = "Browser" },
-      { "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man Pages" },
-      { "<leader>sN", "<cmd>Noice telescope<cr>", desc = "Noice Notifications" },
-      { "<leader>sR", "<cmd>Telescope registers<cr>", desc = "Registers" },
       { "<leader>sb", "<cmd>Telescope git_branches<cr>", desc = "Branches" },
       { "<leader>sC", "<cmd>Telescope colorscheme<cr>", desc = "Colorscheme" },
       { "<leader>sf", "<cmd>Telescope find_files hidden=true<cr>", desc = "Find File" },
       { "<leader>sg", "<cmd>Telescope git_files<cr>", desc = "Git Files" },
+      { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "Help Tags" },
       { "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
+      { "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man Pages" },
       { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Marks" },
+      { "<leader>sN", "<cmd>Noice telescope<cr>", desc = "Noice Notifications" },
       { "<leader>so", "<cmd>Telescope oldfiles<cr>", desc = "Open Recent File" },
       { "<leader>sq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix List" },
+      { "<leader>sR", "<cmd>Telescope registers<cr>", desc = "Registers" },
       { "<leader>st", "<cmd>Telescope live_grep<cr>", desc = "Text" },
     },
     config = function()
@@ -128,12 +127,13 @@ lazy.setup({
     end,
   },
   {
-    "benatouba/project.nvim",
+    "DrKJeff16/project.nvim",
     config = function()
       require("ben.project").setup()
     end,
     keys = {
       { "<leader>s", group = "Search" },
+      { "<leader>sp", "<cmd>Telescope projects<cr>", desc = "Projects", },
     },
     dependencies = "telescope.nvim",
     event = { "BufReadPost", "BufNewFile" },
@@ -252,12 +252,12 @@ lazy.setup({
             desc = "Zen",
             remap = false,
           },
-          {
-            "<leader>sp",
-            "<cmd>lua Snacks.picker.projects()<cr>",
-            icon = " ",
-            desc = "Projects",
-          },
+          -- {
+          --   "<leader>sp",
+          --   "<cmd>lua Snacks.picker.projects()<cr>",
+          --   icon = " ",
+          --   desc = "Projects",
+          -- },
         }, { mode = "n" })
       end
     end,
@@ -323,9 +323,8 @@ lazy.setup({
   {
     "lukas-reineke/indent-blankline.nvim",
     main = "ibl",
-    config = function()
-      require("ben.indent-blankline").config()
-    end,
+    opts = require("ben.indent-blankline").opts,
+    event = { "BufReadPost", "BufNewFile" },
     dependencies = "nvim-treesitter",
     enabled = O.language_parsing,
   },
@@ -369,10 +368,66 @@ lazy.setup({
     event = { "BufReadPost", "BufNewFile" },
     ft = { "markdown", "text", "html", "javascript", "typescript", "vue", "svelte", "css", "scss", "less" },
     keys = {
-      { "<C-a>", "<cmd>DialIncrement<cr>", mode = { "n", "v" }, desc = "Increment" },
-      { "<C-x>", "<cmd>DialDecrement<cr>", mode = { "n", "v" }, desc = "Decrement" },
-      { "g<C-a>", "<cmd>DialIncrement<cr>", mode = { "v" }, desc = "Increment" },
-      { "g<C-x>", "<cmd>DialDecrement<cr>", mode = { "v" }, desc = "Decrement" },
+      {
+        "<C-a>",
+        function()
+          require("dial.map").manipulate("increment", "normal")
+        end,
+        desc = "Increment",
+      },
+      {
+        "<C-x>",
+        function()
+          require("dial.map").manipulate("decrement", "normal")
+        end,
+        desc = "Decrement",
+      },
+      {
+        "<C-a>",
+        function()
+          require("dial.map").manipulate("increment", "visual")
+        end,
+        mode = { "x" },
+        desc = "Increment",
+      },
+      {
+        "<C-x>",
+        function()
+          require("dial.map").manipulate("decrement", "visual")
+        end,
+        mode = { "x" },
+        desc = "Decrement",
+      },
+      {
+        "g<C-a>",
+        function()
+          require("dial.map").manipulate("increment", "gnormal")
+        end,
+        desc = "Increment",
+      },
+      {
+        "g<C-x>",
+        function()
+          require("dial.map").manipulate("decrement", "gnormal")
+        end,
+        desc = "Decrement",
+      },
+      {
+        "g<C-a>",
+        function()
+          require("dial.map").manipulate("increment", "gvisual")
+        end,
+        mode = { "x" },
+        desc = "Increment",
+      },
+      {
+        "g<C-x>",
+        function()
+          require("dial.map").manipulate("decrement", "gvisual")
+        end,
+        mode = { "x" },
+        desc = "Decrement",
+      },
     },
   }, -- increment/decrement basically everything,
   {
@@ -449,38 +504,11 @@ lazy.setup({
   },
   {
     "dmmulroy/ts-error-translator.nvim",
+    enabled = O.typescript,
     ft = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue" },
     config = function()
       require("ts-error-translator").setup()
     end,
-  },
-  {
-    "catgoose/vue-goto-definition.nvim",
-    ft = "vue",
-    enabled = O.webdev and O.language_parsing,
-    opts = {
-      filters = {
-        auto_imports = true,
-        auto_components = true,
-        import_same_file = true,
-        declaration = true,
-        duplicate_filename = true,
-      },
-      filetypes = { "vue", "typescript" },
-      detection = {
-        nuxt = function()
-          return vim.fn.glob(".nuxt/") ~= ""
-        end,
-        vue3 = function()
-          return vim.fn.filereadable("vite.config.ts") == 1 or vim.fn.filereadable("src/app.vue") == 1
-        end,
-        priority = { "nuxt", "vue3" },
-      },
-      lsp = {
-        override_definition = true, -- override vim.lsp.buf.definition
-      },
-      debounce = 300,
-    },
   },
   {
     "Exafunction/codeium.vim",
@@ -532,11 +560,11 @@ lazy.setup({
     config = function()
       require("lsp.copilot").config()
     end,
-    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.copilot,
+    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 20 and O.copilot,
   },
   {
-    "benatouba/mason-lspconfig.nvim",
-    event = "InsertEnter",
+    "mason-org/mason-lspconfig.nvim",
+    event = { "InsertEnter", "CmdlineEnter", "BufReadPost", "BufNewFile" },
     keys = {
       { "<leader>pm", "<cmd>Mason<cr>", desc = "Info" },
       { "<leader>Lm", "<cmd>MasonLog<cr>", desc = "Log" },
@@ -552,7 +580,9 @@ lazy.setup({
       },
       "neovim/nvim-lspconfig",
     },
-    opts = {},
+    opts = {
+      auto_install = false,
+    },
     enabled = O.lsp,
   },
   {
@@ -562,9 +592,8 @@ lazy.setup({
       "mason.nvim",
     },
     opts = {
-      ensure_installed = { "python" },
       handlers = {},
-      automatic_installation = true,
+      automatic_installation = false,
     },
     enabled = O.dap,
   },
@@ -580,11 +609,11 @@ lazy.setup({
       { "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", desc = "Prev Diagnostic" },
       { "<leader>ld", "<cmd>Lspsaga goto_definition<cr>", desc = "Definitions" },
     },
+    event = { "LspAttach", "InsertEnter", "CmdlineEnter" },
     opts = require("lsp.lspsaga"),
     dependencies = {
       "nvim-web-devicons",
       "nvim-treesitter",
-      "nvim-lspconfig",
     },
   },
   {
@@ -686,6 +715,7 @@ lazy.setup({
           "rafamadriz/friendly-snippets",
           "mikavilpas/blink-ripgrep.nvim",
           "Kaiser-Yang/blink-cmp-git",
+          -- { dir = "/home/ben/projects/blink-cmp-ledger" },
           "hrsh7th/cmp-nvim-lua",
           "hrsh7th/cmp-calc",
           "hrsh7th/cmp-emoji",
@@ -711,11 +741,10 @@ lazy.setup({
           },
           {
             "philosofonusus/ecolog.nvim",
-            branch = "beta",
             keys = {
-              { "<leader>ge", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
-              { "<leader>ep", "<cmd>EcologPeek<cr>", desc = "Ecolog peek variable" },
-              { "<leader>es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
+              { "<leader>Eg", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
+              { "<leader>Ep", "<cmd>EcologPeek<cr>", desc = "Ecolog peek variable" },
+              { "<leader>Es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
               { "<leader>se", "<cmd>EcologSnacks<cr>", desc = "Env" },
             },
             event = { "InsertEnter", "CmdlineEnter" },
@@ -767,36 +796,8 @@ lazy.setup({
         opts_extend = { "sources.default" },
       },
       "b0o/SchemaStore.nvim",
-      {
-        "hrsh7th/nvim-cmp",
-        event = { "InsertEnter", "CmdlineEnter" },
-        dependencies = {
-          "rafamadriz/friendly-snippets",
-          "hrsh7th/cmp-nvim-lsp",
-          "hrsh7th/cmp-nvim-lsp-document-symbol",
-          { "micangl/cmp-vimtex", enabled = O.latex },
-          "saadparwaiz1/cmp_luasnip",
-          "hrsh7th/cmp-path",
-          "hrsh7th/cmp-nvim-lua",
-          "hrsh7th/cmp-calc",
-          "hrsh7th/cmp-emoji",
-          "hrsh7th/cmp-cmdline",
-          "dmitmel/cmp-cmdline-history",
-          { "petertriho/cmp-git", enabled = O.git },
-          "andersevenrud/cmp-tmux",
-          "ray-x/cmp-treesitter",
-          "lukas-reineke/cmp-under-comparator",
-          "lukas-reineke/cmp-rg",
-          "R-nvim/cmp-r",
-          "onsails/lspkind-nvim",
-        },
-        config = function()
-          require("lsp.cmp").config()
-        end,
-        enabled = false,
-      },
     },
-    event = "BufReadPost",
+    event = { "BufReadPost", "BufNewFile" },
     config = function()
       require("lsp").config()
     end,
@@ -804,7 +805,7 @@ lazy.setup({
   },
   {
     "R-nvim/R.nvim",
-    lazy = false,
+    -- lazy = false,
     ft = { "r", "rmd" },
     config = function()
       -- Create a table with the options to be passed to setup()
@@ -898,11 +899,16 @@ lazy.setup({
     dependencies = {
       "sindrets/diffview.nvim",
       keys = {
-        { "<leader>gd", "<cmd>lua require('git.diffview').DiffviewToggle()<cr>", desc = "Diffview" },
+        { "<leader>gd", "<cmd>lua DiffviewToggle()<cr>", desc = "Diffview" },
         { "<leader>gS", "<cmd>DiffviewFileHistory -g --range=stash<cr>", desc = "Check Stash" },
+        { "<leader>gm", "<cmd>lua DiffviewToggle('DiffviewOpen master..HEAD')<cr>", desc = "Diff master" },
+        { "<leader>gf", "<cmd>lua DiffviewToggle('DiffviewFileHistory %')<cr>", desc = "Open diffs for current File" },
       },
       cmd = "DiffviewOpen",
-      event = "BufReadPost",
+      cond = function()
+        return vim.fn.isdirectory(vim.fn.getcwd() .. "/.git") == 1
+      end,
+      -- event = "BufReadPost",
       config = function()
         require("git.diffview").config()
       end,
@@ -929,12 +935,26 @@ lazy.setup({
     config = function()
       require("git.gitsigns").config()
     end,
+    event = { "BufReadPost", "BufNewFile" },
+    keys = {
+      { "<leader>g", group = "Git" },
+      { "<leader>gB", "<cmd>Gitsigns blame_line<cr>", desc = "Blame line" },
+      { "<leader>gD", "<cmd>Gitsigns diffthis<cr>", desc = "Diff this" },
+      { "<leader>gR", "<cmd>lua require'gitsigns'.reset_buffer()<cr>", desc = "Reset Buffer" },
+      { "<leader>gT", "<cmd>lua require'gitsigns'.toggle_deleted()<cr>", desc = "Toggle Deleted" },
+      { "<leader>gh", "<cmd>lua require'gitsigns'.preview_hunk()<cr>", desc = "Preview Hunk" },
+      { "<leader>gj", "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", desc = "Next Hunk" },
+      { "<leader>gk", "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", desc = "Prev Hunk" },
+      { "<leader>gl", "<cmd>Gitsigns setloclist<cr>", desc = "Set loclist" },
+      { "<leader>gq", "<cmd>Gitsigns setqflist<cr>", desc = "Set quickfix" },
+      { "<leader>gr", "<cmd>lua require'gitsigns'.reset_hunk()<cr>", desc = "Reset Hunk" },
+      { "<leader>gs", "<cmd>lua require'gitsigns'.stage_hunk()<cr>", desc = "Stage Hunk" },
+    },
     enabled = O.git,
   },
   {
     "nvim-neotest/neotest",
     keys = {
-      { "<leader>t", group = "+Test", icon = { icon = "󰙨", color = "green" } },
       { "<leader>tA", "<cmd>lua require('neotest').state.adapter_ids()<CR>", desc = "Adapters" },
       {
         "<leader>tD",
@@ -944,7 +964,7 @@ lazy.setup({
       { "<leader>tL", "<cmd>lua require('neotest').run.run_last({ strategy = 'dap' })<CR>", desc = "Last (Debug)" },
       {
         "<leader>tO",
-        "<cmd>lua require('neotest').output.open({ enter = true, short = true })<CR>",
+        "<cmd>lua require('neotest').output.open({ enter = true, short = true, last_run = true })<CR>",
         desc = "Output (short)",
       },
       { "<leader>tP", "<cmd>lua require('test.neotest').NeotestSetupProject()<CR>", desc = "Project" },
@@ -970,8 +990,7 @@ lazy.setup({
       "nvim-neotest/neotest-python",
       "shunsambongi/neotest-testthat",
       "marilari88/neotest-vitest",
-      "nvim-neotest/neotest-vim-test",
-      "vim-test/vim-test",
+      "nvim-neotest/nvim-nio",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
     },
@@ -1004,6 +1023,13 @@ lazy.setup({
           require("nvim-dap-virtual-text").setup({})
         end,
       },
+      { "mfussenegger/nvim-dap-python" },
+      {
+        "nvim-telescope/telescope-dap.nvim",
+        setup = function()
+          require("telescope").load_extension("dap")
+        end,
+      },
       {
         "rcarriga/cmp-dap",
         ft = { "dap-repl", "dapui_watches", "dapui_hover" },
@@ -1027,7 +1053,6 @@ lazy.setup({
         "rcarriga/nvim-dap-ui",
         event = "InsertEnter",
         dependencies = {
-          "mfussenegger/nvim-dap",
           "nvim-neotest/nvim-nio",
         },
         config = function()
@@ -1037,7 +1062,6 @@ lazy.setup({
       },
       {
         "jbyuki/one-small-step-for-vimkind",
-        dependencies = "nvim-dap",
         ft = "lua",
         config = function()
           require("debug.one_small_step_for_vimkind").config()
@@ -1045,19 +1069,10 @@ lazy.setup({
         enabled = O.dap and false,
       },
       {
-        "mxsdev/nvim-dap-vscode-js",
-        dependencies = { "mfussenegger/nvim-dap" },
-        config = function()
-          require("debug.vscode_js").config()
-        end,
-        ft = { "javascript", "vue", "javascriptreact", "typescriptreact", "typescript" },
-        enabled = O.webdev and O.dap,
-      },
-      {
         "microsoft/vscode-js-debug",
         lazy = true,
         build = "npm ci --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
-        enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.webdev and O.dap and false,
+        enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.webdev and O.dap,
       },
     },
   },
@@ -1091,7 +1106,6 @@ lazy.setup({
     },
     ft = { "org" },
     keys = {
-      { "<leader>o", group = "Org", nowait = false, remap = false, icon = { icon = "", color = "purple" } },
       {
         "<leader>oa",
         "<cmd>lua require('orgmode').action('agenda.prompt')<CR>",
@@ -1147,8 +1161,8 @@ lazy.setup({
         helm = { "trivy" },
         htmldjango = { "djlint" },
         java = { "trivy" },
-        javascript = { "eslint", "trivy" },
-        javascriptreact = { "eslint", "trivy" },
+        -- javascript = { "oxlint" },
+        -- javascriptreact = { "oxlint" },
         jinja = { "djlint" },
         lua = { "trivy" },
         markdown = { "alex" },
@@ -1158,9 +1172,10 @@ lazy.setup({
         rust = { "trivy" },
         terraform = { "trivy" },
         tex = { "proselint" },
-        typescript = { "eslint" },
-        typescriptreact = { "eslint", "trivy" },
-        vue = { "eslint", "trivy" },
+        toml = { "trivy" },
+        -- typescript = { "oxlint" },
+        -- typescriptreact = { "oxlint" },
+        -- vue = { "eslint" },
         zsh = { "zsh", "trivy" },
         [".*/.github/workflows/.*%.yml"] = { "yaml.ghaction" },
       }
@@ -1207,23 +1222,27 @@ lazy.setup({
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
-        python = { "ruff_fix", "ruff_format", "ruff_organize_imports", "docformatter", stop_after_first = false },
-        javascript = { "biome", "prettierd", "prettier", stop_after_first = true },
-        javascriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
-        typescript = { "biome", "prettierd", "prettier", stop_after_first = true },
-        typescriptreact = { "biome", "prettierd", "prettier", stop_after_first = true },
-        vue = { "prettierd", "prettier", stop_after_first = true },
-        lua = { "stylua", stop_after_first = true },
         css = { "prettierd", "prettier", stop_after_first = true },
-        scss = { "prettierd", "prettier", stop_after_first = true },
-        html = { "prettierd", "prettier", stop_after_first = true },
-        json = { "prettierd", "prettier", stop_after_first = true },
-        nix = { "nixfmt", stop_after_first = true },
-        tex = { "latexindent", stop_after_first = true },
-        -- r = { "styler", stop_after_first = true },
-        yaml = { "prettierd", "prettier", stop_after_first = true },
-        markdown = { "prettierd", "prettier", stop_after_first = true },
         gitcommit = { "commitmsgfmt" },
+        html = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascriptreact = { "prettierd", "prettier", stop_after_first = true },
+        json = { "jq", stop_after_first = true },
+        jsonc = { "jq", stop_after_first = true },
+        lua = { "stylua", stop_after_first = true },
+        markdown = { "prettierd", "prettier", stop_after_first = true },
+        nix = { "nixfmt", stop_after_first = true },
+        python = { "ruff_fix", "ruff_format", "ruff_organize_imports", "docformatter", stop_after_first = false },
+        quarto = { "injected" },
+        r = { "air", stop_after_first = true },
+        rmd = { "injected" },
+        scss = { "prettierd", "prettier", stop_after_first = true },
+        tex = { "latexindent", stop_after_first = true },
+        typescript = { "prettierd", "prettier", stop_after_first = true },
+        typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+        typst = { "typstyle", stop_after_first = true },
+        vue = { "prettierd", "prettier", stop_after_first = true },
+        yaml = { "prettierd", "prettier", stop_after_first = true },
         ["*"] = { "codespell" },
         ["_"] = { "trim_whitespace" },
       },
@@ -1263,10 +1282,8 @@ lazy.setup({
   },
   {
     "folke/todo-comments.nvim",
-    config = function()
-      require("todo-comments").setup()
-    end,
-    lazy = true,
+    opts = {},
+    lazy = false,
     enabled = O.language_parsing,
   },
   {
@@ -1275,6 +1292,21 @@ lazy.setup({
     config = function()
       require("misc.toggleterm").config()
     end,
+    cmd = { "ToggleTerm", "TermExec" },
+    keys = {
+      { "<leader>T", group = "+Terminal" },
+      { "<leader>TT", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal" },
+      { "<leader>Tt", "<cmd>ToggleTerm<cr>", desc = "Terminal (bot)" },
+      { "<leader>gL", "<cmd>lua require('misc.toggleterm').LazyGit()<cr>", desc = "LazyGit" },
+      { "<leader>B", "<cmd>lua require('misc.toggleterm').btop()<cr>", desc = "BTop" },
+      { "<leader>Tv", 'yi"<cmd>lua P(vim.cmd[[p]])<cr>"', desc = "VisiData" },
+      {
+        "<leader>TV",
+        "<cmd>lua require('misc.toggleterm').VisiData(vim.api.nvim_buf_get_name(0))<cr>",
+        desc = "VisiData (File)",
+      },
+      { "<leader>Tu", "<cmd>lua require('misc.toggleterm').UpdateProject()<cr>", desc = "Update Project" },
+    },
     enabled = O.misc,
   },
   {
@@ -1291,15 +1323,19 @@ lazy.setup({
     config = function()
       -- This module contains a number of default definitions
       local rainbow_delimiters = require("rainbow-delimiters")
-
+      ---@type rainbow_delimiters.config
       vim.g.rainbow_delimiters = {
         strategy = {
-          [""] = rainbow_delimiters.strategy["global"],
-          vim = rainbow_delimiters.strategy["local"],
+          [""] = "rainbow-delimiters.strategy.global",
+          vim = "rainbow-delimiters.strategy.local",
         },
         query = {
           [""] = "rainbow-delimiters",
           lua = "rainbow-blocks",
+        },
+        priority = {
+          [""] = 110,
+          lua = 210,
         },
         highlight = {
           "RainbowDelimiterRed",
@@ -1370,7 +1406,7 @@ lazy.setup({
         compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
         integrations = {
           barbar = true,
-          blink_cmp = true,
+          blink_cmp = O.lsp,
           cmp = O.lsp,
           dadbod_ui = true,
           dap = O.dap,
@@ -1450,8 +1486,8 @@ lazy.setup({
     },
     config = function()
       require("misc.refactoring").config()
-      require("misc.refactoring").maps()
     end,
+    keys = require("misc.refactoring").maps,
     enabled = O.language_parsing and O.misc,
   },
   {
@@ -1500,121 +1536,116 @@ lazy.setup({
   {
     "pmizio/typescript-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "nvim-lspconfig" },
-    config = function ()
+    config = function()
       require("misc.typescript_tools").config()
     end,
     ft = { "vue", "typescript", "typescriptreact", "javascript", "javascriptreact" },
-    enabled = O.webdev or O.typescript,
-  },
-  {
-    "3rd/image.nvim",
-    event = "InsertEnter",
-    ft = { "markdown", "vimwiki", "norg", "org", "typst", "css", "html" },
-    config = function ()
-      require("image").setup({
-        backend = "ueberzug",
-        integrations = {
-          markdown = {
-            enabled = true,
-            clear_in_insert_mode = false,
-            download_remote_images = true,
-            only_render_image_at_cursor = false,
-            filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
-          },
-          neorg = {
-            enabled = true,
-            clear_in_insert_mode = false,
-            download_remote_images = true,
-            only_render_image_at_cursor = false,
-            filetypes = { "norg" },
-          },
-          html = {
-            enabled = true,
-          },
-          css = {
-            enabled = true,
-          },
-        },
-        max_width = nil,
-        max_height = nil,
-        max_width_window_percentage = nil,
-        max_height_window_percentage = 50,
-        window_overlap_clear_enabled = false,                                               -- toggles images when windows are overlapped
-        window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
-        editor_only_render_when_focused = false,                                            -- auto show/hide images when the editor gains/looses focus
-        tmux_show_only_in_active_window = false,                                            -- auto show/hide images in the correct Tmux window (needs visual-activity off)
-        hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp", "*.avif" }, -- render image files as images when opened
-      })
-    end,
-    enabled = vim.fn.executable("ueberzugpp") == 1 and O.misc and false,
+    enabled = false,
   },
   { "nvim-neotest/nvim-nio" },
   {
     "rest-nvim/rest.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "luarocks.nvim", "telescope.nvim" },
     ft = "http",
-    config = function ()
+    config = function()
       require("ben.rest").config()
     end,
     enabled = O.webdev and O.misc and false,
   },
   {
     "neo451/feed.nvim",
-    event = "VeryLazy",
-    config = function ()
-      require "feed".setup({
+    keys = {
+      { "<leader>F", "<cmd>Feed<cr>", desc = "Feed", remap = false, mode = "n" },
+    },
+    config = function()
+      require("feed").setup({
         -- rsshub = {
         --   instance = "https://rsshub.app"
         -- },
         feeds = {
           -- { "https://neovim.io/news.xml",                                                    name = "Neovim News",                                                  tags = { "tech", "news" } },
-          { "rsshub://sciencedirect/journal/advances-in-climate-change-research",            name = "ScienceDirect Advances in Climate Change Research",            tags = { "science" }, },
-          { "rsshub://sciencedirect/journal/journal-of-the-european-meteorological-society", name = "ScienceDirect Journal of the European Meteorological Society", tags = { "science" }, },
-          { "rsshub://sciencedirect/journal/results-in-earth-sciences",                      name = "ScienceDirect Results in Earth Sciences",                      tags = { "science" }, },
-          { "rsshub://sciencedirect/journal/weather-and-climate-extremes",                   name = "ScienceDirect Weather and Climate Extremes",                   tags = { "science" }, },
-          { "rsshub://nature/research/nclimate",                                             name = "Nature Climate Change",                                        tags = { "science" }, },
-          { "rsshub://nature/research/ngeo",                                                 name = "Nature Geoscience",                                            tags = { "science" }, },
-          { "rsshub://nature/research/natrevearthenviron",                                   name = "Nature Review Earth and Environment",                          tags = { "science" }, },
-          { "rsshub://nature/research/natwater",                                             name = "Nature Water",                                                 tags = { "science" }, },
-          { "rsshub://nature/research/npjclimatsci",                                         name = "npj Climate Science",                                          tags = { "science" }, },
-        }
+          {
+            "rsshub://sciencedirect/journal/advances-in-climate-change-research",
+            name = "ScienceDirect Advances in Climate Change Research",
+            tags = { "science" },
+          },
+          {
+            "rsshub://sciencedirect/journal/journal-of-the-european-meteorological-society",
+            name = "ScienceDirect Journal of the European Meteorological Society",
+            tags = { "science" },
+          },
+          {
+            "rsshub://sciencedirect/journal/results-in-earth-sciences",
+            name = "ScienceDirect Results in Earth Sciences",
+            tags = { "science" },
+          },
+          {
+            "rsshub://sciencedirect/journal/weather-and-climate-extremes",
+            name = "ScienceDirect Weather and Climate Extremes",
+            tags = { "science" },
+          },
+          {
+            "rsshub://nature/research/nclimate",
+            name = "Nature Climate Change",
+            tags = { "science" },
+          },
+          {
+            "rsshub://nature/research/ngeo",
+            name = "Nature Geoscience",
+            tags = { "science" },
+          },
+          {
+            "rsshub://nature/research/natrevearthenviron",
+            name = "Nature Review Earth and Environment",
+            tags = { "science" },
+          },
+          {
+            "rsshub://nature/research/natwater",
+            name = "Nature Water",
+            tags = { "science" },
+          },
+          {
+            "rsshub://nature/research/npjclimatsci",
+            name = "npj Climate Science",
+            tags = { "science" },
+          },
+        },
       })
-      local wk_ok, wk = pcall(require, "which-key")
-      if wk_ok then
-        wk.add({
-          { "<leader>F", "<cmd>Feed<cr>", desc = "Feed", remap = false },
-        }, { mode = "n" })
-      else
-        vim.notify("which-key.nvim is not loaded in feed.nvim config")
-      end
     end,
-    enabled = O.misc
+    enabled = O.misc,
   },
   {
     "yetone/avante.nvim",
-    event = "VeryLazy",
+    keys = {
+      { "<leader>Aa", "<cmd>AvanteAsk<cr>", desc = "Avante Ask" },
+      { "<leader>AC", "<cmd>AvanteChat<cr>", desc = "Avante Chat" },
+    },
     version = false, -- Never set this value to "*"! Never!
     opts = {
       -- add any opts here
       -- for example
-      provider = "gemini",
-      gemini = {
-        model = "gemini-2.5-pro-exp-03-25",
-      },
-      openai = {
-        endpoint = "https://api.openai.com/v1",
-        model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
-        timeout = 45000,                    -- Timeout in milliseconds, increase this for reasoning models
-        temperature = 0,
-        max_completion_tokens = 8192,       -- Increase this to include reasoning tokens (for reasoning models)
-        --reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+      provider = "copilot",
+      providers = {
+        gemini = {
+          model = "gemini-2.5-pro-exp-03-25",
+        },
+        openai = {
+          endpoint = "https://api.openai.com/v1",
+          model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
+          extra_request_body = {
+            timeout = 45000, -- Timeout in milliseconds, increase this for reasoning models
+            temperature = 0.75,
+            max_completion_tokens = 8192, -- Increase this to include reasoning tokens (for reasoning models)
+            --reasoning_effort = "medium", -- low|medium|high, only used for reasoning models
+          },
+        },
       },
       file_selector = {
         --- @alias FileSelectorProvider "native" | "fzf" | "mini.pick" | "snacks" | "telescope" | string | fun(params: avante.file_selector.IParams|nil): nil
         provider = "telescope",
         -- Options override for custom providers
         provider_opts = {},
-      }
+      },
     },
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     build = "make",
@@ -1626,14 +1657,60 @@ lazy.setup({
       "MunifTanjim/nui.nvim",
       --- The below dependencies are optional,
       "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
-      {
-        -- Make sure to set this up properly if you have lazy=true
-        'MeanderingProgrammer/render-markdown.nvim',
-        opts = {
-          file_types = { "markdown", "Avante" },
+      "zbirenbaum/copilot.lua", -- for providers='copilot'
+    },
+  },
+  {
+    "wllfaria/ledger.nvim",
+    -- tree sitter needs to be loaded before ledger.nvim loads
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      -- { dir = "/home/ben/projects/blink-cmp-ledger" },
+    },
+    ft = { "hledger", "ledger" },
+    opts = {
+      extensions = {
+        "ledger",
+        "hledger",
+        "journal",
+      },
+      completion = {
+        cmp = { enabled = false },
+      },
+      snippets = {
+        cmp = { enabled = false },
+        luasnip = { enabled = false },
+        native = { enabled = true },
+      },
+      keymaps = {
+        snippets = {
+          new_posting = { "tt" },
+          new_account = { "acc" },
+          new_posting_today = { "td" },
+          new_commodity = { "cm" },
         },
-        ft = { "markdown", "Avante" },
+        reports = {},
+      },
+      diagnostics = {
+        lsp_diagnostics = true,
+        strict = false,
       },
     },
+  },
+  {
+    "chomosuke/typst-preview.nvim",
+    ft = { "typst" },
+    version = "1.*",
+    opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+  },
+  {
+    "chrishrb/gx.nvim",
+    keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
+    cmd = { "Browse" },
+    init = function()
+      vim.g.netrw_nogx = 1 -- disable netrw gx
+    end,
+    dependencies = { "nvim-lua/plenary.nvim" }, -- Required for Neovim < 0.10.0
+    config = true, -- default settings
   },
 }, {})
