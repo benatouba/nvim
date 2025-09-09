@@ -8,8 +8,8 @@ end
 M.config = function ()
   copilot.setup({
     panel = {
-      enabled = true,
-      auto_refresh = true,
+      enabled = false,
+      auto_refresh = false,
       keymap = {
         jump_prev = "[[",
         jump_next = "]]",
@@ -25,7 +25,7 @@ M.config = function ()
     suggestion = {
       enabled = true,
       auto_trigger = true,
-      debounce = 75,
+      debounce = 150,
       keymap = {
         accept = "<C-l>",
         accept_word = "<C-a>",

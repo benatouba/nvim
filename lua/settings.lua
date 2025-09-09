@@ -119,3 +119,5 @@ vim.api.nvim_create_autocmd("CmdlineLeave", {
   group = set_cmdline,
 })
 vim.g.skip_ts_context_commentstring_module = true
+vim.lsp.log.set_level("WARN")
+
