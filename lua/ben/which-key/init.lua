@@ -6,8 +6,21 @@ end
 which_key.setup()
 
 which_key.add({
-  { "<leader>t", "<cmd>ToggleTermSendVisualLines<cr>", desc = "Send to terminal", mode = "v" },
-  { "<leader>u", ":UndotreeToggle<cr>", desc = "Undotree", icon = { icon = "", color = "green" } },
+  { "<leader>R", group = "+Refactor", icon = { icon = "󰈏 ", color = "green" }, mode = { "x", "n" } },
+  { "<leader>A", icon = { icon = "󱐒 ", color = "purple" }, group = "+Avante", remap = false, mode = "n" },
+  { "<leader>o", group = "Org", nowait = false, remap = false, icon = { icon = " ", color = "purple" } },
+  { "<leader>S", icon = " ", group = "+Sessions", remap = false, mode = "n" },
+  { "<leader>t", group = "+Test", icon = { icon = "󰙨 ", color = "green" } },
+  { "<leader>v", group = "+Vivere", icon = { icon = "󰇈 ", color = "purple" }, remap = false },
+  { "<localleader>o", group = "+Obsidian", icon = { icon = "󰇈 ", color = "purple" }, mode = { "n", "v", "x" } },
+  {
+    "<leader>t",
+    "<cmd>ToggleTermSendVisualLines<cr>",
+    desc = "Send to terminal",
+    icon = { icon = " ", color = "purple" },
+    mode = "v",
+  },
+  { "<leader>u", ":UndotreeToggle<cr>", desc = "Undotree", icon = { icon = " ", color = "green" } },
   {
     "<leader>f",
     "<cmd>lua P(vim.api.nvim_buf_get_name(0))<cr>",

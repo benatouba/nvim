@@ -69,3 +69,13 @@ Get_python_venv = function ()
     return fn.trim(fn.system("pyenv prefix"))
   end
 end
+
+DiffviewToggle = function(cmd)
+  cmd = cmd or "DiffviewOpen"
+  if next(require("diffview.lib").views) == nil then
+    vim.cmd(cmd)
+  else
+    vim.cmd("DiffviewClose")
+  end
+end
+
