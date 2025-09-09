@@ -40,6 +40,7 @@ M.config = function ()
       yaml = true,
       markdown = true,
       help = false,
+      dotenv = false,
       gitcommit = true,
       gitrebase = false,
       hgcommit = false,

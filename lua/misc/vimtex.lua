@@ -16,13 +16,13 @@ M.config = function()
 
   vim.g.vimtex_complete_bib = { simple = 1 }
   vim.g.vimtex_compiler_enabled = 1
-  vim.g.vimtex_grammar_vlty = {
-    -- lt_directory = "/usr/share/java/languagetool/libs/",
-    lt_command = "languagetool",
-    server = "my",
-    show_suggestions = 1,
-    shell_options = "--multi-language --packages '*' --quation-punctuation display --single-letters 'i.\\,A.\\|z.\\,B.\\|\\|'",
-  }
+  -- vim.g.vimtex_grammar_vlty = {
+  --   -- lt_directory = "/usr/share/java/languagetool/libs/",
+  --   lt_command = "languagetool",
+  --   server = "my",
+  --   show_suggestions = 1,
+  --   shell_options = "--multi-language --packages '*' --equation-punctuation display --single-letters 'i.\\,A.\\|z.\\,B.\\|\\|'",
+  -- }
   -- vim.g.vimtex_compiler_latexmk = {
   --   options = {
   --     "-verbose",

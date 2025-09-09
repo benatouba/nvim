@@ -70,7 +70,7 @@ M.opts = {
     },
     documentation = { auto_show = true, auto_show_delay_ms = 200, window = { border = "single" } },
   },
-  signature = { enabled = true, window = { border = "single" } },
+  signature = { enabled = false, window = { border = "single" } },
   appearance = {
     use_nvim_cmp_as_default = false,
     nerd_font_variant = "mono",
@@ -112,16 +112,7 @@ M.opts = {
       end
     end,
     per_filetype = {
-      org = { "lsp", "orgmode", "path", "snippets", "ripgrep", "emoji", "calc" },
-      markdown = function()
-        if string.find(vim.fn.getcwd(), "vivere") then
-          return { "ecolog", "lsp", "path", "snippets", "emoji", "calc" }
-        else
-          return { inherit_defaults = true }
-        end
-      end,
       gitcommit = { "lsp", "git", "snippets", "emoji", "calc", "path" },
-      sql = { "lsp", "dadbod", "snippets" },
       lua = function()
         if string.find(vim.fn.getcwd(), "nvim") then
           return { "lazydev", inherit_defaults = true }
@@ -129,10 +120,20 @@ M.opts = {
           return { inherit_defaults = true }
         end
       end,
+      -- python = { "ledger", inherit_defaults = true },
+      markdown = function()
+        if string.find(vim.fn.getcwd(), "vivere") then
+          return { "ecolog", "lsp", "path", "snippets", "emoji", "calc" }
+        else
+          return { inherit_defaults = true }
+        end
+      end,
       octo = { "lsp", "git", "emoji", "calc" },
+      org = { "lsp", "orgmode", "path", "snippets", "ripgrep", "emoji", "calc" },
+      quarto = { inherit_defaults = true, "cmp_r" },
       r = { inherit_defaults = true, "cmp_r" },
       rmd = { inherit_defaults = true, "cmp_r" },
-      quarto = { inherit_defaults = true, "cmp_r" },
+      sql = { "lsp", "dadbod", "snippets" },
       terminal = { "path", "cmp_r" },
       ["dap-repl"] = { "dap" },
       ["dapui_watches"] = { "dap" },
@@ -143,6 +144,11 @@ M.opts = {
         name = "Orgmode",
         module = "orgmode.org.autocompletion.blink",
         fallbacks = { "buffer" },
+      },
+      buffer = {
+        opts = {
+          enable_in_ex_commands = true,
+        },
       },
       ecolog = { name = "ecolog", module = "ecolog.integrations.cmp.blink_cmp" },
       dap = {
@@ -175,6 +181,16 @@ M.opts = {
           end,
         },
       },
+      -- ledger = {
+      --   name = "ledger",
+      --   module = "blink-cmp-ledger",
+      --   -- opts = {
+      --   --   enabled = true,
+      --   --   max_items = 20,
+      --   --   min_keyword_length = 1,
+      --   --   score_offset = 85,
+      --   -- },
+      -- },
       -- cmp_rolodex = {
       --   name = "cmp_rolodex",
       --   module = "blink.compat.source",
@@ -210,16 +226,17 @@ M.opts = {
         ---@module "blink-ripgrep"
         ---@type blink-ripgrep.Options
         opts = {
-          prefix_min_len = 4,
-          context_size = 5,
-          max_filesize = "5M",
-          project_root_marker = { ".git", "package.json", ".root", "pyproject.toml" },
-          project_root_fallback = true,
-          search_casing = "--smart-case",
-          additional_rg_options = {},
+          prefix_min_len = 5,
+          project_root_marker = { ".git", "package.json", ".root", "pyproject.toml", "refile.org" },
+          backend = {
+            context_size = 5,
+            ripgrep = {
+              search_casing = "--smart-case",
+              max_filesize = "5M",
+              project_root_fallback = true,
+            },
+          },
           fallback_to_regex_highlighting = true,
-          ignore_paths = {},
-          additional_paths = {},
           debug = false,
         },
         transform_items = function(_, items)

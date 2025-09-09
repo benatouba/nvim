@@ -63,6 +63,7 @@ M.config = function()
         mode = mode or "n"
         vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
       end
+      vim.lsp.semantic_tokens.enable()
       local bufnr = vim.api.nvim_get_current_buf()
       local isOk, wk = pcall(require, "which-key")
       if not isOk then
@@ -70,17 +71,32 @@ M.config = function()
         return
       end
       local client = vim.lsp.get_client_by_id(event.data.client_id)
+      if not client then
+        vim.notify("LSP client not found for bufnr: " .. bufnr, vim.log.levels.ERROR)
+        return
+      end
       if client.server_capabilities.completionProvider then
         vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
       end
       if client.name == "basedpyright" then
         client.server_capabilities.documentFormattingProvider = false
         client.server_capabilities.documentRangeFormattingProvider = false
-        client.server_capabilities.definitionProvider = true
-        -- elseif client.name == "texlab" then
-        --   -- Disable in favor of Conform
-        --   client.server_capabilities.documentFormattingProvider = true
-        --   client.server_capabilities.documentRangeFormattingProvider = true
+        client.server_capabilities.definitionProvider = false
+        client.server_capabilities.hoverProvider = true
+        client.server_capabilities.definitionProvider = false
+        client.server_capabilities.renameProvider = false
+        client.server_capabilities.declarationProvider = false
+        client.server_capabilities.referencesProvider = false
+      -- elseif client.name == "texlab" then
+      --   -- Disable in favor of Conform
+      --   client.server_capabilities.documentFormattingProvider = true
+      --   client.server_capabilities.documentRangeFormattingProvider = true
+      elseif client.name == "ty" then
+        client.server_capabilities.hoverProvider = false
+        client.server_capabilities.semanticTokensProvider = false
+        client.server_capabilities.documentHighlightProvider = false
+        client.server_capabilities.completionProvider = false
+        client.server_capabilities.renameProvider = true
       elseif client.name == "mutt_ls" then
         vim.diagnostic.enable(not vim.diagnostic.is_enabled())
       elseif client.name == "ruff" then
@@ -89,7 +105,8 @@ M.config = function()
         client.server_capabilities.definitionProvider = false
       elseif client.name == "r_language_server" then
         client.server_capabilities.completionProvider = false
-        client.server_capabilities.completionItemResolve = false
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
       elseif client.name == "ts_ls" then
         --   client.server_capabilities.documentFormattingProvider = false
         --   client.server_capabilities.documentRangeFormattingProvider = false
@@ -108,7 +125,7 @@ M.config = function()
       wk.add({
         {
           { buffer = bufnr },
-          { "<C-K>", vim.lsp.buf.signature_help, desc = "Signature", mode = { "n" } },
+          { "<C-K>", vim.lsp.buf.signature_help, desc = "Signature", mode = { "n", "i" } },
           { "<F2>", vim.lsp.buf.rename, desc = "Rename" },
           { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
           { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action" },
@@ -174,190 +191,6 @@ M.config = function()
     end,
   })
 
-  -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-  -- local lsp_defaults = {
-  --   flags = {
-  --     debounce_text_changes = 150,
-  --   },
-  --   capabilities = require("blink.cmp").get_lsp_capabilities(capabilities),
-  -- }
-  -- local ok, wf = pcall(require, "vim.lsp._watchfiles")
-  -- if ok then
-  --   -- wf._watchfunc = function(_, _, _) return true end
-  --   wf._watchfunc = function ()
-  --     return function () end
-  --   end
-  -- end
-
-  -- lspconfig.util.default_config = vim.tbl_deep_extend("force", lspconfig.util.default_config, lsp_defaults)
-
-  --[[
-  require("mason-lspconfig").setup_handlers({
-    -- The first entry (without a key) will be the default handler
-    -- and will be called for each installed server that doesn't have
-    -- a dedicated handler.
-    function(server_name) -- default handler (optional)
-      require("lspconfig")[server_name].setup({})
-    end,
-    ["bashls"] = function()
-      lspconfig.bashls.setup({
-        filetypes = { "sh", "zsh", "bash", "ksh", "dash" },
-      })
-    end,
-    ["jedi_language_server"] = function()
-      lspconfig.jedi_language_server.setup({
-        settings = {
-          completion = {
-            enable = false,
-          },
-        },
-      })
-    end,
-    ["vale_ls"] = function()
-      lspconfig.vale_ls.setup({})
-    end,
-    ["harper_ls"] = function()
-      lspconfig.harper_ls.setup({
-        settings = {
-          ["harper-ls"] = {
-            userDictPath = vim.fn.stdpath("config") .. "/spell/en.utf-8.add",
-          },
-        },
-      })
-    end,
-    ["pyright"] = function()
-      lspconfig.pyright.setup({
-        before_init = function(_, config)
-          config.settings.python.pythonPath = Get_python_venv() .. "/bin/python"
-          config.settings.python.analysis.stubPath =
-            vim.fs.joinpath(vim.fn.expand("~"), ".local", "src", "python-type-stubs", "stubs")
-        end,
-      })
-    end,
-    ["pylsp"] = function()
-      local lsputil = require("lspconfig/util")
-
-      local venv = Get_python_venv()
-
-      lspconfig.pylsp.setup({
-        filetypes = { "python", "djangopython", "django", "jupynium" },
-        cmd = { "pylsp", "-v" },
-        cmd_env = {
-          VIRTUAL_ENV = venv,
-          PATH = lsputil.path.join(venv, "bin") .. ":" .. vim.env.PATH,
-        },
-        single_file_support = true,
-        settings = {
-          pylsp = {
-            plugins = {
-              autopep8 = { enabled = false },
-              flake8 = { enabled = false },
-              pycodestyle = { enabled = false, maxLineLength = 100 },
-              pyflakes = { enabled = false },
-              pydocstyle = { enabled = false, convention = "google" },
-              mccabe = { enabled = false },
-              memestra = { enabled = false },
-              mypy = { enabled = false },
-              pylint = { enabled = false },
-              rope_autimport = { enabled = true },
-              rope_completion = { enabled = true },
-              ruff = { enabled = true, lineLength = 100 },
-              black = { enabled = false, line_length = 100 },
-              yapf = { enabled = false },
-              preload = { modules = { "manim", "numpy", "pandas" } },
-              jedi = {
-                auto_import_modules = {
-                  "numpy",
-                  "pandas",
-                  "salem",
-                  "matplotlib",
-                  "Django",
-                  "djangorestframework",
-                  "manim",
-                  "typing",
-                  "plotly",
-                  "dash",
-                  "dash_bootstrap_components",
-                },
-              },
-              jedi_completion = {
-                enabled = false,
-                eager = false,
-                fuzzy = true,
-                include_class_objects = false,
-                include_function_objects = false,
-                cache_for = {
-                  "pandas",
-                  "numpy",
-                  "matplotlib",
-                  "salem",
-                  "Django",
-                  "djangorestframework",
-                  "manim",
-                  "plotly",
-                  "dash",
-                  "dash_bootstrap_components",
-                },
-              },
-            },
-          },
-        },
-      })
-    end,
-    ["sourcery"] = function()
-      lspconfig.sourcery.setup({
-        init_options = {
-          token = require("secrets").sourcery,
-          extension_version = "vim.lsp",
-          editor_version = "vim",
-        },
-        settings = {
-          sourcery = {
-            metricsEnabled = false,
-          },
-        },
-      })
-    end,
-
-    ["eslint"] = function()
-      lspconfig.eslint.setup({
-        filetypes = {
-          "typescript",
-          "javascript",
-          "javascriptreact",
-          "typescriptreact",
-          "vue",
-          "json",
-        },
-      })
-    end,
-    ["ltex"] = function()
-      lspconfig.ltex.setup({
-        capabilities = lsp_defaults.capabilities,
-        filetypes = {
-          "bib",
-          -- "markdown",
-          -- "org",
-          "plaintex",
-          "rst",
-          "rnoweb",
-          "tex",
-          "pandoc",
-          "quarto",
-          "rmd",
-        },
-        settings = {
-          ltex = {
-            language = "en-GB",
-            additionalRules = {
-              motherTongue = "de-DE",
-            },
-          },
-        },
-      })
-    end,
-  })
-  ]]
   local watch_type = require("vim._watch").FileChangeType
 
   local function handler(res, callback)
