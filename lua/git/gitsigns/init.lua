@@ -4,11 +4,6 @@ if not isOk then
   return
 end
 
-local wkOk, wk = pcall(require, "which-key")
-if not wkOk then
-  vim.notify("Which-key not okay in gitsigns")
-  return
-end
 local M = {}
 
 M.config = function ()
@@ -89,23 +84,6 @@ M.config = function ()
       -- Text object
       map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
     end,
-  })
-  wk.add({
-    -- { "<leader>hd", "<cmd>lua require'gitsigns'.diffthis()<cr>", desc = "Diff This", nowait = false, remap = false},
-    { "<leader>g", group = "Git", nowait = false, remap = false },
-    { "<leader>gB", "<cmd>Gitsigns blame_line<cr>", desc = "Blame line", nowait = false, remap = false },
-    -- { "<leader>gD", "<cmd>Gitsigns diffthis HEAD<cr>", desc = "Diff this HEAD", nowait = false, remap = false },
-    { "<leader>gD", "<cmd>Gitsigns diffthis<cr>", desc = "Diff this", nowait = false, remap = false },
-    { "<leader>gR", "<cmd>lua require'gitsigns'.reset_buffer()<cr>", desc = "Reset Buffer", nowait = false, remap = false },
-    { "<leader>gT", "<cmd>lua require'gitsigns'.toggle_deleted()<cr>", desc = "Toggle Deleted", nowait = false, remap = false },
-    { "<leader>gh", "<cmd>lua require'gitsigns'.preview_hunk()<cr>", desc = "Preview Hunk", nowait = false, remap = false },
-    { "<leader>gj", "<cmd>lua require'gitsigns.actions'.next_hunk()<cr>", desc = "Next Hunk", nowait = false, remap = false },
-    { "<leader>gk", "<cmd>lua require'gitsigns.actions'.prev_hunk()<cr>", desc = "Prev Hunk", nowait = false, remap = false },
-    { "<leader>gl", "<cmd>Gitsigns setloclist<cr>", desc = "Set loclist", nowait = false, remap = false },
-    { "<leader>gq", "<cmd>Gitsigns setqflist<cr>", desc = "Set quickfix", nowait = false, remap = false },
-    { "<leader>gr", "<cmd>lua require'gitsigns'.reset_hunk()<cr>", desc = "Reset Hunk", nowait = false, remap = false },
-    { "<leader>gs", "<cmd>lua require'gitsigns'.stage_hunk()<cr>", desc = "Stage Hunk", nowait = false, remap = false },
-    -- { "<leader>gu", "<cmd>lua require'gitsigns'.undo_stage_hunk()<cr>", desc = "Undo Stage Hunk", nowait = false, remap = false },
   })
 end
 

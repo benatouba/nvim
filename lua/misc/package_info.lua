@@ -1,5 +1,5 @@
 local M = {}
-M.config = function ()
+M.config = function()
   local pi_ok, pi = pcall(require, "package-info")
   if not pi_ok then
     vim.notify("package-info not ok", vim.log.levels.ERROR)
@@ -8,8 +8,9 @@ M.config = function ()
   pi.setup({
     package_manager = "pnpm",
     colors = {
-        up_to_date = "237",
-        outdated = "173",
+      up_to_date = "237",
+      outdated = "173",
+      invalid = "#ee4b2b",
     },
     hide_up_to_date = true,
   })
