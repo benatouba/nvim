@@ -53,14 +53,13 @@ M.config = function ()
       er = {
         description = "Reccuring Event",
         headline = "Recurring",
-        template = "* %?\n %T :EVENT:\n SCHEDULED: %^T\n  %a",
-        -- template = "* MEETING %? :MEETING:\n  %U",
+        template = "* %? :EVENT:\n SCHEDULED: %^T\n  %a",
         target = "~/documents/vivere/org/events.org"
       },
       eo = {
         description = "one-time Event",
         headline = "One-Time",
-        template = "* %?\n %T :EVENT:\n SCHEDULED: %^T\n  %a",
+        template = "* %? :EVENT:\n SCHEDULED: %^T\n  %a",
         target = "~/documents/vivere/org/events.org",
       },
       m = "Meeting",

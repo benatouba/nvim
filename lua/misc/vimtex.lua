@@ -6,7 +6,7 @@ M.config = function()
   vim.g.vimtex_mappings_enabled = 1
   vim.g.vimtex_syntax_enabled = 1
   vim.g.matchup_override_vimtex = 1
-  -- vim.bo.textwidth = 125  -- automatically insert line break after n chars
+  vim.bo.textwidth = 0  -- automatically insert line break after n chars
   vim.g.vimtex_log_ignore = {
     "Underfull",
     "Overfull",
@@ -36,18 +36,18 @@ M.config = function()
   -- vim.g.vimtex_compiler_progname = 'nvr'
   -- vim.g.vimtex_view_general_options = [[--unique file:@pdf\#src:@line@tex]]
   -- vim.g.vimtex_view_general_options_latexmk = '--unique'
-  local augroup = vim.api.nvim_create_augroup("VimtexGroup", { clear = true })
-  vim.api.nvim_set_keymap(
-    "n",
-    "<F9>",
-    ":w <bar> compiler vlty <bar> make <bar> :cw <cr><esc>",
-    { noremap = true, silent = true }
-  )
-  vim.api.nvim_create_autocmd("User", {
-    pattern = "VimtexEventInitPost",
-    group = augroup,
-    command = "VimtexCompile",
-  })
+  -- local augroup = vim.api.nvim_create_augroup("VimtexGroup", { clear = true })
+  -- vim.api.nvim_set_keymap(
+  --   "n",
+  --   "<F9>",
+  --   ":w <bar> compiler vlty <bar> make <bar> :cw <cr><esc>",
+  --   { noremap = true, silent = true }
+  -- )
+  -- vim.api.nvim_create_autocmd("User", {
+  --   pattern = "VimtexEventInitPost",
+  --   group = augroup,
+  --   command = "VimtexCompile",
+  -- })
 
   local wk = require("which-key")
   wk.add({

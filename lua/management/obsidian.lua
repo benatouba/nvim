@@ -58,7 +58,7 @@ M.config = function()
       local out = { title = note.title, id = note.id, aliases = note.aliases, tags = note.tags }
       out.created_at = os.date("%Y-%m-%dT%H:%M")
       out.modified_at = os.date("%Y-%m-%dT%H:%M")
-      if note.metadata ~= nil and require("obsidian").util.table_length(note.metadata) > 0 then
+      if note.metadata ~= nil then
         for k, v in pairs(note.metadata) do
           out[k] = v
         end
@@ -67,5 +67,4 @@ M.config = function()
     end,
   })
 end
-
 return M
