@@ -105,7 +105,6 @@ lazy.setup({
     },
     lazy = true,
     keys = {
-      { "<leader>s", group = "Search" },
       { "<leader>b", "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
       { "<leader>sB", "<cmd>Telescope file_browser<cr>", desc = "Browser" },
       { "<leader>sb", "<cmd>Telescope git_branches<cr>", desc = "Branches" },
@@ -128,15 +127,20 @@ lazy.setup({
   },
   {
     "DrKJeff16/project.nvim",
-    config = function()
-      require("ben.project").setup()
-    end,
     keys = {
-      { "<leader>s", group = "Search" },
-      { "<leader>sp", "<cmd>Telescope projects<cr>", desc = "Projects", },
+      { "<leader>sp", "<cmd>ProjectTelescope<cr>", desc = "Projects" },
     },
     dependencies = "telescope.nvim",
     event = { "BufReadPost", "BufNewFile" },
+    ---@module 'project'
+    ---@type Project.Config.Options
+    opts = {
+      detection_methods = { "lsp", "pattern" },
+      patterns = { "=src", ">projects", ">scripts", "pillar", ".git", "=nvim" },
+      ignore_lsp = { "null-ls", "salt-lsp", "copilot" },
+      exclude_dirs = { "*/node_modules/*" },
+    },
+    cond = vim.fn.has("nvim-0.11") == 1,
     enabled = O.lsp,
   },
 

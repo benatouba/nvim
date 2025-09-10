@@ -9,7 +9,8 @@ which_key.add({
   { "<leader>R", group = "+Refactor", icon = { icon = "󰈏 ", color = "green" }, mode = { "x", "n" } },
   { "<leader>A", icon = { icon = "󱐒 ", color = "purple" }, group = "+Avante", remap = false, mode = "n" },
   { "<leader>o", group = "Org", nowait = false, remap = false, icon = { icon = " ", color = "purple" } },
-  { "<leader>S", icon = " ", group = "+Sessions", remap = false, mode = "n" },
+  { "<leader>S", group = "+Sessions", icon = " ", remap = false, mode = "n" },
+  { "<leader>s", group = "+Search", icon = {icon = " ", color = "green" }, remap = false, mode = "n" },
   { "<leader>t", group = "+Test", icon = { icon = "󰙨 ", color = "green" } },
   { "<leader>v", group = "+Vivere", icon = { icon = "󰇈 ", color = "purple" }, remap = false },
   { "<localleader>o", group = "+Obsidian", icon = { icon = "󰇈 ", color = "purple" }, mode = { "n", "v", "x" } },
@@ -42,7 +43,7 @@ which_key.add({
   { "<leader>c", group = "+Configuration", icon = { icon = "", color = "orange" } },
   { "<leader>cc", "<cmd>e ~/.config/nvim/init.lua<cr>", desc = "Open Config" },
   { "<leader>cC", "<cmd>ColorizerToggle<cr>", desc = "Colorizer" },
-  { "<leader>ch", "<cmd>set hlsearch!<CR>", desc = "Highlightsearch" },
+  { "<leader>ch", "<cmd>set hlsearch!<CR>", desc = "Highlight Search" },
   {
     "<leader>cr",
     function()
@@ -51,7 +52,7 @@ which_key.add({
     end,
     desc = "Reload Config",
   },
-  { "<leader>cR", "<cmd>set norelativenumber!<cr>", desc = "Relative line nums" },
+  { "<leader>cR", "<cmd>set norelativenumber!<cr>", desc = "Relative line numbers" },
   -- Plugins
   { "<leader>p", icon = { icon = " ", color = "blue" }, group = "+Plugins" },
   { "<leader>pc", "<cmd>Lazy clean<cr>", desc = "Clean" },
