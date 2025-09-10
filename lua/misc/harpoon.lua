@@ -34,7 +34,6 @@ M.maps = function ()
   end
   local maps = {
     { "<C-e>", "<cmd>lua require('harpoon.ui').toggle_quick_menu(require('harpoon').list())<cr>", desc = "Toggle harpoon menu" },
-    { "<leader>m", group = "Marks", icon = { icon = "", color = "red" } },
     { "<leader>m0", "<cmd>lua require('harpoon'):list():select(10)<cr>", desc = "Go to mark 10" },
     { "<leader>m1", "<cmd>lua require('harpoon'):list():select(1)<cr>", desc = "Go to mark 1" },
     { "<leader>m2", "<cmd>lua require('harpoon'):list():select(2)<cr>", desc = "Go to mark 2" },

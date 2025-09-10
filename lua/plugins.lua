@@ -253,6 +253,7 @@ lazy.setup({
           {
             "<leader>z",
             "<cmd>lua require('snacks').zen.zen()<cr>",
+            icon = { icon = " ", color = "yellow" },
             desc = "Zen",
             remap = false,
           },
@@ -316,9 +317,9 @@ lazy.setup({
   },
   {
     "stevearc/oil.nvim",
-    keys = {
-      { "<leader>e", ":Oil<cr>", desc = "Explorer" },
-    },
+    -- keys = {
+    --   { "<leader>e", ":Oil<cr>", desc = "Explorer" },
+    -- },
     config = function()
       require("ben.oil").config()
     end,
@@ -1302,7 +1303,11 @@ lazy.setup({
       { "<leader>TT", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal" },
       { "<leader>Tt", "<cmd>ToggleTerm<cr>", desc = "Terminal (bot)" },
       { "<leader>gL", "<cmd>lua require('misc.toggleterm').LazyGit()<cr>", desc = "LazyGit" },
-      { "<leader>B", "<cmd>lua require('misc.toggleterm').btop()<cr>", desc = "BTop" },
+      {
+        "<leader>Tb",
+        "<cmd>lua require('misc.toggleterm').btop()<cr>",
+        desc = "BTop",
+      },
       { "<leader>Tv", 'yi"<cmd>lua P(vim.cmd[[p]])<cr>"', desc = "VisiData" },
       {
         "<leader>TV",
@@ -1559,7 +1564,13 @@ lazy.setup({
   {
     "neo451/feed.nvim",
     keys = {
-      { "<leader>F", "<cmd>Feed<cr>", desc = "Feed", remap = false, mode = "n" },
+      {
+        "<leader>F",
+        "<cmd>Feed<cr>",
+        desc = "Feed",
+        remap = false,
+        mode = "n",
+      },
     },
     config = function()
       require("feed").setup({

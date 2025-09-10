@@ -127,7 +127,6 @@ M.config = function()
           { buffer = bufnr },
           { "<C-K>", vim.lsp.buf.signature_help, desc = "Signature", mode = { "n", "i" } },
           { "<F2>", vim.lsp.buf.rename, desc = "Rename" },
-          { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
           { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action" },
           { "<leader>lc", "<cmd>e $HOME/.config/nvim/lua/lsp/init.lua<cr>", desc = "Config" },
           { "<leader>lC", "<cmd>LspCapabilities<cr>", desc = "Server Capabilities" },

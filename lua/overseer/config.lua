@@ -45,7 +45,6 @@ M.config = function ()
     }
   })
   wk.add({
-    { "<leader>r", group = "+Run" },
     { "<leader>rt", "<cmd>OverseerToggle<cr>", desc = "Toggle" },
     { "<leader>rr", "<cmd>OverseerRun<cr>", desc = "Run" },
     { "<leader>rq", "<cmd>OverseerQuickAction<cr>", desc = "Quick Action" },

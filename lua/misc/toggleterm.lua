@@ -50,7 +50,7 @@ M.config = function ()
     { "<leader>TT", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal", remap = false, icon = { icon = " ", color = "green" } },
     { "<leader>Tt", "<cmd>ToggleTerm<cr>", desc = "Terminal (bot)", remap = false, icon = { icon = " ", color = "green" } },
     { "<leader>gL", "<cmd>lua require('misc.toggleterm').LazyGit()<cr>", desc = "LazyGit", remap = false, icon = { icon = " ", color = "cyan" } },
-    { "<leader>B", "<cmd>lua require('misc.toggleterm').btop()<cr>", desc = "BTop", remap = false, icon = { icon = " ", color = "orange" } },
+    -- { "<leader>B", "<cmd>lua require('misc.toggleterm').btop()<cr>", desc = "BTop", remap = false, icon = { icon = " ", color = "orange" } },
     -- { "<leader>tv", "yi\"<cmd>lua require('misc.toggleterm').VisiData(vim.cmd[[p]])<cr>", desc = "VisiData" },
     { "<leader>Tv", "yi\"<cmd>lua P(vim.cmd[[p]])<cr>\"", desc = "VisiData", remap = false, icon = { icon = " ", color = "orange" } },
     { "<leader>TV", "<cmd>lua require('misc.toggleterm').VisiData(vim.api.nvim_buf_get_name(0))<cr>", desc = "VisiData (File)" },
