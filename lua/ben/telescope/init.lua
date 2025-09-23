@@ -1,10 +1,16 @@
 local M = {}
 
-M.config = function ()
+M.config = function()
   local telescope_ok, telescope = pcall(require, "telescope")
   if not telescope_ok then
     vim.notify("Telescope could not be initiated")
     return
+  end
+  local el_ok, el = pcall(require, "ecolog")
+  if not el_ok then
+    vim.notify("Ecolog not okay in telescope")
+  else
+    telescope.load_extension("ecolog")
   end
   -- vim.api.nvim_create_augroup('telescope_previewer', {})
   -- vim.api.nvim_create_autocmd('TelescopePreviewerLoaded', {
@@ -24,8 +30,8 @@ M.config = function ()
 
   local actions = require("telescope.actions")
   local sorters = require("telescope.sorters")
-  local previewers = require "telescope.previewers"
-  telescope.setup {
+  local previewers = require("telescope.previewers")
+  telescope.setup({
     defaults = {
       find_command = { "rg", "--hidden", "--line-number", "--column", "--smart-case", "--color" },
       prompt_prefix = " ",
@@ -37,7 +43,7 @@ M.config = function ()
       layout_strategy = "horizontal",
       file_sorter = sorters.get_fuzzy_file,
       file_ignore_patterns = { "parser.c", "*.ipynb" },
-      generic_sorter = require "telescope.sorters".get_generic_fuzzy_sorter,
+      generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter,
       path_display = {},
       winblend = 0,
       layout_config = {
@@ -49,7 +55,7 @@ M.config = function ()
       },
       pickers = {
         find_files = {
-          find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "--hidden" }
+          find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "--hidden" },
         },
       },
       border = {},
@@ -79,7 +85,7 @@ M.config = function ()
           -- ["<C-i>"] = actions.select_horizontal,
 
           -- Add up multiple actions
-          ["<CR>"] = actions.select_default + actions.center
+          ["<CR>"] = actions.select_default + actions.center,
 
           -- You can perform as many actions in a row as you like
           -- ["<CR>"] = actions.select_default + actions.center + my_cool_custom_action,
@@ -90,12 +96,24 @@ M.config = function ()
           ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
           ["<c-t>"] = trouble.open,
           -- ["<C-i>"] = my_cool_custom_action,
-        }
-      }
+        },
+      },
     },
     extensions = {
+      ecolog = {
+        shelter = {
+          mask_on_copy = false,
+        },
+        mappings = {
+          copy_value = "<C-y>", -- Key to copy value to clipboard
+          copy_name = "<C-n>", -- Key to copy name to clipboard
+          append_value = "<C-a>", -- Key to append value to buffer
+          append_name = "<CR>", -- Key to append name to buffer (defaults to <CR>)
+          edit_var = "<C-e>", -- Key to edit environment variable
+        },
+      },
       projects = {
-        detection_methods = { "lsp", "pattern", ".git", "Makefile", "*.sln", "build/env.sh" }
+        detection_methods = { "lsp", "pattern", ".git", "Makefile", "*.sln", "build/env.sh" },
       },
       fzy_native = {
         override_generic_sorter = true,
@@ -119,12 +137,12 @@ M.config = function ()
       },
       fzf = {
         override_generic_sorter = true, -- override the generic sorter
-        override_file_sorter = true,    -- override the file sorter
-        case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
+        override_file_sorter = true, -- override the file sorter
+        case_mode = "smart_case", -- or "ignore_case" or "respect_case"
         -- the default case_mode is "smart_case"
-      }
-    }
-  }
+      },
+    },
+  })
   telescope.load_extension("fzf")
   -- local wk_ok, wk = pcall(require, "which-key")
   -- if not wk_ok then
