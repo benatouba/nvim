@@ -7,7 +7,7 @@ M.config = function()
   end
   pi.setup({
     package_manager = "pnpm",
-    colors = {
+    highlight = {
       up_to_date = "237",
       outdated = "173",
       invalid = "#ee4b2b",
