@@ -561,6 +561,12 @@ lazy.setup({
   },
   {
     "zbirenbaum/copilot.lua",
+    dependencies = {
+      "copilotlsp-nvim/copilot-lsp",
+      config = function()
+        vim.g.copilot_nes_debounce = 500
+      end,
+    },
     event = { "InsertEnter" },
     config = function()
       require("lsp.copilot").config()

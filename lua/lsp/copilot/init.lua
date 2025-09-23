@@ -5,7 +5,7 @@ if not copilot_ok then
   return
 end
 
-M.config = function ()
+M.config = function()
   copilot.setup({
     panel = {
       enabled = false,
@@ -35,6 +35,14 @@ M.config = function ()
         dismiss = "<M-e>",
       },
     },
+    nes = {
+      enabled = true,
+      keymap = {
+        accept_and_goto = "<leader>p",
+        accept = false,
+        dismiss = "<Esc>",
+      },
+    },
     filetypes = {
       vue = true,
       yaml = true,
@@ -47,7 +55,7 @@ M.config = function ()
       svn = false,
       cvs = false,
       TelescopePrompt = false,
-      sls = function ()
+      sls = function()
         if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), ".*user.*") then
           -- disable for user files
           return false
@@ -55,7 +63,7 @@ M.config = function ()
         return true
       end,
 
-      sh = function ()
+      sh = function()
         if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
           -- disable for .env files
           return false
