@@ -130,7 +130,7 @@ lazy.setup({
     keys = {
       { "<leader>sp", "<cmd>ProjectTelescope<cr>", desc = "Projects" },
     },
-    dependencies = "telescope.nvim",
+    dependencies = { "telescope.nvim", "ibhagwan/fzf-lua" },
     event = { "BufReadPost", "BufNewFile" },
     ---@module 'project'
     ---@type Project.Config.Options
@@ -324,6 +324,10 @@ lazy.setup({
       require("ben.oil").config()
     end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+  {
+    "benomahony/oil-git.nvim",
+    dependencies = { "stevearc/oil.nvim" },
   },
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -756,31 +760,20 @@ lazy.setup({
               { "<leader>Eg", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
               { "<leader>Ep", "<cmd>EcologPeek<cr>", desc = "Ecolog peek variable" },
               { "<leader>Es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
-              { "<leader>se", "<cmd>EcologSnacks<cr>", desc = "Env" },
+              { "<leader>se", "<cmd>EcologTelescope<cr>", desc = "Env" },
             },
-            event = { "InsertEnter", "CmdlineEnter" },
+            event = { "InsertEnter", "CmdlineEnter", "BufNewFile", "BufReadPre" },
             opts = {
               integrations = {
                 blink_cmp = true,
                 lspsaga = true,
-                snacks = {
-                  shelter = {
-                    mask_on_copy = false, -- Whether to mask values when copying
-                  },
-                  keys = {
-                    copy_value = "<C-y>",
-                    copy_name = "<C-u>",
-                    append_value = "<C-a>",
-                    append_name = "<CR>",
-                  },
-                },
               },
               shelter = {
                 configuration = {
                   partial_mode = {
                     show_start = 1,
                     show_end = 1,
-                    min_mask = 3,
+                    min_mask = 4,
                   },
                   mask_char = "*",
                 },
