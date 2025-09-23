@@ -68,7 +68,7 @@ M.opts = {
         },
       },
     },
-    documentation = { auto_show = true, auto_show_delay_ms = 200, window = { border = "single" } },
+    documentation = { auto_show = true, auto_show_delay_ms = 100, window = { border = "single" } },
   },
   signature = { enabled = false, window = { border = "single" } },
   appearance = {
