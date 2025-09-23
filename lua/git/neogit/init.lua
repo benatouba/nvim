@@ -26,11 +26,11 @@ M.config = function ()
     disable_commit_confirmation = true,
     graph_style = "unicode",
     git_services = {
-      ["github.com"] = "https://github.com/${owner}/${repository}/compare/${branch_name}?expand=1",
-      ["gitlab.com"] = "https://gitlab.com/${owner}/${repository}/merge_requests/new?merge_request[source_branch]=${branch_name}",
-      ["gitlab.klima.tu-berlin.de"] = "https://gitlab.klima.tu-berlin.de/${owner}/${repository}/merge_requests/new?merge_request[source_branch]=${branch_name}",
-      ["bitbucket.org"] = "https://bitbucket.org/${owner}/${repository}/pull-requests/new?source=${branch_name}&t=1",
-      ["azure.com"] = "https://dev.azure.com/${owner}/_git/${repository}/pullrequestcreate?sourceRef=${branch_name}&targetRef=${target}",
+      ["gitlab.klima.tu-berlin.de"] = {
+        pull_request = "https://gitlab.klima.tu-berlin.de/${owner}/${repository}/merge_requests/new?merge_request[source_branch]=${branch_name}",
+        commit = "https://gitlab.klima.tu-berlin.de/${owner}/${repository}/-/commit/${oid}",
+        tree = "https://gitlab.klima.tu-berlin.de/${owner}/${repository}/-/tree/${branch_name}?ref_type=heads",
+      },
     }
   }
   wk.add(
