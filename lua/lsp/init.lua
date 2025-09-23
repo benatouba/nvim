@@ -79,24 +79,23 @@ M.config = function()
         vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
       end
       if client.name == "basedpyright" then
+        client.server_capabilities.declarationProvider = true
+        client.server_capabilities.definitionProvider = true
         client.server_capabilities.documentFormattingProvider = false
         client.server_capabilities.documentRangeFormattingProvider = false
-        client.server_capabilities.definitionProvider = false
         client.server_capabilities.hoverProvider = true
-        client.server_capabilities.definitionProvider = false
+        client.server_capabilities.referencesProvider = true
         client.server_capabilities.renameProvider = false
-        client.server_capabilities.declarationProvider = false
-        client.server_capabilities.referencesProvider = false
       -- elseif client.name == "texlab" then
       --   -- Disable in favor of Conform
       --   client.server_capabilities.documentFormattingProvider = true
       --   client.server_capabilities.documentRangeFormattingProvider = true
       elseif client.name == "ty" then
-        client.server_capabilities.hoverProvider = false
-        client.server_capabilities.semanticTokensProvider = false
+        client.server_capabilities.definitionProvider = false
         client.server_capabilities.documentHighlightProvider = false
-        client.server_capabilities.completionProvider = false
+        client.server_capabilities.hoverProvider = false
         client.server_capabilities.renameProvider = true
+        client.server_capabilities.semanticTokensProvider = false
       elseif client.name == "mutt_ls" then
         vim.diagnostic.enable(not vim.diagnostic.is_enabled())
       elseif client.name == "ruff" then
