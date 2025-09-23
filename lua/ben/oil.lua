@@ -88,6 +88,7 @@ M.config = function()
       winbar = "%!v:lua.get_oil_winbar()",
     },
     watch_for_changes = true,
+    skip_confirm_for_simple_edits = true,
     git = {
       -- Return true to automatically git add/mv/rm files
       add = function(path)
@@ -99,6 +100,15 @@ M.config = function()
       rm = function(path)
         return true
       end,
+    },
+    lsp_file_methods = {
+      -- Enable or disable LSP file operations
+      enabled = true,
+      -- Time to wait for LSP file operations to complete before skipping
+      timeout_ms = 1000,
+      -- Set to true to autosave buffers that are updated with LSP willRenameFiles
+      -- Set to "unmodified" to only save unmodified buffers
+      autosave_changes = false,
     },
     view_options = {
       show_hidden = false,
@@ -133,10 +143,10 @@ M.config = function()
           end
         end,
       },
+      ["<esc>"] = { "actions.close", mode = "n" },
       ["<C-v>"] = { "actions.select", opts = { vertical = true }, desc = "Open the entry in a vertical split" },
       ["<C-x>"] = { "actions.select", opts = { horizontal = true }, desc = "Open the entry in a horizontal split" },
       ["<q>"] = { "actions.close", mode = "n", desc = "Close the entry" },
-      ["<esc>"] = { "<cmd>q<cr>", desc = "Close neovim" },
     },
   })
   require("which-key").add({
