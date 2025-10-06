@@ -128,9 +128,9 @@ lazy.setup({
   {
     "DrKJeff16/project.nvim",
     keys = {
-      { "<leader>sp", "<cmd>ProjectTelescope<cr>", desc = "Projects" },
+      { "<leader>sp", "<cmd>Telescope projects<cr>", desc = "Projects" },
     },
-    dependencies = { "telescope.nvim", "ibhagwan/fzf-lua" },
+    dependencies = { "telescope.nvim" },
     event = { "BufReadPost", "BufNewFile" },
     ---@module 'project'
     ---@type Project.Config.Options
@@ -344,7 +344,7 @@ lazy.setup({
       -- "nvim-web-devicons",
       {
         "AndreM222/copilot-lualine",
-        enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.copilot,
+        enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 20 and O.copilot,
       },
     },
     config = function()
@@ -565,12 +565,12 @@ lazy.setup({
   },
   {
     "zbirenbaum/copilot.lua",
-    dependencies = {
-      "copilotlsp-nvim/copilot-lsp",
-      config = function()
-        vim.g.copilot_nes_debounce = 500
-      end,
-    },
+    -- dependencies = {
+    --   "copilotlsp-nvim/copilot-lsp",
+    --   config = function()
+    --     vim.g.copilot_nes_debounce = 500
+    --   end,
+    -- },
     event = { "InsertEnter" },
     config = function()
       require("lsp.copilot").config()
@@ -732,7 +732,7 @@ lazy.setup({
           "Kaiser-Yang/blink-cmp-git",
           -- { dir = "/home/ben/projects/blink-cmp-ledger" },
           "hrsh7th/cmp-nvim-lua",
-          "hrsh7th/cmp-calc",
+          "joelazar/blink-calc",
           "hrsh7th/cmp-emoji",
           "R-nvim/cmp-r",
           "onsails/lspkind.nvim",

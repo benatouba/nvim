@@ -191,15 +191,10 @@ M.config = function()
     },
   })
 
-  -- local mason_debugpy = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
-  -- dap.adapters.python = {
-  --   type = "executable",
-  --   command = mason_debugpy,
-  --   args = { "-m", "debugpy.adapter" },
-  --   cwd = vim.fn.getcwd(),
-  -- }
   require("dap-python").setup("uv")
-  require("dap-python").test_runner = "pytest"
+  for _, config in ipairs(dap.configurations.python) do
+    config.cwd = vim.fn.getcwd()
+  end
 
   dap.adapters["pwa-node"] = {
     type = "server",

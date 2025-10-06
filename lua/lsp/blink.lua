@@ -7,6 +7,7 @@ M.opts = {
     preset = "default",
     -- ["<CR>"] = { "select_and_accept", "fallback" },
     ["<C-l>"] = { "select_and_accept", "fallback" },
+    -- ["<Tab>"] = {},
     ["<Up>"] = {},
     ["<Down>"] = {},
   },
@@ -150,6 +151,10 @@ M.opts = {
           enable_in_ex_commands = true,
         },
       },
+      calc = {
+        name = "Calc",
+        module = "blink-calc",
+      },
       ecolog = { name = "ecolog", module = "ecolog.integrations.cmp.blink_cmp" },
       dap = {
         name = "dap",
@@ -164,10 +169,6 @@ M.opts = {
       },
       nvim_lua = {
         name = "nvim_lua",
-        module = "blink.compat.source",
-      },
-      calc = {
-        name = "calc",
         module = "blink.compat.source",
       },
       emoji = {
