@@ -41,7 +41,7 @@ M.opts = {
       -- nvim-cmp style menu
       draw = {
         columns = {
-          { "label", gap = 1 },
+          { "label", gap = 0 },
           { "kind_icon", "source_name" },
         },
         components = {
