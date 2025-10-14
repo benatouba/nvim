@@ -1179,7 +1179,7 @@ lazy.setup({
         toml = { "trivy" },
         -- typescript = { "oxlint" },
         -- typescriptreact = { "oxlint" },
-        -- vue = { "eslint" },
+        vue = { "eslint" },
         zsh = { "zsh", "trivy" },
         [".*/.github/workflows/.*%.yml"] = { "yaml.ghaction" },
       }
