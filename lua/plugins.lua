@@ -135,8 +135,8 @@ lazy.setup({
     ---@module 'project'
     ---@type Project.Config.Options
     opts = {
-      detection_methods = { "lsp", "pattern" },
-      patterns = { "=src", ">projects", ">scripts", "pillar", ".git", "=nvim" },
+      detection_methods = { "pattern" },
+      patterns = { "src", ">projects", ">scripts", "pyproject.toml", "package.json", "pillar", ".git", "=nvim" },
       ignore_lsp = { "null-ls", "salt-lsp", "copilot" },
       exclude_dirs = { "*/node_modules/*" },
     },
