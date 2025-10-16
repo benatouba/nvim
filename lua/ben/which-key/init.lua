@@ -20,6 +20,7 @@ which_key.add({
   { "<leader>R", group = "+Refactor", icon = { icon = "󰈏 ", color = "grey" }, mode = { "x", "n" } },
   { "<leader>r", group = "+Run", icon = { icon = "󰑮  ", color = "yellow" }, remap = false, mode = "n" },
   { "<leader>s", group = "+Search", icon = { icon = " ", color = "azure" }, remap = false, mode = "n" },
+  { "<localleader>s", group = "+SearchReplace", icon = { icon = " ", color = "azure" }, remap = false, mode = "n" },
   { "<leader>S", group = "+Sessions", icon = " ", remap = false, mode = "n" },
   { "<leader>T", group = "+Terminal", icon = { icon = " ", color = "orange" } },
   { "<leader>t", group = "+Test", icon = { icon = "󰙨 ", color = "yellow" } },

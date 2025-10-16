@@ -1629,6 +1629,46 @@ lazy.setup({
     enabled = O.misc,
   },
   {
+    "MagicDuck/grug-far.nvim",
+    config = function()
+      require("grug-far").setup({
+        -- options, see Configuration section below
+        -- there are no required options atm
+      })
+    end,
+    keys = {
+      {
+        "gS",
+        "<cmd>GrugFar<cr>",
+        desc = "Find in Files (grug-far)",
+        remap = false,
+        mode = "n",
+      },
+      {
+        "<localleader>sw",
+        "<cmd>lua require('grug-far').open({ prefills = { search = vim.fn.expand('<cword>') } })<cr>",
+        desc = "Replace word under Cursor",
+        remap = false,
+        mode = "n",
+      },
+      {
+        "<localleader>sf",
+        "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.expand('%') } })<cr>",
+        desc = "Replace in Current File",
+        remap = false,
+        mode = "n",
+      },
+      {
+        "gS",
+        "<cmd>GrugFarWithin<cr>",
+        desc = "SearchReplace in Selection",
+        remap = false,
+        mode = "x",
+      },
+    },
+    enabled = O.misc,
+  },
+  {
     "yetone/avante.nvim",
     keys = {
       { "<leader>Aa", "<cmd>AvanteAsk<cr>", desc = "Avante Ask" },
