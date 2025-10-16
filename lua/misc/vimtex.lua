@@ -6,7 +6,7 @@ M.config = function()
   vim.g.vimtex_mappings_enabled = 1
   vim.g.vimtex_syntax_enabled = 1
   vim.g.matchup_override_vimtex = 1
-  vim.bo.textwidth = 0  -- automatically insert line break after n chars
+  vim.bo.textwidth = 0 -- automatically insert line break after n chars
   vim.g.vimtex_log_ignore = {
     "Underfull",
     "Overfull",
@@ -16,6 +16,9 @@ M.config = function()
 
   vim.g.vimtex_complete_bib = { simple = 1 }
   vim.g.vimtex_compiler_enabled = 1
+  vim.g.vimtex_compiler_latexmk_engines = {
+    _ = "-lualatex",
+  }
   -- vim.g.vimtex_grammar_vlty = {
   --   -- lt_directory = "/usr/share/java/languagetool/libs/",
   --   lt_command = "languagetool",
