@@ -1514,6 +1514,7 @@ lazy.setup({
     ---@type render.md.UserConfig
     opts = {
       file_types = { "markdown", "norg", "org", "rmd", "Avante" },
+      completions = { lsp = { enabled = true } },
     },
     enabled = O.markdown,
   },
