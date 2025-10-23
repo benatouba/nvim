@@ -1696,9 +1696,16 @@ lazy.setup({
         gemini = {
           model = "gemini-2.5-pro-exp-03-25",
         },
+        copilot = {
+          endpoint = "https://api.githubcopilot.com",
+          model = "gpt-5-mini", -- or "gpt-4o-2024-08-06", "o1", etc.
+          timeout = 30000,
+          temperature = 0,
+          extra_request_body = { max_tokens = 20480 },
+        },
         openai = {
           endpoint = "https://api.openai.com/v1",
-          model = "gpt-4o", -- your desired model (or use gpt-4o, etc.)
+          model = "gpt-5", -- your desired model (or use gpt-4o, etc.)
           extra_request_body = {
             timeout = 45000, -- Timeout in milliseconds, increase this for reasoning models
             temperature = 0.75,
