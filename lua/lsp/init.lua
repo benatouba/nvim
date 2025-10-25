@@ -256,6 +256,6 @@ M.config = function()
   if vim.fn.executable("watchman") == 1 then
     require("vim.lsp._watchfiles")._watchfunc = watchman
   end
-  vim.lsp.enable({ "codebook", "vtsls", "vue_ls" }) -- If using `ts_ls` replace `vtsls` to `ts_ls`
+  vim.lsp.enable({ "codebook", "vtsls", "vue_ls", "matlab_ls" })
 end
 return M
