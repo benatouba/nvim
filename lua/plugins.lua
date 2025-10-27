@@ -1510,6 +1510,10 @@ lazy.setup({
     enabled = O.markdown,
   },
   {
+    "brianhuster/live-preview.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
+  },
+  {
     "kiyoon/jupynium.nvim",
     build = "pip3 install --user .",
     -- config = function()
