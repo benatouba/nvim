@@ -252,42 +252,6 @@ M.config = function()
   if vim.fn.executable("watchman") == 1 then
     require("vim.lsp._watchfiles")._watchfunc = watchman
   end
-  -- lspconfig.ltex.dictionary_file = Dictionary_file
-  -- lspconfig.ltex.disabledrules_file = DisabledRules_file
-  -- lspconfig.ltex.falsepostivies_file = FalsePositives_file
-  --
-  --
-  -- -- https://github.com/neovim/nvim-lspconfig/issues/858 can't intercept,
-  -- -- override it then.
-  -- local orig_execute_command = vim.lsp.buf.execute_command
-  -- vim.lsp.buf.execute_command = function (command)
-  --   if command.command == '_ltex.addToDictionary' then
-  --     local arg = command.arguments[1].words -- can I really access like this?
-  --     for lang, words in pairs(arg) do
-  --       for _, word in ipairs(words) do
-  --         local filetype = "dictionary"
-  --         addTo(filetype, lang, findLtexFiles(filetype, lang), word)
-  --       end
-  --     end
-  --   elseif command.command == '_ltex.disableRules' then
-  --     local arg = command.arguments[1].ruleIds -- can I really access like this?
-  --     for lang, rules in pairs(arg) do
-  --       for _, rule in ipairs(rules) do
-  --         local filetype = "disable"
-  --         addTo(filetype, lang, findLtexFiles(filetype, lang), rule)
-  --       end
-  --     end
-  --   elseif command.command == '_ltex.hideFalsePositives' then
-  --     local arg = command.arguments[1].falsePositives -- can I really access like this?
-  --     for lang, rules in pairs(arg) do
-  --       for _, rule in ipairs(rules) do
-  --         local filetype = "falsePositive"
-  --         addTo(filetype, lang, findLtexFiles(filetype, lang), rule)
-  --       end
-  --     end
-  --   else
-  --     orig_execute_command(command)
-  --   end
-  -- end
+  vim.lsp.enable({ "codebook", "vtsls", "vue_ls" }) -- If using `ts_ls` replace `vtsls` to `ts_ls`
 end
 return M
