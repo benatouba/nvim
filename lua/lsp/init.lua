@@ -87,19 +87,23 @@ M.config = function()
         client.server_capabilities.referencesProvider = true
         client.server_capabilities.renameProvider = false
       -- elseif client.name == "texlab" then
-      --   -- Disable in favor of Conform
+      --   -- Disable in favour of Conform
       --   client.server_capabilities.documentFormattingProvider = true
       --   client.server_capabilities.documentRangeFormattingProvider = true
       elseif client.name == "ty" then
-        client.server_capabilities.definitionProvider = false
-        client.server_capabilities.documentHighlightProvider = false
-        client.server_capabilities.hoverProvider = false
+        client.server_capabilities.declarationProvider = true
+        client.server_capabilities.definitionProvider = true
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentHighlightProvider = true
+        client.server_capabilities.documentRangeFormattingProvider = false
+        client.server_capabilities.hoverProvider = true
+        client.server_capabilities.referencesProvider = true
         client.server_capabilities.renameProvider = true
         client.server_capabilities.semanticTokensProvider = false
       elseif client.name == "mutt_ls" then
         vim.diagnostic.enable(not vim.diagnostic.is_enabled())
       elseif client.name == "ruff" then
-        -- Disable hover in favor of Pyright
+        -- Disable hover in favour of pyright
         client.server_capabilities.hoverProvider = false
         client.server_capabilities.definitionProvider = false
       elseif client.name == "r_language_server" then
