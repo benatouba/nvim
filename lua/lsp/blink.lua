@@ -131,11 +131,12 @@ M.opts = {
       end,
       octo = { "lsp", "git", "emoji", "calc" },
       org = { "lsp", "orgmode", "path", "snippets", "ripgrep", "emoji", "calc" },
-      quarto = { inherit_defaults = true, "cmp_r" },
-      r = { inherit_defaults = true, "cmp_r" },
-      rmd = { inherit_defaults = true, "cmp_r" },
+      -- quarto = { inherit_defaults = true, "cmp_r" },
+      -- r = { inherit_defaults = true, "cmp_r" },
+      -- rmd = { inherit_defaults = true, "cmp_r" },
       sql = { "lsp", "dadbod", "snippets" },
-      terminal = { "path", "cmp_r" },
+      -- terminal = { "path", "cmp_r" },
+      terminal = { "path" },
       ["dap-repl"] = { "dap" },
       ["dapui_watches"] = { "dap" },
       ["dapui_hover"] = { "dap" },
@@ -160,13 +161,13 @@ M.opts = {
         name = "dap",
         module = "blink.compat.source",
       },
-      cmp_r = {
-        name = "cmp_r",
-        module = "blink.compat.source",
-        opts = {
-          filetypes = { "r", "rmd", "quarto", "terminal" },
-        },
-      },
+      -- cmp_r = {
+      --   name = "cmp_r",
+      --   module = "blink.compat.source",
+      --   opts = {
+      --     filetypes = { "r", "rmd", "quarto", "terminal" },
+      --   },
+      -- },
       nvim_lua = {
         name = "nvim_lua",
         module = "blink.compat.source",

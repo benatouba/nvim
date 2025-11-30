@@ -734,7 +734,6 @@ lazy.setup({
           "hrsh7th/cmp-nvim-lua",
           "joelazar/blink-calc",
           "hrsh7th/cmp-emoji",
-          "R-nvim/cmp-r",
           "onsails/lspkind.nvim",
           {
             "rcarriga/cmp-dap",
@@ -823,6 +822,8 @@ lazy.setup({
             require("r.browser").toggle_view()
           end,
         },
+        Rout_more_colors = true,
+        Rout_follow_colorscheme = true,
         hook = {
           on_filetype = function()
             -- This function will be called at the FileType event

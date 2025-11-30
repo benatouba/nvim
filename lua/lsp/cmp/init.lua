@@ -35,7 +35,6 @@ M.config = function ()
     -- { name = "copilot", priority = 8 },
     -- { name = "nvim_lsp_signature_help" },
     { name = "luasnip" },
-    { name = "cmp_r" },
     { name = "orgmode", priority = 100 },
     { name = "lazydev", group_index = 0 },
     { name = "neorg" },
@@ -442,7 +441,6 @@ M.config = function ()
 
   -- cmp.setup.filetype({ "r", "rmd", "rmarkdown", "quarto", "rnoweb", "rhelp" }, {
   --   sources = cmp.config.sources({
-  --     { name = "cmp_r" },
   --     { name = "path", priority = 4 },
   --     { name = "luasnip", max_item_count = 4, priority = 10 },
   --     { name = "treesitter", priority = 4, max_item_count = 7 },
@@ -561,7 +559,6 @@ M.config = function ()
 	  augroup END
     augroup Rsources
     au!
-    "autocmd FileType r,rmd,terminal lua require("cmp_r").setup({filetypes = {"r", "rmd", "quarto", "terminal"},})
     autocmd FileType r,rmd set conceallevel=0
     augroup END
 	]])
@@ -577,7 +574,6 @@ M.config = function ()
       return "<c-b>"
     end
   end, { silent = true, expr = true })
-  require("cmp_r").setup({ filetypes = { "r", "rmd", "quarto", "terminal" }, })
   vim.cmd(
     [[ autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} }) ]]
   )
