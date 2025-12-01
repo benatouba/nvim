@@ -917,24 +917,26 @@ lazy.setup({
     enabled = O.databases,
   },
   {
-    "NeogitOrg/neogit",
-    dependencies = {
-      "sindrets/diffview.nvim",
-      keys = {
-        { "<leader>gd", "<cmd>lua DiffviewToggle()<cr>", desc = "Diffview" },
-        { "<leader>gS", "<cmd>DiffviewFileHistory -g --range=stash<cr>", desc = "Check Stash" },
-        { "<leader>gm", "<cmd>lua DiffviewToggle('DiffviewOpen master..HEAD')<cr>", desc = "Diff master" },
-        { "<leader>gf", "<cmd>lua DiffviewToggle('DiffviewFileHistory %')<cr>", desc = "Open diffs for current File" },
+    "sindrets/diffview.nvim",
+    keys = {
+      { "<leader>gd", "<cmd>lua DiffviewToggle()<cr>", desc = "Diffview" },
+      { "<leader>gS", "<cmd>DiffviewFileHistory -g --range=stash<cr>", desc = "Check Stash" },
+      { "<leader>gm", "<cmd>lua DiffviewToggle('DiffviewOpen master..HEAD')<cr>", desc = "Diff master" },
+      {
+        "<leader>gf",
+        "<cmd>lua DiffviewToggle('DiffviewFileHistory %')<cr>",
+        desc = "Open diffs for current File",
       },
-      cmd = "DiffviewOpen",
-      cond = function()
-        return vim.fn.isdirectory(vim.fn.getcwd() .. "/.git") == 1
-      end,
-      -- event = "BufReadPost",
-      config = function()
-        require("git.diffview").config()
-      end,
     },
+    cmd = "DiffviewOpen",
+    -- opts = {},
+    config = function()
+      require("git.diffview").config()
+    end,
+  },
+  {
+    "NeogitOrg/neogit",
+    dependencies = { "diffview.nvim" },
     keys = {
       { "<leader>g", group = "+Git", nowait = false, remap = false },
       { "<leader>gb", "<cmd>Neogit branch<cr>", desc = "Branch (Menu)", nowait = false, remap = false },
