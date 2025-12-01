@@ -1169,7 +1169,7 @@ lazy.setup({
     config = function()
       require("overseer.config").config()
     end,
-    enabled = O.misc,
+    enabled = O.misc and false,
   },
   {
     "mfussenegger/nvim-lint",
