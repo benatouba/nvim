@@ -7,6 +7,7 @@ end
 local M = {}
 
 M.config = function()
+  local overseer_ok, overseer = pcall(require, "overseer")
   neotest.setup({
     log_level = vim.log.levels.WARN,
     output = {
@@ -64,12 +65,12 @@ M.config = function()
         end,
       }),
     },
-    -- consumers = {
-    --   overseer = require("neotest.consumers.overseer"),
-    -- },
-    -- overseer = {
-    --   enabled = true,
-    -- },
+    consumers = {
+      overseer = require("neotest.consumers.overseer"),
+    },
+    overseer = {
+      enabled = overseer_ok,
+    },
   })
 end
 

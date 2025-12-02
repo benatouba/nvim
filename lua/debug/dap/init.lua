@@ -207,6 +207,11 @@ M.config = function()
     },
   }
 
+  local overseer_ok, overseer = pcall(require, "overseer")
+  if overseer_ok then
+    overseer.enable_dap()
+  end
+
   -- local function get_python_path()
   --   -- debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself.
   --   -- The code below looks for a `venv` or `.venv` folder in the current directly and uses the python within.

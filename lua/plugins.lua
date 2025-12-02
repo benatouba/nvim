@@ -1168,12 +1168,13 @@ lazy.setup({
   { "kevinhwang91/nvim-bqf", event = "InsertEnter", enabled = O.misc },
   {
     "stevearc/overseer.nvim",
-    lazy = true,
-    event = "InsertEnter",
-    config = function()
-      require("overseer.config").config()
-    end,
-    enabled = O.misc and false,
+    ---@module 'overseer'
+    ---@type overseer.SetupOpts
+    opts = {
+      -- disable dap initially and enable only after dap is loaded
+      dap = false,
+    },
+    enabled = O.misc,
   },
   {
     "mfussenegger/nvim-lint",
