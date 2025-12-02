@@ -1102,17 +1102,21 @@ lazy.setup({
   },
   {
     "folke/lazydev.nvim",
+    ---@alias lazydev.Library {path:string, words:string[], mods:string[]}
+    ---@alias lazydev.Library.spec string|{path:string, words?:string[], mods?:string[]}
+    ---@class lazydev.Config
     opts = {
-      -- library = {
-      --   { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-      --   { path = "snacks.nvim",        words = { "Snacks" } },
-      --   { path = "lazy.nvim",          words = { "LazyVim" } },
-      -- },
+      library = {
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        { path = vim.fn.stdpath("config") .. "/lua", words = { "^ben%." } },
+      },
+      cmp = {
+        enable = false,
+      },
     },
     ft = "lua",
     enabled = function(root_dir)
-      local direct_enabled = vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
-      return O.lsp and direct_enabled
+      return vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
     end,
   },
 

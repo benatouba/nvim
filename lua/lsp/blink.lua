@@ -206,7 +206,7 @@ M.opts = {
       lazydev = {
         name = "LazyDev",
         module = "lazydev.integrations.blink",
-        score_offset = 1000,
+        score_offset = 100,
       },
       git = {
         module = "blink-cmp-git",
