@@ -1528,13 +1528,19 @@ lazy.setup({
   },
   { "nvim-neotest/nvim-nio" },
   {
-    "rest-nvim/rest.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "luarocks.nvim", "telescope.nvim" },
-    ft = "http",
-    config = function()
-      require("ben.rest").config()
-    end,
-    enabled = O.webdev and O.misc and false,
+    "mistweaverco/kulala.nvim",
+    keys = {
+      { "<leader>Rs", desc = "Send request" },
+      { "<leader>Ra", desc = "Send all requests" },
+      { "<leader>Rp", desc = "Open scratchpad" },
+    },
+    ft = {"http", "rest"},
+    opts = {
+      global_keymaps = false,
+      global_keymaps_prefix = "<leader>R",
+      kulala_keymaps_prefix = "",
+    },
+    enabled = O.webdev and O.misc,
   },
   {
     "neo451/feed.nvim",
