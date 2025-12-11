@@ -749,20 +749,6 @@ lazy.setup({
             ft = { "dap-repl", "dapui_watches", "dapui_hover" },
           },
           {
-            "michhernand/RLDX.nvim",
-            enabled = false,
-            -- lazy = true,
-            -- event = {
-            --   "BufReadPost *.org", "BufNewFile *.org",
-            --   "BufReadPost *.md", "BufNewFile *.md",
-            -- },
-            opts = {
-              filename = os.getenv("HOME") .. "/documents/rolodex_db.json",
-              schema_ver = "latest",
-              encryption = "plaintext",
-            },
-          },
-          {
             "philosofonusus/ecolog.nvim",
             keys = {
               { "<leader>Eg", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
@@ -1055,25 +1041,6 @@ lazy.setup({
         end,
       },
       {
-        "rcarriga/cmp-dap",
-        ft = { "dap-repl", "dapui_watches", "dapui_hover" },
-        config = function()
-          local cmp = require("cmp")
-          -- local config = cmp.get_config()
-          -- config.enabled = function()
-          --   return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
-          --       or require("cmp_dap").is_dap_buffer()
-          -- end
-          -- cmp.setup(config)
-          cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-            sources = {
-              { name = "dap" },
-            },
-          })
-        end,
-        enabled = false,
-      },
-      {
         "rcarriga/nvim-dap-ui",
         event = "InsertEnter",
         dependencies = {
@@ -1234,18 +1201,6 @@ lazy.setup({
       })
     end,
     enabled = O.language_parsing,
-  },
-  {
-    "barreiroleo/ltex_extra.nvim",
-    branch = "dev",
-    ft = { "markdown", "tex", "norg", "org" },
-    event = "BufReadPost",
-    dependencies = { "nvim-lspconfig" },
-    opts = {
-      load_langs = { "en-US" },
-      path = vim.fn.stdpath("config") .. "/spell/",
-    },
-    enabled = false,
   },
   {
     "stevearc/conform.nvim",
@@ -1571,15 +1526,6 @@ lazy.setup({
     end,
     enabled = O.latex,
   },
-  {
-    "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-lspconfig" },
-    config = function()
-      require("misc.typescript_tools").config()
-    end,
-    ft = { "vue", "typescript", "typescriptreact", "javascript", "javascriptreact" },
-    enabled = false,
-  },
   { "nvim-neotest/nvim-nio" },
   {
     "rest-nvim/rest.nvim",
@@ -1607,7 +1553,6 @@ lazy.setup({
         --   instance = "https://rsshub.app"
         -- },
         feeds = {
-          -- { "https://neovim.io/news.xml",                                                    name = "Neovim News",                                                  tags = { "tech", "news" } },
           {
             "rsshub://sciencedirect/journal/advances-in-climate-change-research",
             name = "ScienceDirect Advances in Climate Change Research",
