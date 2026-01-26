@@ -11,7 +11,7 @@ local vue_plugin = {
   configNamespace = "typescript",
 }
 
-local vtsls_config = {
+local M = {
   settings = {
     vtsls = {
       tsserver = {
@@ -23,4 +23,5 @@ local vtsls_config = {
   },
   filetypes = tsserver_filetypes,
 }
-vim.lsp.config("vtsls", vtsls_config)
+
+return M

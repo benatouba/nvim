@@ -1,4 +1,4 @@
-vim.lsp.config("yamlls", {
+local M = {
   settings = {
     redhat = { telemetry = { enabled = false } },
     yaml = {
@@ -12,4 +12,6 @@ vim.lsp.config("yamlls", {
       -- schemas = require("schemastore").yaml.schemas(),
     },
   },
-})
+}
+
+return M

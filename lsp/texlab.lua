@@ -1,4 +1,4 @@
-vim.lsp.config("texlab", {
+local M = {
   settings = {
     texlab = {
       build = {
@@ -25,4 +25,6 @@ vim.lsp.config("texlab", {
       },
     },
   },
-})
+}
+
+return M

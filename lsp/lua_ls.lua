@@ -1,4 +1,4 @@
-vim.lsp.config("lua_ls", {
+local M = {
   cmd = { "lua-language-server" },
   on_init = function(client)
     if client.workspace_folders then
@@ -36,4 +36,6 @@ vim.lsp.config("lua_ls", {
       },
     },
   },
-})
+}
+
+return M

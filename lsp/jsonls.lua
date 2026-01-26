@@ -1,8 +1,7 @@
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-vim.lsp.config("jsonls", {
-  capabilities = capabilities,
+local M = {
   root_markers = { "package.json", "init.lua", "pyproject.toml", ".git" },
   workspace_required = true,
   settings = {
@@ -11,4 +10,5 @@ vim.lsp.config("jsonls", {
       validate = { enable = true },
     },
   },
-})
+}
+return M
