@@ -1116,35 +1116,20 @@ lazy.setup({
     config = function()
       require("lint").linters_by_ft = {
         NeogitCommitMessage = { "commitlint" },
-        c = { "trivy", "compiler" },
-        cxx = { "trivy" },
-        docker = { "trivy" },
-        elixir = { "trivy" },
+        c = { "compiler" },
         gitcommit = { "commitlint" },
-        go = { "trivy" },
-        helm = { "trivy" },
         htmldjango = { "djlint" },
-        java = { "trivy" },
         -- javascript = { "oxlint" },
         -- javascriptreact = { "oxlint" },
         jinja = { "djlint" },
-        lua = { "trivy" },
         markdown = { "alex" },
-        php = { "trivy" },
-        python = { "trivy" },
-        ruby = { "trivy" },
-        rust = { "trivy" },
-        terraform = { "trivy" },
         tex = { "proselint" },
-        toml = { "trivy" },
         -- typescript = { "oxlint" },
         -- typescriptreact = { "oxlint" },
         vue = { "eslint" },
-        zsh = { "zsh", "trivy" },
+        zsh = { "zsh", },
         [".*/.github/workflows/.*%.yml"] = { "yaml.ghaction" },
       }
-      local trivy = require("lint").linters.trivy
-      trivy.args = { "--scanners", "vuln,misconfig,secret", "--format", "json", "fs" }
       local ns = require("lint").get_namespace("commitlint")
       vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = true }, ns)
       vim.api.nvim_create_augroup("lint", { clear = true })
