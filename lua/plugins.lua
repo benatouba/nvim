@@ -1309,7 +1309,7 @@ lazy.setup({
         },
       })
     end,
-    
+
     event = "VeryLazy", -- Ensure it loads when Tree-sitter is ready
     enabled = O.language_parsing,
   },
@@ -1508,80 +1508,13 @@ lazy.setup({
       { "<leader>Ra", desc = "Send all requests" },
       { "<leader>Rp", desc = "Open scratchpad" },
     },
-    ft = {"http", "rest"},
+    ft = { "http", "rest" },
     opts = {
       global_keymaps = false,
       global_keymaps_prefix = "<leader>R",
       kulala_keymaps_prefix = "",
     },
     enabled = O.webdev and O.misc,
-  },
-  {
-    "neo451/feed.nvim",
-    keys = {
-      {
-        "<leader>F",
-        "<cmd>Feed<cr>",
-        desc = "Feed",
-        remap = false,
-        mode = "n",
-      },
-    },
-    config = function()
-      require("feed").setup({
-        -- rsshub = {
-        --   instance = "https://rsshub.app"
-        -- },
-        feeds = {
-          {
-            "rsshub://sciencedirect/journal/advances-in-climate-change-research",
-            name = "ScienceDirect Advances in Climate Change Research",
-            tags = { "science" },
-          },
-          {
-            "rsshub://sciencedirect/journal/journal-of-the-european-meteorological-society",
-            name = "ScienceDirect Journal of the European Meteorological Society",
-            tags = { "science" },
-          },
-          {
-            "rsshub://sciencedirect/journal/results-in-earth-sciences",
-            name = "ScienceDirect Results in Earth Sciences",
-            tags = { "science" },
-          },
-          {
-            "rsshub://sciencedirect/journal/weather-and-climate-extremes",
-            name = "ScienceDirect Weather and Climate Extremes",
-            tags = { "science" },
-          },
-          {
-            "rsshub://nature/research/nclimate",
-            name = "Nature Climate Change",
-            tags = { "science" },
-          },
-          {
-            "rsshub://nature/research/ngeo",
-            name = "Nature Geoscience",
-            tags = { "science" },
-          },
-          {
-            "rsshub://nature/research/natrevearthenviron",
-            name = "Nature Review Earth and Environment",
-            tags = { "science" },
-          },
-          {
-            "rsshub://nature/research/natwater",
-            name = "Nature Water",
-            tags = { "science" },
-          },
-          {
-            "rsshub://nature/research/npjclimatsci",
-            name = "npj Climate Science",
-            tags = { "science" },
-          },
-        },
-      })
-    end,
-    enabled = O.misc,
   },
   {
     "MagicDuck/grug-far.nvim",
