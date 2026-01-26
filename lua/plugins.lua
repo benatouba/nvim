@@ -146,7 +146,7 @@ lazy.setup({
         "pillar",
         "=nvim",
       },
-      ignore_lsp = { "null-ls", "salt-lsp", "copilot" },
+      lsp = { ignore = { "null-ls", "salt-lsp", "copilot" } },
       exclude_dirs = { "*/node_modules/*" },
     },
     cond = vim.fn.has("nvim-0.11") == 1,
