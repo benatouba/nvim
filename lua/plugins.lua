@@ -750,43 +750,19 @@ lazy.setup({
           },
           {
             "philosofonusus/ecolog.nvim",
+            branch = "beta",
             keys = {
               { "<leader>Eg", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
               { "<leader>Ep", "<cmd>EcologPeek<cr>", desc = "Ecolog peek variable" },
               { "<leader>Es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
               { "<leader>se", "<cmd>EcologTelescope<cr>", desc = "Env" },
+              { "<leader>ev", "<cmd>Ecolog list<cr>", desc = "List env variables" },
+              { "<leader>ef", "<cmd>Ecolog files select<cr>", desc = "Select env file" },
             },
             event = { "InsertEnter", "CmdlineEnter", "BufNewFile", "BufReadPre" },
             opts = {
-              integrations = {
-                blink_cmp = true,
-                lspsaga = true,
-              },
-              shelter = {
-                configuration = {
-                  partial_mode = {
-                    show_start = 1,
-                    show_end = 1,
-                    min_mask = 4,
-                  },
-                  mask_char = "*",
-                },
-                modules = {
-                  cmp = true,
-                  peek = false,
-                  files = true,
-                  telescope = false,
-                  telescope_previewer = false,
-                  fzf = false,
-                  fzf_previewer = false,
-                  snacks_previewer = false,
-                  snacks = false,
-                },
-              },
-              types = true,
-              path = vim.fn.getcwd(),
-              preferred_environment = "development",
-              provider_patterns = true,
+              picker = { backend = "telescope" },
+              lsp = { cmd = "/home/ben/.local/src/ecolog-lsp/target/release/ecolog-lsp" },
             },
           },
         },

@@ -6,12 +6,6 @@ M.config = function()
     vim.notify("Telescope could not be initiated")
     return
   end
-  local el_ok, el = pcall(require, "ecolog")
-  if not el_ok then
-    vim.notify("Ecolog not okay in telescope")
-  else
-    telescope.load_extension("ecolog")
-  end
   -- vim.api.nvim_create_augroup('telescope_previewer', {})
   -- vim.api.nvim_create_autocmd('TelescopePreviewerLoaded', {
   -- 	group = 'telescope_previewer',
@@ -100,18 +94,19 @@ M.config = function()
       },
     },
     extensions = {
-      ecolog = {
-        shelter = {
-          mask_on_copy = false,
-        },
-        mappings = {
-          copy_value = "<C-y>", -- Key to copy value to clipboard
-          copy_name = "<C-n>", -- Key to copy name to clipboard
-          append_value = "<C-a>", -- Key to append value to buffer
-          append_name = "<CR>", -- Key to append name to buffer (defaults to <CR>)
-          edit_var = "<C-e>", -- Key to edit environment variable
-        },
-      },
+      -- ecolog = {
+      --   shelter = {
+      --     -- Whether to show masked values when copying to clipboard
+      --     mask_on_copy = true,
+      --   },
+      --   mappings = {
+      --     copy_value = "<C-y>", -- Key to copy value to clipboard
+      --     copy_name = "<C-n>", -- Key to copy name to clipboard
+      --     append_value = "<C-a>", -- Key to append value to buffer
+      --     append_name = "<CR>", -- Key to append name to buffer (defaults to <CR>)
+      --     edit_var = "<C-e>", -- Key to edit environment variable
+      --   },
+      -- },
       projects = {
         detection_methods = { "lsp", "pattern", ".git", "Makefile", "*.sln", "build/env.sh" },
       },

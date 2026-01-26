@@ -100,7 +100,6 @@ M.opts = {
         return { "buffer" }
       else
         return {
-          "ecolog",
           "lsp",
           "path",
           "snippets",
@@ -124,7 +123,7 @@ M.opts = {
       -- python = { "ledger", inherit_defaults = true },
       markdown = function()
         if string.find(vim.fn.getcwd(), "vivere") then
-          return { "ecolog", "lsp", "path", "snippets", "emoji", "calc" }
+          return { "lsp", "path", "snippets", "emoji", "calc" }
         else
           return { inherit_defaults = true }
         end
@@ -156,7 +155,6 @@ M.opts = {
         name = "Calc",
         module = "blink-calc",
       },
-      ecolog = { name = "ecolog", module = "ecolog.integrations.cmp.blink_cmp" },
       dap = {
         name = "dap",
         module = "blink.compat.source",
