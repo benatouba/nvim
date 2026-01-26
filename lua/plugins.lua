@@ -1285,17 +1285,14 @@ lazy.setup({
   {
     "hiphish/rainbow-delimiters.nvim",
     config = function()
-      -- This module contains a number of default definitions
-      local rainbow_delimiters = require("rainbow-delimiters")
-      ---@type rainbow_delimiters.config
-      vim.g.rainbow_delimiters = {
+      require("rainbow-delimiters.setup").setup({
         strategy = {
           [""] = "rainbow-delimiters.strategy.global",
           vim = "rainbow-delimiters.strategy.local",
         },
         query = {
           [""] = "rainbow-delimiters",
-          lua = "rainbow-blocks",
+          lua = "rainbow-blocks", -- query names for Neovim 0.12.dev
         },
         priority = {
           [""] = 110,
@@ -1310,9 +1307,10 @@ lazy.setup({
           "RainbowDelimiterViolet",
           "RainbowDelimiterCyan",
         },
-      }
+      })
     end,
-    event = "BufReadPost",
+    
+    event = "VeryLazy", -- Ensure it loads when Tree-sitter is ready
     enabled = O.language_parsing,
   },
   {
