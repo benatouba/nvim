@@ -115,7 +115,6 @@ lazy.setup({
       { "<leader>sk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
       { "<leader>sM", "<cmd>Telescope man_pages<cr>", desc = "Man Pages" },
       { "<leader>sm", "<cmd>Telescope marks<cr>", desc = "Marks" },
-      { "<leader>sN", "<cmd>Noice telescope<cr>", desc = "Noice Notifications" },
       { "<leader>so", "<cmd>Telescope oldfiles<cr>", desc = "Open Recent File" },
       { "<leader>sq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix List" },
       { "<leader>sR", "<cmd>Telescope registers<cr>", desc = "Registers" },
@@ -253,13 +252,6 @@ lazy.setup({
       })
     end,
     keys = {
-      {
-        "<leader>sn",
-        function()
-          Snacks.picker.notifications()
-        end,
-        desc = "Notifications",
-      },
       {
         "<leader>z",
         function()
@@ -1490,6 +1482,18 @@ lazy.setup({
     config = function()
       require("ui.noice").config()
     end,
+    keys = {
+      {
+        "<leader>sn",
+        "<cmd>Noice telescope<cr>",
+        desc = "Notifications",
+      },
+      {
+        "<leader>sN",
+        "<cmd>Noice<cr>",
+        desc = "Messages",
+      },
+    },
     enabled = true,
   },
   {

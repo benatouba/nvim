@@ -8,7 +8,8 @@ M.config = function()
   end
   noice.setup({
     notify = {
-      enabled = false,
+      enabled = true,
+      view = "notify",
     },
     lsp = {
       override = {
