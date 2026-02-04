@@ -1660,7 +1660,10 @@ lazy.setup({
     "chomosuke/typst-preview.nvim",
     ft = { "typst" },
     version = "1.*",
-    opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+    opts = {},
+    keys = {
+      { "<localleader>tt", "<cmd>TypstPreviewToggle<cr>", desc = "Typst Preview Toggle" },
+    },
   },
   {
     "chrishrb/gx.nvim",
