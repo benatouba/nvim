@@ -158,6 +158,9 @@ M.opts = {
       dap = {
         name = "dap",
         module = "blink.compat.source",
+        enabled = function()
+          return require("dap").session() ~= nil
+        end,
       },
       -- cmp_r = {
       --   name = "cmp_r",
