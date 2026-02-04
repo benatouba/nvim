@@ -10,6 +10,7 @@ M.config = function()
   ---@module 'obsidian'
   ---@type obsidian.config.ClientOpts
   obsidian.setup({
+    legacy_commands = false,
     workspaces = {
       {
         name = "vivere",
@@ -54,17 +55,19 @@ M.config = function()
     end,
     wiki_link_func = "prepend_note_id",
     preferred_link_style = "wiki",
-    note_frontmatter_func = function(note)
-      local out = { title = note.title, id = note.id, aliases = note.aliases, tags = note.tags }
-      out.created_at = os.date("%Y-%m-%dT%H:%M")
-      out.modified_at = os.date("%Y-%m-%dT%H:%M")
-      if note.metadata ~= nil then
-        for k, v in pairs(note.metadata) do
-          out[k] = v
+    frontmatter = {
+      func = function(note)
+        local out = { title = note.title, id = note.id, aliases = note.aliases, tags = note.tags }
+        out.created_at = os.date("%Y-%m-%dT%H:%M")
+        out.modified_at = os.date("%Y-%m-%dT%H:%M")
+        if note.metadata ~= nil then
+          for k, v in pairs(note.metadata) do
+            out[k] = v
+          end
         end
-      end
-      return out
-    end,
+        return out
+      end,
+    },
   })
 end
 return M
