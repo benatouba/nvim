@@ -36,7 +36,7 @@ vim.opt.number = true -- set numbered lines
 vim.opt.relativenumber = true -- set relative number
 vim.opt.cursorline = true -- Enable highlighting of the current line
 vim.opt.incsearch = true
-vim.opt.spelllang = "en,de"
+vim.opt.spelllang = "en"
 vim.opt.showcmd = true
 
 vim.opt.sidescrolloff = 7
