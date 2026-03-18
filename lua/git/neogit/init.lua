@@ -23,6 +23,9 @@ M.config = function ()
       diffview = dvOk,
       telescope = tsOk,
     },
+    commit_editor = {
+      kind = "tab",
+    },
     disable_commit_confirmation = true,
     graph_style = "unicode",
     git_services = {

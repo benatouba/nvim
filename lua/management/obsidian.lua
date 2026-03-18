@@ -8,9 +8,11 @@ local M = {}
 
 M.config = function()
   ---@module 'obsidian'
-  ---@type obsidian.config.ClientOpts
+  ---@type obsidian.config.Internal
   obsidian.setup({
     legacy_commands = false,
+    notes_subdir = "notes",
+    new_notes_location = "current_dir",
     workspaces = {
       {
         name = "vivere",
@@ -21,28 +23,8 @@ M.config = function()
         path = "~/projects/fg_doku",
       },
     },
-    notes_subdir = "notes",
-    new_notes_location = "notes",
-    daily_notes = {
-      folder = "calendar/daily",
-      template = "~/documents/vivere/templates/daily.md",
-      workdays_only = true,
-    },
-    completion = {
-      blink = true,
-      nvim_cmp = false,
-      match_case = false,
-      min_chars = 2,
-    },
-    templates = {
-      folder = "templates",
-      date_format = "%Y-%m-%d",
-      time_format = "%H:%M",
-    },
-    picker = {
-      name = "telescope.nvim",
-    },
     note_id_func = function(title)
+      local date = os.date "%Y-%m-%d"
       local suffix = ""
       if title ~= nil then
         suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
@@ -51,11 +33,13 @@ M.config = function()
           suffix = suffix .. string.char(math.random(65, 90))
         end
       end
-      return suffix
+      return date .. "-" .. suffix
     end,
-    wiki_link_func = "prepend_note_id",
+    wiki_link_func = require("obsidian.builtin").wiki_link_path_only,
     preferred_link_style = "wiki",
+    open_notes_in = "current",
     frontmatter = {
+      enabled = true,
       func = function(note)
         local out = { title = note.title, id = note.id, aliases = note.aliases, tags = note.tags }
         out.created_at = os.date("%Y-%m-%dT%H:%M")
@@ -68,6 +52,35 @@ M.config = function()
         return out
       end,
     },
+    templates = {
+      folder = "templates",
+      date_format = "%Y-%m-%d",
+      time_format = "%H:%M",
+    },
+    completion = {
+      match_case = false,
+      min_chars = 2,
+    },
+    picker = {
+      name = "telescope.nvim",
+      note_mappings = {
+        new = "<C-x>",
+        insert_link = "<C-l>",
+      },
+      tag_mappings = {
+        tag_note = "<C-x>",
+        insert_tag = "<C-l>",
+      },
+    },
+    daily_notes = {
+      enabled = true,
+      folder = "calendar/daily",
+      template = "~/documents/vivere/templates/daily.md",
+      workdays_only = true,
+    },
+    attachments = {
+      folder = "assets",
+    }
   })
 end
 return M

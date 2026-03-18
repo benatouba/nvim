@@ -11,30 +11,19 @@ local modules = lualine_require.lazy_require({
 local remote_ok, remote = pcall(require, "remote-nvim")
 
 local get_lsp_client = function ()
-  local msg = "LSP Inactive"
-  local buf_ft = vim.api.nvim_buf_get_option(0, "filetype")
-  local clients = vim.lsp.get_clients()
-  if next(clients) == nil then
-    return msg
-  end
-  local lsps = ""
+  local clients = vim.lsp.get_clients({ bufnr = 0 })
+  local names = {}
+  local seen = {}
   for _, client in ipairs(clients) do
-    local filetypes = client.config.filetypes
-    if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
-      if lsps == "" then
-        lsps = client.name
-      else
-        if not string.find(lsps, client.name) then
-          lsps = lsps .. "|" .. client.name
-        end
-      end
+    if client.name ~= "copilot" and not seen[client.name] then
+      seen[client.name] = true
+      names[#names + 1] = client.name
     end
   end
-  if lsps == "" then
-    return msg
-  else
-    return " " .. lsps
+  if #names == 0 then
+    return "LSP Inactive"
   end
+  return " " .. table.concat(names, "|")
 end
 
 local rstt =

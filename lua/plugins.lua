@@ -64,6 +64,7 @@ lazy.setup({
       { "<leader>ot", "<cmd>Obsidian today<CR>", desc = "Today note", remap = false },
       { "<leader>oT", "<cmd>Obsidian tomorrow<CR>", desc = "Tomorrow note", remap = false },
       { "<leader>os", "<cmd>Obsidian search<CR>", desc = "Search Workspace", remap = false },
+      { "<leader>or", "<cmd>Obsidian rename<CR>", desc = "Rename", remap = false },
       { "<leader>ov", "<cmd>Obsidian workspace vivere<CR>", desc = "Vivere (Workspace)", remap = false },
       { "<leader>ow", "<cmd>Obsidian workspace work<CR>", desc = "Work (Workspace)", remap = false },
       { "<leader>oy", "<cmd>Obsidian yesterday<CR>", desc = "Yesterday note", remap = false },
@@ -96,10 +97,10 @@ lazy.setup({
     dependencies = {
       {
         "nvim-telescope/telescope-fzf-native.nvim",
-        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
         dependencies = "telescope.nvim",
         config = function()
-          require("telescope").load_extension("fzf")
+          pcall(require("telescope").load_extension, "fzf")
         end,
       },
     },
@@ -176,7 +177,7 @@ lazy.setup({
         },
       },
       dashboard = {
-        enabled = true,
+        enabled = vim.env.NVIM == nil,
         preset = {
           keys = {
             { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
@@ -223,9 +224,9 @@ lazy.setup({
       indent = { enabled = false },
       input = { enabled = false },
       notifier = {
-        enabled = true,
+        enabled = vim.env.NVIM == nil,
       },
-      notify = { enabled = true },
+      notify = { enabled = vim.env.NVIM == nil },
       quickfile = { enabled = false },
       scroll = { enabled = false },
       statuscolumn = { enabled = false },
@@ -239,15 +240,17 @@ lazy.setup({
       vim.api.nvim_create_autocmd("LspProgress", {
         ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
         callback = function(ev)
-          local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
-          vim.notify(vim.lsp.status(), "info", {
-            id = "lsp_progress",
-            title = "LSP Progress",
-            opts = function(notif)
-              notif.icon = ev.data.params.value.kind == "end" and " "
-                or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-            end,
-          })
+          vim.schedule(function()
+            local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+            vim.notify(vim.lsp.status(), "info", {
+              id = "lsp_progress",
+              title = "LSP Progress",
+              opts = function(notif)
+                notif.icon = ev.data.params.value.kind == "end" and " "
+                  or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+              end,
+              })
+          end)
         end,
       })
     end,
@@ -611,7 +614,7 @@ lazy.setup({
       handlers = {},
       automatic_installation = false,
     },
-    enabled = O.dap,
+    enabled = O.dap and not O.is_nixos,
   },
   {
     "nvimdev/lspsaga.nvim",
@@ -742,7 +745,6 @@ lazy.setup({
           },
           {
             "philosofonusus/ecolog.nvim",
-            branch = "beta",
             keys = {
               { "<leader>Eg", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
               { "<leader>Ep", "<cmd>EcologPeek<cr>", desc = "Ecolog peek variable" },
@@ -754,7 +756,8 @@ lazy.setup({
             event = { "InsertEnter", "CmdlineEnter", "BufNewFile", "BufReadPre" },
             opts = {
               picker = { backend = "telescope" },
-              lsp = { cmd = "/home/ben/.local/src/ecolog-lsp/target/release/ecolog-lsp" },
+              -- lsp = { cmd = "/home/ben/.local/src/ecolog-lsp/target/release/ecolog-lsp" },
+              integrations = { lsp = false },
             },
           },
         },
@@ -1119,15 +1122,10 @@ lazy.setup({
         c = { "compiler" },
         gitcommit = { "commitlint" },
         htmldjango = { "djlint" },
-        -- javascript = { "oxlint" },
-        -- javascriptreact = { "oxlint" },
         jinja = { "djlint" },
         markdown = { "alex" },
         tex = { "proselint" },
-        -- typescript = { "oxlint" },
-        -- typescriptreact = { "oxlint" },
-        vue = { "eslint" },
-        zsh = { "zsh", },
+        zsh = { "zsh" },
         [".*/.github/workflows/.*%.yml"] = { "yaml.ghaction" },
       }
       local ns = require("lint").get_namespace("commitlint")
@@ -1159,12 +1157,7 @@ lazy.setup({
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
-        css = { "prettierd", "prettier", stop_after_first = true },
         gitcommit = { "commitmsgfmt" },
-        html = { "prettierd", "prettier", stop_after_first = true },
-        javascript = { "prettierd", "prettier", stop_after_first = true },
-        javascriptreact = { "prettierd", "prettier", stop_after_first = true },
-        json = { "jq", stop_after_first = true },
         jsonc = { "jq", stop_after_first = true },
         lua = { "stylua", stop_after_first = true },
         markdown = { "prettierd", "prettier", stop_after_first = true },
@@ -1175,10 +1168,15 @@ lazy.setup({
         rmd = { "injected" },
         scss = { "prettierd", "prettier", stop_after_first = true },
         tex = { "latexindent", stop_after_first = true },
-        typescript = { "prettierd", "prettier", stop_after_first = true },
-        typescriptreact = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { "oxfmt" },
+        typescript = { "oxfmt" },
+        javascriptreact = { "oxfmt" },
+        typescriptreact = { "oxfmt" },
+        vue = { "oxfmt" },
+        json = { "oxfmt" },
+        html = { "oxfmt" },
+        css = { "oxfmt" },
         typst = { "typstyle", stop_after_first = true },
-        vue = { "prettierd", "prettier", stop_after_first = true },
         yaml = { "prettierd", "prettier", stop_after_first = true },
         ["*"] = { "codespell" },
         ["_"] = { "trim_whitespace" },
@@ -1261,6 +1259,17 @@ lazy.setup({
   },
   {
     "hiphish/rainbow-delimiters.nvim",
+    init = function()
+      -- Patch lib.attach before plugin/rainbow-delimiters.lua sets up autocommands.
+      -- Must be in init (not config) so it runs before the plugin's runtime files.
+      local lib = require("rainbow-delimiters.lib")
+      local orig_attach = lib.attach
+      lib.attach = function(bufnr, ...)
+        local ok, parser = pcall(vim.treesitter.get_parser, bufnr)
+        if not ok or not parser then return end
+        return orig_attach(bufnr, ...)
+      end
+    end,
     config = function()
       require("rainbow-delimiters.setup").setup({
         strategy = {
@@ -1269,7 +1278,7 @@ lazy.setup({
         },
         query = {
           [""] = "rainbow-delimiters",
-          lua = "rainbow-blocks", -- query names for Neovim 0.12.dev
+          lua = "rainbow-blocks",
         },
         priority = {
           [""] = 110,
@@ -1286,23 +1295,18 @@ lazy.setup({
         },
       })
     end,
-
-    event = "VeryLazy", -- Ensure it loads when Tree-sitter is ready
+    event = "VeryLazy",
     enabled = O.language_parsing,
   },
   {
     "folke/tokyonight.nvim",
-    lazy = function()
-      return vim.cmd("colorscheme") ~= "tokyonight"
-    end,
+    lazy = vim.cmd("O.colorscheme", "tokyonight") ~= nil,
     priority = 1000,
-    config = function()
-      require("tokyonight").setup({
-        style = "storm",
-        transparent = false,
-        hide_inactive_statusline = false,
-      })
-    end,
+    opts = {
+      style = "storm",
+      transparent = false,
+      hide_inactive_statusline = false,
+    },
     enabled = true,
   },
   {
@@ -1313,27 +1317,18 @@ lazy.setup({
         dimInactive = true,
       })
     end,
-    lazy = function()
-      return vim.cmd("colorscheme") ~= "kanagawa"
-    end,
+    lazy = string.find(O.colorscheme, "kanagawa") ~= nil,
     enabled = O.misc or vim.cmd("colorscheme") == "kanagawa",
   },
   {
     "rose-pine/neovim",
     name = "rose-pine",
-    config = function()
-      if string.find(O.colorscheme, "rose-pine") ~= nil then
-        vim.cmd("colorscheme " .. O.colorscheme)
-      end
-    end,
     enabled = O.misc or string.find(O.colorscheme, "rose-pine") ~= nil,
   },
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    lazy = function()
-      return string.find(O.colorscheme, "catppuccin") ~= nil
-    end,
+    lazy = string.find(O.colorscheme, "catppuccin") ~= nil,
     config = function()
       require("catppuccin").setup({
         flavour = "mocha", -- mocha, macchiato, frappe, latte
@@ -1431,7 +1426,8 @@ lazy.setup({
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
+    -- if you prefer nvim-web-devicons
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
     ft = { "markdown", "norg", "org", "rmd", "rst", "tex", "Avante" },
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
@@ -1555,7 +1551,7 @@ lazy.setup({
     opts = {
       -- add any opts here
       -- for example
-      provider = "claude",
+      provider = "copilot",
       providers = {
         gemini = {
           model = "gemini-2.5-pro-exp-03-25",

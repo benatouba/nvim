@@ -103,7 +103,6 @@ M.opts = {
           "lsp",
           "path",
           "snippets",
-          "dap",
           "git",
           "ripgrep",
           "calc",
@@ -136,9 +135,12 @@ M.opts = {
       sql = { "lsp", "dadbod", "snippets" },
       -- terminal = { "path", "cmp_r" },
       terminal = { "path" },
-      ["dap-repl"] = { "dap" },
-      ["dapui_watches"] = { "dap" },
-      ["dapui_hover"] = { "dap" },
+      -- ["dap-repl"] = { "dap" },
+      -- ["dapui_watches"] = { "dap" },
+      -- ["dapui_hover"] = { "dap" },
+      ["dap-repl"] = { "cmp-dap" },
+      ["dapui_watches"] = { "cmp-dap" },
+      ["dapui_hover"] = { "cmp-dap" },
     },
     providers = {
       orgmode = {

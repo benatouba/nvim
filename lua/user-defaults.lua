@@ -1,4 +1,8 @@
+-- Detect NixOS: tools are managed by Nix, Mason is not needed
+local is_nixos = vim.fn.filereadable("/etc/NIXOS") == 1
+
 O = {
+    is_nixos = is_nixos,
     language_parsing = true,
     lsp = false,
     git = false,
@@ -13,7 +17,7 @@ O = {
     wrap_lines = false,
     number = true,
     relative_number = true,
-    shell = '/usr/bin/zsh',
+    shell = is_nixos and '/run/current-system/sw/bin/zsh' or '/usr/bin/zsh',
     mapleader = " ",
 
     -- @usage pass a table with your desired languages

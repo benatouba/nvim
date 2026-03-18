@@ -3,6 +3,96 @@ local M = {}
 M.config = function()
   vim.opt.completeopt = { "menu", "menuone", "noinsert", "noselect" }
 
+  -- vim.lsp.config() calls have the highest priority and cannot be
+  -- overwritten by lsp/*.lua runtime files (including nvim-lspconfig defaults).
+
+  local vue_language_server_path = vim.fn.stdpath("data")
+    .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+
+  vim.lsp.config("vtsls", {
+    settings = {
+      vtsls = {
+        tsserver = {
+          globalPlugins = {
+            {
+              name = "@vue/typescript-plugin",
+              location = vue_language_server_path,
+              languages = { "vue" },
+              configNamespace = "typescript",
+            },
+          },
+        },
+      },
+    },
+    filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+    on_attach = function(client)
+      if vim.bo.filetype == "vue" then
+        client.server_capabilities.semanticTokensProvider = nil
+      end
+    end,
+  })
+
+  vim.lsp.config("vue_ls", {
+    init_options = {
+      typescript = {
+        tsdk = vim.fn.stdpath("data")
+          .. "/mason/packages/vtsls/node_modules/@vtsls/language-server/node_modules/typescript/lib",
+      },
+    },
+    on_init = function(client)
+      local retries = 0
+
+      local function find_ts_client(bufnr)
+        local ts_client = vim.lsp.get_clients({ bufnr = bufnr, name = "vtsls" })[1]
+          or vim.lsp.get_clients({ bufnr = bufnr, name = "ts_ls" })[1]
+          or vim.lsp.get_clients({ bufnr = bufnr, name = "typescript-tools" })[1]
+        if ts_client then
+          return ts_client
+        end
+        return vim.lsp.get_clients({ name = "vtsls" })[1]
+          or vim.lsp.get_clients({ name = "ts_ls" })[1]
+          or vim.lsp.get_clients({ name = "typescript-tools" })[1]
+      end
+
+      local function typescriptHandler(_, result, context)
+        local ts_client = find_ts_client(context.bufnr)
+
+        if not ts_client then
+          if retries <= 50 then
+            retries = retries + 1
+            vim.defer_fn(function()
+              typescriptHandler(_, result, context)
+            end, 200)
+          else
+            vim.notify(
+              "Could not find `vtsls`, `ts_ls`, or `typescript-tools` lsp client required by `vue_ls`.",
+              vim.log.levels.ERROR
+            )
+          end
+          return
+        end
+
+        retries = 0
+        local param = unpack(result)
+        local id, command, payload = unpack(param)
+        ts_client:exec_cmd({
+          title = "vue_request_forward",
+          command = "typescript.tsserverRequest",
+          arguments = {
+            command,
+            payload,
+          },
+        }, { bufnr = context.bufnr }, function(_, r)
+          local response_data = { { id, r and r.body } }
+          ---@diagnostic disable-next-line: param-type-mismatch
+          client:notify("tsserver/response", response_data)
+        end)
+      end
+
+      client.handlers["tsserver/request"] = typescriptHandler
+    end,
+  })
+
   -- Enable inlay hints
   -- vim.api.nvim_create_autocmd("LspAttach", {
   --   desc = "Enable inlay hints",
@@ -268,6 +358,5 @@ M.config = function()
   if vim.fn.executable("watchman") == 1 then
     require("vim.lsp._watchfiles")._watchfunc = watchman
   end
-  vim.lsp.enable({ "codebook", "vtsls", "vue_ls", "vtsls", "matlab_ls", "lua_ls", "jsonls", "yamlls", "texlab" })
 end
 return M
