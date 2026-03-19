@@ -6,7 +6,7 @@ local rule = require("nvim-autopairs.rule")
 local cond = require("nvim-autopairs.conds")
 
 local get_closing_for_line = function (line)
-  local i = -1
+  local i = -1 ---@type integer|nil
   local clo = ""
 
   while true do

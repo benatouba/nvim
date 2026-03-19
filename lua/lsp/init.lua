@@ -73,8 +73,8 @@ M.config = function()
         end
 
         retries = 0
-        local param = unpack(result)
-        local id, command, payload = unpack(param)
+        local param = result[1]
+        local id, command, payload = param[1], param[2], param[3]
         ts_client:exec_cmd({
           title = "vue_request_forward",
           command = "typescript.tsserverRequest",

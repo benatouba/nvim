@@ -13,6 +13,7 @@ end
 -- end
 local connectToKernel = function()
 	local handle = io.popen('pyenv version-name')
+	if not handle then return end
 	local kernel = handle:read("*a")
 	handle:close()
 	vim.api.nvim_command("call IPyConnect('--kernel'" .. kernel .. "'--no-window')")
