@@ -51,46 +51,46 @@ module.exports = {
 					docs: {
 						description: 'Documentation only changes',
 						title: 'Documentation',
-						emoji: '📚',
+						emoji: '📝',
 					},
 					style: {
 						description:
 							'Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)',
 						title: 'Styles',
-						emoji: '💎',
+						emoji: '💅',
 					},
 					refactor: {
 						description:
 							'A code change that neither fixes a bug nor adds a feature',
 						title: 'Code Refactoring',
-						emoji: '📦',
+						emoji: '♻️',
 					},
 					perf: {
 						description: 'A code change that improves performance',
 						title: 'Performance Improvements',
-						emoji: '🚀',
+						emoji: '⚡',
 					},
 					test: {
 						description: 'Adding missing tests or correcting existing tests',
 						title: 'Tests',
-						emoji: '🚨',
+						emoji: '✅',
 					},
 					build: {
 						description:
 							'Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)',
 						title: 'Builds',
-						emoji: '🛠',
+						emoji: '🏗️',
 					},
 					ci: {
 						description:
 							'Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)',
 						title: 'Continuous Integrations',
-						emoji: '⚙️',
+						emoji: '🚀',
 					},
 					chore: {
 						description: "Other changes that don't modify src or test files",
 						title: 'Chores',
-						emoji: '♻️',
+						emoji: '⬛',
 					},
 					revert: {
 						description: 'Reverts a previous commit',
