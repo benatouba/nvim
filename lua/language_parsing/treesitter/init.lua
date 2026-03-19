@@ -47,23 +47,7 @@ M.config = function()
   })
 
   ts.setup({
-    ensure_installed = {
-      "bash",
-      "css",
-      "csv",
-      "dap_repl",
-      "javascript",
-      "json",
-      "latex",
-      "lua",
-      "markdown",
-      "markdown_inline",
-      "python",
-      "r",
-      "rnoweb",
-      "typescript",
-      "yaml",
-    },
+    ensure_installed = "all",
     auto_install = true,
     -- sync_install = false,
     highlight = {

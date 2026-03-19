@@ -1,4 +1,4 @@
-vim.lsp.config("ltex_plus", {
+return {
   settings = {
     ltex = {
       language = "en-US",
@@ -12,4 +12,4 @@ vim.lsp.config("ltex_plus", {
       path = vim.fn.stdpath("config") .. "/spell/",
     },
   },
-})
+}

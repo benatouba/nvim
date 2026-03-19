@@ -1,9 +1,9 @@
-vim.lsp.config("matlab_ls", {
+return {
   settings = {
     MATLAB = {
       installPath = "~/.local/matlab/",
       telemetry = false,
     },
   },
-})
+}
 

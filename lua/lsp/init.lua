@@ -153,16 +153,15 @@ M.config = function()
         mode = mode or "n"
         vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
       end
-      vim.lsp.semantic_tokens.enable()
       local bufnr = vim.api.nvim_get_current_buf()
-      local isOk, wk = pcall(require, "which-key")
-      if not isOk then
-        vim.notify("which-key not okay in lspconfig")
-        return
-      end
       local client = vim.lsp.get_client_by_id(event.data.client_id)
       if not client then
         vim.notify("LSP client not found for bufnr: " .. bufnr, vim.log.levels.ERROR)
+        return
+      end
+      local isOk, wk = pcall(require, "which-key")
+      if not isOk then
+        vim.notify("which-key not okay in lspconfig")
         return
       end
       if client.server_capabilities.completionProvider then
@@ -225,6 +224,9 @@ M.config = function()
       --   client.server_capabilities.definitionProvider = false
       elseif client.name == "cssmodules_ls" then
         client.server_capabilities.definitionProvider = true
+      end
+      if client.server_capabilities.semanticTokensProvider then
+        vim.lsp.semantic_tokens.enable(true, { bufnr = event.buf })
       end
       vim.keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.completion.trigger()<cr>")
       wk.add({

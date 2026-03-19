@@ -18,6 +18,7 @@ if not lazy_ok then
 end
 
 lazy.setup({
+  "direnv/direnv.vim",
   "nvim-lua/plenary.nvim", -- most important functions (very important)
   { "nvim-mini/mini.ai", version = false, opts = {} },
   {
@@ -1166,7 +1167,7 @@ lazy.setup({
         quarto = { "injected" },
         r = { "air", stop_after_first = true },
         rmd = { "injected" },
-        scss = { "prettierd", "prettier", stop_after_first = true },
+        scss = { "oxfmt" },
         tex = { "latexindent", stop_after_first = true },
         javascript = { "oxfmt" },
         typescript = { "oxfmt" },
@@ -1177,7 +1178,7 @@ lazy.setup({
         html = { "oxfmt" },
         css = { "oxfmt" },
         typst = { "typstyle", stop_after_first = true },
-        yaml = { "prettierd", "prettier", stop_after_first = true },
+        yaml = { "yamlfmt", stop_after_first = true },
         ["*"] = { "codespell" },
         ["_"] = { "trim_whitespace" },
       },

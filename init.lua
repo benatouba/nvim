@@ -31,10 +31,21 @@ else
   require("utils.after")
 end
 if O.is_nixos then
-
-  -- vim.lsp.config("nil_ls", lspconfig.nil_ls.document_config.default_config)
-  vim.lsp.enable("nil_ls")
-
-  -- vim.lsp.config("lua_ls", lspconfig.lua_ls.document_config.default_config)
-  vim.lsp.enable("lua_ls")
+  -- LSPs
+  vim.lsp.enable({
+    "nil_ls",
+    "lua_ls",
+    "basedpyright",
+    "ty",
+    "eslint",
+    "jsonls",
+    "ltex_plus",
+    "matlab_ls",
+    "oxlint",
+    "texlab",
+    "tinymist",
+    "vtsls",
+    "vue_ls",
+    "yamlls",
+  })
 end

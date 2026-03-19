@@ -1,4 +1,4 @@
-vim.lsp.config("tinymist", {
+return {
   settings = {
     exportPdf = "onType",
     outputPath = "$root/target/$dir/$name",
@@ -10,4 +10,4 @@ vim.lsp.config("tinymist", {
     },
   },
   filetypes = { "typst" },
-})
+}
