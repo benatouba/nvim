@@ -77,7 +77,7 @@ return {
     opts = {
       auto_install = false,
     },
-    enabled = O.lsp,
+    enabled = O.lsp and not O.is_nixos,
   },
   {
     "nvimdev/lspsaga.nvim",
@@ -201,6 +201,7 @@ return {
         htmldjango = { "djlint" },
         jinja = { "djlint" },
         markdown = { "alex" },
+        nix = { "statix" },
         tex = { "proselint" },
         zsh = { "zsh" },
         [".*/.github/workflows/.*%.yml"] = { "yaml.ghaction" },
