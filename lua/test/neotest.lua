@@ -65,9 +65,9 @@ M.config = function()
         end,
       }),
     },
-    consumers = {
+    consumers = overseer_ok and {
       overseer = require("neotest.consumers.overseer"),
-    },
+    } or {},
     overseer = {
       enabled = overseer_ok,
     },
