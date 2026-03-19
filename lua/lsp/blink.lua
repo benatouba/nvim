@@ -223,6 +223,14 @@ M.opts = {
         should_show_items = function(ctx)
           return ctx.trigger.initial_kind ~= "trigger_character"
         end,
+        opts = {
+          filter_snippets = function(ft, file)
+            if ft == "gitcommit" and file:match("friendly.snippets") then
+              return false
+            end
+            return true
+          end,
+        },
       },
       ripgrep = {
         module = "blink-ripgrep",
