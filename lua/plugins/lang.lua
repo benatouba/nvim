@@ -19,7 +19,7 @@ return {
   {
     "chomosuke/typst-preview.nvim",
     ft = { "typst" },
-    version = "1.*",
+    version = false,
     opts = {},
     keys = {
       { "<localleader>tt", "<cmd>TypstPreviewToggle<cr>", desc = "Typst Preview Toggle" },

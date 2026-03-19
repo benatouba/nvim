@@ -264,11 +264,4 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
     config = true,
   },
-  {
-    "lewis6991/impatient.nvim",
-    config = function()
-      require("impatient")
-    end,
-    enabled = vim.fn.has("nvim-0.10") == 0,
-  },
 }

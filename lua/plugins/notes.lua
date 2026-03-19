@@ -34,12 +34,6 @@ return {
     "nvim-orgmode/orgmode",
     dependencies = {
       "danilshvalov/org-modern.nvim",
-      {
-        "akinsho/org-bullets.nvim",
-        config = function()
-          require("org-bullets").setup()
-        end,
-      },
     },
     ft = { "org" },
     keys = {
@@ -62,14 +56,5 @@ return {
     config = function()
       require("management.orgmode").config()
     end,
-  },
-  {
-    "renerocksai/telekasten.nvim",
-    event = "BufReadPost",
-    dependencies = { "telescope.nvim", "renerocksai/calendar-vim" },
-    config = function()
-      require("management.telekasten").config()
-    end,
-    enabled = false,
   },
 }
