@@ -1,1 +1,1 @@
-require('ben.which-key')
+-- which-key setup has moved to lua/plugins/editor.lua

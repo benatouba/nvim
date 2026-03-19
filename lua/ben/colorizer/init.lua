@@ -1,47 +1,26 @@
-local isOk, colorizer = pcall(require, "colorizer")
-if not isOk then
-  vim.notify("Colorizer not okay")
-  return
-end
+local M = {}
 
-colorizer.setup({
-  filetypes = { "*" },
+M.opts = {
+  lazy_load = false,
   user_default_options = {
-    RGB = true, -- #RGB hex codes
-    RRGGBB = true, -- #RRGGBB hex codes
+    names_opts = {
+      uppercase = true,
+    },
     RRGGBBAA = true, -- #RRGGBBAA hex codes
-    names = true,
-    rgb_fn = false, -- CSS rgb() and rgba() functions
-    hsl_fn = false, -- CSS hsl() and hsla() functions
-    css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+    AARRGGBB = true, -- 0xAARRGGBB hex codes
+    rgb_fn = true, -- CSS rgb() and rgba() functions
+    hsl_fn = true, -- CSS hsl() and hsla() functions
+    css = true, -- Enable all CSS *features*:
+    -- names, RGB, RGBA, RRGGBB, RRGGBBAA, AARRGGBB, rgb_fn, hsl_fn
     css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
-    -- Available modes for `mode`: foreground, background,  virtualtext
-    mode = "background", -- Set the display mode.
-    -- Available methods are false / true / "normal" / "lsp" / "both"
-    -- True is same as normal
+    -- Tailwind colors.  boolean|'normal'|'lsp'|'both'.  True sets to 'normal'
     tailwind = true, -- Enable tailwind colors
-    -- parsers can contain values used in |user_default_options|
-    sass = { enable = true, parsers = { css = true } }, -- Enable sass colors
-    virtualtext = "■",
+    tailwind_opts = { -- Options for highlighting tailwind names
+      update_names = true, -- When using tailwind = 'both', update tailwind names from LSP results.  See tailwind section
+    },
+    -- parsers can contain values used in `user_default_options`
+    sass = { enable = true, parsers = { "css" } }, -- Enable sass colors
   },
-})
--- names    = true;         -- "Name" codes like Blue
+}
 
--- colorizer.setup({
---   fileypes = { "css", "html", "vue", "javascript", "typescript" },
---   {
---     RGB = true, -- #RGB hex codes
---     RRGGBB = true, -- #RRGGBB hex codes
---     RRGGBBAA = true, -- #RRGGBBAA hex codes
---     names = true,
---     rgb_fn = true, -- CSS rgb() and rgba() functions
---     hsl_fn = true, -- CSS hsl() and hsla() functions
---     css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
---     css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
---     tailwind = true,
---     sass = {
---       enable = true,
---       parsers = { "css" },
---     },
---   },
--- })
+return M

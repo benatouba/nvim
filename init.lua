@@ -7,7 +7,6 @@ if vim.g.neovide then
   require("user-settings")
   require("settings")
   require("plugins")
-  require("ben")
   require("autocommands")
   require("colorscheme")
   require("utils.after")
@@ -24,7 +23,6 @@ else
   if vim.g.vscode then
   else
     require("plugins")
-    require("ben")
   end
   require("autocommands")
   require("colorscheme")

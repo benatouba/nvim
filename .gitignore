@@ -8,3 +8,5 @@ ftdetect/jupynium.vim
 repro.lua
 snippets/python.json
 spell/ltex*
+
+CLAUDE.md
