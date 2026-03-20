@@ -24,7 +24,7 @@ M.config = function ()
       telescope = tsOk,
     },
     commit_editor = {
-      kind = "tab",
+      kind = "auto",
     },
     disable_commit_confirmation = true,
     graph_style = "unicode",
