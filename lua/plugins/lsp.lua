@@ -176,7 +176,7 @@ return {
       vim.api.nvim_create_autocmd("InsertLeave", {
         pattern = "*COMMIT_EDITMSG*",
         callback = function(args)
-          require("conform").format({ bufnr = args.buf, timeout_ms = 2500, lsp_format = "fallback" })
+          require("conform").format({ bufnr = args.buf, timeout_ms = 2500, lsp_format = "never" })
         end,
       })
     end,

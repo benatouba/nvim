@@ -1,4 +1,5 @@
 return {
+  filetypes = { "bib", "tex", "latex", "markdown", "quarto", "rmd", "rst", "text", "typst" },
   settings = {
     ltex = {
       language = "en-US",
