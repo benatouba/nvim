@@ -55,7 +55,17 @@ M.config = function()
     config.cwd = vim.fn.getcwd()
   end
 
-  if not O.is_nixos then
+  if O.is_nixos then
+    dap.adapters["pwa-node"] = {
+      type = "server",
+      host = "localhost",
+      port = "${port}",
+      executable = {
+        command = "js-debug-adapter",
+        args = { "${port}" },
+      },
+    }
+  else
     dap.adapters["pwa-node"] = {
       type = "server",
       host = "localhost",

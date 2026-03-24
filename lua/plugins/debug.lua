@@ -73,12 +73,6 @@ return {
         end,
         enabled = O.dap and false,
       },
-      {
-        "microsoft/vscode-js-debug",
-        lazy = true,
-        build = "npm ci --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
-        enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 18 and O.webdev and O.dap,
-      },
     },
   },
   {

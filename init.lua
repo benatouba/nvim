@@ -1,3 +1,4 @@
+
 vim.loader.enable()
 if vim.g.neovide then
   require("user-defaults")
@@ -29,6 +30,12 @@ else
   require("utils.after")
 end
 if O.is_nixos then
+  -- Restrict filetypes before enabling (vim.lsp.config has highest priority)
+  vim.lsp.config("lua_ls", { filetypes = { "lua" } })
+  vim.lsp.config("ltex_plus", {
+    filetypes = { "bib", "tex", "latex", "markdown", "quarto", "rmd", "rst", "text", "typst" },
+  })
+
   -- LSPs
   vim.lsp.enable({
     "nil_ls",
