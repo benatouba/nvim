@@ -76,17 +76,25 @@ end
 --   return pi.get_status()
 -- end
 local lint_ok, lint = pcall(require, "lint")
-local lint_progress = function ()
+local lint_progress = function()
   return false
 end
 if lint_ok then
-  lint_progress = function ()
+  lint_progress = function()
     local linters = lint.get_running()
     if #linters == 0 then
       return "󰦕"
     end
     return "󱉶 " .. table.concat(linters, ", ")
   end
+end
+
+local function diagnostic_status()
+  local ok, status = pcall(vim.diagnostic.status, 0)
+  if not ok or not status or status == "" then
+    return ""
+  end
+  return status
 end
 
 local M = {}
@@ -110,6 +118,7 @@ M.config = function ()
     "overseer",
     { get_lsp_client },
     { lint_progress },
+    { diagnostic_status },
     { "copilot", show_colors = true },
   }
   config.sections.lualine_y = {

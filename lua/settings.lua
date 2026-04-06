@@ -21,6 +21,8 @@ vim.wo.wrap = true -- Display long lines as just one line
 vim.opt.whichwrap:append("<,>,[,]") -- move to next line with theses keys
 vim.o.syntax = "on" -- syntax highlighting
 vim.o.pumheight = 10 -- Makes pop-up menu smaller
+vim.o.pummaxwidth = 120
+vim.o.pumborder = "rounded"
 vim.o.fileencoding = "utf-8" -- The encoding written to file
 vim.o.cmdheight = 0 -- More space for displaying messages
 vim.o.mouse = "c" -- Disable mouse

@@ -189,6 +189,8 @@ M.config = function()
     end
   end, {})
 
+  
+
   vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
     callback = function(event)
@@ -280,6 +282,7 @@ M.config = function()
           { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action" },
           { "<leader>lc", "<cmd>e $HOME/.config/nvim/lua/lsp/init.lua<cr>", desc = "Config" },
           { "<leader>lC", "<cmd>LspCapabilities<cr>", desc = "Server Capabilities" },
+          { "<leader>lI", "<cmd>checkhealth vim.lsp<cr>", desc = "Health" },
           { "<leader>lD", "<cmd>Telescope lsp_declarations<cr>", desc = "Declarations" },
           { "<leader>lh", vim.lsp.buf.hover, desc = "Hover" },
           { "<leader>lF", "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", desc = "Format Document (Sync)" },
@@ -287,7 +290,7 @@ M.config = function()
           { "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens" },
           { "<leader>lL", "<cmd>LspLog<CR>", desc = "Logs", icon = { icon = " ", color = "green" } },
           { "<leader>lq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix" },
-          { "<leader>lr", "<cmd>LspRestart<cr>", desc = "Restart Server" },
+          { "<leader>lr", "<cmd>lsp restart<cr>", desc = "Restart Server" },
           {
             "<leader>lR",
             "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>",
