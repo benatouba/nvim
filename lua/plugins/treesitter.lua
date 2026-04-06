@@ -53,6 +53,6 @@ return {
     end,
     keys = { "%" },
     event = "InsertEnter",
-    enabled = O.language_parsing and vim.fn.has("nvim-0.13") == 0,
+    enabled = O.language_parsing and vim.fn.has("nvim-0.12") == 0,
   },
 }
