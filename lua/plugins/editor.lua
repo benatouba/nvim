@@ -33,7 +33,7 @@ return {
   {
     "mbbill/undotree",
     cmd = "UndotreeToggle",
-    enabled = true,
+    enabled = vim.fn.has("nvim-0.13") == 0,
   },
   {
     "kylechui/nvim-surround",

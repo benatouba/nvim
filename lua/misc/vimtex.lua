@@ -5,7 +5,9 @@ M.config = function()
   vim.g.vimtex_quickfix_open_on_warning = 0
   vim.g.vimtex_mappings_enabled = 1
   vim.g.vimtex_syntax_enabled = 1
-  vim.g.matchup_override_vimtex = 1
+  if vim.fn.has("nvim-0.13") == 0 then
+    vim.g.matchup_override_vimtex = 1
+  end
   vim.bo.textwidth = 0 -- automatically insert line break after n chars
   vim.g.vimtex_log_ignore = {
     "Underfull",
