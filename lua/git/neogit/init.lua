@@ -19,6 +19,10 @@ M.config = function ()
     vim.notify("Telescope not okay in neogit")
   end
   neogit.setup {
+    process_spinner = true,
+    env = {
+      GIT_PAGER = "cat",
+    },
     integrations = {
       diffview = dvOk,
       telescope = tsOk,

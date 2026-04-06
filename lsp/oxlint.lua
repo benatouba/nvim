@@ -1,6 +1,8 @@
 -- lsp/oxlint.lua
+-- Exclude .vue files: oxlint can't properly parse <template> blocks and
+-- produces incorrect diagnostics there. ESLint + eslint-plugin-vue handles
+-- Vue SFC linting; eslint-plugin-oxlint disables the overlapping rules.
 return {
-  -- oxlint's default lspconfig already includes "vue" in its filetypes.
-  -- You can leave this empty to use defaults, or explicitly ensure single file support:
+  filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
   single_file_support = true,
 }

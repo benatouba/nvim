@@ -1,33 +1,14 @@
 local M = {}
 
 M.config = function()
-  local ts_ok, ts = pcall(require, "nvim-treesitter.configs")
+  local ts_ok, ts = pcall(require, "nvim-treesitter")
   if not ts_ok then
     vim.notify("Treesitter not okay")
     return
   end
-  --[[ local function add(lang, opts)
-    if type(opts.ensure_installed) == "table" then
-      table.insert(opts.ensure_installed, lang)
-    end
-  end
-  local xdg_config = vim.env.XDG_CONFIG_HOME or vim.env.HOME .. "/.config"
-  local function have(path)
-    return vim.uv.fs_stat(xdg_config .. "/" .. path) ~= nil
-  end
-  add("git_config")
 
-  if have("hypr") then
-    add("hyprlang")
-  end
-
-  if have("fish") then
-    add("fish")
-  end
-
-  if have("rofi") or have("wofi") then
-    add("rasi")
-  end ]]
+  -- New nvim-treesitter API: setup() only accepts install_dir
+  ts.setup()
 
   vim.filetype.add({
     extension = { rasi = "rasi", rofi = "rasi", wofi = "rasi" },
@@ -46,50 +27,34 @@ M.config = function()
     },
   })
 
-  ts.setup({
-    ensure_installed = "all",
-    auto_install = true,
-    -- sync_install = false,
-    highlight = {
-      enable = true,
-      additional_vim_regex_highlighting = { "markdown" },
-      -- config = {
-      --   vue = {
-      --     style_element = "// %s",
-      --   },
-      -- },
-    },
-    incremental_selection = {
-      enable = true,
-      keymaps = {
-        -- init_selection = "<CR>",
-        -- scope_incremental = "<CR>",
-        node_incremental = "<TAB>",
-        node_decremental = "<S-TAB>",
-      },
-    },
-    -- context_commentstring = { enable = true },
-    indent = {
-      enable = true,
-      -- disable = { "python", "html" },
-    },
-    endwise = {
-      enable = true,
-    },
-    matchup = { enable = true },
-    autopairs = { enable = true },
-    playground = {
-      enable = true,
-      disable = {},
-      updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-      persist_queries = false, -- Whether the query persists across vim sessions
-    },
-    rainbow = {
-      enable = false,
-      extended_mode = true, -- Highlight also non-parentheses delimiters, boolean or table: lang -> boolean
-      max_file_lines = 1000, -- Do not enable for files with more than 1000 lines, int
-    },
+  -- Enable treesitter highlighting and indent for every filetype
+  vim.api.nvim_create_autocmd("FileType", {
+    callback = function(args)
+      pcall(vim.treesitter.start, args.buf)
+      vim.opt_local.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+    end,
   })
+
+  -- Auto-install the parser for any filetype that doesn't have one yet.
+  -- available_parsers is built once, only on first miss, then cached.
+  local available_parsers = nil
+  vim.api.nvim_create_autocmd("FileType", {
+    callback = function(args)
+      local lang = vim.treesitter.language.get_lang(args.match)
+      if not lang then return end
+      if pcall(vim.treesitter.language.inspect, lang) then return end
+      if not available_parsers then
+        available_parsers = {}
+        for _, l in ipairs(require("nvim-treesitter.config").get_available()) do
+          available_parsers[l] = true
+        end
+      end
+      if available_parsers[lang] then
+        require("nvim-treesitter.install").install({ lang })
+      end
+    end,
+  })
+
   vim.treesitter.language.register("markdown", "octo")
 end
 return M

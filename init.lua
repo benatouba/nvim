@@ -32,13 +32,16 @@ end
 if O.is_nixos then
   -- Restrict filetypes before enabling (vim.lsp.config has highest priority)
   vim.lsp.config("lua_ls", { filetypes = { "lua" } })
-  vim.lsp.config("ltex_plus", {
-    filetypes = { "bib", "tex", "latex", "markdown", "quarto", "rmd", "rst", "text", "typst" },
-  })
+  -- Ltex nervt
+  -- vim.lsp.config("ltex_plus", {
+  --   filetypes = { "bib", "tex", "latex", "markdown", "quarto", "rmd", "rst", "text", "typst" },
+  -- })
 
   -- LSPs
   vim.lsp.enable({
+    "marksman",
     "nil_ls",
+    "nixd",
     "lua_ls",
     "basedpyright",
     "ty",
@@ -47,6 +50,7 @@ if O.is_nixos then
     "ltex_plus",
     "matlab_ls",
     "oxlint",
+    "taplo",
     "texlab",
     "tinymist",
     "vtsls",

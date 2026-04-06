@@ -200,7 +200,6 @@ return {
         gitcommit = { "commitlint" },
         htmldjango = { "djlint" },
         jinja = { "djlint" },
-        markdown = { "alex" },
         nix = { "statix" },
         tex = { "proselint" },
         zsh = { "zsh" },
