@@ -120,3 +120,6 @@ vim.api.nvim_create_autocmd("CmdlineLeave", {
 vim.g.skip_ts_context_commentstring_module = true
 vim.lsp.log.set_level("WARN")
 
+if vim.fn.has("nvim-0.12") == 1 then
+  require("vim._core.ui2").enable()
+end

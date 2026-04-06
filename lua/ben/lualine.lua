@@ -89,14 +89,6 @@ if lint_ok then
   end
 end
 
-local function diagnostic_status()
-  local ok, status = pcall(vim.diagnostic.status, 0)
-  if not ok or not status or status == "" then
-    return ""
-  end
-  return status
-end
-
 local M = {}
 M.config = function ()
   local config = ll.get_config()
@@ -118,7 +110,6 @@ M.config = function ()
     "overseer",
     { get_lsp_client },
     { lint_progress },
-    { diagnostic_status },
     { "copilot", show_colors = true },
   }
   config.sections.lualine_y = {

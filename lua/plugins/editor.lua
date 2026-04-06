@@ -114,6 +114,11 @@ return {
   {
     "stevearc/oil.nvim",
     cmd = "Oil",
+    init = function()
+      if vim.env.GIT_DIFFTOOL or vim.env.GIT_DIFF_OPT then
+        vim.g.oil_manual_open = true
+      end
+    end,
     config = function()
       require("ben.oil").config()
     end,
