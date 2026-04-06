@@ -33,10 +33,6 @@ M.config = function ()
       silent = true,
     }),
     ["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {}),
-    ["textDocument/publishDiagnostics"] = vim.lsp.with(
-      vim.lsp.diagnostic.on_publish_diagnostics,
-      { virtual_text = vim.lsp.virtual_text }
-    ),
     ["textDocument/definition"] = function (err, result, method, ...)
       P(result)
       if vim.tbl_islist(result) and #result > 1 then

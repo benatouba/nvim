@@ -6,12 +6,45 @@ M.config = function()
   -- vim.lsp.config() calls have the highest priority and cannot be
   -- overwritten by lsp/*.lua runtime files (including nvim-lspconfig defaults).
 
-  local vue_language_server_path = vim.fn.stdpath("data")
-    .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+  -- Resolve vue-language-server and TypeScript SDK paths.
+  -- On NixOS (devenv), derive from binaries in $PATH; on other systems, use Mason.
+  local vue_language_server_path, tsdk
+
+  local function workspace_tsdk(root_dir)
+    if not root_dir or root_dir == "" then
+      return nil
+    end
+    local candidate = root_dir .. "/node_modules/typescript/lib"
+    if vim.fn.isdirectory(candidate) == 1 then
+      return candidate
+    end
+    return nil
+  end
+  if O.is_nixos then
+    local vue_ls_bin = vim.fn.exepath("vue-language-server")
+    if vue_ls_bin ~= "" then
+      local vue_ls_pkg = vim.fn.fnamemodify(vue_ls_bin, ":h:h")
+      vue_language_server_path = vue_ls_pkg .. "/lib/language-tools/packages/language-server"
+    end
+    local vtsls_bin = vim.fn.exepath("vtsls")
+    if vtsls_bin ~= "" then
+      local vtsls_pkg = vim.fn.fnamemodify(vtsls_bin, ":h:h")
+      local ts_glob = vim.fn.glob(vtsls_pkg .. "/lib/**/typescript/lib", true)
+      if ts_glob ~= "" then
+        tsdk = vim.split(ts_glob, "\n")[1]
+      end
+    end
+  else
+    vue_language_server_path = vim.fn.stdpath("data")
+      .. "/mason/packages/vue-language-server/node_modules/@vue/language-server"
+    tsdk = vim.fn.stdpath("data")
+      .. "/mason/packages/vtsls/node_modules/@vtsls/language-server/node_modules/typescript/lib"
+  end
 
   vim.lsp.config("vtsls", {
     settings = {
       vtsls = {
+        autoUseWorkspaceTsdk = true,
         tsserver = {
           globalPlugins = {
             {
@@ -19,12 +52,18 @@ M.config = function()
               location = vue_language_server_path,
               languages = { "vue" },
               configNamespace = "typescript",
+              enableForWorkspaceTypeScriptVersions = true,
             },
           },
         },
       },
     },
     filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact", "vue" },
+    on_new_config = function(new_config, root_dir)
+      new_config.settings = new_config.settings or {}
+      new_config.settings.typescript = new_config.settings.typescript or {}
+      new_config.settings.typescript.tsdk = workspace_tsdk(root_dir) or tsdk
+    end,
     on_attach = function(client)
       if vim.bo.filetype == "vue" then
         client.server_capabilities.semanticTokensProvider = nil
@@ -35,10 +74,14 @@ M.config = function()
   vim.lsp.config("vue_ls", {
     init_options = {
       typescript = {
-        tsdk = vim.fn.stdpath("data")
-          .. "/mason/packages/vtsls/node_modules/@vtsls/language-server/node_modules/typescript/lib",
+        tsdk = tsdk,
       },
     },
+    on_new_config = function(new_config, root_dir)
+      new_config.init_options = new_config.init_options or {}
+      new_config.init_options.typescript = new_config.init_options.typescript or {}
+      new_config.init_options.typescript.tsdk = workspace_tsdk(root_dir) or tsdk
+    end,
     on_init = function(client)
       local retries = 0
 
@@ -250,7 +293,13 @@ M.config = function()
             "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>",
             desc = "Refactor",
           },
-          { "<leader>lv", "<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>", desc = "Virtual Text" },
+          {
+            "<leader>lv",
+            function()
+              vim.diagnostic.open_float(0, { scope = "line", border = "rounded", source = true })
+            end,
+            desc = "Line Diagnostics",
+          },
           { "<leader>lw", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", desc = "Workspace" },
           { "<leader>lx", "<cmd>cclose<cr>", desc = "Close Quickfix" },
           { "<leader>s", group = "Search" },

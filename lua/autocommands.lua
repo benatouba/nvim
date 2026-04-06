@@ -5,10 +5,12 @@ api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank({ higroup = "IncSearch", timeout = 40 })
   end,
 })
-api.nvim_create_autocmd(
-  { "BufRead", "BufNewFile" },
-  { pattern = "*/node_modules/*", command = "lua vim.diagnostic.disable(0)" }
-)
+api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*/node_modules/*",
+  callback = function(args)
+    vim.diagnostic.enable(false, { bufnr = args.buf })
+  end,
+})
 api.nvim_create_autocmd(
   { "BufWipeout" },
   { pattern = "template.tex", command = "!cp template.pdf manuscript.pdf" }
