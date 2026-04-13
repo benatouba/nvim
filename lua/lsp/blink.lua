@@ -111,6 +111,7 @@ M.opts = {
       end
     end,
     per_filetype = {
+      sonicpi = { "sonicpi", inherit_defaults = true },
       gitcommit = { "lsp", "git", "snippets", "emoji", "calc", "path" },
       lua = function()
         if string.find(vim.fn.getcwd(), "nvim") then
@@ -143,6 +144,11 @@ M.opts = {
       ["dapui_hover"] = { "cmp-dap" },
     },
     providers = {
+      sonicpi = {
+        name = "sonicpi",
+        module = "blink.compat.source",
+        score_offset = 5,
+      },
       orgmode = {
         name = "Orgmode",
         module = "orgmode.org.autocompletion.blink",

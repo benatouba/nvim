@@ -181,6 +181,7 @@ return {
         { "<leader>L", group = "+Logs", icon = { icon = " ", color = "green" } },
         { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
         { "<leader>m", group = "Marks", icon = { icon = "", color = "red" } },
+        { "<leader>M", group = "+Music", icon = { icon = "󰎈 ", color = "orange" }, remap = false, mode = "n" },
         { "<leader>n", group = "+Annotations", icon = { icon = " ", color = "orange" }, remap = false, mode = "n" },
         { "<leader>o", group = "+Org", icon = { icon = " ", color = "purple" }, nowait = false, remap = false },
         { "<leader>p", group = "+Plugins", icon = { icon = " ", color = "blue" } },

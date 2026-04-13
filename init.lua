@@ -39,6 +39,7 @@ if O.is_nixos then
 
   -- LSPs
   vim.lsp.enable({
+    "hls",
     "marksman",
     "nil_ls",
     "nixd",
@@ -50,6 +51,7 @@ if O.is_nixos then
     "ltex_plus",
     "matlab_ls",
     "oxlint",
+    "ruby_lsp",
     "taplo",
     "texlab",
     "tinymist",

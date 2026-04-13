@@ -90,12 +90,38 @@ return {
     version = "*",
     config = function()
       require("misc.toggleterm").config()
+
+      local function shellescape(value)
+        return vim.fn.shellescape(value)
+      end
+
+      vim.api.nvim_create_user_command("DirtBoot", function()
+        local sample_dir = vim.env.TIDAL_SAMPLE_DIR
+        if not sample_dir or sample_dir == "" then
+          vim.notify("TIDAL_SAMPLE_DIR is not set (enter project devenv)", vim.log.levels.ERROR)
+          return
+        end
+        local cmd = "dirt -s " .. shellescape(sample_dir)
+        vim.cmd("ToggleTerm direction=horizontal cmd=" .. shellescape(cmd))
+      end, { force = true })
+
+      vim.api.nvim_create_user_command("TidalBoot", function()
+        local boot_file = vim.env.TIDAL_BOOT
+        if not boot_file or boot_file == "" then
+          vim.notify("TIDAL_BOOT is not set (enter project devenv)", vim.log.levels.ERROR)
+          return
+        end
+        local cmd = "ghci -ghci-script " .. shellescape(boot_file)
+        vim.cmd("ToggleTerm direction=horizontal cmd=" .. shellescape(cmd))
+      end, { force = true })
     end,
     cmd = { "ToggleTerm", "TermExec" },
     keys = {
       { "<leader>T", group = "+Terminal" },
       { "<leader>TT", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal" },
       { "<leader>Tt", "<cmd>ToggleTerm<cr>", desc = "Terminal (bot)" },
+      { "<leader>Md", "<cmd>DirtBoot<cr>", desc = "Dirt Sampler" },
+      { "<leader>Mr", "<cmd>TidalBoot<cr>", desc = "Tidal REPL" },
       { "<leader>gL", "<cmd>lua require('misc.toggleterm').LazyGit()<cr>", desc = "LazyGit" },
       {
         "<leader>Tb",
