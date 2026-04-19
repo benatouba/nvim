@@ -10,3 +10,5 @@ snippets/python.json
 spell/ltex*
 
 CLAUDE.md
+.devenv/
+devenv.lock
