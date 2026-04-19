@@ -1,5 +1,11 @@
 return {
-  { "direnv/direnv.vim", event = "BufReadPre" },
+  {
+    "direnv/direnv.vim",
+    event = "BufReadPre",
+    init = function()
+      vim.g.direnv_silent_load = 1
+    end,
+  },
   "nvim-lua/plenary.nvim", -- most important functions (very important)
   { "nvim-mini/mini.ai", version = false, opts = {}, event = "VeryLazy" },
   {
