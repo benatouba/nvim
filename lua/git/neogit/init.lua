@@ -9,6 +9,33 @@ if not wkOk then
 end
 local M = {}
 
+local function patch_stale_neogit_console()
+  local buffer_ok, Buffer = pcall(require, "neogit.lib.buffer")
+  if not buffer_ok or Buffer._stale_console_patch_applied then
+    return
+  end
+
+  local original_from_name = Buffer.from_name
+
+  Buffer.from_name = function(name)
+    local buffer_handle = vim.fn.bufnr(name)
+    if name == "NeogitConsole" and buffer_handle ~= -1 and vim.api.nvim_buf_is_valid(buffer_handle) then
+      local is_hidden = #vim.fn.win_findbuf(buffer_handle) == 0
+      local buftype = vim.api.nvim_get_option_value("buftype", { buf = buffer_handle })
+
+      -- Neovim 0.13 keeps the console buffer as a terminal buffer, which neogit
+      -- cannot safely reuse once it is hidden.
+      if is_hidden and buftype == "terminal" then
+        pcall(vim.api.nvim_buf_delete, buffer_handle, { force = true })
+      end
+    end
+
+    return original_from_name(name)
+  end
+
+  Buffer._stale_console_patch_applied = true
+end
+
 M.config = function ()
   local dvOk, _ = pcall(require, "diffview")
   if not dvOk then
@@ -18,6 +45,9 @@ M.config = function ()
   if not tsOk then
     vim.notify("Telescope not okay in neogit")
   end
+
+  patch_stale_neogit_console()
+
   neogit.setup {
     process_spinner = true,
     env = {
