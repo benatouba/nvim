@@ -68,13 +68,14 @@ local function window()
   return vim.api.nvim_win_get_number(0)
 end
 
--- local function package_status()
---   local pi_ok, pi = pcall(require, "package-info")
---   if not pi_ok then
---     return
---   end
---   return pi.get_status()
--- end
+local function package_status()
+  local pi_ok, pi = pcall(require, "package-info")
+  if not pi_ok then
+    return
+  end
+  return pi.get_status()
+end
+
 local lint_ok, lint = pcall(require, "lint")
 local lint_progress = function()
   return false
@@ -108,6 +109,7 @@ M.config = function ()
   config.sections.lualine_c = { { "diff", source = diff_source }, "diagnostics", "oil" }
   config.sections.lualine_x = {
     "overseer",
+  { package_status, color = { fg = "#ff9e64" } },
     { get_lsp_client },
     { lint_progress },
     { "copilot", show_colors = true },
