@@ -45,6 +45,7 @@ if O.is_nixos then
     "nixd",
     "lua_ls",
     "basedpyright",
+    "ruff",
     "ty",
     "eslint",
     "jsonls",
