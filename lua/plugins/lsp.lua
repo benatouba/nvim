@@ -130,7 +130,7 @@ return {
         gitcommit = { "commitmsgfmt" },
         jsonc = { "jq", stop_after_first = true },
         lua = { "stylua", stop_after_first = true },
-        markdown = { "prettierd", "prettier", stop_after_first = true },
+        markdown = { "markdownlint", "markdownlint-cli2", stop_after_first = true },
         nix = { "nixfmt", stop_after_first = true },
         python = { "ruff_fix", "ruff_format", "ruff_organize_imports", "docformatter", stop_after_first = false },
         quarto = { "injected" },
