@@ -37,6 +37,7 @@ M.config = function()
     },
     filetypes = {
       vue = true,
+      nix = true,
       yaml = true,
       markdown = true,
       help = false,
