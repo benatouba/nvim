@@ -28,22 +28,6 @@ return {
             "rcarriga/cmp-dap",
             ft = { "dap-repl", "dapui_watches", "dapui_hover" },
           },
-          {
-            "philosofonusus/ecolog.nvim",
-            keys = {
-              { "<leader>Eg", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
-              { "<leader>Ep", "<cmd>EcologPeek<cr>", desc = "Ecolog peek variable" },
-              { "<leader>Es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
-              { "<leader>se", "<cmd>EcologTelescope<cr>", desc = "Env" },
-              { "<leader>ev", "<cmd>Ecolog list<cr>", desc = "List env variables" },
-              { "<leader>ef", "<cmd>Ecolog files select<cr>", desc = "Select env file" },
-            },
-            event = { "InsertEnter", "CmdlineEnter", "BufNewFile", "BufReadPre" },
-            opts = {
-              picker = { backend = "telescope" },
-              integrations = { lsp = false },
-            },
-          },
         },
         opts = require("lsp.blink").opts,
         opts_extend = { "sources.default" },

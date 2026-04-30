@@ -141,8 +141,11 @@ return {
   { "nvim-neotest/nvim-nio" },
   {
     "kiyoon/jupynium.nvim",
-    build = "pip3 install --user .",
-    ft = "ipynb",
+    build = "uv pip install user . --python=$HOME/.virtualenvs/jupynium/bin/python",
+    depependencies = {
+      "stevearc/dressing.nvim",
+    },
+    ft = "python",
     enabled = O.notebooks,
   },
   {

@@ -120,7 +120,7 @@ M.opts = {
           return { inherit_defaults = true }
         end
       end,
-      -- python = { "ledger", inherit_defaults = true },
+      python = { "jupynium", inherit_defaults = true },
       markdown = function()
         if string.find(vim.fn.getcwd(), "vivere") then
           return { "lsp", "path", "snippets", "emoji", "calc" }
@@ -144,6 +144,12 @@ M.opts = {
       ["dapui_hover"] = { "cmp-dap" },
     },
     providers = {
+      jupynium = {
+        name = "Jupynium",
+        module = "jupynium.blink_cmp",
+        -- Consider higher priority than LSP
+        score_offset = 100,
+      },
       sonicpi = {
         name = "sonicpi",
         module = "blink.compat.source",

@@ -109,11 +109,35 @@ M.config = function ()
   config.sections.lualine_c = { { "diff", source = diff_source }, "diagnostics", "oil" }
   config.sections.lualine_x = {
     "overseer",
-  { package_status, color = { fg = "#ff9e64" } },
+    { package_status, color = { fg = "#ff9e64" } },
     { get_lsp_client },
     { lint_progress },
     { "copilot", show_colors = true },
+    {
+      function()
+        local sk_status_ok, sk_status = pcall(require, "sidekick.status")
+        if not sk_status_ok then
+          vim.notify("sidekick status not okay in lualine")
+          return ""
+        end
+        sk_status = sk_status.cli()
+        return " " .. (#sk_status > 1 and #sk_status or "")
+      end,
+      cond = function()
+        local sk_status_ok, sk_status = pcall(require, "sidekick.status")
+        if not sk_status_ok then
+          vim.notify("sidekick status not okay in lualine")
+          return ""
+        end
+        sk_status = sk_status.cli()
+        return #sk_status > 0
+      end,
+      color = function()
+        return "Special"
+      end,
+    },
   }
+
   config.sections.lualine_y = {
     "encoding",
     "fileformat",

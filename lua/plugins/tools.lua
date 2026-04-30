@@ -212,4 +212,43 @@ return {
     },
     enabled = O.webdev and O.misc,
   },
+  {
+    "ph1losof/shelter.nvim",
+    lazy = false,
+    -- keys = {
+    --   { "<leader>Eg", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
+    --   { "<leader>Ep", "<cmd>EcologPeek<cr>", desc = "Ecolog peek variable" },
+    --   { "<leader>Es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
+    --   { "<leader>se", "<cmd>EcologTelescope<cr>", desc = "Env" },
+    --   { "<leader>ev", "<cmd>Ecolog list<cr>", desc = "List env variables" },
+    --   { "<leader>ef", "<cmd>Ecolog files select<cr>", desc = "Select env file" },
+    -- },
+    -- event = { "InsertEnter", "CmdlineEnter", "BufNewFile", "BufReadPre" },
+    init = function()
+      vim.filetype.add({
+        -- Mappings based on file extension
+        extension = {
+          env = "dotenv",
+        },
+        -- Mappings based on FULL filename
+        filename = {
+          [".env"] = "dotenv",
+          ["env"] = "dotenv",
+        },
+        -- Mappings based on filename pattern match
+        pattern = {
+          -- Match filenames like ".env.development", "env.local" and so on
+          [".?env.*"] = "dotenv",
+        },
+      })
+    end,
+    opts = {
+      modules = {
+        files = true,
+        telescope_previewer = true,
+        snacks_previewer = true,
+        oil_previewer = true,
+    },
+  },
+},
 }
