@@ -29,4 +29,5 @@ lazy.setup({
   { import = "plugins.lang" },
   { import = "plugins.notes" },
   { import = "plugins.debug" },
+  { import = "plugins.ai" },
 }, {})
