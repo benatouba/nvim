@@ -182,7 +182,7 @@ return {
         { "<leader>a", group = "+Actions", icon = { icon = "", color = "yellow" } },
         { "<leader>A", group = "+Avante", icon = { icon = "󱐒 ", color = "purple" }, remap = false, mode = "n" },
         { "<leader>c", group = "+Configuration", icon = { icon = "", color = "orange" } },
-        { "<leader>E", group = "+Ecolog", icon = { icon = "󰒃  ", color = "green" }, remap = false, mode = "n" },
+        { "<leader>h", group = "+Hide (Shelter)", icon = { icon = "󰒃  ", color = "green" }, remap = false, mode = "n" },
         { "<leader>g", group = "+Git", icon = { icon = "󰊢 ", color = "red" }, remap = false, mode = "n" },
         { "<leader>L", group = "+Logs", icon = { icon = " ", color = "green" } },
         { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
@@ -218,9 +218,8 @@ return {
         { "<leader><leader>", ":bprevious<cr>", desc = "Switch Buffer" },
         -- Actions
         { "<leader>ac", ":BufferClose<CR>", desc = "Close Buffer" },
-        { "<leader>ad", "<cmd>lua vim.diagnostic.enable(not vim.diagnostic.is_enabled())<cr>", desc = "Toggle diagnostics" },
+        -- { "<leader>ad", "<cmd>lua vim.diagnostic.enable(not vim.diagnostic.is_enabled())<cr>", desc = "Toggle diagnostics" },
         { "<leader>ah", "<cmd>let @/ = ''<cr>", desc = "Highlights" },
-        { "<leader>as", "<cmd>source %<cr>", desc = "Source file" },
         { "<leader>ar", "<cmd>syntax sync fromstart<cr><cmd>redraw!<cr>", desc = "Redraw" },
         { "<leader>aw", "<cmd>call TrimWhitespace()<cr>", desc = "Trim Whitespaces" },
         -- Configuration
