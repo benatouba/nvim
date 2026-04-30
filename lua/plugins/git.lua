@@ -56,6 +56,7 @@ return {
   },
   {
     "dlyongemallo/diffview.nvim",
+    version = "*",
     keys = {
       { "<leader>gd", "<cmd>lua DiffviewToggle()<cr>", desc = "Diffview" },
       { "<leader>gS", "<cmd>DiffviewFileHistory -g --range=stash<cr>", desc = "Check Stash" },

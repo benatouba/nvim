@@ -20,6 +20,17 @@ M.config = function()
   diffview.setup({
     diff_binaries = false,
     enhanced_diff_hl = true,
+    hide_merge_artifacts = true,
+    clean_up_buffers = true,
+    auto_close_on_empty = true,
+    diffopt = { algorithm = "histogram" },
+    default_args = {
+      DiffviewOpen = { "--imply-local" },
+    },
+    file_panel = {
+      show_branch_name = true,
+      always_show_sections = true,
+    },
     view = {
       default = {
         layout = "diff2_horizontal",
@@ -27,9 +38,12 @@ M.config = function()
         disable_diagnostics = true,
       },
       merge_tool = {
-        layout = "diff3_horizontal",
+        layout = "diff4_mixed",
         disable_diagnostics = true,
         winbar_info = true,
+      },
+      cycle_layouts = {
+        merge_tool = { "diff4_mixed", "diff3_mixed", "diff3_horizontal", "diff1_plain" },
       },
       file_history = {
         layout = "diff2_horizontal",
