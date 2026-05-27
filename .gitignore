@@ -3,7 +3,9 @@ plugin/*
 **/secrets.lua
 lazy-lock.json
 .supermaven/
-after/
+after/*
+!after/lsp/
+!after/lsp/*.lua
 ftdetect/jupynium.vim
 repro.lua
 snippets/python.json
