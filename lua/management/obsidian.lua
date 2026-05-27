@@ -16,7 +16,7 @@ M.config = function()
     workspaces = {
       {
         name = "vivere",
-        path = "~/documents/vivere",
+        path = "~/projects/vivere",
       },
       {
         name = "work",
@@ -24,7 +24,7 @@ M.config = function()
       },
     },
     note_id_func = function(title)
-      local date = os.date "%Y-%m-%d"
+      local date = os.date("%Y-%m-%d")
       local suffix = ""
       if title ~= nil then
         suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
@@ -36,7 +36,10 @@ M.config = function()
       return date .. "-" .. suffix
     end,
     wiki_link_func = require("obsidian.builtin").wiki_link_path_only,
-    preferred_link_style = "wiki",
+    link = {
+      style = "wiki",
+      auto_update = true,
+    },
     open_notes_in = "current",
     frontmatter = {
       enabled = true,
@@ -80,7 +83,7 @@ M.config = function()
     },
     attachments = {
       folder = "assets",
-    }
+    },
   })
 end
 return M
