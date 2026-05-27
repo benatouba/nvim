@@ -139,60 +139,6 @@ return {
     enabled = O.misc,
   },
   {
-    "yetone/avante.nvim",
-    keys = {
-      { "<leader>Aa", "<cmd>AvanteAsk<cr>", desc = "Avante Ask" },
-      { "<leader>AC", "<cmd>AvanteChat<cr>", desc = "Avante Chat" },
-    },
-    version = false,
-    opts = {
-      provider = "copilot",
-      providers = {
-        gemini = {
-          model = "gemini-2.5-pro-exp-03-25",
-        },
-        claude = {
-          endpoint = "https://api.anthropic.com",
-          model = "claude-sonnet-4-20250514",
-          timeout = 30000,
-          extra_request_body = {
-            temperature = 0.75,
-            max_tokens = 20480,
-          },
-        },
-        copilot = {
-          endpoint = "https://api.githubcopilot.com",
-          model = "gpt-5-mini",
-          timeout = 30000,
-          temperature = 0,
-          extra_request_body = { max_tokens = 20480 },
-        },
-        openai = {
-          endpoint = "https://api.openai.com/v1",
-          model = "gpt-5",
-          extra_request_body = {
-            timeout = 45000,
-            temperature = 0.75,
-            max_completion_tokens = 8192,
-          },
-        },
-      },
-      file_selector = {
-        provider = "telescope",
-        provider_opts = {},
-      },
-    },
-    build = "make",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "stevearc/dressing.nvim",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      "nvim-telescope/telescope.nvim",
-      "zbirenbaum/copilot.lua",
-    },
-  },
-  {
     "kevinhwang91/nvim-bqf",
     ft = "qf",
     enabled = O.misc,
@@ -248,7 +194,7 @@ return {
         telescope_previewer = true,
         snacks_previewer = true,
         oil_previewer = true,
+      },
     },
   },
-},
 }

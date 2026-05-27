@@ -7,115 +7,80 @@ M.config = function()
     return
   end
   ref.setup()
-  -- load refactoring Telescope extension
-  require("telescope").load_extension("refactoring")
+  local keymap = vim.keymap
+
+  keymap.set({ "n", "x" }, "<localleader>re", function()
+    return require("refactoring").extract_func()
+  end, { desc = "Extract Function", expr = true })
+  -- `_` is the default textobject for "current line"
+  keymap.set("n", "<localleader>ree", function()
+    return require("refactoring").extract_func() .. "_"
+  end, { desc = "Extract Function (line)", expr = true })
+
+  keymap.set({ "n", "x" }, "<localleader>rE", function()
+    return require("refactoring").extract_func_to_file()
+  end, { desc = "Extract Function To File", expr = true })
+
+  keymap.set({ "n", "x" }, "<localleader>rv", function()
+    return require("refactoring").extract_var()
+  end, { desc = "Extract Variable", expr = true })
+
+  -- `_` is the default textobject for "current line"
+  keymap.set("n", "<localleader>rvv", function()
+    return require("refactoring").extract_var() .. "_"
+  end, { desc = "Extract Variable (line)", expr = true })
+
+  keymap.set({ "n", "x" }, "<localleader>ri", function()
+    return require("refactoring").inline_var()
+  end, { desc = "Inline Variable", expr = true })
+  keymap.set({ "n", "x" }, "<localleader>rI", function()
+    return require("refactoring").inline_func()
+  end, { desc = "Inline function", expr = true })
+
+  keymap.set({ "n", "x" }, "<localleader>rs", function()
+    return require("refactoring").select_refactor()
+  end, { desc = "Select refactor" })
+
+  -- `iw` is the builtin textobject for "in word". You can use any other textobject or even create the keymap without any textobject if you prefer to provide one yourself each time that you use the keymap
+  keymap.set({ "x", "n" }, "<localleader>pv", function()
+    return require("refactoring.debug").print_var({ output_location = "below" }) .. "iw"
+  end, { desc = "Debug print var below", expr = true })
+
+  -- `iw` is the builtin textobject for "in word". You can use any other textobject or even create the keymap without any textobject if you prefer to provide one yourself each time that you use the keymap
+  keymap.set({ "x", "n" }, "<localleader>pV", function()
+    return require("refactoring.debug").print_var({ output_location = "above" }) .. "iw"
+  end, { desc = "Debug print var above", expr = true })
+
+  keymap.set({ "x", "n" }, "<localleader>pe", function()
+    return require("refactoring.debug").print_exp({ output_location = "below" })
+  end, { desc = "Debug print exp below", expr = true })
+  -- `_` is the default textobject for "current line"
+  keymap.set("n", "<localleader>pee", function()
+    return require("refactoring.debug").print_exp({ output_location = "below" }) .. "_"
+  end, { desc = "Debug print exp below", expr = true })
+
+  keymap.set({ "x", "n" }, "<localleader>pE", function()
+    return require("refactoring.debug").print_exp({ output_location = "above" })
+  end, { desc = "Debug print exp above", expr = true })
+  -- `_` is the default textobject for "current line"
+  keymap.set("n", "<localleader>pEE", function()
+    return require("refactoring.debug").print_exp({ output_location = "above" }) .. "_"
+  end, { desc = "Debug print exp above", expr = true })
+
+  keymap.set("n", "<localleader>pP", function()
+    return require("refactoring.debug").print_loc({ output_location = "above" })
+  end, { desc = "Debug print location", expr = true })
+  keymap.set("n", "<localleader>pp", function()
+    return require("refactoring.debug").print_loc({ output_location = "below" })
+  end, { desc = "Debug print location", expr = true })
+
+  keymap.set({ "x", "n" }, "<localleader>pc", function()
+    -- `ag` is a custom textobject that selects the whole buffer. It's provided by plugins like `mini.ai` (requires manual configuration using `MiniExtra.gen_ai_spec.buffer()`).
+    -- return require("refactoring.debug").cleanup { restore_view = true } .. "ag"
+
+    -- this keymap doesn't select any textobject by default, so you need to provide one each time you use it.
+    return require("refactoring.debug").cleanup({ restore_view = true })
+  end, { desc = "Debug print clean", expr = true, remap = true })
 end
-M.maps = {
-  {
-    "<leader>Rb",
-    function()
-      require("refactoring").refactor("Extract Block")
-    end,
-    desc = "Extract Block",
-    mode = { "x", "n" },
-    expr = true,
-  },
-  {
-    "<leader>RB",
-    function()
-      require("refactoring").refactor("Extract Block to File")
-    end,
-    desc = "Extract Block to File",
-    mode = { "x", "n" },
-    expr = true,
-  },
-  {
-    "<leader>Rf",
-    function()
-      require("refactoring").refactor("Extract Function")
-    end,
-    desc = "Extract Function",
-    mode = { "x", "n" },
-    expr = true,
-  },
-  {
-    "<leader>RF",
-    function()
-      require("refactoring").refactor("Extract Function To File")
-    end,
-    desc = "Extract Function to File",
-    mode = { "x", "n" },
-    expr = true,
-  },
-  {
-    "<leader>Ri",
-    function()
-      require("refactoring").refactor("Inline Variable")
-    end,
-    desc = "Inline Variable",
-    mode = { "x", "n" },
-    expr = true,
-  },
-  {
-    "<leader>RI",
-    function()
-      require("refactoring").refactor("Inline Function")
-    end,
-    desc = "Inline Function",
-    mode = { "x", "n" },
-    expr = true,
-  },
-  {
-    "<leader>Rv",
-    function()
-      require("refactoring").refactor("Extract Variable")
-    end,
-    desc = "Extract Variable",
-    mode = { "x", "n" },
-    expr = true,
-  },
-  {
-    "<leader>Rt",
-    function()
-      require("telescope").extensions.refactoring.refactors()
-    end,
-    desc = "Extract to Telescope",
-    mode = { "x", "n" },
-    expr = true,
-  },
-  {
-    "<leader>Rr",
-    function()
-      require("refactoring").select_refactor()
-    end,
-    desc = "Select Refactor",
-    mode = { "x", "n" },
-    expr = true,
-  },
-}
-
--- telescope refactoring helper
--- local function refactor(prompt_bufnr)
--- 	local content = require("telescope.actions.state").get_selected_entry(prompt_bufnr)
--- 	require("telescope.actions").close(prompt_bufnr)
--- 	require("refactoring").refactor(content.value)
--- end
-
--- M.refactors = function()
--- 	local opts = require("telescope.themes").get_cursor() -- set personal telescope options
--- 	require("telescope.pickers").new(opts, {
--- 		prompt_title = "refactors",
--- 		finder = require("telescope.finders").new_table({
--- 			results = require("refactoring").get_refactors(),
--- 		}),
--- 		sorter = require("telescope.config").values.generic_sorter(opts),
--- 		attach_mappings = function(_, map)
--- 			map("i", "<CR>", refactor)
--- 			map("n", "<CR>", refactor)
--- 			return true
--- 		end,
--- 	}):find()
--- end
---
 
 return M

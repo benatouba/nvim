@@ -2,36 +2,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      {
-        "saghen/blink.compat",
-        version = "*",
-        event = "VeryLazy",
-        opts = {
-          impersonate_nvim_cmp = false,
-        },
-      },
-      {
-        "saghen/blink.cmp",
-        enabled = true,
-        version = "*",
-        build = "cargo build --release",
-        event = "VeryLazy",
-        dependencies = {
-          "rafamadriz/friendly-snippets",
-          "mikavilpas/blink-ripgrep.nvim",
-          "Kaiser-Yang/blink-cmp-git",
-          "hrsh7th/cmp-nvim-lua",
-          "joelazar/blink-calc",
-          "hrsh7th/cmp-emoji",
-          "onsails/lspkind.nvim",
-          {
-            "rcarriga/cmp-dap",
-            ft = { "dap-repl", "dapui_watches", "dapui_hover" },
-          },
-        },
-        opts = require("lsp.blink").opts,
-        opts_extend = { "sources.default" },
-      },
+      "saghen/blink.cmp",
       "b0o/SchemaStore.nvim",
     },
     event = { "BufReadPost", "BufNewFile" },
@@ -122,96 +93,5 @@ return {
     config = function()
       require("ts-error-translator").setup()
     end,
-  },
-  {
-    "stevearc/conform.nvim",
-    opts = {
-      formatters_by_ft = {
-        gitcommit = { "commitmsgfmt" },
-        jsonc = { "jq", stop_after_first = true },
-        lua = { "stylua", stop_after_first = true },
-        markdown = { "markdownlint", "markdownlint-cli2", stop_after_first = true },
-        nix = { "nixfmt", stop_after_first = true },
-        python = { "ruff_fix", "ruff_format", "ruff_organize_imports", "docformatter", stop_after_first = false },
-        quarto = { "injected" },
-        r = { "air", stop_after_first = true },
-        rmd = { "injected" },
-        scss = { "oxfmt" },
-        tex = { "latexindent", stop_after_first = true },
-        javascript = { "oxfmt" },
-        typescript = { "oxfmt" },
-        javascriptreact = { "oxfmt" },
-        typescriptreact = { "oxfmt" },
-        vue = { "oxfmt" },
-        json = { "oxfmt" },
-        html = { "oxfmt" },
-        css = { "oxfmt" },
-        typst = { "typstyle", stop_after_first = true },
-        yaml = { "yamlfmt", stop_after_first = true },
-        ["*"] = { "codespell" },
-        ["_"] = { "trim_whitespace" },
-      },
-      default_format_opts = {
-        lsp_format = "fallback",
-      },
-    },
-    init = function()
-      vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-      vim.api.nvim_create_autocmd("InsertLeave", {
-        pattern = "*COMMIT_EDITMSG*",
-        callback = function(args)
-          require("conform").format({ bufnr = args.buf, timeout_ms = 2500, lsp_format = "never" })
-        end,
-      })
-    end,
-    ft = { "gitcommit" },
-    keys = {
-      { "<leader>Lf", "<cmd>ConformInfo<cr>", desc = "Conform Info" },
-      {
-        "<leader>lf",
-        '<cmd>lua require("conform").format({ lsp_format = "fallback", timeout_ms = 5000 })<cr>',
-        desc = "Format",
-      },
-    },
-    enabled = O.language_parsing,
-  },
-  {
-    "mfussenegger/nvim-lint",
-    config = function()
-      require("lint").linters_by_ft = {
-        NeogitCommitMessage = { "commitlint" },
-        c = { "compiler" },
-        gitcommit = { "commitlint" },
-        htmldjango = { "djlint" },
-        jinja = { "djlint" },
-        nix = { "statix" },
-        tex = { "proselint" },
-        zsh = { "zsh" },
-        [".*/.github/workflows/.*%.yml"] = { "yaml.ghaction" },
-      }
-      local ns = require("lint").get_namespace("commitlint")
-      vim.diagnostic.config({ virtual_text = true, signs = true, update_in_insert = true }, ns)
-      vim.api.nvim_create_augroup("lint", { clear = true })
-      vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
-        group = "lint",
-        callback = function()
-          require("lint").try_lint()
-        end,
-      })
-      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-        group = "lint",
-        callback = function()
-          require("lint").try_lint("editorconfig-checker")
-        end,
-      })
-      vim.api.nvim_create_autocmd({ "TextChanged" }, {
-        group = "lint",
-        pattern = "*COMMIT_EDITMSG*",
-        callback = function()
-          require("lint").try_lint("commitlint")
-        end,
-      })
-    end,
-    enabled = O.language_parsing,
   },
 }

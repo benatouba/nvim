@@ -151,7 +151,9 @@ return {
     dependencies = {
       {
         "AndreM222/copilot-lualine",
-        enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 20 and O.copilot,
+        enabled = function()
+          return O.copilot and vim.fn.executable("node") == 1
+        end,
       },
     },
     config = function()

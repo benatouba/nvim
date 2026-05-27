@@ -1,5 +1,13 @@
 local M = {}
 
+-- local function on_blink_cmp_git_error(return_value, standard_error)
+--   if return_value == 0 and type(standard_error) == "string" and standard_error:match("^%* Request") then
+--     return false
+--   end
+--
+--   return require("blink-cmp-git.default.common").default_on_error(return_value, standard_error)
+-- end
+--
 ---@module 'blink.cmp'
 ---@type blink.cmp.Config
 M.opts = {
@@ -112,7 +120,7 @@ M.opts = {
     end,
     per_filetype = {
       sonicpi = { "sonicpi", inherit_defaults = true },
-      gitcommit = { "lsp", "git", "snippets", "emoji", "calc", "path" },
+      gitcommit = { "conventional_commits", "lsp", "git", "snippets", "emoji", "calc", "path" },
       lua = function()
         if string.find(vim.fn.getcwd(), "nvim") then
           return { "lazydev", inherit_defaults = true }
@@ -128,6 +136,7 @@ M.opts = {
           return { inherit_defaults = true }
         end
       end,
+      json = { "npm", inherit_defaults = true },
       octo = { "lsp", "git", "emoji", "calc" },
       org = { "lsp", "orgmode", "path", "snippets", "ripgrep", "emoji", "calc" },
       -- quarto = { inherit_defaults = true, "cmp_r" },
@@ -144,6 +153,18 @@ M.opts = {
       ["dapui_hover"] = { "cmp-dap" },
     },
     providers = {
+      conventional_commits = {
+        name = "Conventional Commits",
+        module = "blink-cmp-conventional-commits",
+        enabled = function()
+          return vim.bo.filetype == "gitcommit"
+        end,
+        ---@module 'blink-cmp-conventional-commits'
+        ---@type blink-cmp-conventional-commits.Options
+        opts = {
+          -- See Configuration section below for available options
+        },
+      },
       jupynium = {
         name = "Jupynium",
         module = "jupynium.blink_cmp",
@@ -171,10 +192,10 @@ M.opts = {
       },
       dap = {
         name = "dap",
-        module = "blink.compat.source",
-        enabled = function()
-          return require("dap").session() ~= nil
-        end,
+        module = "blink-cmp-dap",
+        -- enabled = function()
+        --   return require("dap").session() ~= nil
+        -- end,
       },
       -- cmp_r = {
       --   name = "cmp_r",
@@ -188,8 +209,16 @@ M.opts = {
         module = "blink.compat.source",
       },
       emoji = {
-        name = "emoji",
-        module = "blink.compat.source",
+        name = "Emoji",
+        module = "blink-emoji",
+        score_offset = 15, -- Tune by preference
+        opts = {
+          insert = true, -- Insert emoji (default) or complete its name
+          ---@type string|table|fun():table
+          trigger = function()
+            return { ":" }
+          end,
+        },
       },
       path = {
         opts = {
@@ -223,13 +252,37 @@ M.opts = {
         module = "lazydev.integrations.blink",
         score_offset = 100,
       },
+      npm = {
+        name = "npm",
+        module = "blink-cmp-npm",
+        async = true,
+        enabled = function()
+          return vim.bo.filetype == "json"
+        end,
+        score_offset = 100,
+        ---@module "blink-cmp-npm"
+        ---@type blink-cmp-npm.Options
+        opts = {
+          ignore = {},
+          only_semantic_versions = true,
+          only_latest_version = false,
+        },
+      },
       git = {
         module = "blink-cmp-git",
         name = "Git",
         should_show_items = function()
           return vim.o.filetype == "gitcommit"
         end,
-        opts = {},
+        -- opts = {
+        --   git_centers = {
+        --     github = {
+        --       issue = { on_error = on_blink_cmp_git_error },
+        --       pull_request = { on_error = on_blink_cmp_git_error },
+        --       mention = { on_error = on_blink_cmp_git_error },
+        --     },
+        --   },
+        -- },
       },
       snippets = {
         should_show_items = function(ctx)
@@ -261,7 +314,6 @@ M.opts = {
               project_root_fallback = true,
             },
           },
-          fallback_to_regex_highlighting = true,
           debug = false,
         },
         transform_items = function(_, items)

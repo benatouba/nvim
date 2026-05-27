@@ -1,35 +1,31 @@
 return {
   {
-    "zbirenbaum/copilot.lua",
-    event = { "InsertEnter" },
-    config = function()
-      require("lsp.copilot").config()
-    end,
-    enabled = tonumber(string.sub(Capture("node --version"), 2, 3)) >= 20 and O.copilot,
+    "saghen/blink.compat",
+    version = "*",
+    event = "VeryLazy",
+    opts = {
+      impersonate_nvim_cmp = false,
+    },
   },
   {
-    "Exafunction/codeium.vim",
-    config = function()
-      require("lsp.codeium").config()
-    end,
-    enabled = O.codeium,
-  },
-  {
-    "supermaven-inc/supermaven-nvim",
-    event = { "InsertEnter" },
-    config = function()
-      require("supermaven-nvim").setup({
-        keymaps = {
-          accept_suggestion = "<C-l>",
-          clear_suggestion = "<C-h>",
-          accept_word = "<C-a>",
-        },
-        ignore_filetypes = { "env" },
-        color = {
-          cterm = 244,
-        },
-      })
-    end,
-    enabled = O.supermaven,
+    "saghen/blink.cmp",
+    enabled = true,
+    version = "1.*",
+    build = "cargo build --release",
+    event = "VeryLazy",
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+      "mikavilpas/blink-ripgrep.nvim",
+      "Kaiser-Yang/blink-cmp-git",
+      "hrsh7th/cmp-nvim-lua",
+      "joelazar/blink-calc",
+      "moyiz/blink-emoji.nvim",
+      "onsails/lspkind.nvim",
+      "disrupted/blink-cmp-conventional-commits",
+      "mayromr/blink-cmp-dap",
+      "alexandre-abrioux/blink-cmp-npm.nvim",
+    },
+    opts = require("lsp.blink").opts,
+    opts_extend = { "sources.default" },
   },
 }
