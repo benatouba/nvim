@@ -28,7 +28,6 @@ M.enable_nixos = function()
     "basedpyright",
     "ruff",
     "ty",
-    "eslint",
     "jsonls",
     "ltex_plus",
     "matlab_ls",
