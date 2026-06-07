@@ -58,8 +58,8 @@ return {
       }
     end
   end,
-  on_attach = function(client)
-    if vim.bo.filetype == "vue" then
+  on_attach = function(client, bufnr)
+    if vim.bo[bufnr].filetype == "vue" then
       client.server_capabilities.semanticTokensProvider = nil
     end
   end,
