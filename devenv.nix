@@ -1,14 +1,14 @@
 { pkgs, ... }:
 {
-  # https://devenv.sh/packages/
   packages = with pkgs; [
-    nixd
-    nil
+    editorconfig-checker
     lua-language-server
     stylua
-    editorconfig-checker
   ];
   enterShell = ''
-    git --version # Use packages
+    echo "Tooling versions:"
+    echo "  editorconfig-checker: $(editorconfig-checker --version)"
+    echo "  lua-language-server: $(lua-language-server --version)"
+    echo "  stylua: $(stylua --version)"
   '';
 }
