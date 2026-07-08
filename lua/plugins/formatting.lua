@@ -3,6 +3,7 @@ return {
     "stevearc/conform.nvim",
     opts = {
       formatters_by_ft = {
+        dockerfile = { "lsp" },
         gitcommit = { "commitmsgfmt" },
         jsonc = { "jq", stop_after_first = true },
         lua = { "stylua", stop_after_first = true },
@@ -24,6 +25,7 @@ return {
         css = { "oxfmt" },
         typst = { "typstyle", stop_after_first = true },
         yaml = { "yamlfmt", stop_after_first = true },
+        ["yaml.docker-compose"] = { "yamlfmt", stop_after_first = true },
         ["*"] = { "codespell" },
         ["_"] = { "trim_whitespace" },
       },
