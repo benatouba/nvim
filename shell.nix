@@ -3,7 +3,7 @@
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
     lua-language-server
-    stylua
     selene
+    stylua
   ];
 }
