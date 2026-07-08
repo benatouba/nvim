@@ -1,66 +1,5 @@
 local M = {}
 
-local function patch_capabilities(client)
-  if client.name == "basedpyright" then
-    client.server_capabilities.declarationProvider = true
-    client.server_capabilities.definitionProvider = true
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-    client.server_capabilities.hoverProvider = true
-    client.server_capabilities.referencesProvider = true
-    client.server_capabilities.renameProvider = false
-  -- elseif client.name == "texlab" then
-  --   -- Disable in favour of Conform
-  --   client.server_capabilities.documentFormattingProvider = true
-  --   client.server_capabilities.documentRangeFormattingProvider = true
-  elseif client.name == "ty" then
-    client.server_capabilities.callHierarchyProvider = false
-    client.server_capabilities.codeActionProvider = true
-    client.server_capabilities.codeLensProvider = false
-    client.server_capabilities.colorProvider = false
-    client.server_capabilities.declarationProvider = true
-    client.server_capabilities.definitionProvider = true
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentHighlightProvider = true
-    client.server_capabilities.documentLinkProvider = false
-    client.server_capabilities.documentOnTypeFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-    client.server_capabilities.documentSymbolProvider = true
-    client.server_capabilities.foldingRangeProvider = false
-    client.server_capabilities.hoverProvider = true
-    client.server_capabilities.implementationProvider = false
-    client.server_capabilities.referencesProvider = true
-    client.server_capabilities.renameProvider = true
-    -- client.server_capabilities.semanticTokensProvider = false
-    client.server_capabilities.typeDefinitionProvider = true
-    client.server_capabilities.typeHierarchyProvider = false
-    client.server_capabilities.workspaceSymbolProvider = true
-  elseif client.name == "mutt_ls" then
-    vim.diagnostic.enable(not vim.diagnostic.is_enabled())
-  elseif client.name == "ruff" then
-    -- Disable hover in favour of pyright
-    client.server_capabilities.hoverProvider = false
-    client.server_capabilities.definitionProvider = false
-  elseif client.name == "r_language_server" then
-    client.server_capabilities.completionProvider = false
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentRangeFormattingProvider = false
-  elseif client.name == "ts_ls" then
-    --   client.server_capabilities.documentFormattingProvider = false
-    --   client.server_capabilities.documentRangeFormattingProvider = false
-    --   client.server_capabilities.documentHighlightProvider = true
-    client.server_capabilities.semanticTokensProvider = false
-  elseif client.name == "vue_ls" then
-    --   client.server_capabilities.documentHighlightProvider = true
-    client.server_capabilities.semanticTokensProvider = false
-  --   client.server_capabilities.documentFormattingProvider = true
-  --   client.server_capabilities.documentRangeFormattingProvider = false
-  --   client.server_capabilities.definitionProvider = false
-  elseif client.name == "cssmodules_ls" then
-    client.server_capabilities.definitionProvider = true
-  end
-end
-
 local function add_keymaps(event, bufnr)
   vim.keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.completion.trigger()<cr>")
 
@@ -82,11 +21,11 @@ local function add_keymaps(event, bufnr)
       { "<leader>lD", "<cmd>Telescope lsp_declarations<cr>", desc = "Declarations" },
       { "<leader>lh", vim.lsp.buf.hover, desc = "Hover" },
       { "<leader>lF", "<cmd>lua vim.lsp.buf.format({ async = false })<CR>", desc = "Format Document (Sync)" },
-      { "<leader>li", "<cmd>LspInfo<cr>", desc = "Info" },
+      { "<leader>li", "<cmd>LspConfig<cr>", desc = "Server Config" },
       { "<leader>ll", "<cmd>lua vim.lsp.codelens.run()<cr>", desc = "CodeLens" },
       { "<leader>lL", "<cmd>LspLog<CR>", desc = "Logs", icon = { icon = " ", color = "green" } },
       { "<leader>lq", "<cmd>Telescope quickfix<cr>", desc = "Quickfix" },
-      { "<leader>lr", "<cmd>lsp restart<cr>", desc = "Restart Server" },
+      { "<leader>lr", "<cmd>LspRestart<cr>", desc = "Restart Server" },
       {
         "<leader>lR",
         "<cmd>lua vim.lsp.buf.code_action({context = {only = {'refactor'}}})<cr>",
@@ -130,27 +69,9 @@ local function add_keymaps(event, bufnr)
   })
 end
 
-local function add_document_highlight(event, client)
-  if not client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-    return
-  end
-
-  local highlight_group = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
-  vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-    buffer = event.buf,
-    group = highlight_group,
-    callback = vim.lsp.buf.document_highlight,
-  })
-  vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-    buffer = event.buf,
-    group = highlight_group,
-    callback = vim.lsp.buf.clear_references,
-  })
-end
-
 M.setup = function()
   vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
+    group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
     callback = function(event)
       local bufnr = vim.api.nvim_get_current_buf()
       local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -163,15 +84,20 @@ M.setup = function()
         vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
       end
 
-      patch_capabilities(client)
-
-      if client.server_capabilities.semanticTokensProvider then
-        vim.lsp.semantic_tokens.enable(true, { bufnr = event.buf })
-      end
+      -- Deferred so config.on_attach callbacks (which fire after LspAttach)
+      -- can modify server_capabilities before we act on them.
+      vim.schedule(function()
+        if not vim.api.nvim_buf_is_valid(bufnr) then
+          return
+        end
+        local c = vim.lsp.get_client_by_id(client.id)
+        if c and c.server_capabilities.semanticTokensProvider then
+          vim.lsp.semantic_tokens.enable(true, { bufnr = bufnr })
+        end
+      end)
 
       add_keymaps(event, bufnr)
       vim.bo.omnifunc = "v:lua.vim.lsp.omnifunc"
-      add_document_highlight(event, client)
     end,
   })
 end
