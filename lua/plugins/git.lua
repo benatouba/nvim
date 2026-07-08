@@ -55,7 +55,7 @@ return {
     end,
   },
   {
-    "dlyongemallo/diffview.nvim",
+    "dlyongemallo/diffview-plus.nvim",
     version = "*",
     keys = {
       { "<leader>gd", "<cmd>lua DiffviewToggle()<cr>", desc = "Diffview" },
