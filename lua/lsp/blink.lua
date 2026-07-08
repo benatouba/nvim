@@ -120,7 +120,7 @@ M.opts = {
     end,
     per_filetype = {
       sonicpi = { "sonicpi", inherit_defaults = true },
-      gitcommit = { "conventional_commits", "lsp", "git", "snippets", "emoji", "calc", "path" },
+      gitcommit = { "lsp", "git", "snippets", "emoji", "calc", "path" },
       lua = function()
         if string.find(vim.fn.getcwd(), "nvim") then
           return { "lazydev", inherit_defaults = true }
@@ -153,18 +153,6 @@ M.opts = {
       ["dapui_hover"] = { "cmp-dap" },
     },
     providers = {
-      conventional_commits = {
-        name = "Conventional Commits",
-        module = "blink-cmp-conventional-commits",
-        enabled = function()
-          return vim.bo.filetype == "gitcommit"
-        end,
-        ---@module 'blink-cmp-conventional-commits'
-        ---@type blink-cmp-conventional-commits.Options
-        opts = {
-          -- See Configuration section below for available options
-        },
-      },
       jupynium = {
         name = "Jupynium",
         module = "jupynium.blink_cmp",

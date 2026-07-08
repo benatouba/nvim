@@ -1,14 +1,14 @@
 return {
   {
     "neovim/nvim-lspconfig",
+    -- IMPORTANT: must load early so its lsp/*.lua configs are on the
+    -- runtime path before any vim.lsp.enable() call (see :help lspconfig-nvim-0.11).
+    -- Config priority: lsp/ -> after/lsp/ -> vim.lsp.config()
+    lazy = false,
     dependencies = {
       "saghen/blink.cmp",
       "b0o/SchemaStore.nvim",
     },
-    event = { "BufReadPost", "BufNewFile" },
-    config = function()
-      require("lsp").config()
-    end,
     enabled = O.lsp,
   },
   {
