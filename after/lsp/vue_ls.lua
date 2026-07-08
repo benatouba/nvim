@@ -1,20 +1,25 @@
 local vue = require("lsp.vue")
 
 return {
-  cmd = { "vue-language-server", "--stdio" },
+  cmd = function(dispatchers, config)
+    local resolved = vue.resolve_vue_ls_cmd(config and config.root_dir) or { "vue-language-server", "--stdio" }
+    return vim.lsp.rpc.start(resolved, dispatchers)
+  end,
   filetypes = { "vue" },
   root_markers = { "package.json" },
-  on_new_config = function(new_config, root)
-    local _, fallback_tsdk = vue.resolve_paths()
-    local tsdk = vue.workspace_tsdk(root) or fallback_tsdk
+  before_init = function(init_params, config)
+    local _, fallback_tsdk = vue.resolve_paths(config.root_dir)
+    local tsdk = vue.workspace_tsdk(config.root_dir) or fallback_tsdk
 
-    if not tsdk then
-      return
+    if tsdk then
+      init_params.initializationOptions =
+        vim.tbl_deep_extend("force", init_params.initializationOptions or {}, { typescript = { tsdk = tsdk } })
     end
-
-    new_config.init_options = new_config.init_options or {}
-    new_config.init_options.typescript = new_config.init_options.typescript or {}
-    new_config.init_options.typescript.tsdk = tsdk
   end,
-  on_init = vue.vue_on_init,
+  on_init = {
+    vue.vue_on_init,
+    function(client)
+      client.server_capabilities.definitionProvider = true
+    end,
+  },
 }
