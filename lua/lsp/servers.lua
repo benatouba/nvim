@@ -72,6 +72,8 @@ M.enable_nixos = function()
     "docker_language_server",
     "hls",
     "jsonls",
+    "kotlin_language_server",
+    "lemminx",
     "lua_ls",
     "marksman",
     "matlab_ls",
