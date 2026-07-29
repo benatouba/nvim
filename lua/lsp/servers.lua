@@ -69,6 +69,7 @@ M.enable_nixos = function()
   vim.lsp.enable({
     "basedpyright",
     "codebook",
+    "cssls",
     "docker_language_server",
     "hls",
     "jsonls",
@@ -82,6 +83,7 @@ M.enable_nixos = function()
     "oxlint",
     "ruby_lsp",
     "ruff",
+    "tailwindcss",
     "taplo",
     "texlab",
     "tinymist",
