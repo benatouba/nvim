@@ -22,6 +22,8 @@ return {
         vue = { "oxfmt" },
         json = { "oxfmt" },
         html = { "oxfmt" },
+        xml = { "lsp" },
+        xhtml = { "lsp" },
         css = { "oxfmt" },
         typst = { "typstyle", stop_after_first = true },
         yaml = { "yamlfmt", stop_after_first = true },
