@@ -2,9 +2,19 @@
 {
   packages = with pkgs; [
     editorconfig-checker
-    lua-language-server
     stylua
+    vscode-json-languageserver
   ];
+  languages = {
+    lua = {
+      enable = true;
+      package = pkgs.lua5_2;
+      lsp = {
+        enable = true;
+        package = pkgs.lua-language-server;
+      };
+    };
+  };
   enterShell = ''
     echo "Tooling versions:"
     echo "  editorconfig-checker: $(editorconfig-checker --version)"
