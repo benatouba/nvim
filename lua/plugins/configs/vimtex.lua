@@ -1,14 +1,12 @@
+-- vimtex: g: options (read when the plugin sources, so set from the spec's init) and
+-- the which-key descriptions for its <localleader>l mappings.
 local M = {}
 
-M.config = function()
+M.init = function()
   vim.g.vimtex_view_method = "zathura_simple"
   vim.g.vimtex_quickfix_open_on_warning = 0
   vim.g.vimtex_mappings_enabled = 1
   vim.g.vimtex_syntax_enabled = 1
-  if vim.fn.has("nvim-0.12") == 0 then
-    vim.g.matchup_override_vimtex = 1
-  end
-  vim.bo.textwidth = 0 -- automatically insert line break after n chars
   vim.g.vimtex_log_ignore = {
     "Underfull",
     "Overfull",
@@ -21,39 +19,9 @@ M.config = function()
   vim.g.vimtex_compiler_latexmk_engines = {
     _ = "-lualatex",
   }
-  -- vim.g.vimtex_grammar_vlty = {
-  --   -- lt_directory = "/usr/share/java/languagetool/libs/",
-  --   lt_command = "languagetool",
-  --   server = "my",
-  --   show_suggestions = 1,
-  --   shell_options = "--multi-language --packages '*' --equation-punctuation display --single-letters 'i.\\,A.\\|z.\\,B.\\|\\|'",
-  -- }
-  -- vim.g.vimtex_compiler_latexmk = {
-  --   options = {
-  --     "-verbose",
-  --     "-file-line-error'",
-  --     "-synctex=1",
-  --     "-interaction=nonstopmode",
-  --     -- "--enable-write18",
-  --   },
-  -- }
-  -- vim.g.tex_comment_nospell = 1
-  -- vim.g.vimtex_compiler_progname = 'nvr'
-  -- vim.g.vimtex_view_general_options = [[--unique file:@pdf\#src:@line@tex]]
-  -- vim.g.vimtex_view_general_options_latexmk = '--unique'
-  -- local augroup = vim.api.nvim_create_augroup("VimtexGroup", { clear = true })
-  -- vim.api.nvim_set_keymap(
-  --   "n",
-  --   "<F9>",
-  --   ":w <bar> compiler vlty <bar> make <bar> :cw <cr><esc>",
-  --   { noremap = true, silent = true }
-  -- )
-  -- vim.api.nvim_create_autocmd("User", {
-  --   pattern = "VimtexEventInitPost",
-  --   group = augroup,
-  --   command = "VimtexCompile",
-  -- })
+end
 
+M.config = function()
   local wk = require("which-key")
   wk.add({
     -- buffer = "tex", -- e.g. ev.buf or similar
