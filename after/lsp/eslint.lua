@@ -2,15 +2,15 @@ return {
   settings = {
     -- This is the magic bullet for ESLint v9 / Flat Config:
     useESLintClass = true,
-    
+
     experimental = {
       useFlatConfig = true,
     },
-    
+
     workingDirectories = { mode = "auto" },
-    
+
     -- By explicitly listing 'vue' here instead of leaving it 'on',
-    -- the server is forced to lint the file and will visibly throw an 
+    -- the server is forced to lint the file and will visibly throw an
     -- error in Neovim if it fails, rather than failing silently.
     validate = {
       "javascript",

@@ -3,20 +3,10 @@ local M = {
     return vim.lsp.rpc.start({ "lua-language-server" }, dispatchers)
   end,
   filetypes = { "lua" },
-  root_markers = vim.fn.has("nvim-0.11.3") == 1 and {
+  root_markers = {
     { ".emmyrc.json", ".luarc.json", ".luarc.jsonc" },
     { ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml" },
     { ".git" },
-  } or {
-    ".emmyrc.json",
-    ".luarc.json",
-    ".luarc.jsonc",
-    ".luacheckrc",
-    ".stylua.toml",
-    "stylua.toml",
-    "selene.toml",
-    "selene.yml",
-    ".git",
   },
   on_init = function(client)
     if client.workspace_folders then

@@ -2,10 +2,10 @@ return {
   cmd = { "nil" },
   filetypes = { "nix" },
   root_markers = { "flake.nix", "shell.nix", "default.nix", ".git" },
-  -- Disable completions — handled by nixd which has full nixpkgs awareness
-  capabilities = {
-    completionProvider = false,
-  },
+  -- Completions come from nixd, which has full nixpkgs awareness.
+  on_init = function(client)
+    client.server_capabilities.completionProvider = false
+  end,
   settings = {
     ["nil"] = {
       formatting = {

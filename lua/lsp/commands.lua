@@ -35,7 +35,7 @@ M.setup = function()
     vim.notify(table.concat(lines, "\n"), "trace", {
       on_open = function(win)
         local buf = vim.api.nvim_win_get_buf(win)
-        vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
+        vim.bo[buf].filetype = "markdown"
       end,
       timeout = 15000,
     })
@@ -59,7 +59,7 @@ M.setup = function()
         vim.notify(msg, "trace", {
           on_open = function(win)
             local buf = vim.api.nvim_win_get_buf(win)
-            vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
+            vim.bo[buf].filetype = "markdown"
           end,
           timeout = 14000,
         })

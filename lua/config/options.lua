@@ -27,6 +27,7 @@ o.signcolumn = "yes:1" -- always reserve the sign column so text does not shift
 o.showmode = false -- the statusline shows the mode
 o.showcmd = true
 o.pumheight = 10
+o.completeopt = "menu,menuone,noinsert,noselect"
 o.scrolloff = 999 -- keep the cursor line vertically centred
 o.sidescrolloff = 7
 o.conceallevel = 2 -- e.g. hide markup in markdown

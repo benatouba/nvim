@@ -1,17 +1,12 @@
+-- LSP core, invoked from the nvim-lspconfig spec once its defaults are on the runtimepath.
+-- Client capabilities: blink.cmp registers its own via vim.lsp.config("*", ...) on load.
 local M = {}
 
-M.config = function()
-  vim.opt.completeopt = { "menu", "menuone", "noinsert", "noselect" }
-
-  require("lsp.servers").setup()
+M.setup = function()
   require("lsp.diagnostics").setup()
   require("lsp.commands").setup()
   require("lsp.attach").setup()
-  require("lsp.watchman").setup()
-end
-
-M.enable_nixos = function()
-  require("lsp.servers").enable_nixos()
+  require("lsp.servers").enable()
 end
 
 return M

@@ -4,81 +4,9 @@ local function is_dir(path)
   return path and path ~= "" and vim.fn.isdirectory(path) == 1
 end
 
-local function is_file(path)
-  return path and path ~= "" and vim.fn.filereadable(path) == 1
-end
-
-local function walk_ancestors(start_dir, cb)
-  local dir = start_dir
-  while dir and dir ~= "" do
-    local done, value = cb(dir)
-    if done then
-      return value
-    end
-
-    local parent = vim.fs.dirname(dir)
-    if not parent or parent == dir then
-      break
-    end
-
-    dir = parent
-  end
-
-  return nil
-end
-
-local function bin_cmd(bin_path)
-  if vim.fn.executable(bin_path) == 1 then
-    return { bin_path, "--stdio" }
-  end
-
-  local win_candidate = bin_path .. ".cmd"
-  if is_file(win_candidate) then
-    return { win_candidate, "--stdio" }
-  end
-
-  return nil
-end
-
-local function workspace_bin_cmd(root_dir, bin)
-  if not root_dir or root_dir == "" then
-    return nil
-  end
-
-  return walk_ancestors(root_dir, function(dir)
-    local cmd = bin_cmd(dir .. "/node_modules/.bin/" .. bin)
-    return cmd ~= nil, cmd
-  end)
-end
-
-local function devenv_bin_cmd(root_dir, bin)
-  if not root_dir or root_dir == "" then
-    return nil
-  end
-
-  return walk_ancestors(root_dir, function(dir)
-    local cmd = bin_cmd(dir .. "/.devenv/profile/bin/" .. bin)
-    return cmd ~= nil, cmd
-  end)
-end
-
-local function resolve_cmd(root_dir, bin)
-  local local_cmd = workspace_bin_cmd(root_dir, bin)
-  if local_cmd then
-    return local_cmd
-  end
-
-  local devenv_cmd = devenv_bin_cmd(root_dir, bin)
-  if devenv_cmd then
-    return devenv_cmd
-  end
-
-  if vim.fn.executable(bin) == 1 then
-    return { bin, "--stdio" }
-  end
-
-  return nil
-end
+local resolve = require("lsp.resolve")
+local workspace_bin_cmd = resolve.workspace
+local resolve_cmd = resolve.cmd
 
 local function resolve_typescript_relative_to(bin_path)
   local pkg_root = vim.fn.fnamemodify(bin_path, ":h:h")

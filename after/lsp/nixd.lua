@@ -1,4 +1,5 @@
-local flake = "/home/ben/projects/flakes"
+-- The flake that pins nixpkgs and defines the machine; override with $NIX_FLAKE.
+local flake = vim.env.NIX_FLAKE or vim.fn.expand("~/projects/flakes")
 
 return {
   cmd = { "nixd" },

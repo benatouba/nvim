@@ -9,8 +9,7 @@ return {
       "b0o/SchemaStore.nvim",
     },
     config = function()
-      require("lsp").config()
-      require("lsp").enable_nixos()
+      require("lsp").setup()
     end,
   },
   {
@@ -31,9 +30,13 @@ return {
       },
       "neovim/nvim-lspconfig",
     },
-    opts = {
-      auto_install = false,
-    },
+    -- mason-lspconfig v2: install the shared server list and let it call vim.lsp.enable().
+    opts = function()
+      return {
+        ensure_installed = require("lsp.servers").servers,
+        automatic_enable = true,
+      }
+    end,
     enabled = not vim.g.is_nixos,
   },
   {
