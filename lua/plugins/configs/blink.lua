@@ -9,7 +9,7 @@ M.opts = {
     preset = "default",
     -- Accept the highlighted menu item (kept alongside the preset's <C-y>).
     ["<C-l>"] = { "select_and_accept", "fallback" },
-    -- <Tab>/<S-Tab> jump between snippet placeholders, otherwise insert a literal tab.
+    -- <Tab>/<S-Tab> jump between LuaSnip placeholders, otherwise insert a literal tab.
     -- (Copilot accepts live on <C-a>/<C-s>/<C-d>, see the copilot config.)
     ["<Tab>"] = { "snippet_forward", "fallback" },
     ["<S-Tab>"] = { "snippet_backward", "fallback" },
@@ -98,6 +98,8 @@ M.opts = {
       ["<C-l>"] = { "select_and_accept" },
     },
   },
+  snippets = { preset = "luasnip" },
+
   sources = {
     default = function(ctx)
       local success, node = pcall(vim.treesitter.get_node)
