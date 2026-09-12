@@ -84,6 +84,7 @@ return {
   },
   {
     "folke/sidekick.nvim",
+    event = "VeryLazy", -- next-edit suggestions need the plugin resident, not only its keys
     opts = {
       cli = { mux = { backend = "tmux", enabled = true } },
     },
