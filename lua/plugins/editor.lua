@@ -118,23 +118,6 @@ return {
     },
   }, -- increment/decrement basically everything
   {
-    "stevearc/oil.nvim",
-    cmd = "Oil",
-    init = function()
-      if vim.env.GIT_DIFFTOOL or vim.env.GIT_DIFF_OPT then
-        vim.g.oil_manual_open = true
-      end
-    end,
-    config = function()
-      require("ben.oil").config()
-    end,
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-  },
-  {
-    "benomahony/oil-git.nvim",
-    dependencies = { "stevearc/oil.nvim" },
-  },
-  {
     "MagicDuck/grug-far.nvim",
     config = function()
       require("grug-far").setup({})
@@ -182,7 +165,13 @@ return {
         { "<leader>a", group = "+Actions", icon = { icon = "", color = "yellow" } },
         { "<leader>A", group = "+Avante", icon = { icon = "󱐒 ", color = "purple" }, remap = false, mode = "n" },
         { "<leader>c", group = "+Configuration", icon = { icon = "", color = "orange" } },
-        { "<leader>h", group = "+Hide (Shelter)", icon = { icon = "󰒃  ", color = "green" }, remap = false, mode = "n" },
+        {
+          "<leader>h",
+          group = "+Hide (Shelter)",
+          icon = { icon = "󰒃  ", color = "green" },
+          remap = false,
+          mode = "n",
+        },
         { "<leader>g", group = "+Git", icon = { icon = "󰊢 ", color = "red" }, remap = false, mode = "n" },
         { "<leader>L", group = "+Logs", icon = { icon = " ", color = "green" } },
         { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
@@ -194,12 +183,23 @@ return {
         { "<leader>R", group = "+Refactor", icon = { icon = "󰈏 ", color = "grey" }, mode = { "x", "n" } },
         { "<leader>r", group = "+Run", icon = { icon = "󰑮  ", color = "yellow" }, remap = false, mode = "n" },
         { "<leader>s", group = "+Search", icon = { icon = " ", color = "azure" }, remap = false, mode = "n" },
-        { "<localleader>s", group = "+SearchReplace", icon = { icon = " ", color = "azure" }, remap = false, mode = "n" },
+        {
+          "<localleader>s",
+          group = "+SearchReplace",
+          icon = { icon = " ", color = "azure" },
+          remap = false,
+          mode = "n",
+        },
         { "<leader>S", group = "+Sessions", icon = " ", remap = false, mode = "n" },
         { "<leader>T", group = "+Terminal", icon = { icon = " ", color = "orange" } },
         { "<leader>t", group = "+Test", icon = { icon = "󰙨 ", color = "yellow" } },
         { "<leader>v", group = "+Vivere", icon = { icon = "󰇈 ", color = "purple" }, remap = false },
-        { "<localleader>o", group = "+Obsidian", icon = { icon = "󰇈 ", color = "purple" }, mode = { "n", "v", "x" } },
+        {
+          "<localleader>o",
+          group = "+Obsidian",
+          icon = { icon = "󰇈 ", color = "purple" },
+          mode = { "n", "v", "x" },
+        },
         {
           "<leader>t",
           "<cmd>ToggleTermSendVisualLines<cr>",

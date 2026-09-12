@@ -57,22 +57,6 @@ return {
     end,
   },
   {
-    "tidalcycles/vim-tidal",
-    ft = { "tidal" },
-    keys = {
-      { "<leader>mt", "<cmd>TidalLaunch<cr>", desc = "Tidal launch" },
-      { "<leader>mq", "<cmd>TidalQuit<cr>", desc = "Tidal quit" },
-      { "<leader>mb", "<cmd>TidalBoot<cr>", desc = "Tidal boot" },
-    },
-    init = function()
-      vim.g.tidal_target = "terminal"
-      vim.g.tidal_ghci = "ghci"
-      vim.g.tidal_boot = "BootTidal.hs"
-      vim.g.tidal_sc_enable = 0
-    end,
-    enabled = false,
-  },
-  {
     "grddavies/tidal.nvim",
     ft = { "tidal", "scd" },
     opts = {
@@ -126,8 +110,6 @@ return {
       require("misc.r-nvim").config()
     end,
   },
-  { "saltstack/salt-vim", ft = "sls", enabled = O.salt },
-  { "Glench/Vim-Jinja2-Syntax", ft = { "sls", "Jinja2" }, enabled = O.salt },
   {
     "lervag/vimtex",
     ft = "tex",

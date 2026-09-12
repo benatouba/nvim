@@ -222,14 +222,6 @@ return {
         end,
         enabled = O.dap,
       },
-      {
-        "jbyuki/one-small-step-for-vimkind",
-        ft = "lua",
-        config = function()
-          require("debug.one_small_step_for_vimkind").config()
-        end,
-        enabled = O.dap and false,
-      },
     },
   },
   {

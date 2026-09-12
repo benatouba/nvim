@@ -63,7 +63,8 @@ return {
       },
       rename = { enabled = false },
       indent = { enabled = false },
-      input = { enabled = false },
+      input = { enabled = true }, -- vim.ui.input (replaces archived dressing.nvim)
+      picker = { enabled = true }, -- also installs vim.ui.select (ui_select defaults to true)
       notifier = {
         enabled = vim.env.NVIM == nil,
       },
@@ -192,10 +193,6 @@ return {
     end,
     event = "VeryLazy",
     enabled = O.language_parsing,
-  },
-  {
-    "stevearc/dressing.nvim",
-    opts = {},
   },
   {
     "folke/noice.nvim",

@@ -6,6 +6,7 @@ lazy-lock.json
 after/*
 !after/lsp/
 !after/lsp/*.lua
+!after/ftplugin/
 ftdetect/jupynium.vim
 repro.lua
 snippets/python.json
@@ -25,3 +26,6 @@ devenv.local.yaml
 
 # pre-commit
 .pre-commit-config.yaml
+
+# runtime artifacts
+nvim.log
