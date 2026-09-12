@@ -1,16 +1,8 @@
-local ll_ok, ll = pcall(require, "lualine")
-if not ll_ok then
-  vim.notify("lualine not okay")
-  return
-end
-local lualine_require = require("lualine_require")
-local modules = lualine_require.lazy_require({
-  highlight = "lualine.highlight",
-  utils = "lualine.utils.utils",
-})
+-- lualine statusline layout. Kept as a module because of the amount of component code.
+
 local remote_ok, remote = pcall(require, "remote-nvim")
 
-local get_lsp_client = function ()
+local get_lsp_client = function()
   local clients = vim.lsp.get_clients({ bufnr = 0 })
   local names = {}
   local seen = {}
@@ -26,18 +18,17 @@ local get_lsp_client = function ()
   return " " .. table.concat(names, "|")
 end
 
-local rstt =
-{
-  { "-", "#aaaaaa" },  -- 1: ftplugin/* sourced, but nclientserver not started yet.
-  { "S", "#757755" },  -- 2: nclientserver started, but not ready yet.
-  { "S", "#117711" },  -- 3: nclientserver is ready.
-  { "S", "#ff8833" },  -- 4: nclientserver started the TCP server
-  { "S", "#3388ff" },  -- 5: TCP server is ready
-  { "R", "#ff8833" },  -- 6: R started, but nvimcom was not loaded yet.
-  { "R", "#3388ff" },  -- 7: nvimcom is loaded.
+local rstt = {
+  { "-", "#aaaaaa" }, -- 1: ftplugin/* sourced, but nclientserver not started yet.
+  { "S", "#757755" }, -- 2: nclientserver started, but not ready yet.
+  { "S", "#117711" }, -- 3: nclientserver is ready.
+  { "S", "#ff8833" }, -- 4: nclientserver started the TCP server
+  { "S", "#3388ff" }, -- 5: TCP server is ready
+  { "R", "#ff8833" }, -- 6: R started, but nvimcom was not loaded yet.
+  { "R", "#3388ff" }, -- 7: nvimcom is loaded.
 }
 
-local rstatus = function ()
+local rstatus = function()
   if not vim.g.R_Nvim_status or vim.g.R_Nvim_status == 0 then
     -- No R file type (R, Quarto, Rmd, Rhelp) opened yet
     return ""
@@ -45,7 +36,7 @@ local rstatus = function ()
   return rstt[vim.g.R_Nvim_status][1]
 end
 
-local rsttcolor = function ()
+local rsttcolor = function()
   if not vim.g.R_Nvim_status or vim.g.R_Nvim_status == 0 then
     -- No R file type (R, Quarto, Rmd, Rhelp) opened yet
     return { fg = "#000000" }
@@ -91,15 +82,17 @@ if lint_ok then
 end
 
 local M = {}
-M.config = function ()
-  local config = ll.get_config()
+
+--- Build the lualine options on top of its defaults (called from the spec's `opts`).
+M.opts = function()
+  local config = require("lualine").get_config()
   config.options.component_separators = { left = "", right = "" }
   config.options.section_separators = { left = "", right = "" }
   config.sections.lualine_a = { window }
   config.sections.lualine_b = { { "b:gitsigns_head", icon = "" } }
   if remote_ok then
     table.insert(config.sections.lualine_b, {
-      function ()
+      function()
         return vim.g.remote_neovim_host and ("Remote: %s"):format(vim.uv.os_gethostname()) or ""
       end,
       padding = { right = 1, left = 1 },
@@ -161,7 +154,7 @@ M.config = function ()
     "nvim-dap-ui",
     "oil",
   }
-  ll.setup(config)
+  return config
 end
 
 return M

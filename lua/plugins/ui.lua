@@ -1,22 +1,13 @@
+-- UI: dashboard/pickers/notifications (snacks), statusline, bufferline, cmdline, colours.
 return {
   {
     "folke/snacks.nvim",
-    enabled = true,
     priority = 1000,
     lazy = false,
     ---@type snacks.Config
     opts = {
       animate = { enabled = false },
       bigfile = { enabled = false },
-      keys = {
-        {
-          "<leader>sc",
-          function()
-            Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
-          end,
-          desc = "Find Config File",
-        },
-      },
       dashboard = {
         enabled = vim.env.NVIM == nil,
         preset = {
@@ -63,11 +54,9 @@ return {
       },
       rename = { enabled = false },
       indent = { enabled = false },
-      input = { enabled = true }, -- vim.ui.input (replaces archived dressing.nvim)
+      input = { enabled = true }, -- vim.ui.input
       picker = { enabled = true }, -- also installs vim.ui.select (ui_select defaults to true)
-      notifier = {
-        enabled = vim.env.NVIM == nil,
-      },
+      notifier = { enabled = vim.env.NVIM == nil },
       notify = { enabled = vim.env.NVIM == nil },
       quickfile = { enabled = false },
       scroll = { enabled = false },
@@ -79,6 +68,7 @@ return {
       zen = { enabled = true },
     },
     init = function()
+      -- LSP progress as a single updating notification
       vim.api.nvim_create_autocmd("LspProgress", {
         ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
         callback = function(ev)
@@ -98,6 +88,13 @@ return {
     end,
     keys = {
       {
+        "<leader>sc",
+        function()
+          Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
+        end,
+        desc = "Find Config File",
+      },
+      {
         "<leader>z",
         function()
           Snacks.zen()
@@ -113,42 +110,20 @@ return {
       },
     },
   },
-
-  -- Colorize hex and other colors in code
-  {
-    "nvchad/nvim-colorizer.lua",
-    opts = require("ben.colorizer").opts,
-    event = "BufReadPost",
-    cmd = { "ColorizerToggle", "ColorizerAttachToBuffer", "ColorizerDetachFromBuffer", "ColorizerReloadAllBuffers" },
-    keys = { { "<leader>cC", "<cmd>ColorizerToggle<cr>", desc = "Colorizer" } },
-  },
-
-  -- Icons and visuals
   {
     "nvim-tree/nvim-web-devicons",
-    config = function()
-      require("nvim-web-devicons").setup()
-      require("nvim-web-devicons").set_icon({
-        nvim = {
-          icon = "",
-          color = "#67B25E",
-          cterm_color = "83",
-          name = "Neovim",
-        },
-      })
-    end,
-  },
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
-    opts = require("ben.indent-blankline").opts,
-    event = { "BufReadPost", "BufNewFile" },
-    dependencies = "nvim-treesitter",
+    lazy = true,
+    opts = {
+      override = {
+        nvim = { icon = "", color = "#67B25E", cterm_color = "83", name = "Neovim" },
+      },
+    },
   },
   {
     "nvim-lualine/lualine.nvim",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
+      "nvim-tree/nvim-web-devicons",
       {
         "AndreM222/copilot-lualine",
         enabled = function()
@@ -156,29 +131,135 @@ return {
         end,
       },
     },
-    config = function()
-      require("ben.lualine").config()
+    opts = function()
+      return require("plugins.configs.lualine").opts()
     end,
-    enabled = true,
   },
   {
     "romgrk/barbar.nvim",
-    opts = require("ui.barbar").opts,
-    init = require("ui.barbar").init,
-    -- <C-l>/<C-h> in config/keymaps.lua and the keys below all go through these commands.
+    event = "VeryLazy",
+    -- <C-l>/<C-h> in config/keymaps.lua go through these commands too.
     cmd = { "BufferNext", "BufferPrevious", "BufferClose", "BufferPick", "BufferRestore" },
     keys = { { "<leader>ac", "<cmd>BufferClose<CR>", desc = "Close Buffer" } },
-    dependencies = {
-      "lewis6991/gitsigns.nvim",
-      "nvim-tree/nvim-web-devicons",
+    dependencies = { "lewis6991/gitsigns.nvim", "nvim-tree/nvim-web-devicons" },
+    init = function()
+      vim.g.barbar_auto_setup = false -- setup() is called with `opts` below
+    end,
+    opts = {
+      animation = true,
+      auto_hide = 1,
+      clickable = false,
+      tabpages = true,
+      highlight_alternate = true,
+      icons = {
+        gitsigns = {
+          added = { enabled = true, icon = "+" },
+          changed = { enabled = true, icon = "~" },
+          deleted = { enabled = true, icon = "-" },
+        },
+        inactive = { button = false },
+        button = false,
+      },
     },
-    lazy = true,
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    dependencies = { "MunifTanjim/nui.nvim" },
+    keys = {
+      { "<leader>sn", "<cmd>Noice telescope<cr>", desc = "Notifications" },
+      { "<leader>sN", "<cmd>Noice<cr>", desc = "Messages" },
+      {
+        "<c-f>",
+        function()
+          if not require("noice.lsp").scroll(4) then
+            return "<c-f>"
+          end
+        end,
+        mode = { "n", "i", "s" },
+        expr = true,
+        desc = "Scroll hover forward",
+      },
+      {
+        "<c-b>",
+        function()
+          if not require("noice.lsp").scroll(-4) then
+            return "<c-b>"
+          end
+        end,
+        mode = { "n", "i", "s" },
+        expr = true,
+        desc = "Scroll hover backward",
+      },
+    },
+    opts = {
+      notify = { enabled = true, view = "notify" },
+      lsp = {
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = false,
+        },
+        hover = { enabled = true },
+        signature = { enabled = true },
+      },
+      presets = {
+        bottom_search = true, -- classic bottom cmdline for search
+        command_palette = false,
+        long_message_to_split = true,
+        inc_rename = true,
+        lsp_doc_border = true,
+      },
+      cmdline = { enabled = true, view = "cmdline" },
+      routes = {
+        { filter = { event = "msg_show", kind = "search_count" }, opts = { skip = true } },
+        { filter = { event = "msg_show", kind = "", find = "written" }, opts = { skip = true } },
+        { filter = { event = "notify", min_height = 15 }, view = "split" },
+      },
+    },
+  },
+  {
+    "nvchad/nvim-colorizer.lua",
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = { "ColorizerToggle", "ColorizerAttachToBuffer", "ColorizerDetachFromBuffer", "ColorizerReloadAllBuffers" },
+    keys = { { "<leader>cC", "<cmd>ColorizerToggle<cr>", desc = "Colorizer" } },
+    opts = {
+      lazy_load = false,
+      user_default_options = {
+        names_opts = { uppercase = true },
+        RRGGBBAA = true,
+        AARRGGBB = true,
+        rgb_fn = true,
+        hsl_fn = true,
+        css = true,
+        css_fn = true,
+        tailwind = true,
+        tailwind_opts = { update_names = true },
+        sass = { enable = true, parsers = { "css" } },
+      },
+    },
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    event = { "BufReadPost", "BufNewFile" },
+    opts = {
+      indent = { highlight = { "Whitespace" }, tab_char = "" },
+      scope = { enabled = false },
+      whitespace = { highlight = { "Whitespace" }, remove_blankline_trail = true },
+      exclude = {
+        buftypes = { "terminal", "fugitive", "neogit" },
+        filetypes = { "help", "dashboard", "neogitstatus", "fugitive" },
+      },
+    },
   },
   {
     "hiphish/rainbow-delimiters.nvim",
+    event = "VeryLazy",
+    main = "rainbow-delimiters.setup",
     init = function()
-      -- Patch lib.attach before plugin/rainbow-delimiters.lua sets up autocommands.
-      -- Must be in init (not config) so it runs before the plugin's runtime files.
+      -- Skip buffers without a treesitter parser. Patched in init (not config) so it is
+      -- in place before plugin/rainbow-delimiters.lua registers its autocommands.
       local lib = require("rainbow-delimiters.lib")
       local orig_attach = lib.attach
       lib.attach = function(bufnr, ...)
@@ -189,38 +270,29 @@ return {
         return orig_attach(bufnr, ...)
       end
     end,
-    config = function()
-      require("ui.rainbow-delimiters").config()
-    end,
-    event = "VeryLazy",
-  },
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-    },
-    config = function()
-      require("ui.noice").config()
-    end,
-    keys = {
-      {
-        "<leader>sn",
-        "<cmd>Noice telescope<cr>",
-        desc = "Notifications",
+    opts = {
+      strategy = {
+        [""] = "rainbow-delimiters.strategy.global",
+        vim = "rainbow-delimiters.strategy.local",
       },
-      {
-        "<leader>sN",
-        "<cmd>Noice<cr>",
-        desc = "Messages",
+      query = { [""] = "rainbow-delimiters", lua = "rainbow-blocks" },
+      priority = { [""] = 110, lua = 210 },
+      highlight = {
+        "RainbowDelimiterRed",
+        "RainbowDelimiterYellow",
+        "RainbowDelimiterBlue",
+        "RainbowDelimiterOrange",
+        "RainbowDelimiterGreen",
+        "RainbowDelimiterViolet",
+        "RainbowDelimiterCyan",
       },
     },
-    enabled = true,
   },
   {
     "folke/todo-comments.nvim",
+    event = { "BufReadPost", "BufNewFile" },
+    cmd = { "TodoTelescope", "TodoTrouble", "TodoQuickFix", "TodoLocList" },
     opts = {},
-    lazy = false,
     keys = {
       {
         "]T",
@@ -241,16 +313,17 @@ return {
   {
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" },
-    ft = { "markdown", "norg", "org", "rmd", "rst", "tex", "Avante" },
+    ft = { "markdown", "norg", "org", "rmd", "rst", "tex" },
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {
-      file_types = { "markdown", "norg", "org", "rmd", "Avante" },
+      file_types = { "markdown", "norg", "org", "rmd" },
       completions = { lsp = { enabled = true } },
     },
   },
   {
     "brianhuster/live-preview.nvim",
+    cmd = { "LivePreview" },
     dependencies = { "nvim-telescope/telescope.nvim" },
   },
 }
