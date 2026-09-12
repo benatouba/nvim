@@ -1,3 +1,4 @@
+-- Databases: dadbod UI with SQL completion (blink's dadbod source).
 return {
   {
     "kristijanhusak/vim-dadbod-ui",

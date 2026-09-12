@@ -1,3 +1,4 @@
+-- Notebooks and REPLs: jupynium (Jupyter sync), jupytext (.ipynb as text), iron (REPL).
 return {
   {
     "kiyoon/jupynium.nvim",
@@ -7,63 +8,51 @@ return {
   {
     "goerz/jupytext.nvim",
     version = "0.2.0",
+    -- must be loaded before an .ipynb buffer is read
+    event = { { event = "BufReadCmd", pattern = "*.ipynb" } },
     opts = {},
   },
   {
     "hkupty/iron.nvim",
-    config = function(plugins, opts)
-      local iron = require("iron.core")
-
-      iron.setup({
+    main = "iron.core",
+    cmd = { "IronRepl", "IronRestart", "IronFocus", "IronHide", "IronSend" },
+    keys = {
+      { "<leader>rs", "<cmd>IronRepl<cr>", desc = "REPL open" },
+      { "<leader>rr", "<cmd>IronRestart<cr>", desc = "REPL restart" },
+      { "<leader>rF", "<cmd>IronFocus<cr>", desc = "REPL focus" },
+      { "<leader>rh", "<cmd>IronHide<cr>", desc = "REPL hide" },
+      -- the send/mark keys below are set by iron itself once it is loaded
+      { "<leader>rc", mode = { "n", "x" }, desc = "REPL send motion/selection" },
+      { "<leader>rf", desc = "REPL send file" },
+      { "<leader>rl", desc = "REPL send line" },
+    },
+    opts = function()
+      return {
         config = {
-          -- Whether a repl should be discarded or not
           scratch_repl = true,
-          -- Your repl definitions come here
           repl_definition = {
-            markdown = {
-              -- Can be a table or a function that
-              -- returns a table (see below)
-              command = { "python" },
-            },
-            python = {
-              -- Can be a table or a function that
-              -- returns a table (see below)
-              command = { "python" },
-            },
+            markdown = { command = { "python" } },
+            python = { command = { "python" } },
           },
-          -- How the repl window will be displayed
-          -- See below for more information
           repl_open_cmd = require("iron.view").right(60),
         },
-        -- Iron doesn't set keymaps by default anymore.
-        -- You can set them here or manually add keymaps to the functions in iron.core
         keymaps = {
-          send_motion = "<space>rc",
-          visual_send = "<space>rc",
-          send_file = "<space>rf",
-          send_line = "<space>rl",
-          send_mark = "<space>rm",
-          mark_motion = "<space>rmc",
-          mark_visual = "<space>rmc",
-          remove_mark = "<space>rmd",
-          cr = "<space>r<cr>",
-          interrupt = "<space>r<space>",
-          exit = "<space>rq",
-          clear = "<space>rx",
+          send_motion = "<leader>rc",
+          visual_send = "<leader>rc",
+          send_file = "<leader>rf",
+          send_line = "<leader>rl",
+          send_mark = "<leader>rm",
+          mark_motion = "<leader>rmc",
+          mark_visual = "<leader>rmc",
+          remove_mark = "<leader>rmd",
+          cr = "<leader>r<cr>",
+          interrupt = "<leader>r<space>",
+          exit = "<leader>rq",
+          clear = "<leader>rx",
         },
-        -- If the highlight is on, you can change how it looks
-        -- For the available options, check nvim_set_hl
-        highlight = {
-          italic = true,
-        },
-        ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
-      })
-
-      -- iron also has a list of commands, see :h iron-commands for all available commands
-      vim.keymap.set("n", "<space>rs", "<cmd>IronRepl<cr>")
-      vim.keymap.set("n", "<space>rr", "<cmd>IronRestart<cr>")
-      vim.keymap.set("n", "<space>rF", "<cmd>IronFocus<cr>")
-      vim.keymap.set("n", "<space>rh", "<cmd>IronHide<cr>")
+        highlight = { italic = true },
+        ignore_blank_lines = true,
+      }
     end,
   },
 }

@@ -204,7 +204,7 @@ return {
     end,
     dependencies = {
       { "theHamsta/nvim-dap-virtual-text", opts = { virt_text_pos = "inline", all_frames = true } },
-      "mfussenegger/nvim-dap-python",
+      { "mfussenegger/nvim-dap-python", lazy = true }, -- its rockspec would otherwise make it a start plugin
       {
         "nvim-telescope/telescope-dap.nvim",
         dependencies = { "nvim-telescope/telescope.nvim" },

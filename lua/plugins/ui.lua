@@ -258,9 +258,10 @@ return {
     "hiphish/rainbow-delimiters.nvim",
     event = "VeryLazy",
     main = "rainbow-delimiters.setup",
-    init = function()
-      -- Skip buffers without a treesitter parser. Patched in init (not config) so it is
-      -- in place before plugin/rainbow-delimiters.lua registers its autocommands.
+    config = function(_, opts)
+      -- Skip buffers without a treesitter parser. The plugin's autocommands look up
+      -- lib.attach at call time, so wrapping it here (after load) is enough - doing it
+      -- in init would require the module and load the plugin at startup.
       local lib = require("rainbow-delimiters.lib")
       local orig_attach = lib.attach
       lib.attach = function(bufnr, ...)
@@ -270,6 +271,7 @@ return {
         end
         return orig_attach(bufnr, ...)
       end
+      require("rainbow-delimiters.setup").setup(opts)
     end,
     opts = {
       strategy = {

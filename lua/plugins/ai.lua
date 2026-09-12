@@ -1,23 +1,91 @@
+-- AI: copilot ghost text (accepted via <C-a>/<C-s>/<C-d>) and sidekick (NES + CLI agents).
 return {
   {
     "zbirenbaum/copilot.lua",
-    config = function()
-      require("lsp.copilot").config()
-    end,
     enabled = function()
       return vim.fn.executable("node") == 1
     end,
+    event = "InsertEnter",
+    cmd = "Copilot",
+    keys = {
+      {
+        "<M-g>",
+        function()
+          require("copilot.panel").open()
+        end,
+        mode = "i",
+        desc = "Copilot panel",
+      },
+    },
+    opts = {
+      panel = {
+        enabled = false,
+        auto_refresh = false,
+        keymap = {
+          jump_prev = "[[",
+          jump_next = "]]",
+          accept = "<CR>",
+          refresh = "gr",
+          open = "<M-cr>",
+        },
+        layout = {
+          position = "bottom", -- | top | left | right
+          ratio = 0.3,
+        },
+      },
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+        debounce = 150,
+        -- Buffer-local pass-through maps: with no ghost text visible each key keeps its
+        -- previous meaning (<C-a> insert last text, <C-s> LSP signature help, <C-d> dedent).
+        keymap = {
+          accept_word = "<C-a>",
+          accept_line = "<C-s>",
+          accept = "<C-d>",
+          next = "<M-j>",
+          prev = "<M-k>",
+          dismiss = "<M-e>",
+        },
+      },
+      filetypes = {
+        vue = true,
+        nix = true,
+        yaml = true,
+        markdown = true,
+        help = false,
+        dotenv = false,
+        gitcommit = true,
+        gitrebase = false,
+        hgcommit = false,
+        svn = false,
+        cvs = false,
+        TelescopePrompt = false,
+        sls = function()
+          if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), ".*user.*") then
+            -- disable for user files
+            return false
+          end
+          return true
+        end,
+
+        sh = function()
+          if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
+            -- disable for .env files
+            return false
+          end
+          return true
+        end,
+        ["."] = false,
+      },
+      copilot_node_command = "node", -- Node.js version must be > 16.x
+      server_opts_overrides = {},
+    },
   },
   {
     "folke/sidekick.nvim",
     opts = {
-      -- add any options here
-      cli = {
-        mux = {
-          backend = "tmux",
-          enabled = true,
-        },
-      },
+      cli = { mux = { backend = "tmux", enabled = true } },
     },
     keys = {
       {
@@ -51,8 +119,6 @@ return {
         function()
           require("sidekick.cli").select()
         end,
-        -- Or to select only installed tools:
-        -- require("sidekick.cli").select({ filter = { installed = true } })
         desc = "Select CLI",
       },
       {
@@ -93,9 +159,8 @@ return {
         mode = { "n", "x" },
         desc = "Sidekick Select Prompt",
       },
-      -- Example of a keybinding to open Claude directly
       {
-        "<leader>ac",
+        "<leader>aC",
         function()
           require("sidekick.cli").toggle({ name = "claude", focus = true })
         end,
