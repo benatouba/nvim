@@ -1,14 +1,9 @@
-local neotest_ok, neotest = pcall(require, "neotest")
-if not neotest_ok then
-  vim.notify("Neotest not okay")
-  return
-end
-
+-- neotest options and the per-project adapter picker (<leader>tP).
 local M = {}
 
-M.config = function()
-  local overseer_ok, overseer = pcall(require, "overseer")
-  neotest.setup({
+M.opts = function()
+  local overseer_ok = pcall(require, "overseer")
+  return {
     log_level = vim.log.levels.WARN,
     output = {
       enabled = true,
@@ -71,10 +66,10 @@ M.config = function()
     overseer = {
       enabled = overseer_ok,
     },
-  })
+  }
 end
 
-M.NeotestSetupProject = function()
+M.setup_project = function()
   vim.ui.select({ "neotest-jest", "neotest-playwright", "neotest-vitest", "neotest-python" }, {
     prompt = "Choose Adapter",
   }, function(choice)
@@ -151,22 +146,6 @@ M.NeotestSetupProject = function()
         })
         return require("neotest").setup_project(vim.fn.getcwd(), playwrightConf)
       end
-      -- if choice == "neotest-vim-test" then
-      --   local vimTestConf = vim.tbl_deep_extend("force", neotestDefault, {
-      --     adapters = {
-      --       require("neotest-vim-test"),
-      --     },
-      --   })
-      --   return require("neotest").setup_project(vim.fn.getcwd(), vimTestConf)
-      -- end
-      -- if choice == "neotest-vim-test" then
-      --   local pythonConf = vim.tbl_deep_extend("force", neotestDefault, {
-      --     adapters = {
-      --       require("neotest-python"),
-      --     },
-      --   })
-      --   return require("neotest").setup_project(vim.fn.getcwd(), pythonConf)
-      -- end
     end)
   end)
 end

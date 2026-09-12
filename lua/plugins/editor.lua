@@ -187,6 +187,7 @@ return {
         { "<leader>S", group = "+Sessions", icon = " " },
         { "<leader>T", group = "+Terminal", icon = { icon = " ", color = "orange" } },
         { "<leader>t", group = "+Test", icon = { icon = "󰙨 ", color = "yellow" } },
+        { "<leader>tj", group = "+Jump (tests)" },
         { "<localleader>s", group = "+SearchReplace", icon = { icon = " ", color = "azure" } },
         { "<localleader>o", group = "+Obsidian", icon = { icon = "󰇈 ", color = "purple" }, mode = { "n", "x" } },
 

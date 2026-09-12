@@ -1,3 +1,4 @@
+-- Testing: neotest with python/R/vitest adapters (jest/playwright via <leader>tP per project).
 return {
   {
     "nvim-neotest/neotest",
@@ -14,13 +15,12 @@ return {
         "<cmd>lua require('neotest').output.open({ enter = true, short = true, last_run = true })<CR>",
         desc = "Output (short)",
       },
-      { "<leader>tP", "<cmd>lua require('test.neotest').NeotestSetupProject()<CR>", desc = "Project" },
+      { "<leader>tP", "<cmd>lua require('plugins.configs.neotest').setup_project()<CR>", desc = "Project" },
       { "<leader>tS", "<cmd>lua require('neotest').run.run({ suite = true })<CR>", desc = "Suite" },
       { "<leader>ta", "<cmd>lua require('neotest').run.attach()<CR>", desc = "Attach to nearest" },
       { "<leader>td", "<cmd>lua require('neotest').run.run({ strategy = 'dap' })<CR>", desc = "Debug" },
       { "<leader>tf", "<cmd>lua require('neotest').run.run({ vim.fn.expand('%') })<CR>", desc = "File" },
       { "<leader>tl", "<cmd>lua require('neotest').run.run_last()<CR>", desc = "Last" },
-      { "<leader>tj", group = "+Jump" },
       {
         "<leader>tjp",
         "<cmd>lua require('neotest').jump.prev({ status = 'failed' })<CR>",
@@ -45,9 +45,8 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
     },
-    config = function()
-      require("test.neotest").config()
+    opts = function()
+      return require("plugins.configs.neotest").opts()
     end,
   },
-  { "nvim-neotest/nvim-nio" },
 }
