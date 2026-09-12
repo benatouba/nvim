@@ -1,6 +1,7 @@
+-- Bootstrap lazy.nvim and load every spec under lua/plugins/.
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
-  vim.fn.system({
+  local out = vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
@@ -8,31 +9,24 @@ if not vim.uv.fs_stat(lazypath) then
     "--branch=stable",
     lazypath,
   })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({ { "Failed to clone lazy.nvim:\n", "ErrorMsg" }, { out, "WarningMsg" } }, true, {})
+    return
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 
-local lazy_ok, lazy = pcall(require, "lazy")
-if not lazy_ok then
-  vim.notify("lazy.nvim not okay")
-  return
-end
-
-lazy.setup({
-  { import = "plugins.editor" },
-  { import = "plugins.ui" },
-  { import = "plugins.colorschemes" },
-  { import = "plugins.lsp" },
-  { import = "plugins.completion" },
-  { import = "plugins.formatting" },
-  { import = "plugins.linting" },
-  { import = "plugins.git" },
-  { import = "plugins.treesitter" },
-  { import = "plugins.tools" },
-  { import = "plugins.lang" },
-  { import = "plugins.notes" },
-  { import = "plugins.dap" },
-  { import = "plugins.test" },
-  { import = "plugins.notebooks" },
-  { import = "plugins.databases" },
-  { import = "plugins.ai" },
-}, {})
+require("lazy").setup({
+  spec = { { import = "plugins" } },
+  install = { colorscheme = { "catppuccin-mocha", "habamax" } },
+  checker = { enabled = true, notify = false }, -- check for updates quietly; see :Lazy
+  change_detection = { notify = false },
+  ui = { border = "rounded" },
+  rocks = { enabled = false }, -- nothing here needs luarocks
+  performance = {
+    rtp = {
+      -- netrw is disabled via vim.g.loaded_netrw* in config/options.lua
+      disabled_plugins = { "gzip", "tarPlugin", "zipPlugin", "tohtml", "tutor", "rplugin" },
+    },
+  },
+})
