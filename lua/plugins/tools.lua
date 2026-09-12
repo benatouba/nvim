@@ -77,6 +77,22 @@ return {
     "stevearc/overseer.nvim",
     ---@module 'overseer'
     ---@type overseer.SetupOpts
+  },
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    event = { "InsertEnter" },
+    keys = { "m", "'" },
+    config = function()
+      require("misc.harpoon").config()
+      require("misc.harpoon").maps()
+    end,
+  },
+  {
+    "stevearc/overseer.nvim",
+    ---@module 'overseer'
+    ---@type overseer.SetupOpts
     opts = {
       dap = false,
     },
@@ -111,9 +127,9 @@ return {
         vim.cmd("ToggleTerm direction=horizontal cmd=" .. shellescape(cmd))
       end, { force = true })
     end,
-    cmd = { "ToggleTerm", "TermExec" },
+    cmd = { "ToggleTerm", "TermExec", "ToggleTermSendVisualLines", "ToggleTermSendCurrentLine" },
     keys = {
-      { "<leader>T", group = "+Terminal" },
+      { "<leader>t", "<cmd>ToggleTermSendVisualLines<cr>", mode = "v", desc = "Send to terminal" },
       { "<leader>TT", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal" },
       { "<leader>Tt", "<cmd>ToggleTerm<cr>", desc = "Terminal (bot)" },
       { "<leader>Md", "<cmd>DirtBoot<cr>", desc = "Dirt Sampler" },

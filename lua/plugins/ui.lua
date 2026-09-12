@@ -118,8 +118,9 @@ return {
   {
     "nvchad/nvim-colorizer.lua",
     opts = require("ben.colorizer").opts,
-    lazy = true,
     event = "BufReadPost",
+    cmd = { "ColorizerToggle", "ColorizerAttachToBuffer", "ColorizerDetachFromBuffer", "ColorizerReloadAllBuffers" },
+    keys = { { "<leader>cC", "<cmd>ColorizerToggle<cr>", desc = "Colorizer" } },
   },
 
   -- Icons and visuals
@@ -164,6 +165,9 @@ return {
     "romgrk/barbar.nvim",
     opts = require("ui.barbar").opts,
     init = require("ui.barbar").init,
+    -- <C-l>/<C-h> in config/keymaps.lua and the keys below all go through these commands.
+    cmd = { "BufferNext", "BufferPrevious", "BufferClose", "BufferPick", "BufferRestore" },
+    keys = { { "<leader>ac", "<cmd>BufferClose<CR>", desc = "Close Buffer" } },
     dependencies = {
       "lewis6991/gitsigns.nvim",
       "nvim-tree/nvim-web-devicons",
@@ -217,6 +221,22 @@ return {
     "folke/todo-comments.nvim",
     opts = {},
     lazy = false,
+    keys = {
+      {
+        "]T",
+        function()
+          require("todo-comments").jump_next()
+        end,
+        desc = "Next todo comment",
+      },
+      {
+        "[T",
+        function()
+          require("todo-comments").jump_prev()
+        end,
+        desc = "Previous todo comment",
+      },
+    },
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",

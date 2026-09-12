@@ -173,6 +173,12 @@ return {
     opts = require("misc.neogen").opts,
     dependencies = "nvim-treesitter/nvim-treesitter",
     event = "InsertEnter",
+    keys = {
+      { "<leader>nn", "<cmd>lua require('neogen').generate()<CR>", desc = "Auto" },
+      { "<leader>nc", "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", desc = "Class" },
+      { "<leader>nf", "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", desc = "Function" },
+      { "<leader>nt", "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", desc = "Type" },
+    },
   },
   {
     "ThePrimeagen/refactoring.nvim",

@@ -1,4 +1,6 @@
+-- Editing primitives, sessions, search/replace, which-key.
 return {
+  { "nvim-lua/plenary.nvim", lazy = true }, -- library; loaded as a dependency
   {
     "direnv/direnv.vim",
     event = "BufReadPre",
@@ -6,222 +8,189 @@ return {
       vim.g.direnv_silent_load = 1
     end,
   },
-  "nvim-lua/plenary.nvim", -- most important functions (very important)
-  { "nvim-mini/mini.ai", version = false, opts = {}, event = "VeryLazy" },
+  { "nvim-mini/mini.ai", version = false, event = "VeryLazy", opts = {} },
+  { "nvim-mini/mini.bracketed", version = false, event = "VeryLazy", opts = {} },
+  { "kylechui/nvim-surround", event = "VeryLazy", opts = {} },
   {
     "nvim-mini/mini.sessions",
     version = false,
     keys = {
       {
         "<leader>Sw",
-        "<cmd>lua require('mini.sessions').write()<cr>",
+        function()
+          require("mini.sessions").write()
+        end,
         desc = "Write Session",
-        remap = false,
-        mode = "n",
       },
       {
         "<leader>Sr",
-        "<cmd>lua require('mini.sessions').read()<cr>",
+        function()
+          require("mini.sessions").read()
+        end,
         desc = "Read Session",
-        remap = false,
-        mode = "n",
       },
     },
     opts = { autoread = false },
   },
   {
-    "nvim-mini/mini.bracketed",
-    version = false,
-    opts = {},
-    event = "VeryLazy",
-  },
-  {
     "mbbill/undotree",
-    cmd = "UndotreeToggle",
+    -- Disabled on Neovim >= 0.12 (kept for the day it is wanted back).
     enabled = vim.fn.has("nvim-0.12") == 0,
+    cmd = "UndotreeToggle",
+    keys = { { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Undotree", icon = { icon = " ", color = "green" } } },
   },
   {
-    "kylechui/nvim-surround",
-    opts = {},
-    event = "VeryLazy",
-  },
-  {
-    "monaqa/dial.nvim",
-    config = function()
-      require("ben.dial").config()
+    "monaqa/dial.nvim", -- increment/decrement basically everything
+    keys = function()
+      local map = function(lhs, action, mode)
+        return {
+          lhs,
+          function()
+            require("dial.map").manipulate(action, mode)
+          end,
+          mode = mode:find("visual") and "x" or "n",
+          desc = action:sub(1, 1):upper() .. action:sub(2),
+        }
+      end
+      return {
+        map("<C-a>", "increment", "normal"),
+        map("<C-x>", "decrement", "normal"),
+        map("<C-a>", "increment", "visual"),
+        map("<C-x>", "decrement", "visual"),
+        map("g<C-a>", "increment", "gnormal"),
+        map("g<C-x>", "decrement", "gnormal"),
+        map("g<C-a>", "increment", "gvisual"),
+        map("g<C-x>", "decrement", "gvisual"),
+      }
     end,
-    event = { "BufReadPost", "BufNewFile" },
-    ft = { "markdown", "text", "html", "javascript", "typescript", "vue", "svelte", "css", "scss", "less" },
-    keys = {
-      {
-        "<C-a>",
-        function()
-          require("dial.map").manipulate("increment", "normal")
-        end,
-        desc = "Increment",
-      },
-      {
-        "<C-x>",
-        function()
-          require("dial.map").manipulate("decrement", "normal")
-        end,
-        desc = "Decrement",
-      },
-      {
-        "<C-a>",
-        function()
-          require("dial.map").manipulate("increment", "visual")
-        end,
-        mode = { "x" },
-        desc = "Increment",
-      },
-      {
-        "<C-x>",
-        function()
-          require("dial.map").manipulate("decrement", "visual")
-        end,
-        mode = { "x" },
-        desc = "Decrement",
-      },
-      {
-        "g<C-a>",
-        function()
-          require("dial.map").manipulate("increment", "gnormal")
-        end,
-        desc = "Increment",
-      },
-      {
-        "g<C-x>",
-        function()
-          require("dial.map").manipulate("decrement", "gnormal")
-        end,
-        desc = "Decrement",
-      },
-      {
-        "g<C-a>",
-        function()
-          require("dial.map").manipulate("increment", "gvisual")
-        end,
-        mode = { "x" },
-        desc = "Increment",
-      },
-      {
-        "g<C-x>",
-        function()
-          require("dial.map").manipulate("decrement", "gvisual")
-        end,
-        mode = { "x" },
-        desc = "Decrement",
-      },
-    },
-  }, -- increment/decrement basically everything
+    config = function()
+      local augend = require("dial.augend")
+      local default_augends = {
+        augend.integer.alias.decimal,
+        augend.constant.alias.bool,
+        augend.constant.alias.de_weekday,
+        augend.constant.alias.de_weekday_full,
+        augend.date.alias["%d/%m/%Y"],
+        augend.constant.new({ elements = { "yes", "no" } }),
+        augend.constant.new({ elements = { "let", "const", "var" } }),
+        augend.constant.new({ elements = { "T", "F" } }),
+        augend.constant.new({ elements = { "True", "False" } }),
+        augend.constant.new({ elements = { "TRUE", "FALSE" } }),
+        augend.constant.new({ elements = { "def", "class" } }),
+        augend.hexcolor.new({ case = "lower" }),
+        augend.semver.alias.semver,
+        augend.constant.new({ elements = { "[ ]", "[x]" }, word = false, cyclic = true }),
+      }
+      local config = require("dial.config")
+      config.augends:register_group({
+        default = default_augends,
+        visual = {
+          augend.integer.alias.decimal,
+          augend.integer.alias.hex,
+          augend.date.alias["%Y/%m/%d"],
+          augend.date.alias["%d/%m/%Y"],
+        },
+      })
+      config.augends:on_filetype({
+        default = vim.tbl_extend("keep", {
+          augend.integer.alias.decimal,
+          augend.integer.alias.hex,
+          augend.constant.new({ elements = { "true", "false" } }),
+          augend.constant.new({ elements = { "let", "const" } }),
+        }, default_augends),
+        lua = vim.tbl_extend("keep", {
+          augend.integer.alias.decimal,
+          augend.constant.new({ elements = { "true", "false" } }),
+        }, default_augends),
+        markdown = vim.tbl_extend("keep", {
+          augend.integer.alias.decimal,
+          augend.misc.alias.markdown_header,
+          augend.constant.alias.de_weekday,
+          augend.constant.alias.de_weekday_full,
+        }, default_augends),
+      })
+    end,
+  },
   {
     "MagicDuck/grug-far.nvim",
-    config = function()
-      require("grug-far").setup({})
-    end,
+    opts = {},
     keys = {
-      {
-        "gS",
-        "<cmd>GrugFar<cr>",
-        desc = "Find in Files (grug-far)",
-        remap = false,
-        mode = "n",
-      },
+      { "gS", "<cmd>GrugFar<cr>", desc = "Find in Files (grug-far)" },
+      { "gS", "<cmd>GrugFarWithin<cr>", mode = "x", desc = "SearchReplace in Selection" },
       {
         "<localleader>sw",
-        "<cmd>lua require('grug-far').open({ prefills = { search = vim.fn.expand('<cword>') } })<cr>",
+        function()
+          require("grug-far").open({ prefills = { search = vim.fn.expand("<cword>") } })
+        end,
         desc = "Replace word under Cursor",
-        remap = false,
-        mode = "n",
       },
       {
         "<localleader>sf",
-        "<cmd>lua require('grug-far').open({ prefills = { paths = vim.fn.expand('%') } })<cr>",
+        function()
+          require("grug-far").open({ prefills = { paths = vim.fn.expand("%") } })
+        end,
         desc = "Replace in Current File",
-        remap = false,
-        mode = "n",
-      },
-      {
-        "gS",
-        "<cmd>GrugFarWithin<cr>",
-        desc = "SearchReplace in Selection",
-        remap = false,
-        mode = "x",
       },
     },
   },
-  -- help me find my way around
+  {
+    "chrishrb/gx.nvim",
+    keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
+    cmd = { "Browse" },
+    init = function()
+      vim.g.netrw_nogx = 1 -- disable netrw gx
+    end,
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    config = function()
-      local which_key = require("which-key")
-      which_key.setup()
-      which_key.add({
+    opts = {
+      -- Group names for the leader menu; the mappings themselves live in each plugin's `keys`.
+      spec = {
         { "<leader>a", group = "+Actions", icon = { icon = "", color = "yellow" } },
-        { "<leader>A", group = "+Avante", icon = { icon = "󱐒 ", color = "purple" }, remap = false, mode = "n" },
         { "<leader>c", group = "+Configuration", icon = { icon = "", color = "orange" } },
-        {
-          "<leader>h",
-          group = "+Hide (Shelter)",
-          icon = { icon = "󰒃  ", color = "green" },
-          remap = false,
-          mode = "n",
-        },
-        { "<leader>g", group = "+Git", icon = { icon = "󰊢 ", color = "red" }, remap = false, mode = "n" },
+        { "<leader>g", group = "+Git", icon = { icon = "󰊢 ", color = "red" } },
         { "<leader>L", group = "+Logs", icon = { icon = " ", color = "green" } },
         { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
         { "<leader>m", group = "Marks", icon = { icon = "", color = "red" } },
-        { "<leader>M", group = "+Music", icon = { icon = "󰎈 ", color = "orange" }, remap = false, mode = "n" },
-        { "<leader>n", group = "+Annotations", icon = { icon = " ", color = "orange" }, remap = false, mode = "n" },
-        { "<leader>o", group = "+Org", icon = { icon = " ", color = "purple" }, nowait = false, remap = false },
+        { "<leader>M", group = "+Music", icon = { icon = "󰎈 ", color = "orange" } },
+        { "<leader>n", group = "+Annotations", icon = { icon = " ", color = "orange" } },
+        { "<leader>o", group = "+Org", icon = { icon = " ", color = "purple" } },
         { "<leader>p", group = "+Plugins", icon = { icon = " ", color = "blue" } },
         { "<leader>R", group = "+Refactor", icon = { icon = "󰈏 ", color = "grey" }, mode = { "x", "n" } },
-        { "<leader>r", group = "+Run", icon = { icon = "󰑮  ", color = "yellow" }, remap = false, mode = "n" },
-        { "<leader>s", group = "+Search", icon = { icon = " ", color = "azure" }, remap = false, mode = "n" },
-        {
-          "<localleader>s",
-          group = "+SearchReplace",
-          icon = { icon = " ", color = "azure" },
-          remap = false,
-          mode = "n",
-        },
-        { "<leader>S", group = "+Sessions", icon = " ", remap = false, mode = "n" },
+        { "<leader>r", group = "+Run", icon = { icon = "󰑮  ", color = "yellow" } },
+        { "<leader>s", group = "+Search", icon = { icon = " ", color = "azure" } },
+        { "<leader>S", group = "+Sessions", icon = " " },
         { "<leader>T", group = "+Terminal", icon = { icon = " ", color = "orange" } },
         { "<leader>t", group = "+Test", icon = { icon = "󰙨 ", color = "yellow" } },
-        { "<leader>v", group = "+Vivere", icon = { icon = "󰇈 ", color = "purple" }, remap = false },
-        {
-          "<localleader>o",
-          group = "+Obsidian",
-          icon = { icon = "󰇈 ", color = "purple" },
-          mode = { "n", "v", "x" },
-        },
-        {
-          "<leader>t",
-          "<cmd>ToggleTermSendVisualLines<cr>",
-          desc = "Send to terminal",
-          icon = { icon = " ", color = "purple" },
-          mode = "v",
-        },
-        { "<leader>u", ":UndotreeToggle<cr>", desc = "Undotree", icon = { icon = " ", color = "green" } },
+        { "<localleader>s", group = "+SearchReplace", icon = { icon = " ", color = "azure" } },
+        { "<localleader>o", group = "+Obsidian", icon = { icon = "󰇈 ", color = "purple" }, mode = { "n", "x" } },
+
         {
           "<leader>f",
-          "<cmd>lua vim.print(vim.api.nvim_buf_get_name(0))<cr>",
+          function()
+            vim.print(vim.api.nvim_buf_get_name(0))
+          end,
           desc = "Show Filename",
           icon = { icon = "", color = "blue" },
         },
-        -- Buffers
-        { "<leader><leader>", ":bprevious<cr>", desc = "Switch Buffer" },
+        { "<leader><leader>", "<cmd>bprevious<cr>", desc = "Switch Buffer" },
         -- Actions
-        { "<leader>ac", ":BufferClose<CR>", desc = "Close Buffer" },
-        -- { "<leader>ad", "<cmd>lua vim.diagnostic.enable(not vim.diagnostic.is_enabled())<cr>", desc = "Toggle diagnostics" },
         { "<leader>ah", "<cmd>let @/ = ''<cr>", desc = "Highlights" },
         { "<leader>ar", "<cmd>syntax sync fromstart<cr><cmd>redraw!<cr>", desc = "Redraw" },
-        { "<leader>aw", "<cmd>call TrimWhitespace()<cr>", desc = "Trim Whitespaces" },
+        {
+          "<leader>aw",
+          function()
+            local view = vim.fn.winsaveview()
+            vim.cmd([[keeppatterns %s/\s\+$//e]])
+            vim.fn.winrestview(view)
+          end,
+          desc = "Trim Whitespaces",
+        },
         -- Configuration
         { "<leader>cc", "<cmd>e ~/.config/nvim/init.lua<cr>", desc = "Open Config" },
-        { "<leader>cC", "<cmd>ColorizerToggle<cr>", desc = "Colorizer" },
         { "<leader>ch", "<cmd>set hlsearch!<CR>", desc = "Highlight Search" },
         {
           "<leader>cr",
@@ -243,33 +212,13 @@ return {
         { "<leader>pr", "<cmd>Lazy restore<cr>", desc = "Restore" },
         { "<leader>ps", "<cmd>Lazy sync<cr>", desc = "Sync" },
         { "<leader>pu", "<cmd>Lazy update<cr>", desc = "Update" },
-        -- Diagnostics
-        { "]D", "<cmd>lua require('trouble').next({skip_groups = true, desc = jump = true})<cr>" },
-        { "]T", "<cmd>lua require('todo-comments').jump_next()<cr>", desc = "Next todo comment" },
-        { "[D", "<cmd>lua require('trouble').previous({skip_groups = true, desc = jump = true})<cr>" },
-        { "[T", "<cmd>lua require('todo-comments').jump_prev()<cr>", desc = "Previous todo comment" },
         -- Tabs
         { "]t", "<cmd>tabNext<cr>", desc = "Next tab" },
         { "[t", "<cmd>tabprevious<cr>", desc = "Tab" },
         -- Logs
         { "<leader>Ll", "<cmd>LspLog<cr>", desc = "LSP" },
         { "<leader>Lp", "<cmd>Lazy profile<cr>", desc = "Lazy Profile" },
-        -- Generate Annotations
-        { "<leader>nn", "<cmd>lua require('neogen').generate()<CR>", desc = "Auto" },
-        { "<leader>nc", "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", desc = "Class" },
-        { "<leader>nf", "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", desc = "Function" },
-        { "<leader>nt", "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", desc = "Type" },
-      })
-    end,
-  },
-  {
-    "chrishrb/gx.nvim",
-    keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
-    cmd = { "Browse" },
-    init = function()
-      vim.g.netrw_nogx = 1 -- disable netrw gx
-    end,
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = true,
+      },
+    },
   },
 }
