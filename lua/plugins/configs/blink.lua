@@ -1,13 +1,6 @@
+-- blink.cmp options. Kept as a module because of the number of sources.
 local M = {}
 
--- local function on_blink_cmp_git_error(return_value, standard_error)
---   if return_value == 0 and type(standard_error) == "string" and standard_error:match("^%* Request") then
---     return false
---   end
---
---   return require("blink-cmp-git.default.common").default_on_error(return_value, standard_error)
--- end
---
 ---@module 'blink.cmp'
 ---@type blink.cmp.Config
 M.opts = {
@@ -124,7 +117,7 @@ M.opts = {
     end,
     per_filetype = {
       sonicpi = { "sonicpi", inherit_defaults = true },
-      gitcommit = { "lsp", "git", "snippets", "emoji", "calc", "path" },
+      gitcommit = { "conventional_commits", "lsp", "git", "snippets", "emoji", "calc", "path" },
       lua = function()
         if string.find(vim.fn.getcwd(), "nvim") then
           return { "lazydev", inherit_defaults = true }
@@ -143,18 +136,11 @@ M.opts = {
       json = { "npm", inherit_defaults = true },
       octo = { "lsp", "git", "emoji", "calc" },
       org = { "lsp", "orgmode", "path", "snippets", "ripgrep", "emoji", "calc" },
-      -- quarto = { inherit_defaults = true, "cmp_r" },
-      -- r = { inherit_defaults = true, "cmp_r" },
-      -- rmd = { inherit_defaults = true, "cmp_r" },
       sql = { "lsp", "dadbod", "snippets" },
-      -- terminal = { "path", "cmp_r" },
       terminal = { "path" },
-      -- ["dap-repl"] = { "dap" },
-      -- ["dapui_watches"] = { "dap" },
-      -- ["dapui_hover"] = { "dap" },
-      ["dap-repl"] = { "cmp-dap" },
-      ["dapui_watches"] = { "cmp-dap" },
-      ["dapui_hover"] = { "cmp-dap" },
+      ["dap-repl"] = { "dap" },
+      ["dapui_watches"] = { "dap" },
+      ["dapui_hover"] = { "dap" },
     },
     providers = {
       jupynium = {
@@ -185,20 +171,13 @@ M.opts = {
       dap = {
         name = "dap",
         module = "blink-cmp-dap",
-        -- enabled = function()
-        --   return require("dap").session() ~= nil
-        -- end,
       },
-      -- cmp_r = {
-      --   name = "cmp_r",
-      --   module = "blink.compat.source",
-      --   opts = {
-      --     filetypes = { "r", "rmd", "quarto", "terminal" },
-      --   },
-      -- },
-      nvim_lua = {
-        name = "nvim_lua",
-        module = "blink.compat.source",
+      conventional_commits = {
+        name = "Conventional Commits",
+        module = "blink-cmp-conventional-commits",
+        enabled = function()
+          return vim.bo.filetype == "gitcommit"
+        end,
       },
       emoji = {
         name = "Emoji",
@@ -219,25 +198,6 @@ M.opts = {
           end,
         },
       },
-      -- ledger = {
-      --   name = "ledger",
-      --   module = "blink-cmp-ledger",
-      --   -- opts = {
-      --   --   enabled = true,
-      --   --   max_items = 20,
-      --   --   min_keyword_length = 1,
-      --   --   score_offset = 85,
-      --   -- },
-      -- },
-      -- cmp_rolodex = {
-      --   name = "cmp_rolodex",
-      --   module = "blink.compat.source",
-      --   opts = {
-      --     filename = os.getenv("HOME") .. "/documents/rolodex_db.json",
-      --     schema_ver = "latest",
-      --     encryption = "plaintext",
-      --   },
-      -- },
       dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
       lazydev = {
         name = "LazyDev",
@@ -266,15 +226,6 @@ M.opts = {
         should_show_items = function()
           return vim.o.filetype == "gitcommit"
         end,
-        -- opts = {
-        --   git_centers = {
-        --     github = {
-        --       issue = { on_error = on_blink_cmp_git_error },
-        --       pull_request = { on_error = on_blink_cmp_git_error },
-        --       mention = { on_error = on_blink_cmp_git_error },
-        --     },
-        --   },
-        -- },
       },
       snippets = {
         should_show_items = function(ctx)

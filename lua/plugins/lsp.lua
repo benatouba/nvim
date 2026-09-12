@@ -41,8 +41,10 @@ return {
   },
   {
     "nvimdev/lspsaga.nvim",
+    event = { "LspAttach", "InsertEnter", "CmdlineEnter" },
+    dependencies = { "nvim-tree/nvim-web-devicons", "nvim-treesitter/nvim-treesitter" },
     keys = {
-      { "gI", "<cmd>Lspsaga finder imp<CR>", desc = "Implementation" },
+      -- gI is the native implementation lookup from lua/lsp/attach.lua (buffer-local, wins anyway)
       { "ga", "<cmd>Lspsaga code_action<CR>", desc = "Code Action" },
       { "gF", "<cmd>Lspsaga finder def+ref<CR>", desc = "Finder" },
       { "go", "<cmd>Lspsaga outline<CR>", desc = "Outline" },
@@ -51,50 +53,58 @@ return {
       { "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", desc = "Prev Diagnostic" },
       { "<leader>ld", "<cmd>Lspsaga goto_definition<cr>", desc = "Definitions" },
     },
-    event = { "LspAttach", "InsertEnter", "CmdlineEnter" },
-    opts = require("lsp.lspsaga"),
-    dependencies = {
-      "nvim-web-devicons",
-      "nvim-treesitter",
-    },
-  },
-  {
-    "xzbdmw/colorful-menu.nvim",
-    opts = require("lsp.colorful-menu").opts,
+    opts = function()
+      local cp_ok, cp = pcall(require, "catppuccin.groups.integrations.lsp_saga")
+      return {
+        code_action = {
+          num_shortcut = true,
+          show_server_name = true,
+          extend_gitsigns = true,
+          keys = { quit = { "q", "<ESC>" }, exec = "<CR>" },
+        },
+        lightbulb = { enable = false },
+        hover = { enable = true, max_width = 0.6, open_link = "gx", open_browser = "!brave" },
+        ui = {
+          title = true,
+          border = "rounded",
+          lines = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+          winblend = 0,
+          expand = "",
+          collapse = "",
+          code_action = "💡",
+          incoming = " ",
+          outgoing = " ",
+          hover = " ",
+          kind = cp_ok and cp.custom_kind() or nil,
+        },
+        request_timeout = 5000,
+      }
+    end,
   },
   {
     "folke/lazydev.nvim",
+    ft = "lua",
+    enabled = function()
+      return vim.g.lazydev_enabled ~= false
+    end,
     ---@class lazydev.Config
     opts = {
       library = {
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-        { path = vim.fn.stdpath("config") .. "/lua", words = { "^ben%." } },
+        { path = vim.fn.stdpath("config") .. "/lua", words = { "^config%.", "^plugins%.", "^lsp%." } },
       },
-      cmp = {
-        enable = false,
-      },
+      integrations = { cmp = false }, -- completion goes through blink's lazydev source
     },
-    ft = "lua",
-    enabled = function(root_dir)
-      return vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
-    end,
   },
   {
     "dmmulroy/tsc.nvim",
     ft = { "typescript", "typescriptreact", "vue" },
-    config = function()
-      require("tsc").setup({
-        use_trouble_qflist = true,
-        use_diagnostics = true,
-      })
-      vim.keymap.set("n", "<leader>lt", ":TSC<CR>")
-    end,
+    keys = { { "<leader>lt", "<cmd>TSC<CR>", desc = "Typecheck (tsc)" } },
+    opts = { use_trouble_qflist = true, use_diagnostics = true },
   },
   {
     "dmmulroy/ts-error-translator.nvim",
     ft = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue" },
-    config = function()
-      require("ts-error-translator").setup()
-    end,
+    opts = {},
   },
 }

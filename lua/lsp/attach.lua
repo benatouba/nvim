@@ -37,7 +37,7 @@ local function add_keymaps(bufnr)
       desc = "Refactor",
     },
     {
-      "<leader>lt",
+      "<leader>lH",
       function()
         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
       end,
