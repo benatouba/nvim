@@ -1,8 +1,8 @@
+-- Debugging: nvim-dap with UI, virtual text, telescope pickers and python/JS adapters.
 return {
   {
     "mfussenegger/nvim-dap",
     keys = {
-      { "<leader>d", group = "+Debug" },
       {
         "<leader>db",
         function()
@@ -154,7 +154,6 @@ return {
         desc = "Test Class",
       },
       -- telescope-dap
-      { "<leader>ds", group = "+Search" },
       {
         "<leader>dsC",
         function()
@@ -191,33 +190,47 @@ return {
         desc = "Variables",
       },
       -- JS launch.json
-      { "<leader>da", desc = "Run with Args (JS)" },
+      {
+        "<leader>da",
+        function()
+          require("plugins.configs.dap").js_attach_with_arguments()
+        end,
+        desc = "Run with Args (JS)",
+      },
     },
     cmd = { "DapContinue", "DapToggleBreakpoint" },
     config = function()
-      require("debug.dap").config()
+      require("plugins.configs.dap").setup()
     end,
     dependencies = {
-      {
-        "theHamsta/nvim-dap-virtual-text",
-        config = function()
-          require("nvim-dap-virtual-text").setup({})
-        end,
-      },
-      { "mfussenegger/nvim-dap-python" },
+      { "theHamsta/nvim-dap-virtual-text", opts = { virt_text_pos = "inline", all_frames = true } },
+      "mfussenegger/nvim-dap-python",
       {
         "nvim-telescope/telescope-dap.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim" },
         config = function()
           require("telescope").load_extension("dap")
         end,
       },
       {
         "rcarriga/nvim-dap-ui",
-        dependencies = {
-          "nvim-neotest/nvim-nio",
-        },
-        config = function()
-          require("debug.dapui").config()
+        dependencies = { "nvim-neotest/nvim-nio" },
+        opts = {},
+        config = function(_, opts)
+          local dap, dapui = require("dap"), require("dapui")
+          dapui.setup(opts)
+          dap.listeners.after.event_initialized["dapui_conf"] = function()
+            dapui.open()
+          end
+          dap.listeners.after.event_stopped["dapui_conf"] = function()
+            dapui.open()
+          end
+          dap.listeners.before.event_terminated["dapui_conf"] = function()
+            dapui.close()
+          end
+          dap.listeners.before.event_exited["dapui_conf"] = function()
+            dapui.close()
+          end
         end,
       },
     },
@@ -225,9 +238,7 @@ return {
   {
     "jay-babu/mason-nvim-dap.nvim",
     event = "VeryLazy",
-    dependencies = {
-      "mason.nvim",
-    },
+    dependencies = { "mason-org/mason.nvim" },
     opts = {
       handlers = {},
       automatic_installation = false,

@@ -168,6 +168,8 @@ return {
       spec = {
         { "<leader>a", group = "+Actions", icon = { icon = "", color = "yellow" } },
         { "<leader>c", group = "+Configuration", icon = { icon = "", color = "orange" } },
+        { "<leader>d", group = "+Debug" },
+        { "<leader>ds", group = "+Debug search" },
         { "<leader>g", group = "+Git", icon = { icon = "󰊢 ", color = "red" } },
         { "<leader>L", group = "+Logs", icon = { icon = " ", color = "green" } },
         { "<leader>l", group = "+LSP", icon = { icon = "", color = "yellow" } },
