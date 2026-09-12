@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   packages = with pkgs; [
+    commitlint
     editorconfig-checker
     stylua
     vscode-json-languageserver
