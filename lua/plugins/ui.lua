@@ -151,6 +151,7 @@ return {
       clickable = false,
       tabpages = true,
       highlight_alternate = true,
+      exclude_ft = { "oil" },
       icons = {
         gitsigns = {
           added = { enabled = true, icon = "+" },

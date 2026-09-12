@@ -18,9 +18,11 @@ vim.filetype.add({
     rasi = "rasi",
     rofi = "rasi",
     wofi = "rasi",
+    env = "dotenv",
   },
   filename = {
     [".env"] = "dotenv",
+    ["env"] = "dotenv",
     ["vifmrc"] = "vim",
     [".ledger"] = "ledger",
     [".hledger"] = "hledger",
@@ -70,13 +72,6 @@ autocmd("FileType", {
   pattern = "org",
   callback = function()
     vim.opt_local.concealcursor = "nc"
-  end,
-})
-autocmd("FileType", {
-  group = ft,
-  pattern = "directory",
-  callback = function()
-    vim.opt_local.winbar = "[dir] %f"
   end,
 })
 autocmd({ "BufRead", "BufNewFile" }, {

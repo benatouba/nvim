@@ -37,7 +37,7 @@ return {
     -- Disabled on Neovim >= 0.12 (kept for the day it is wanted back).
     enabled = vim.fn.has("nvim-0.12") == 0,
     cmd = "UndotreeToggle",
-    keys = { { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Undotree", icon = { icon = " ", color = "green" } } },
+    keys = { { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Undotree" } },
   },
   {
     "monaqa/dial.nvim", -- increment/decrement basically everything
@@ -132,6 +132,23 @@ return {
         desc = "Replace in Current File",
       },
     },
+  },
+  {
+    "stevearc/oil.nvim",
+    cmd = "Oil",
+    keys = { { "<leader>e", "<cmd>Oil<cr>", desc = "Explorer" } },
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      { "benomahony/oil-git.nvim", lazy = true },
+    },
+    init = function()
+      if vim.env.GIT_DIFFTOOL or vim.env.GIT_DIFF_OPT then
+        vim.g.oil_manual_open = true
+      end
+    end,
+    opts = function()
+      return require("plugins.configs.oil").opts
+    end,
   },
   {
     "chrishrb/gx.nvim",

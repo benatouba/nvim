@@ -1,20 +1,17 @@
+-- Pickers, projects, diagnostics list, marks, tasks, terminals, HTTP client, env masking.
 return {
   {
     "nvim-telescope/telescope.nvim",
+    cmd = "Telescope",
     dependencies = {
+      "nvim-lua/plenary.nvim",
       {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
-        dependencies = "telescope.nvim",
-        config = function()
-          pcall(require("telescope").load_extension, "fzf")
-        end,
       },
     },
-    lazy = true,
     keys = {
       { "<leader>b", "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
-      { "<leader>sB", "<cmd>Telescope file_browser<cr>", desc = "Browser" },
       { "<leader>sb", "<cmd>Telescope git_branches<cr>", desc = "Branches" },
       { "<leader>sC", "<cmd>Telescope colorscheme<cr>", desc = "Colorscheme" },
       { "<leader>sf", "<cmd>Telescope find_files hidden=true<cr>", desc = "Find File" },
@@ -28,17 +25,56 @@ return {
       { "<leader>sR", "<cmd>Telescope registers<cr>", desc = "Registers" },
       { "<leader>st", "<cmd>Telescope live_grep<cr>", desc = "Text" },
     },
-    config = function()
-      require("ben.telescope").config()
+    opts = function()
+      return require("plugins.configs.telescope").opts()
+    end,
+    config = function(_, opts)
+      local telescope = require("telescope")
+      telescope.setup(opts)
+      telescope.load_extension("fzf")
+      vim.api.nvim_create_autocmd("User", {
+        group = vim.api.nvim_create_augroup("ben_telescope", { clear = true }),
+        pattern = "TelescopePreviewerLoaded",
+        callback = function()
+          vim.opt_local.wrap = true
+        end,
+      })
     end,
   },
   {
     "DrKJeff16/project.nvim",
-    keys = {
-      { "<leader>sp", "<cmd>Telescope projects<cr>", desc = "Projects" },
-    },
-    dependencies = { "telescope.nvim" },
     event = { "BufReadPost", "BufNewFile" },
+    dependencies = { "nvim-telescope/telescope.nvim" },
+    keys = {
+      {
+        "<leader>sp",
+        function()
+          require("telescope").load_extension("projects")
+          vim.cmd("Telescope projects")
+        end,
+        desc = "Projects",
+      },
+    },
+    init = function()
+      -- write_history() truncates the history file with open('w') *before* it
+      -- encodes, so a failed encode or an nvim that dies mid-write leaves it at
+      -- zero bytes. Its re-seed guard is `if not Path.exists(path)`, which only
+      -- covers a *missing* file, so an empty one makes every BufEnter throw
+      -- "Unable to decode JSON data!" until it is repaired by hand.
+      local hist = vim.fs.joinpath(vim.fn.stdpath("data"), "project_nvim", "project_history.json")
+      local stat = vim.uv.fs_stat(hist)
+      if not stat then
+        return
+      end
+
+      local ok = stat.size > 0
+      if ok then
+        ok = pcall(vim.json.decode, table.concat(vim.fn.readfile(hist), "\n"))
+      end
+      if not ok then
+        vim.fn.writefile({ "[]" }, hist)
+      end
+    end,
     ---@module 'project'
     ---@type Project.Config.Options
     opts = {
@@ -53,157 +89,202 @@ return {
         "pillar",
         "=nvim",
       },
-      lsp = { ignore = { "null-ls", "salt-lsp", "copilot" } },
+      lsp = { ignore = { "salt-lsp", "copilot" } },
       exclude_dirs = { "*/node_modules/*" },
     },
-    cond = vim.fn.has("nvim-0.11") == 1,
   },
   {
     "folke/trouble.nvim",
     cmd = { "Trouble" },
-  },
-  {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    event = { "InsertEnter" },
-    keys = { "m", "'" },
-    config = function()
-      require("misc.harpoon").config()
-      require("misc.harpoon").maps()
-    end,
-  },
-  {
-    "stevearc/overseer.nvim",
-    ---@module 'overseer'
-    ---@type overseer.SetupOpts
-  },
-  {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    event = { "InsertEnter" },
-    keys = { "m", "'" },
-    config = function()
-      require("misc.harpoon").config()
-      require("misc.harpoon").maps()
-    end,
-  },
-  {
-    "stevearc/overseer.nvim",
-    ---@module 'overseer'
-    ---@type overseer.SetupOpts
-    opts = {
-      dap = false,
+    opts = {},
+    keys = {
+      {
+        "]D",
+        function()
+          require("trouble").next({ skip_groups = true, jump = true })
+        end,
+        desc = "Next trouble item",
+      },
+      {
+        "[D",
+        function()
+          require("trouble").prev({ skip_groups = true, jump = true })
+        end,
+        desc = "Previous trouble item",
+      },
     },
+  },
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
+    keys = function()
+      local h = function()
+        return require("harpoon")
+      end
+      local keys = {
+        {
+          "<C-e>",
+          function()
+            h().ui:toggle_quick_menu(h():list())
+          end,
+          desc = "Toggle harpoon menu",
+        },
+        {
+          "<leader>mm",
+          function()
+            h():list():add()
+          end,
+          desc = "Add mark",
+        },
+        {
+          "<leader>mn",
+          function()
+            h():list():next()
+          end,
+          desc = "Next mark",
+        },
+        {
+          "<leader>mp",
+          function()
+            h():list():prev()
+          end,
+          desc = "Prev mark",
+        },
+        {
+          "]m",
+          function()
+            h():list():next()
+          end,
+          desc = "Next mark",
+        },
+        {
+          "[m",
+          function()
+            h():list():prev()
+          end,
+          desc = "Prev mark",
+        },
+        { "<leader>mt", "<cmd>Telescope harpoon marks<cr>", desc = "Toggle menu" },
+      }
+      for i = 1, 10 do
+        table.insert(keys, {
+          "<leader>m" .. (i % 10),
+          function()
+            h():list():select(i)
+          end,
+          desc = "Go to mark " .. i,
+        })
+      end
+      return keys
+    end,
+    opts = { settings = { save_on_toggle = true, save_on_change = true } },
+    config = function(_, opts)
+      require("harpoon").setup(opts)
+      require("telescope").load_extension("harpoon")
+    end,
+  },
+  {
+    "stevearc/overseer.nvim",
+    cmd = { "OverseerRun", "OverseerToggle", "OverseerOpen", "OverseerInfo", "OverseerBuild" },
+    ---@module 'overseer'
+    ---@type overseer.SetupOpts
+    opts = { dap = false },
   },
   {
     "akinsho/toggleterm.nvim",
     version = "*",
-    config = function()
-      require("misc.toggleterm").config()
-
-      local function shellescape(value)
-        return vim.fn.shellescape(value)
-      end
-
-      vim.api.nvim_create_user_command("DirtBoot", function()
-        local sample_dir = vim.env.TIDAL_SAMPLE_DIR
-        if not sample_dir or sample_dir == "" then
-          vim.notify("TIDAL_SAMPLE_DIR is not set (enter project devenv)", vim.log.levels.ERROR)
-          return
-        end
-        local cmd = "dirt -s " .. shellescape(sample_dir)
-        vim.cmd("ToggleTerm direction=horizontal cmd=" .. shellescape(cmd))
-      end, { force = true })
-
-      vim.api.nvim_create_user_command("TidalBoot", function()
-        local boot_file = vim.env.TIDAL_BOOT
-        if not boot_file or boot_file == "" then
-          vim.notify("TIDAL_BOOT is not set (enter project devenv)", vim.log.levels.ERROR)
-          return
-        end
-        local cmd = "ghci -ghci-script " .. shellescape(boot_file)
-        vim.cmd("ToggleTerm direction=horizontal cmd=" .. shellescape(cmd))
-      end, { force = true })
-    end,
-    cmd = { "ToggleTerm", "TermExec", "ToggleTermSendVisualLines", "ToggleTermSendCurrentLine" },
+    cmd = {
+      "ToggleTerm",
+      "TermExec",
+      "ToggleTermSendVisualLines",
+      "ToggleTermSendCurrentLine",
+      "DirtBoot",
+      "TidalBoot",
+    },
     keys = {
       { "<leader>t", "<cmd>ToggleTermSendVisualLines<cr>", mode = "v", desc = "Send to terminal" },
       { "<leader>TT", "<cmd>ToggleTerm direction=float<cr>", desc = "Terminal" },
-      { "<leader>Tt", "<cmd>ToggleTerm<cr>", desc = "Terminal (bot)" },
-      { "<leader>Md", "<cmd>DirtBoot<cr>", desc = "Dirt Sampler" },
-      { "<leader>Mr", "<cmd>TidalBoot<cr>", desc = "Tidal REPL" },
-      { "<leader>gL", "<cmd>lua require('misc.toggleterm').LazyGit()<cr>", desc = "LazyGit" },
+      { "<leader>Tt", "<cmd>ToggleTerm direction=tab<cr>", desc = "Terminal (Tab)" },
+      { "<leader>Tv", "<cmd>ToggleTerm direction=vertical size=80<cr>", desc = "Terminal (Vert)" },
+      { "<leader>Tx", "<cmd>ToggleTerm<cr>", desc = "Terminal (bot)" },
       {
         "<leader>Tb",
-        "<cmd>lua require('misc.toggleterm').btop()<cr>",
+        function()
+          require("plugins.configs.toggleterm").btop()
+        end,
         desc = "BTop",
       },
-      { "<leader>Tv", 'yi"<cmd>lua vim.print(vim.cmd[[p]])<cr>"', desc = "VisiData" },
       {
         "<leader>TV",
-        "<cmd>lua require('misc.toggleterm').VisiData(vim.api.nvim_buf_get_name(0))<cr>",
+        function()
+          require("plugins.configs.toggleterm").visidata(vim.api.nvim_buf_get_name(0))
+        end,
         desc = "VisiData (File)",
       },
-      { "<leader>Tu", "<cmd>lua require('misc.toggleterm').UpdateProject()<cr>", desc = "Update Project" },
+      {
+        "<leader>Tu",
+        function()
+          require("plugins.configs.toggleterm").update_project()
+        end,
+        desc = "Update Project",
+      },
+      {
+        "<leader>gL",
+        function()
+          require("plugins.configs.toggleterm").lazygit()
+        end,
+        desc = "LazyGit",
+      },
+      { "<leader>Md", "<cmd>DirtBoot<cr>", desc = "Dirt Sampler" },
+      { "<leader>Mr", "<cmd>TidalBoot<cr>", desc = "Tidal REPL" },
     },
+    opts = function()
+      return require("plugins.configs.toggleterm").opts
+    end,
+    config = function(_, opts)
+      require("toggleterm").setup(opts)
+      local tt = require("plugins.configs.toggleterm")
+      vim.api.nvim_create_user_command("DirtBoot", tt.dirt_boot, { desc = "Boot the dirt sampler" })
+      vim.api.nvim_create_user_command("TidalBoot", tt.tidal_boot, { desc = "Boot tidal ghci" })
+    end,
   },
-  {
-    "kevinhwang91/nvim-bqf",
-    ft = "qf",
-  },
+  { "kevinhwang91/nvim-bqf", ft = "qf" },
   {
     "mistweaverco/kulala.nvim",
-    keys = {
-      { "<leader>Rs", desc = "Send request" },
-      { "<leader>Ra", desc = "Send all requests" },
-      { "<leader>Rp", desc = "Open scratchpad" },
-    },
     ft = { "http", "rest" },
-    opts = {
-      global_keymaps = false,
-      global_keymaps_prefix = "<leader>R",
-      kulala_keymaps_prefix = "",
+    keys = {
+      {
+        "<leader>Rs",
+        function()
+          require("kulala").run()
+        end,
+        ft = { "http", "rest" },
+        desc = "Send request",
+      },
+      {
+        "<leader>Ra",
+        function()
+          require("kulala").run_all()
+        end,
+        ft = { "http", "rest" },
+        desc = "Send all requests",
+      },
+      {
+        "<leader>Rp",
+        function()
+          require("kulala").scratchpad()
+        end,
+        desc = "Open scratchpad",
+      },
     },
+    opts = { global_keymaps = false, global_keymaps_prefix = "<leader>R", kulala_keymaps_prefix = "" },
   },
   {
     "ph1losof/shelter.nvim",
-    lazy = false,
-    -- keys = {
-    --   { "<leader>Eg", "<cmd>EcologGoto<cr>", desc = "Go to env file" },
-    --   { "<leader>Ep", "<cmd>EcologPeek<cr>", desc = "Ecolog peek variable" },
-    --   { "<leader>Es", "<cmd>EcologSelect<cr>", desc = "Switch env file" },
-    --   { "<leader>se", "<cmd>EcologTelescope<cr>", desc = "Env" },
-    --   { "<leader>ev", "<cmd>Ecolog list<cr>", desc = "List env variables" },
-    --   { "<leader>ef", "<cmd>Ecolog files select<cr>", desc = "Select env file" },
-    -- },
-    -- event = { "InsertEnter", "CmdlineEnter", "BufNewFile", "BufReadPre" },
-    init = function()
-      vim.filetype.add({
-        -- Mappings based on file extension
-        extension = {
-          env = "dotenv",
-        },
-        -- Mappings based on FULL filename
-        filename = {
-          [".env"] = "dotenv",
-          ["env"] = "dotenv",
-        },
-        -- Mappings based on filename pattern match
-        pattern = {
-          -- Match filenames like ".env.development", "env.local" and so on
-          [".?env.*"] = "dotenv",
-        },
-      })
-    end,
+    event = { "BufReadPre", "BufNewFile" },
     opts = {
-      modules = {
-        files = true,
-        telescope_previewer = true,
-        snacks_previewer = true,
-        oil_previewer = true,
-      },
+      modules = { files = true, telescope_previewer = true, snacks_previewer = true, oil_previewer = true },
     },
   },
 }
