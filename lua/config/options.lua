@@ -64,6 +64,18 @@ o.incsearch = true
 o.inccommand = "split"
 vim.opt.shortmess:append("c")
 
+-- Diffs (used by :diffthis and diffview)
+vim.opt.diffopt = {
+  "internal",
+  "filler",
+  "closeoff",
+  "context:12",
+  "algorithm:histogram",
+  "linematch:200",
+  "indent-heuristic",
+  "iwhite",
+}
+
 -- Folding: LSP folding ranges, falling back to treesitter. Everything open by default.
 o.foldmethod = "expr"
 o.foldexpr = "v:lua.vim.lsp.foldexpr()"
