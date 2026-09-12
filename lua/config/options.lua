@@ -1,110 +1,105 @@
--- vim.opt.iskeyword:append("-") -- treat dash separated words as a word text object"
-vim.opt.shortmess:append("c") -- Don't pass messages to |ins-completion-menu|.
-vim.opt.fillchars:append("stl: ")
-vim.opt.inccommand = "split" -- Make substitution work in realtime
-vim.o.hidden = true -- Required to keep multiple buffers open multiple buffers
--- vim.o.title = true
-TERMINAL = vim.fn.expand("$TERMINAL")
-DATA_PATH = vim.fn.stdpath("data")
-vim.o.titlestring = "%<%F%=%l/%L - nvim"
-vim.o.exrc = false
-vim.g.lazydev_enabled = true
+-- Editor options. Loaded first from init.lua, before lazy.nvim, so leader keys and
+-- globals that plugin specs read (vim.g.is_nixos) are in place when specs are built.
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
-vim.g.loaded = 1
+
+-- On NixOS every tool comes from Nix, so Mason-style installers are disabled.
+vim.g.is_nixos = vim.uv.fs_stat("/etc/NIXOS") ~= nil
+
+-- Disabled built-in plugins / providers
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_netrwSettings = 1
 vim.g.loaded_netrwFileHandlers = 1
 vim.g.loaded_netrw_gitignore = 1
-vim.wo.wrap = true -- Display long lines as just one line
-vim.opt.whichwrap:append("<,>,[,]") -- move to next line with theses keys
-vim.o.syntax = "on" -- syntax highlighting
-vim.o.pumheight = 10 -- Makes pop-up menu smaller
--- vim.o.pummaxwidth = 120
--- vim.o.pumborder = "rounded"
-vim.o.fileencoding = "utf-8" -- The encoding written to file
--- vim.o.cmdheight = 0 -- More space for displaying messages
-vim.o.mouse = "c" -- Disable mouse
-vim.o.splitbelow = true -- Horizontal splits will automatically be below
-vim.o.termguicolors = true -- set term GUI colors most terminals support this
-vim.o.splitright = true -- Vertical splits will automatically be to the right
-vim.o.conceallevel = 2 -- Conceals a lot in markdown files
-vim.opt.list = true
-vim.opt.listchars:append("nbsp:␣,trail:•,extends:⟩,precedes:⟨")
-vim.bo.expandtab = true -- Converts tabs to spaces
-vim.bo.smartindent = true -- Makes indenting smart
-vim.opt.number = true -- set numbered lines
-vim.opt.relativenumber = true -- set relative number
-vim.opt.cursorline = true -- Enable highlighting of the current line
-vim.opt.incsearch = true
-vim.opt.spelllang = "en"
-vim.opt.showcmd = true
-
-vim.opt.sidescrolloff = 7
-vim.opt.textwidth = 0
-vim.o.scrolloff = 999
-vim.o.showmode = false -- We don't need to see things like -- INSERT -- anymore
-vim.o.backup = true -- backup files
-vim.g.cursorhold_updatetime = 100
-vim.o.writebackup = true -- backup files during writing
-vim.wo.signcolumn = "yes:1" -- Always show the signcolumn, otherwise it would shift the text each time
-vim.o.updatetime = 200 -- Faster completion
-vim.o.timeoutlen = 400 -- By default timeoutlen is 1000 ms
-vim.o.clipboard = "unnamedplus" -- Copy paste between vim and everything else
-vim.opt.foldmethod = "expr"
-vim.opt.foldlevelstart = 50
-vim.opt.formatoptions:remove("c")
-vim.opt.formatoptions:remove("r")
-vim.opt.formatoptions:remove("o")
-vim.opt.hlsearch = true
-
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2 -- Change the number of space characters inserted for indentation
-
-vim.o.ignorecase = true -- makes searching case insensitive
-vim.o.smartcase = true -- searching becomes case sensitive if you use a capital letter
-
-local function ensure_dir(path)
-  vim.fn.mkdir(path, "p")
-end
-
-ensure_dir(DATA_PATH .. "/backup")
-vim.o.backupdir = DATA_PATH .. "/backup" -- set backup directory to be a subdirectory of data to ensure that backups are not written to git repos
-vim.o.undodir = DATA_PATH .. "/undo" -- set location of undo files
-vim.o.undofile = true -- enable persistent undo
-ensure_dir(DATA_PATH .. "/directory")
-vim.o.directory = DATA_PATH .. "/directory" -- ensure that swap files are not written to repos.
-
--- Settings for folkes tokyo night colorscheme
-vim.g.tokynight_style = "storm"
-vim.g.tokyonight_transparent = true
-vim.g.tokyonight_sidebars = { "terminal", "packer", "qf", "nvimtree" }
--- vim.g.tokyonight_colors = { hint = "orange", error = "#ff0000" }
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
-local python_path = vim.fn.expand("$HOME/.pyenv/shims/python3")
-if Exists(python_path) then
-  vim.g.python3_host_prog = python_path
+
+local o = vim.o
+
+-- UI
+o.termguicolors = true
+o.number = true
+o.relativenumber = true
+o.cursorline = true
+o.signcolumn = "yes:1" -- always reserve the sign column so text does not shift
+o.showmode = false -- the statusline shows the mode
+o.showcmd = true
+o.pumheight = 10
+o.scrolloff = 999 -- keep the cursor line vertically centred
+o.sidescrolloff = 7
+o.conceallevel = 2 -- e.g. hide markup in markdown
+o.list = true
+vim.opt.listchars:append("nbsp:␣,trail:•,extends:⟩,precedes:⟨")
+vim.opt.fillchars:append("stl: ")
+o.titlestring = "%<%F%=%l/%L - nvim"
+o.mouse = "c" -- mouse only in command-line mode
+o.syntax = "on"
+
+-- Splits, wrapping, movement
+o.splitbelow = true
+o.splitright = true
+o.wrap = true
+vim.opt.whichwrap:append("<,>,[,]")
+
+-- Editing
+o.expandtab = true
+o.smartindent = true
+o.tabstop = 2
+o.shiftwidth = 2
+o.textwidth = 0
+vim.opt.formatoptions:remove({ "c", "r", "o" }) -- no auto-continued comments
+o.clipboard = "unnamedplus"
+o.spelllang = "en"
+o.fileencoding = "utf-8"
+o.exrc = false
+
+-- Search
+o.ignorecase = true
+o.smartcase = true
+o.hlsearch = true
+o.incsearch = true
+o.inccommand = "split"
+vim.opt.shortmess:append("c")
+
+-- Folding: LSP folding ranges, falling back to treesitter. Everything open by default.
+o.foldmethod = "expr"
+o.foldexpr = "v:lua.vim.lsp.foldexpr()"
+o.foldlevelstart = 99
+
+-- Timing
+o.updatetime = 200
+o.timeoutlen = 400
+
+-- Backups, undo and swap live under stdpath("data") so they never land in a project tree.
+local data = vim.fn.stdpath("data")
+for _, dir in ipairs({ data .. "/backup", data .. "/directory" }) do
+  if not vim.uv.fs_stat(dir) then
+    vim.fn.mkdir(dir, "p")
+  end
+end
+o.backup = true
+o.writebackup = true
+o.backupdir = data .. "/backup"
+o.directory = data .. "/directory"
+o.undofile = true
+o.undodir = data .. "/undo"
+
+-- Python host: prefer the pyenv shim when present.
+local pyenv_python = vim.fn.expand("$HOME/.pyenv/shims/python3")
+if vim.uv.fs_stat(pyenv_python) then
+  vim.g.python3_host_prog = pyenv_python
 end
 
-vim.diagnostic.config({
-  virtual_text = false,
-  signs = true,
-  update_in_insert = false,
-  underline = true,
-  severity_sort = true,
-  float = {
-    show_header = true,
-    source = true,
-    border = "rounded",
-    focusable = true,
-  },
-})
-
+-- Plugin globals that must be set before the plugin loads
+vim.g.lazydev_enabled = true
 vim.g.skip_ts_context_commentstring_module = true
+vim.g.cursorhold_updatetime = 100
+
 vim.lsp.log.set_level("WARN")
 
-if vim.fn.has("nvim-0.12") == 1 then
+-- Experimental TUI (nightly-internal module; tolerate it moving).
+pcall(function()
   require("vim._core.ui2").enable()
-end
+end)

@@ -36,6 +36,5 @@ return {
         end,
       })
     end,
-    enabled = O.language_parsing,
   },
 }

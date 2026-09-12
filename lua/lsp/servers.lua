@@ -59,7 +59,7 @@ M.setup = function()
 end
 
 M.enable_nixos = function()
-  if not O.is_nixos then
+  if not vim.g.is_nixos then
     return
   end
 

@@ -5,7 +5,7 @@ return {
       require("lsp.copilot").config()
     end,
     enabled = function()
-      return O.copilot and vim.fn.executable("node") == 1
+      return vim.fn.executable("node") == 1
     end,
   },
   {

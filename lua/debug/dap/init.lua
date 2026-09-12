@@ -55,7 +55,7 @@ M.config = function()
     config.cwd = vim.fn.getcwd()
   end
 
-  if O.is_nixos then
+  if vim.g.is_nixos then
     dap.adapters["pwa-node"] = {
       type = "server",
       host = "localhost",
@@ -72,7 +72,10 @@ M.config = function()
       port = "${port}",
       executable = {
         command = "node",
-        args = { vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js", "${port}" },
+        args = {
+          vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+          "${port}",
+        },
       },
     }
   end

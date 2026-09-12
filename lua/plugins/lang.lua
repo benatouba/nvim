@@ -116,7 +116,6 @@ return {
     config = function()
       require("misc.vimtex").config()
     end,
-    enabled = O.latex,
   },
   {
     "chomosuke/typst-preview.nvim",
@@ -167,14 +166,12 @@ return {
     config = function()
       require("misc.package_info").config()
     end,
-    enabled = O.webdev and O.misc,
     ft = { "json" },
   },
   {
     "danymat/neogen",
     opts = require("misc.neogen").opts,
     dependencies = "nvim-treesitter/nvim-treesitter",
-    enabled = O.language_parsing,
     event = "InsertEnter",
   },
   {
@@ -260,6 +257,5 @@ return {
         return require("refactoring.debug").cleanup({ restore_view = true })
       end, { desc = "Debug print clean", expr = true, remap = true })
     end,
-    enabled = O.language_parsing and O.misc,
   },
 }

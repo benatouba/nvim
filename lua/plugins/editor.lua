@@ -34,7 +34,6 @@ return {
     version = false,
     opts = {},
     event = "VeryLazy",
-    enabled = O.language_parsing,
   },
   {
     "mbbill/undotree",
@@ -45,7 +44,6 @@ return {
     "kylechui/nvim-surround",
     opts = {},
     event = "VeryLazy",
-    enabled = O.language_parsing,
   },
   {
     "monaqa/dial.nvim",
@@ -152,7 +150,6 @@ return {
         mode = "x",
       },
     },
-    enabled = O.misc,
   },
   -- help me find my way around
   {
@@ -210,7 +207,7 @@ return {
         { "<leader>u", ":UndotreeToggle<cr>", desc = "Undotree", icon = { icon = " ", color = "green" } },
         {
           "<leader>f",
-          "<cmd>lua P(vim.api.nvim_buf_get_name(0))<cr>",
+          "<cmd>lua vim.print(vim.api.nvim_buf_get_name(0))<cr>",
           desc = "Show Filename",
           icon = { icon = "", color = "blue" },
         },

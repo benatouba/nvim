@@ -1,15 +1,17 @@
 return {
   {
     "neovim/nvim-lspconfig",
-    -- IMPORTANT: must load early so its lsp/*.lua configs are on the
-    -- runtime path before any vim.lsp.enable() call (see :help lspconfig-nvim-0.11).
-    -- Config priority: lsp/ -> after/lsp/ -> vim.lsp.config()
+    -- Loaded eagerly: its lsp/*.lua defaults must be on the runtime path before
+    -- vim.lsp.enable() runs. Config priority: lsp/ -> after/lsp/ -> vim.lsp.config().
     lazy = false,
     dependencies = {
       "saghen/blink.cmp",
       "b0o/SchemaStore.nvim",
     },
-    enabled = O.lsp,
+    config = function()
+      require("lsp").config()
+      require("lsp").enable_nixos()
+    end,
   },
   {
     "mason-org/mason-lspconfig.nvim",
@@ -32,7 +34,7 @@ return {
     opts = {
       auto_install = false,
     },
-    enabled = O.lsp and not O.is_nixos,
+    enabled = not vim.g.is_nixos,
   },
   {
     "nvimdev/lspsaga.nvim",
@@ -76,7 +78,6 @@ return {
   },
   {
     "dmmulroy/tsc.nvim",
-    enabled = O.typescript,
     ft = { "typescript", "typescriptreact", "vue" },
     config = function()
       require("tsc").setup({
@@ -88,7 +89,6 @@ return {
   },
   {
     "dmmulroy/ts-error-translator.nvim",
-    enabled = O.typescript,
     ft = { "typescript", "typescriptreact", "javascript", "javascriptreact", "vue" },
     config = function()
       require("ts-error-translator").setup()

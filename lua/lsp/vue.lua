@@ -185,7 +185,7 @@ M.resolve_paths = function(root_dir)
     return vue_language_server_path, tsdk
   end
 
-  if rawget(_G, "O") and O.is_nixos then
+  if vim.g.is_nixos then
     local vue_ls_cmd = M.resolve_vue_ls_cmd(root_dir)
       or (vim.fn.executable("vue-language-server") == 1 and { vim.fn.exepath("vue-language-server") })
     if vue_ls_cmd then

@@ -197,7 +197,6 @@ return {
     config = function()
       require("debug.dap").config()
     end,
-    enabled = O.dap,
     dependencies = {
       {
         "theHamsta/nvim-dap-virtual-text",
@@ -220,7 +219,6 @@ return {
         config = function()
           require("debug.dapui").config()
         end,
-        enabled = O.dap,
       },
     },
   },
@@ -234,6 +232,6 @@ return {
       handlers = {},
       automatic_installation = false,
     },
-    enabled = O.dap and not O.is_nixos,
+    enabled = not vim.g.is_nixos,
   },
 }

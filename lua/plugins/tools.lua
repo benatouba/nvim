@@ -57,12 +57,10 @@ return {
       exclude_dirs = { "*/node_modules/*" },
     },
     cond = vim.fn.has("nvim-0.11") == 1,
-    enabled = O.lsp,
   },
   {
     "folke/trouble.nvim",
     cmd = { "Trouble" },
-    enabled = O.language_parsing or O.lsp,
   },
   {
     "ThePrimeagen/harpoon",
@@ -74,7 +72,6 @@ return {
       require("misc.harpoon").config()
       require("misc.harpoon").maps()
     end,
-    enabled = O.misc and O.language_parsing,
   },
   {
     "stevearc/overseer.nvim",
@@ -83,7 +80,6 @@ return {
     opts = {
       dap = false,
     },
-    enabled = O.misc,
   },
   {
     "akinsho/toggleterm.nvim",
@@ -128,7 +124,7 @@ return {
         "<cmd>lua require('misc.toggleterm').btop()<cr>",
         desc = "BTop",
       },
-      { "<leader>Tv", 'yi"<cmd>lua P(vim.cmd[[p]])<cr>"', desc = "VisiData" },
+      { "<leader>Tv", 'yi"<cmd>lua vim.print(vim.cmd[[p]])<cr>"', desc = "VisiData" },
       {
         "<leader>TV",
         "<cmd>lua require('misc.toggleterm').VisiData(vim.api.nvim_buf_get_name(0))<cr>",
@@ -136,12 +132,10 @@ return {
       },
       { "<leader>Tu", "<cmd>lua require('misc.toggleterm').UpdateProject()<cr>", desc = "Update Project" },
     },
-    enabled = O.misc,
   },
   {
     "kevinhwang91/nvim-bqf",
     ft = "qf",
-    enabled = O.misc,
   },
   {
     "mistweaverco/kulala.nvim",
@@ -156,7 +150,6 @@ return {
       global_keymaps_prefix = "<leader>R",
       kulala_keymaps_prefix = "",
     },
-    enabled = O.webdev and O.misc,
   },
   {
     "ph1losof/shelter.nvim",

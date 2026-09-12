@@ -53,6 +53,5 @@ return {
         desc = "Format",
       },
     },
-    enabled = O.language_parsing,
   },
 }

@@ -14,7 +14,6 @@ return {
     config = function()
       require("language_parsing.treesitter").config()
     end,
-    enabled = O.language_parsing,
   },
   {
     "windwp/nvim-ts-autotag",
@@ -29,7 +28,6 @@ return {
         },
       })
     end,
-    enabled = O.language_parsing,
   },
   {
     "folke/ts-comments.nvim",
@@ -43,7 +41,6 @@ return {
     config = function()
       require("language_parsing.autopairs").config()
     end,
-    enabled = O.language_parsing,
   },
   {
     "andymass/vim-matchup",
@@ -53,6 +50,6 @@ return {
     end,
     keys = { "%" },
     event = "InsertEnter",
-    enabled = O.language_parsing and vim.fn.has("nvim-0.12") == 0,
+    enabled = vim.fn.has("nvim-0.12") == 0,
   },
 }

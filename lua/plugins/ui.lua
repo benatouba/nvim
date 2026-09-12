@@ -120,7 +120,6 @@ return {
     opts = require("ben.colorizer").opts,
     lazy = true,
     event = "BufReadPost",
-    enabled = O.misc,
   },
 
   -- Icons and visuals
@@ -144,7 +143,6 @@ return {
     opts = require("ben.indent-blankline").opts,
     event = { "BufReadPost", "BufNewFile" },
     dependencies = "nvim-treesitter",
-    enabled = O.language_parsing,
   },
   {
     "nvim-lualine/lualine.nvim",
@@ -153,7 +151,7 @@ return {
       {
         "AndreM222/copilot-lualine",
         enabled = function()
-          return O.copilot and vim.fn.executable("node") == 1
+          return vim.fn.executable("node") == 1
         end,
       },
     },
@@ -171,7 +169,6 @@ return {
       "nvim-tree/nvim-web-devicons",
     },
     lazy = true,
-    enabled = O.misc,
   },
   {
     "hiphish/rainbow-delimiters.nvim",
@@ -192,7 +189,6 @@ return {
       require("ui.rainbow-delimiters").config()
     end,
     event = "VeryLazy",
-    enabled = O.language_parsing,
   },
   {
     "folke/noice.nvim",
@@ -221,7 +217,6 @@ return {
     "folke/todo-comments.nvim",
     opts = {},
     lazy = false,
-    enabled = O.language_parsing,
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
@@ -233,7 +228,6 @@ return {
       file_types = { "markdown", "norg", "org", "rmd", "Avante" },
       completions = { lsp = { enabled = true } },
     },
-    enabled = O.markdown,
   },
   {
     "brianhuster/live-preview.nvim",

@@ -1,3 +1,12 @@
+-- Open Diffview with `cmd`, or close it if a view is already open.
+local function diffview_toggle(cmd)
+  if next(require("diffview.lib").views) == nil then
+    vim.cmd(cmd or "DiffviewOpen")
+  else
+    vim.cmd("DiffviewClose")
+  end
+end
+
 return {
   {
     "lewis6991/gitsigns.nvim",
@@ -17,7 +26,6 @@ return {
       { "<leader>gr", "<cmd>lua require'gitsigns'.reset_hunk()<cr>", desc = "Reset Hunk" },
       { "<leader>gs", "<cmd>lua require'gitsigns'.stage_hunk()<cr>", desc = "Stage Hunk" },
     },
-    enabled = O.git,
   },
   {
     "NeogitOrg/neogit",
@@ -37,7 +45,6 @@ return {
     config = function()
       require("git.neogit").config()
     end,
-    enabled = O.git,
   },
   {
     "pwntester/octo.nvim",
@@ -58,12 +65,18 @@ return {
     "dlyongemallo/diffview-plus.nvim",
     version = "*",
     keys = {
-      { "<leader>gd", "<cmd>lua DiffviewToggle()<cr>", desc = "Diffview" },
+      { "<leader>gd", function()
+        diffview_toggle()
+      end, desc = "Diffview" },
       { "<leader>gS", "<cmd>DiffviewFileHistory -g --range=stash<cr>", desc = "Check Stash" },
-      { "<leader>gm", "<cmd>lua DiffviewToggle('DiffviewOpen master..HEAD')<cr>", desc = "Diff master" },
+      { "<leader>gm", function()
+        diffview_toggle("DiffviewOpen master..HEAD")
+      end, desc = "Diff master" },
       {
         "<leader>gf",
-        "<cmd>lua DiffviewToggle('DiffviewFileHistory %')<cr>",
+        function()
+        diffview_toggle("DiffviewFileHistory %")
+      end,
         desc = "Open diffs for current File",
       },
     },

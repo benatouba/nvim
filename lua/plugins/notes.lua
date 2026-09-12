@@ -28,7 +28,6 @@ return {
     config = function()
       require("management.obsidian").config()
     end,
-    enabled = O.obsidian,
   },
   {
     "nvim-orgmode/orgmode",
@@ -52,7 +51,6 @@ return {
         remap = false,
       },
     },
-    enabled = O.project_management,
     config = function()
       require("management.orgmode").config()
     end,

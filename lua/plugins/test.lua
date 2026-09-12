@@ -48,7 +48,6 @@ return {
     config = function()
       require("test.neotest").config()
     end,
-    enabled = O.test,
   },
   { "nvim-neotest/nvim-nio" },
 }

@@ -3,7 +3,6 @@ return {
     "kiyoon/jupynium.nvim",
     build = "uv pip install user . --python=$HOME/.virtualenvs/jupynium/bin/python",
     ft = "python",
-    enabled = O.notebooks,
   },
   {
     "goerz/jupytext.nvim",
