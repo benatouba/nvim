@@ -1,8 +1,6 @@
 local M = {}
 
 local function add_keymaps(event, bufnr)
-  vim.keymap.set("i", "<C-Space>", "<cmd>lua vim.lsp.completion.trigger()<cr>")
-
   local isOk, wk = pcall(require, "which-key")
   if not isOk then
     vim.notify("which-key not okay in lspconfig")

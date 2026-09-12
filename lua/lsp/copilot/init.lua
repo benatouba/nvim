@@ -26,10 +26,12 @@ M.config = function()
       enabled = true,
       auto_trigger = true,
       debounce = 150,
+      -- <Tab> accepts a full suggestion via blink.cmp's keymap chain (snippet -> copilot -> tab),
+      -- so copilot itself only owns the Alt-based partial accepts and navigation.
       keymap = {
-        accept_word = "<C-a>",
-        accept_line = "<C-s>",
-        accept = "<C-d>",
+        accept = false,
+        accept_word = "<M-w>",
+        accept_line = "<M-l>",
         next = "<M-j>",
         prev = "<M-k>",
         dismiss = "<M-e>",
@@ -68,10 +70,9 @@ M.config = function()
     copilot_node_command = "node", -- Node.js version must be > 16.x
     server_opts_overrides = {},
   })
-  vim.keymap.set("i", "<C-a>", "<cmd>lua require('copilot.suggestion').accept_word()<cr>", {})
-  vim.keymap.set("i", "<C-l>", "<cmd>lua require('copilot.suggestion').accept_line()<cr>", {})
-  vim.keymap.set("i", "<Tab>", "<cmd>lua require('copilot.suggestion').accept()<cr>", {})
-  vim.keymap.set("i", "<M-g>", "<cmd>lua require('copilot.panel').open()<cr>", {})
+  vim.keymap.set("i", "<M-g>", function()
+    require("copilot.panel").open()
+  end, { desc = "Copilot panel" })
 end
 
 return M

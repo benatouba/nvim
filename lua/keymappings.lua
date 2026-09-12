@@ -32,8 +32,6 @@ map("t", "<C-h>", "<C-\\><C-N><C-w><cmd>BufferPrevious<CR>", { remap = false })
 map("x", "K", "<cmd>move '<-2<CR>gv-gv'<ESC>")
 map("x", "J", "<cmd>move '>+1<CR>gv-gv'<ESC>")
 
--- TAB completion
-map("i", "<C-TAB>", "cmp#complete()")
 
 vim.cmd([[
     cnoreabbrev W w

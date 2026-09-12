@@ -12,10 +12,23 @@ local M = {}
 ---@type blink.cmp.Config
 M.opts = {
   keymap = {
+    -- "default" preset: <C-y> accept, <C-n>/<C-p> next/prev, <C-space> show/docs, <C-e> hide.
     preset = "default",
-    -- ["<CR>"] = { "select_and_accept", "fallback" },
+    -- Accept the highlighted menu item (kept alongside the preset's <C-y>).
     ["<C-l>"] = { "select_and_accept", "fallback" },
-    -- ["<Tab>"] = {},
+    -- <Tab> = "take the obvious next step": snippet placeholder -> copilot ghost text -> literal tab.
+    ["<Tab>"] = {
+      "snippet_forward",
+      function()
+        local ok, suggestion = pcall(require, "copilot.suggestion")
+        if ok and suggestion.is_visible() then
+          suggestion.accept()
+          return true
+        end
+      end,
+      "fallback",
+    },
+    ["<S-Tab>"] = { "snippet_backward", "fallback" },
     ["<Up>"] = {},
     ["<Down>"] = {},
   },
