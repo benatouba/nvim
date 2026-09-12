@@ -26,13 +26,10 @@ M.setup = function()
     DapLogPoint = "",
     DapStopped = "",
   }) do
-    vim.fn.sign_define(
-      name,
-      {
-        text = text,
-        texthl = name == "DapLogPoint" and "DapLogPoint" or name == "DapStopped" and "DapStopped" or "DapBreakpoint",
-      }
-    )
+    vim.fn.sign_define(name, {
+      text = text,
+      texthl = name == "DapLogPoint" and "DapLogPoint" or name == "DapStopped" and "DapStopped" or "DapBreakpoint",
+    })
   end
   vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
   dap.defaults.fallback.terminal_win_cmd = "50vsplit new"

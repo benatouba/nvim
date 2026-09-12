@@ -1,6 +1,6 @@
 return {
   name = "run script",
-  builder = function ()
+  builder = function()
     local file = vim.fn.expand("%:p")
     local cmd = { file }
     if vim.bo.filetype == "go" then

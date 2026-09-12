@@ -1,6 +1,6 @@
 return {
   name = "Run Python module",
-  builder = function ()
+  builder = function()
     local module = vim.fn.expand("%:r")
     local cmd = { "python", "-m", module }
     return {
