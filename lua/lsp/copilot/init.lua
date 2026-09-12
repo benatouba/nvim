@@ -26,12 +26,12 @@ M.config = function()
       enabled = true,
       auto_trigger = true,
       debounce = 150,
-      -- <Tab> accepts a full suggestion via blink.cmp's keymap chain (snippet -> copilot -> tab),
-      -- so copilot itself only owns the Alt-based partial accepts and navigation.
+      -- Buffer-local pass-through maps: with no ghost text visible each key keeps its
+      -- previous meaning (<C-a> insert last text, <C-s> LSP signature help, <C-d> dedent).
       keymap = {
-        accept = false,
-        accept_word = "<M-w>",
-        accept_line = "<M-l>",
+        accept_word = "<C-a>",
+        accept_line = "<C-s>",
+        accept = "<C-d>",
         next = "<M-j>",
         prev = "<M-k>",
         dismiss = "<M-e>",

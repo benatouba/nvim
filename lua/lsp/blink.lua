@@ -16,18 +16,9 @@ M.opts = {
     preset = "default",
     -- Accept the highlighted menu item (kept alongside the preset's <C-y>).
     ["<C-l>"] = { "select_and_accept", "fallback" },
-    -- <Tab> = "take the obvious next step": snippet placeholder -> copilot ghost text -> literal tab.
-    ["<Tab>"] = {
-      "snippet_forward",
-      function()
-        local ok, suggestion = pcall(require, "copilot.suggestion")
-        if ok and suggestion.is_visible() then
-          suggestion.accept()
-          return true
-        end
-      end,
-      "fallback",
-    },
+    -- <Tab>/<S-Tab> jump between snippet placeholders, otherwise insert a literal tab.
+    -- (Copilot accepts live on <C-a>/<C-s>/<C-d>, see the copilot config.)
+    ["<Tab>"] = { "snippet_forward", "fallback" },
     ["<S-Tab>"] = { "snippet_backward", "fallback" },
     ["<Up>"] = {},
     ["<Down>"] = {},
