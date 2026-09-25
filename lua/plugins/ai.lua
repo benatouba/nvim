@@ -78,7 +78,13 @@ return {
         end,
         ["."] = false,
       },
-      copilot_node_command = "node", -- Node.js version must be > 16.x
+      -- The plugin's default downloads a glibc-linked native server that does not run
+      -- on NixOS.  Use the one the system provides (nixpkgs copilot-language-server,
+      -- on PATH via the neovim wrapper); a name alone means "resolve via PATH".
+      server = {
+        type = "binary",
+        custom_server_filepath = "copilot-language-server",
+      },
       server_opts_overrides = {},
     },
   },

@@ -195,7 +195,6 @@ return {
     },
     opts = {
       package_manager = "pnpm",
-      highlight = { up_to_date = "237", outdated = "173", invalid = "#ee4b2b" },
       hide_up_to_date = true,
     },
   },

@@ -233,14 +233,10 @@ M.opts = {
         should_show_items = function(ctx)
           return ctx.trigger.initial_kind ~= "trigger_character"
         end,
-        opts = {
-          filter_snippets = function(ft, file)
-            if ft == "gitcommit" and file:match("friendly.snippets") then
-              return false
-            end
-            return true
-          end,
-        },
+        -- No `opts.filter_snippets` here: that option belongs to blink's built-in
+        -- snippets source, and `snippets.preset = "luasnip"` above swaps in the LuaSnip
+        -- source, which validates its opts strictly (use_show_condition,
+        -- show_autosnippets, prefer_doc_trig, use_label_description only).
       },
       ripgrep = {
         module = "blink-ripgrep",
