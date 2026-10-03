@@ -134,7 +134,9 @@ return {
   },
   {
     "lervag/vimtex",
-    ft = "tex",
+    -- Upstream warns against plugin-manager lazy-loading (inverse search needs the
+    -- global command); its own filetype/autoload machinery already defers the work.
+    lazy = false,
     init = function()
       require("plugins.configs.vimtex").init()
     end,

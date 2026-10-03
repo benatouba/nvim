@@ -43,8 +43,8 @@ return {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
     build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile" },
-    cmd = { "TSInstall", "TSUpdate", "TSInstallInfo", "TSLog" },
+    -- Upstream `main` does not support lazy-loading: load eager.
+    lazy = false,
     dependencies = {
       { "LiadOz/nvim-dap-repl-highlights", opts = {} },
     },
@@ -85,8 +85,19 @@ return {
   },
   {
     "windwp/nvim-ts-autotag",
-    event = { "InsertEnter", "BufNewFile" },
-    ft = { "html", "javascript", "typescript", "vue", "svelte", "markdown", "xml", "php" },
+    -- Filetype-scoped only: an InsertEnter trigger would load this in every buffer.
+    ft = {
+      "html",
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact",
+      "vue",
+      "svelte",
+      "markdown",
+      "xml",
+      "php",
+    },
     opts = {
       opts = { enable_close = true, enable_rename = true, enable_close_on_slash = true },
     },
