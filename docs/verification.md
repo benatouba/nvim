@@ -68,6 +68,10 @@ Run in order; every step must be silent unless stated.
    `commands.lua`), independent of this config — needs an upstream report,
    not a config change. The HTTP client (kulala.nvim) is disabled, so there
    is no http/rest probe; re-enable with a working spec before covering it.
+   Toolchain-gated specialists stay file-startup-only on hosts missing
+   their runtimes (verified absent here): TeX (no `latexmk`), Typst (no
+   `tinymist`), R (no `R`), notebooks (no Jupyter/browser env), Tidal
+   (no `ghci`), dirt sampler (no `dirt`). Each gets a full probe once its runtime is provisioned.
 5. Directory startup: `nvim --headless -u <repro>/init.lua <dir> +qa` against an
    existing directory — no output, exit 0.
 6. First-use probes for the ticket's workflow: open a representative file

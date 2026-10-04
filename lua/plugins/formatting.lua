@@ -3,6 +3,22 @@
 -- deliberately no format_on_save/format_after_save here; <leader>lf formats
 -- explicitly. The sole auto-format is the commit-message InsertLeave below
 -- (kept, scoped to *COMMIT_EDITMSG*, never on save).
+-- Ruff steps resolve through the project-owned executable. The resolver must
+-- always return a string: conform evaluates `command` before its `condition`
+-- check, and vim.fn.executable(nil) errors (E1174), so a nil return breaks
+-- the availability path instead of skipping. With a bare-name fallback
+-- ("ruff", not on PATH here) the executable check marks the step unavailable
+-- and conform skips it cleanly.
+local function ruff_formatter(name)
+  return {
+    [name] = {
+      command = require("util.python").formatter,
+      condition = function(_, ctx)
+        return require("util.python").executable(ctx.dirname, "ruff") ~= nil
+      end,
+    },
+  }
+end
 return {
   {
     "stevearc/conform.nvim",
@@ -31,11 +47,12 @@ return {
       })
     end,
     opts = {
-      formatters = {
-        ruff_organize_imports = { command = require("util.python").formatter },
-        ruff_fix = { command = require("util.python").formatter },
-        ruff_format = { command = require("util.python").formatter },
-      },
+      formatters = vim.tbl_extend(
+        "force",
+        ruff_formatter("ruff_organize_imports"),
+        ruff_formatter("ruff_fix"),
+        ruff_formatter("ruff_format")
+      ),
       formatters_by_ft = {
         css = { "oxfmt" },
         dockerfile = { "lsp" },

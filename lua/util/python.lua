@@ -32,7 +32,11 @@ function M.rpc(bin)
 end
 
 function M.formatter(_, ctx)
-  return M.executable(vim.fs.dirname(ctx.filename), "ruff")
+  -- Conform resolves `command` before it checks availability, and
+  -- vim.fn.executable(nil) errors (E1174), so always return a string: a bare
+  -- missing name lets conform mark the formatter unavailable instead of
+  -- erroring. A `condition` guard cannot do this — it runs after resolution.
+  return M.executable(vim.fs.dirname(ctx.filename), "ruff") or "ruff"
 end
 
 return M
