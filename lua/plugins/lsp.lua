@@ -40,6 +40,34 @@ return {
     enabled = not vim.g.is_nixos,
   },
   {
+    -- Non-NixOS fallback provisioning for editor-level formatter/linter
+    -- binaries consumed via $PATH (see docs/provisioning.md). Project-managed
+    -- tools (ruff via uv, node_modules binaries) are deliberately excluded.
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
+    event = { "InsertEnter", "CmdlineEnter", "BufReadPost", "BufNewFile" },
+    dependencies = { "mason-org/mason.nvim" },
+    opts = {
+      ensure_installed = {
+        "air",
+        "codespell",
+        "commitlint",
+        "djlint",
+        "editorconfig-checker",
+        "jq",
+        "latexindent",
+        "markdownlint",
+        "markdownlint-cli2",
+        "nixfmt",
+        "proselint",
+        "statix",
+        "stylua",
+        "typstyle",
+        "yamlfmt",
+      },
+    },
+    enabled = not vim.g.is_nixos,
+  },
+  {
     "nvimdev/lspsaga.nvim",
     event = { "LspAttach", "InsertEnter", "CmdlineEnter" },
     dependencies = { "nvim-tree/nvim-web-devicons", "nvim-treesitter/nvim-treesitter" },
