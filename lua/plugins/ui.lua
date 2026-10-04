@@ -1,4 +1,15 @@
 -- UI: dashboard/pickers/notifications (snacks), statusline, bufferline, cmdline, colours.
+-- Telescope-first picks: the Snacks picker stays disabled, so dashboard and
+-- config-file shortcuts call telescope.builtin directly (lazy loads Telescope).
+local function telescope_pick(pick, opts)
+  return function()
+    require("telescope.builtin")[pick](opts)
+  end
+end
+local find_files = telescope_pick("find_files")
+local live_grep = telescope_pick("live_grep")
+local find_org_files = telescope_pick("find_files", { cwd = vim.fn.expand("~/documents/vivere/org") })
+local find_config_files = telescope_pick("find_files", { cwd = vim.fn.stdpath("config") })
 return {
   {
     "folke/snacks.nvim",
@@ -12,20 +23,20 @@ return {
         enabled = vim.env.NVIM == nil,
         preset = {
           keys = {
-            { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = " ", key = "f", desc = "Find File", action = find_files },
             { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-            { icon = " ", key = "t", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+            { icon = " ", key = "t", desc = "Find Text", action = live_grep },
             {
               icon = " ",
               key = "o",
               desc = "Orgmode",
-              action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.expand('~') .. '/documents/vivere/org'})",
+              action = find_org_files,
             },
             {
               icon = " ",
               key = "c",
               desc = "Config",
-              action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})",
+              action = find_config_files,
             },
             { icon = " ", key = "s", desc = "Restore Session", section = "session" },
             { icon = " ", key = "q", desc = "Quit", action = ":qa" },
@@ -55,7 +66,7 @@ return {
       rename = { enabled = false },
       indent = { enabled = false },
       input = { enabled = true }, -- vim.ui.input
-      picker = { enabled = true }, -- also installs vim.ui.select (ui_select defaults to true)
+      picker = { enabled = false }, -- Telescope is the picker; no vim.ui.select provider from Snacks
       notifier = { enabled = vim.env.NVIM == nil },
       notify = { enabled = vim.env.NVIM == nil },
       quickfile = { enabled = false },
@@ -89,9 +100,7 @@ return {
     keys = {
       {
         "<leader>sc",
-        function()
-          Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
-        end,
+        find_config_files,
         desc = "Find Config File",
       },
       {
