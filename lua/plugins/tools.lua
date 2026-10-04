@@ -185,13 +185,20 @@ return {
     end,
   },
   {
+    -- Tasks: overseer owns every runnable task (run/build/toggle live here).
     "stevearc/overseer.nvim",
     cmd = { "OverseerRun", "OverseerToggle", "OverseerOpen", "OverseerInfo", "OverseerBuild" },
+    keys = {
+      { "<leader>Ot", "<cmd>OverseerToggle<cr>", desc = "Tasks (toggle)" },
+      { "<leader>Or", "<cmd>OverseerRun<cr>", desc = "Tasks (run)" },
+    },
     ---@module 'overseer'
     ---@type overseer.SetupOpts
     opts = { dap = false },
   },
   {
+    -- Terminals: toggleterm owns interactive shells, LazyGit fallback, and the
+    -- live-coding boots (Dirt/Tidal). REPL evaluation itself belongs to iron.
     "akinsho/toggleterm.nvim",
     version = "*",
     cmd = {

@@ -12,7 +12,7 @@ return {
         expr = ('import (builtins.getFlake "%s").inputs.nixpkgs { }'):format(flake),
       },
       formatting = {
-        -- Delegate formatting to nil_ls; disable here to avoid conflicts
+        -- Formatting is owned by Conform (nixfmt); disabled here to avoid conflicts
         command = nil,
       },
       options = {

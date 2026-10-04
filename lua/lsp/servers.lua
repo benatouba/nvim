@@ -3,6 +3,8 @@ local M = {}
 -- Servers to enable. Their configs come from nvim-lspconfig's lsp/*.lua defaults,
 -- overridden by after/lsp/<name>.lua in this repo (native runtimepath discovery).
 -- On NixOS the binaries come from Nix; elsewhere mason-lspconfig installs this list.
+-- Nix has a single server (nixd, for completion and options); formatting is owned
+-- by Conform (nixfmt), never by a language server.
 M.servers = {
   "basedpyright",
   "codebook",
@@ -16,7 +18,6 @@ M.servers = {
   "lua_ls",
   "marksman",
   "matlab_ls",
-  "nil_ls",
   "nixd",
   "oxlint",
   "ruby_lsp",
