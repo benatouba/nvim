@@ -1,4 +1,8 @@
--- Formatting via conform.nvim. No format-on-save; <leader>lf formats explicitly.
+-- Formatting via conform.nvim.
+-- Save-time contract (#8): general formatting stays manual. There is
+-- deliberately no format_on_save/format_after_save here; <leader>lf formats
+-- explicitly. The sole auto-format is the commit-message InsertLeave below
+-- (kept, scoped to *COMMIT_EDITMSG*, never on save).
 return {
   {
     "stevearc/conform.nvim",
@@ -16,7 +20,8 @@ return {
     },
     init = function()
       vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-      -- Commit messages are reflowed whenever insert mode is left.
+      -- Kept save-time behavior (#8): commit messages are reflowed on
+      -- InsertLeave (not on save), scoped to commit buffers only.
       vim.api.nvim_create_autocmd("InsertLeave", {
         group = vim.api.nvim_create_augroup("ben_conform_commitmsg", { clear = true }),
         pattern = "*COMMIT_EDITMSG*",

@@ -62,17 +62,25 @@ return {
           auto_update = true,
         },
         open_notes_in = "current",
+        -- Kept save-time behavior (#8): obsidian.nvim refreshes frontmatter
+        -- on BufWritePre for workspace notes (templates/blacklist excluded
+        -- by the plugin). created_at is preserved; modified_at is stamped
+        -- on every save. Scoped to markdown vault notes only.
         frontmatter = {
           enabled = true,
           func = function(note)
             local out = { title = note.title, id = note.id, aliases = note.aliases, tags = note.tags }
-            out.created_at = os.date("%Y-%m-%dT%H:%M")
-            out.modified_at = os.date("%Y-%m-%dT%H:%M")
             if note.metadata ~= nil then
               for k, v in pairs(note.metadata) do
-                out[k] = v
+                if k ~= "modified_at" then
+                  out[k] = v
+                end
               end
             end
+            if out.created_at == nil then
+              out.created_at = os.date("%Y-%m-%dT%H:%M")
+            end
+            out.modified_at = os.date("%Y-%m-%dT%H:%M")
             return out
           end,
         },

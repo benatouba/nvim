@@ -1,4 +1,7 @@
 -- Linting via nvim-lint (no setup(); options are assigned in config).
+-- Save-time contract (#8): BufWritePost hooks below only refresh diagnostics;
+-- they never rewrite the buffer. Autofix on save lives solely in
+-- after/lsp/eslint.lua (eslint-attached buffers).
 return {
   {
     "mfussenegger/nvim-lint",
