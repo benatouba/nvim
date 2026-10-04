@@ -1,7 +1,8 @@
 plugin/*
 **/packer_compiled.lua
 **/secrets.lua
-lazy-lock.json
+# lazy-lock.json is tracked: it pins exact plugin revisions for
+# reproducible restores (see docs/verification.md).
 .supermaven/
 after/*
 !after/lsp/
