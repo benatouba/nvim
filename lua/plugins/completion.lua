@@ -62,7 +62,7 @@ return {
         clangd = { extra_info_hl = "@comment", align_type_to_right = true, import_dot_hl = "@comment" },
         zls = { align_type_to_right = true },
         roslyn = { extra_info_hl = "@comment" },
-        basedpyright = { extra_info_hl = "@comment" },
+        ty = { extra_info_hl = "@comment" },
         fallback = true,
       },
       fallback_highlight = "@variable",

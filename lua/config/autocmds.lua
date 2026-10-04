@@ -133,26 +133,6 @@ autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
--- Python: tidy imports after save (pyflyby), then reload the buffer.
-autocmd("BufWritePost", {
-  group = augroup("pyflyby"),
-  pattern = "*.py",
-  callback = function(args)
-    if vim.fn.executable("tidy-imports") ~= 1 then
-      return
-    end
-    vim.system(
-      { "tidy-imports", "--quiet", "--black", "--replace-star-imports", "--action", "REPLACE", args.file },
-      {},
-      vim.schedule_wrap(function()
-        if vim.api.nvim_buf_is_valid(args.buf) then
-          vim.cmd.checktime(args.buf)
-        end
-      end)
-    )
-  end,
-})
-
 -- LaTeX template workflow
 autocmd("BufWipeout", {
   group = augroup("tex_template"),

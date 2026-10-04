@@ -6,7 +6,6 @@ local M = {}
 -- Nix has a single server (nixd, for completion and options); formatting is owned
 -- by Conform (nixfmt), never by a language server.
 M.servers = {
-  "basedpyright",
   "codebook",
   "cssls",
   "docker_language_server",

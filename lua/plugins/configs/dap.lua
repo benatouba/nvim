@@ -34,8 +34,14 @@ M.setup = function()
   vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
   dap.defaults.fallback.terminal_win_cmd = "50vsplit new"
 
-  -- Python: debugpy from the active virtualenv
-  local python = vim.env.VIRTUAL_ENV and (vim.env.VIRTUAL_ENV .. "/bin/python") or "python"
+  -- Python: the debugpy adapter runs on the uv-managed interpreter when the
+  -- project has one, else the active virtualenv. Launched programs resolve
+  -- per launch inside dap-python (VIRTUAL_ENV/CONDA_PREFIX, then a
+  -- venv/.venv/env/.env directory under the working directory or LSP roots),
+  -- so this setup-time choice never goes stale for program runs.
+  local uv_python = vim.fn.getcwd() .. "/.venv/bin/python"
+  local python = vim.fn.executable(uv_python) == 1 and uv_python
+    or (vim.env.VIRTUAL_ENV and (vim.env.VIRTUAL_ENV .. "/bin/python") or "python")
   require("dap-python").setup(python)
   for _, config in ipairs(dap.configurations.python) do
     config.cwd = vim.fn.getcwd()

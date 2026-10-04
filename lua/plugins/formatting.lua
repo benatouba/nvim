@@ -38,7 +38,7 @@ return {
         lua = { "stylua", stop_after_first = true },
         markdown = { "markdownlint", "markdownlint-cli2", "markdownfmt", stop_after_first = true },
         nix = { "nixfmt", stop_after_first = true },
-        python = { "ruff_fix", "ruff_format", "ruff_organize_imports", "docformatter", stop_after_first = false },
+        python = { "ruff_organize_imports", "ruff_fix", "ruff_format", stop_after_first = false },
         quarto = { "injected" },
         r = { "air", stop_after_first = true },
         rmd = { "injected" },
