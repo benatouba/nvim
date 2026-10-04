@@ -26,6 +26,44 @@ second tool for an owned layer without reopening the owning ticket.
 
 REPL evaluation belongs to iron even when the terminal underneath is toggleterm's.
 
+## LSP UI (core workflow)
+
+Native LSP is the default; lspsaga is kept for its selector, finder,
+outline, peek, and jumps; Trouble owns aggregated lists and the Telescope
+bridge; Noice owns messages and history; nvim-lint owns non-LSP linters.
+
+| Layer | Owner | Entry |
+| --- | --- | --- |
+| Code actions (apply) | native LSP | `<leader>la`, builtin `gra` |
+| Action selector (choosing UI) | lspsaga | `ga` |
+| Definitions (jump) | native LSP | `gd`, `gD` declaration |
+| Finder (combined def+ref view) | lspsaga | `gF` |
+| References (jump) | native LSP | `gR`, builtin `grr` |
+| Implementations (lookup) | native LSP | `gI` buffer-local; builtin `gri` stays as Neovim fallback |
+| Type definitions | native LSP | `gtd`, builtin `grt` |
+| Symbols pickers | Telescope (bridge into Trouble via `<c-t>`) | `<leader>sr/si/ss/sS/sd/sD` |
+| Outline (symbol tree) | lspsaga | `go` |
+| Definitions peek | lspsaga | `gp` |
+| Diagnostic jumps | lspsaga | `]d`/`[d` (global; shadows the Neovim defaults) |
+| Diagnostics lists | Trouble | `:Trouble`, `]D`/`[D` next/prev item |
+| Line diagnostics, hover | native LSP (rendered via Noice) | `<leader>lv`, `K` / `<leader>lh` |
+| Messages and history | Noice | `<leader>sN` (`:Noice`), `<leader>sn` |
+| Non-LSP linters | nvim-lint | per-filetype table; namespaced commitlint config |
+
+Resolved overlaps (one winner each, no conflicting duplicate mapping):
+
+- Diagnostic jumps: lspsaga wins. Its global `]d`/`[d` shadows Neovim's
+  defaults and `lua/lsp/attach.lua` adds no buffer-local rival.
+- Implementation lookup: native `gI` wins. Saga's `finder imp` on the same
+  key never ran (buffer-local beats global) and was removed; the builtin
+  `gri` remains only as an unconfigured Neovim fallback under the same
+  native owner.
+- Definitions: native `gd` wins. Saga's `<leader>ld` goto_definition was a
+  second definition tool outside the kept surface and was removed.
+
+`ga` and `<leader>la` invoke the same code-action method through different
+keys and UIs (selector vs default apply); neither shadows the other.
+
 ## Documents (specialist workflows)
 
 | Layer | Owner | Entry |

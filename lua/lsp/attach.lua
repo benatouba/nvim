@@ -3,7 +3,9 @@ local M = {}
 -- Buffer-local keymaps added on top of Neovim's own LSP defaults. Neovim 0.11+ already
 -- provides K (hover), grn (rename), gra (code action), grr (references),
 -- gri (implementation), grt (type definition), gO (document symbol), <C-s> (signature
--- help, insert mode), omnifunc, semantic tokens and the ]d/[d diagnostic motions.
+-- help, insert mode), omnifunc and semantic tokens. Diagnostic jumps are owned by
+-- lspsaga's global ]d/[d (docs/ownership.md "LSP UI"), so they are not relied on
+-- from the defaults here.
 local function add_keymaps(bufnr)
   local wk = require("which-key")
   -- `buffer` on the parent table is inherited by every child (a sibling entry would be ignored).

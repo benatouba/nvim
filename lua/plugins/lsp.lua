@@ -71,15 +71,21 @@ return {
     "nvimdev/lspsaga.nvim",
     event = { "LspAttach", "InsertEnter", "CmdlineEnter" },
     dependencies = { "nvim-tree/nvim-web-devicons", "nvim-treesitter/nvim-treesitter" },
+    -- Kept lspsaga surface (docs/ownership.md "LSP UI"): selector, finder,
+    -- outline, peek, and diagnostic jumps. Definitions stay native (gd), so
+    -- there is deliberately no Lspsaga goto_definition entry here.
     keys = {
-      -- gI is the native implementation lookup from lua/lsp/attach.lua (buffer-local, wins anyway)
+      -- gI stays the native implementation lookup from lua/lsp/attach.lua:
+      -- buffer-local beats any global, which is why saga's finder imp was
+      -- removed. Native gI is the documented winner.
       { "ga", "<cmd>Lspsaga code_action<CR>", desc = "Code Action" },
       { "gF", "<cmd>Lspsaga finder def+ref<CR>", desc = "Finder" },
       { "go", "<cmd>Lspsaga outline<CR>", desc = "Outline" },
       { "gp", "<cmd>Lspsaga peek_definition<CR>", desc = "Peek" },
+      -- Diagnostic jumps: saga wins over Neovim's ]d/[d defaults (this
+      -- global mapping shadows the builtin); attach.lua adds no rival.
       { "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", desc = "Next Diagnostic" },
       { "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", desc = "Prev Diagnostic" },
-      { "<leader>ld", "<cmd>Lspsaga goto_definition<cr>", desc = "Definitions" },
     },
     opts = function()
       local cp_ok, cp = pcall(require, "catppuccin.groups.integrations.lsp_saga")
