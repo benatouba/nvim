@@ -38,6 +38,14 @@ Run in order; every step must be silent unless stated.
 4. File startup: `nvim --headless -u init.lua <file> +qa` for one core
    workflow file (e.g. a Lua file) and one specialist workflow file
    (e.g. a TeX file) — no output, exit 0. Both fixture files must exist.
+   Host-tool caveat: on hosts without the specialist toolchain installed
+   (e.g. no `latexmk` on PATH), the owning plugin may print its own
+   missing-executable warning on open. That message is a provisioning gap
+   on the host, not a config failure; it fires identically with or without
+   eager loading, since opening the file loads the owner either way.
+   The same applies to runtime-dependent owners (notebooks, R): without
+   their runtime on the host, opening a representative file surfaces the
+   owner's own error, which is likewise out of scope with this reason.
 5. Directory startup: `nvim --headless -u init.lua <dir> +qa` against an
    existing directory — no output, exit 0.
 6. First-use probes for the ticket's workflow: open a representative file
