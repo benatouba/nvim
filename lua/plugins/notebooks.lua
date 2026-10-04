@@ -2,7 +2,7 @@
 return {
   {
     "kiyoon/jupynium.nvim",
-    build = "uv pip install user . --python=$HOME/.virtualenvs/jupynium/bin/python",
+    -- Python/browser runtime is provisioned separately; see docs/provisioning.md.
     ft = "python",
   },
   {

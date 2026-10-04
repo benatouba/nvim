@@ -3,7 +3,11 @@
   packages = with pkgs; [
     commitlint
     editorconfig-checker
+    python3
+    ruff
     stylua
+    ty
+    uv
     vscode-json-languageserver
   ];
   languages = {

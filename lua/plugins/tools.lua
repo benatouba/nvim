@@ -259,6 +259,7 @@ return {
   { "kevinhwang91/nvim-bqf", ft = "qf" },
   {
     "mistweaverco/kulala.nvim",
+    enabled = false,
     ft = { "http", "rest" },
     keys = {
       {

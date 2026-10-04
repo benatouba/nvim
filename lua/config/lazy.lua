@@ -14,6 +14,25 @@ if not vim.uv.fs_stat(lazypath) then
     return
   end
 end
+-- lazy.nvim cannot restore its own running checkout, so pin the bootstrap on
+-- every startup, not just the first clone. The initial clone is the stable
+-- branch, which may not contain the locked commit, so fetch it first.
+local lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json"
+local lock = vim.json.decode(table.concat(vim.fn.readfile(lockfile), "\n"))
+local pin = lock["lazy.nvim"].commit
+-- The initial clone is the stable branch, which may not contain the locked
+-- commit; fetch it first, but only when it is missing locally.
+vim.fn.system({ "git", "-C", lazypath, "cat-file", "-e", pin })
+if vim.v.shell_error ~= 0 then
+  local fetch = vim.fn.system({ "git", "-C", lazypath, "fetch", "--quiet", "origin", pin })
+  if vim.v.shell_error ~= 0 then
+    error("Failed to fetch pinned lazy.nvim: " .. fetch)
+  end
+end
+local checkout = vim.fn.system({ "git", "-C", lazypath, "checkout", "--quiet", pin })
+if vim.v.shell_error ~= 0 then
+  error("Failed to pin lazy.nvim: " .. checkout)
+end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({

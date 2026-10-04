@@ -30,11 +30,11 @@ return {
       },
       "neovim/nvim-lspconfig",
     },
-    -- mason-lspconfig v2: install the shared server list and let it call vim.lsp.enable().
+    -- Project-owned Python servers are enabled separately, never installed by Mason.
     opts = function()
       return {
-        ensure_installed = require("lsp.servers").servers,
-        automatic_enable = true,
+        ensure_installed = require("lsp.servers").mason_servers(),
+        automatic_enable = require("lsp.servers").mason_servers(),
       }
     end,
     enabled = not vim.g.is_nixos,

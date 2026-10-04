@@ -242,7 +242,7 @@ return {
     opts = {
       -- The only adapter this config consumes off NixOS
       -- (see plugins/configs/dap.lua); install it with no manual step.
-      ensure_installed = { "js-debug-adapter" },
+      ensure_installed = { "js" }, -- mason-nvim-dap identifier; package is js-debug-adapter
       handlers = {},
       automatic_installation = false,
     },

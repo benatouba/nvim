@@ -2,7 +2,7 @@ local M = {}
 
 -- Servers to enable. Their configs come from nvim-lspconfig's lsp/*.lua defaults,
 -- overridden by after/lsp/<name>.lua in this repo (native runtimepath discovery).
--- On NixOS the binaries come from Nix; elsewhere mason-lspconfig installs this list.
+-- On NixOS binaries come from Nix; elsewhere Mason installs editor-owned servers.
 -- Nix has a single server (nixd, for completion and options); formatting is owned
 -- by Conform (nixfmt), never by a language server.
 M.servers = {
@@ -32,11 +32,21 @@ M.servers = {
   "yamlls",
 }
 
+local project_servers = { "ruff", "ty" }
+
+M.mason_servers = function()
+  return vim.tbl_filter(function(server)
+    return not vim.tbl_contains(project_servers, server)
+  end, M.servers)
+end
+
 M.enable = function()
   if vim.g.is_nixos then
     vim.lsp.enable(M.servers)
+  else
+    vim.lsp.enable(project_servers)
   end
-  -- non-NixOS: mason-lspconfig enables everything it installs (automatic_enable)
+  -- non-NixOS: Mason enables only the editor-owned subset.
 end
 
 return M

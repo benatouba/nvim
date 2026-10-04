@@ -3,7 +3,7 @@ return {
     client.server_capabilities.hoverProvider = false
     client.server_capabilities.definitionProvider = false
   end,
-  cmd = { "ruff", "server" },
+  cmd = require("util.python").rpc("ruff"),
   filetypes = { "python" },
   root_markers = {
     "pyproject.toml",

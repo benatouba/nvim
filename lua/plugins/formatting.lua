@@ -31,6 +31,11 @@ return {
       })
     end,
     opts = {
+      formatters = {
+        ruff_organize_imports = { command = require("util.python").formatter },
+        ruff_fix = { command = require("util.python").formatter },
+        ruff_format = { command = require("util.python").formatter },
+      },
       formatters_by_ft = {
         css = { "oxfmt" },
         dockerfile = { "lsp" },

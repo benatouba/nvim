@@ -19,7 +19,7 @@ return {
     client.server_capabilities.typeHierarchyProvider = false
     client.server_capabilities.workspaceSymbolProvider = true
   end,
-  cmd = { "ty", "server" },
+  cmd = require("util.python").rpc("ty"),
   filetypes = { "python" },
   root_markers = { "ty.toml", "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
 }
