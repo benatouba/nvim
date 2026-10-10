@@ -133,7 +133,9 @@ return {
   {
     "dmmulroy/tsc.nvim",
     ft = { "typescript", "typescriptreact", "vue" },
-    keys = { { "<leader>lt", "<cmd>TSC<CR>", desc = "Typecheck (tsc)" } },
+    keys = {
+      { "<leader>lt", "<cmd>TSC<CR>", desc = "Typecheck (tsc)", ft = { "typescript", "typescriptreact", "vue" } },
+    },
     opts = { use_trouble_qflist = true, use_diagnostics = true },
   },
   {

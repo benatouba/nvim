@@ -25,6 +25,13 @@ return {
       { "<leader>rc", mode = { "n", "x" }, desc = "REPL send motion/selection" },
       { "<leader>rf", desc = "REPL send file" },
       { "<leader>rl", desc = "REPL send line" },
+      { "<leader>rm", desc = "REPL mark motion" },
+      { "<leader>rmc", mode = { "n", "x" }, desc = "REPL mark motion/selection" },
+      { "<leader>rmd", desc = "REPL remove mark" },
+      { "<leader>r<cr>", desc = "REPL send newline" },
+      { "<leader>r<space>", desc = "REPL interrupt" },
+      { "<leader>rq", desc = "REPL exit" },
+      { "<leader>rx", desc = "REPL clear" },
     },
     opts = function()
       return {

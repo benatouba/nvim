@@ -21,11 +21,16 @@ return {
       vim.g.scnvim_postwin_auto_toggle = 1
     end,
     keys = {
-      { "<leader>Ms", "<cmd>SCNvimStart<cr>", desc = "SuperCollider start" },
-      { "<leader>MS", "<cmd>SCNvimStop<cr>", desc = "SuperCollider stop" },
-      { "<leader>Mc", "<cmd>SCNvimRecompile<cr>", desc = "SuperCollider recompile" },
-      { "<leader>Mh", "<cmd>SCNvimHardstop<cr>", desc = "SuperCollider hard stop" },
-      { "<leader>Ma", "<cmd>SCNvimGenerateAssets<cr>", desc = "SuperCollider generate assets" },
+      { "<leader>Ms", "<cmd>SCNvimStart<cr>", desc = "SuperCollider start", ft = { "supercollider", "scd" } },
+      { "<leader>MS", "<cmd>SCNvimStop<cr>", desc = "SuperCollider stop", ft = { "supercollider", "scd" } },
+      { "<leader>Mc", "<cmd>SCNvimRecompile<cr>", desc = "SuperCollider recompile", ft = { "supercollider", "scd" } },
+      { "<leader>Mh", "<cmd>SCNvimHardstop<cr>", desc = "SuperCollider hard stop", ft = { "supercollider", "scd" } },
+      {
+        "<leader>Ma",
+        "<cmd>SCNvimGenerateAssets<cr>",
+        desc = "SuperCollider generate assets",
+        ft = { "supercollider", "scd" },
+      },
     },
     opts = function()
       local scnvim = require("scnvim")
@@ -81,10 +86,10 @@ return {
       "SonicPiEval",
     },
     keys = {
-      { "<leader>Mp", "<cmd>SonicPiStart<cr>", desc = "Sonic Pi start" },
-      { "<leader>MP", "<cmd>SonicPiStop<cr>", desc = "Sonic Pi stop" },
-      { "<leader>Me", "<cmd>SonicPiEval<cr>", mode = { "n", "v" }, desc = "Sonic Pi eval" },
-      { "<leader>MB", "<cmd>SonicPiSendBuffer<cr>", desc = "Sonic Pi send buffer" },
+      { "<leader>Mp", "<cmd>SonicPiStart<cr>", desc = "Sonic Pi start", ft = "sonicpi" },
+      { "<leader>MP", "<cmd>SonicPiStop<cr>", desc = "Sonic Pi stop", ft = "sonicpi" },
+      { "<leader>Me", "<cmd>SonicPiEval<cr>", mode = { "n", "v" }, desc = "Sonic Pi eval", ft = "sonicpi" },
+      { "<leader>MB", "<cmd>SonicPiSendBuffer<cr>", desc = "Sonic Pi send buffer", ft = "sonicpi" },
     },
     dependencies = {
       "saghen/blink.compat",
@@ -148,9 +153,22 @@ return {
     "chomosuke/typst-preview.nvim",
     ft = { "typst" },
     version = false,
-    opts = {},
+    -- On NixOS the preview binaries come from Nix (pkgs.tinymist, pkgs.websocat);
+    -- pointing the plugin at them keeps it from downloading GitHub releases.
+    opts = function()
+      local bins = {}
+      for _, tool in ipairs({ "tinymist", "websocat" }) do
+        if vim.fn.executable(tool) == 1 then
+          bins[tool] = vim.fn.exepath(tool)
+        end
+      end
+      if vim.g.is_nixos and next(bins) == nil then
+        vim.notify("typst-preview needs tinymist and websocat from Nix (nixpkgs)", vim.log.levels.WARN)
+      end
+      return { dependencies_bin = bins }
+    end,
     keys = {
-      { "<localleader>tt", "<cmd>TypstPreviewToggle<cr>", desc = "Typst Preview Toggle" },
+      { "<localleader>tt", "<cmd>TypstPreviewToggle<cr>", desc = "Typst Preview Toggle", ft = "typst" },
     },
   },
   {
@@ -186,14 +204,14 @@ return {
     "vuki656/package-info.nvim",
     ft = { "json" },
     keys = {
-      { "<leader>lpa", "<cmd>lua require('package-info').install()<cr>", desc = "Add" },
-      { "<leader>lpc", "<cmd>lua require('package-info').change_version()<cr>", desc = "Change version" },
-      { "<leader>lpd", "<cmd>lua require('package-info').delete()<cr>", desc = "Delete" },
-      { "<leader>lph", "<cmd>lua require('package-info').hide()<cr>", desc = "Hide" },
-      { "<leader>lpi", "<cmd>lua require('package-info').install()<cr>", desc = "Install" },
-      { "<leader>lps", "<cmd>lua require('package-info').show()<cr>", desc = "Show" },
-      { "<leader>lpt", "<cmd>lua require('package-info').toggle()<cr>", desc = "Toggle" },
-      { "<leader>lpu", "<cmd>lua require('package-info').update()<cr>", desc = "Update" },
+      { "<leader>lpa", "<cmd>lua require('package-info').install()<cr>", desc = "Add", ft = "json" },
+      { "<leader>lpc", "<cmd>lua require('package-info').change_version()<cr>", desc = "Change version", ft = "json" },
+      { "<leader>lpd", "<cmd>lua require('package-info').delete()<cr>", desc = "Delete", ft = "json" },
+      { "<leader>lph", "<cmd>lua require('package-info').hide()<cr>", desc = "Hide", ft = "json" },
+      { "<leader>lpi", "<cmd>lua require('package-info').install()<cr>", desc = "Install", ft = "json" },
+      { "<leader>lps", "<cmd>lua require('package-info').show()<cr>", desc = "Show", ft = "json" },
+      { "<leader>lpt", "<cmd>lua require('package-info').toggle()<cr>", desc = "Toggle", ft = "json" },
+      { "<leader>lpu", "<cmd>lua require('package-info').update()<cr>", desc = "Update", ft = "json" },
     },
     opts = {
       package_manager = "pnpm",

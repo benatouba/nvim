@@ -258,7 +258,7 @@ return {
   },
   { "kevinhwang91/nvim-bqf", ft = "qf" },
   {
-    "mistweaverco/kulala.nvim",
+    "dont-be-evil-company/kulala.nvim",
     enabled = false,
     ft = { "http", "rest" },
     keys = {
@@ -283,6 +283,7 @@ return {
         function()
           require("kulala").scratchpad()
         end,
+        ft = { "http", "rest" },
         desc = "Open scratchpad",
       },
     },
