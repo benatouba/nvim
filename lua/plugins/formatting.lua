@@ -78,7 +78,8 @@ return {
         rmd = { "injected" },
         scss = { "oxfmt" },
         -- Nonempty options suppress the generic trim_whitespace fallback too.
-        sls = { lsp_format = "never" },
+        salt = { lsp_format = "never" },
+        sls = { lsp_format = "never" }, -- legacy salt-vim filetype
         tex = { "latexindent", stop_after_first = true },
         typescript = { "oxfmt" },
         typescriptreact = { "oxfmt" },

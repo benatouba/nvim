@@ -58,7 +58,7 @@ return {
         group = group,
         callback = function(args)
           -- Salt uses mixed YAML/Jinja syntax and predictable autoindent.
-          if args.match ~= "sls" and pcall(vim.treesitter.start, args.buf) then
+          if args.match ~= "salt" and args.match ~= "sls" and pcall(vim.treesitter.start, args.buf) then
             vim.bo[args.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
           end
         end,
@@ -138,7 +138,7 @@ return {
         },
         rule("%", "%", "lua"):with_pair(ts_conds.is_ts_node({ "string", "comment" })),
         rule("$", "$", "lua"):with_pair(ts_conds.is_not_ts_node({ "function" })),
-        rule("%", "%", "sls")
+        rule("%", "%", { "salt", "sls" })
       )
     end,
   },

@@ -31,7 +31,7 @@ return {
       })
     end
 
-    if file ~= "" and vim.bo.filetype == "sls" then
+    if file ~= "" and (vim.bo.filetype == "salt" or vim.bo.filetype == "sls") then
       add(
         "lint current SLS",
         { "salt-lint", "--nocolor", file },

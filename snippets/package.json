@@ -21,7 +21,7 @@
         "path": "./gitcommit.json"
       },
       {
-        "language": ["sls"],
+        "language": ["salt", "sls"],
         "path": "./salt.json"
       }
     ]
