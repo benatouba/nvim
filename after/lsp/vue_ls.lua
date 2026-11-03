@@ -1,15 +1,11 @@
 local vue = require("lsp.vue")
 
 return {
-  cmd = function(dispatchers, config)
-    local resolved = vue.resolve_vue_ls_cmd(config and config.root_dir) or { "vue-language-server", "--stdio" }
-    return vim.lsp.rpc.start(resolved, dispatchers)
-  end,
+  cmd = require("lsp.resolve").rpc("vue-language-server"),
   filetypes = { "vue" },
   root_markers = { "package.json" },
   before_init = function(init_params, config)
-    local _, fallback_tsdk = vue.resolve_paths(config.root_dir)
-    local tsdk = vue.workspace_tsdk(config.root_dir) or fallback_tsdk
+    local _, tsdk = vue.resolve_paths(config.root_dir)
 
     if tsdk then
       init_params.initializationOptions =

@@ -1,4 +1,5 @@
 local vue = require("lsp.vue")
+local resolve = require("lsp.resolve")
 
 local function root_dir(bufnr, on_dir)
   local project_root = vue.node_root_dir(bufnr)
@@ -6,7 +7,7 @@ local function root_dir(bufnr, on_dir)
     return
   end
 
-  if not vue.resolve_vtsls_cmd(project_root) then
+  if not resolve.cmd(project_root, "vtsls") then
     return
   end
 
@@ -14,10 +15,7 @@ local function root_dir(bufnr, on_dir)
 end
 
 return {
-  cmd = function(dispatchers, config)
-    local cmd = vue.resolve_vtsls_cmd(config.root_dir) or { "vtsls", "--stdio" }
-    return vim.lsp.rpc.start(cmd, dispatchers)
-  end,
+  cmd = resolve.rpc("vtsls"),
   init_options = {
     hostInfo = "neovim",
   },
@@ -35,8 +33,7 @@ return {
     end
   end,
   before_init = function(_, config)
-    local vue_language_server_path, fallback_tsdk = vue.resolve_paths(config.root_dir)
-    local tsdk = vue.workspace_tsdk(config.root_dir) or fallback_tsdk
+    local vue_language_server_path, tsdk = vue.resolve_paths(config.root_dir)
 
     if tsdk then
       config.settings = config.settings or {}

@@ -5,7 +5,7 @@ return {
       and vim.fs.joinpath(config.root_dir, ".devenv", "profile", "bin", "docker-language-server")
     local cmd = binary and vim.uv.fs_stat(binary) and { binary, "start", "--stdio" }
       or { "docker-language-server", "start", "--stdio" }
-    return vim.lsp.rpc.start(cmd, dispatchers)
+    return require("lsp.resolve").start(cmd, dispatchers, config)
   end,
   filetypes = { "dockerfile", "yaml.docker-compose" },
   root_markers = {

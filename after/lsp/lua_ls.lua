@@ -1,6 +1,9 @@
 local M = {
-  cmd = function(dispatchers, _config)
-    return vim.lsp.rpc.start({ "lua-language-server" }, dispatchers)
+  cmd = function(dispatchers, config)
+    local resolve = require("lsp.resolve")
+    -- The session may have started outside this project's direnv environment.
+    local project_cmd = resolve.devenv(config and config.root_dir, "lua-language-server")
+    return resolve.start({ project_cmd and project_cmd[1] or "lua-language-server" }, dispatchers, config)
   end,
   filetypes = { "lua" },
   root_markers = {

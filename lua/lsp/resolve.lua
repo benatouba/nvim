@@ -60,16 +60,27 @@ function M.cmd(root_dir, bin)
     return cmd
   end
   if vim.fn.executable(bin) == 1 then
-    return { bin, "--stdio" }
+    return { vim.fn.exepath(bin), "--stdio" }
   end
   return nil
+end
+
+-- Function-valued LSP commands bypass Neovim's normal process-option forwarding.
+-- Keep the same semantics as native table-valued commands, including detached=nil.
+function M.start(cmd, dispatchers, config)
+  config = config or {}
+  return vim.lsp.rpc.start(cmd, dispatchers, {
+    cwd = config.cmd_cwd or config.root_dir,
+    env = config.cmd_env,
+    detached = config.detached,
+  })
 end
 
 --- A `cmd` for vim.lsp.config that resolves `bin` per root_dir at start time.
 function M.rpc(bin)
   return function(dispatchers, config)
     local cmd = M.cmd(config and config.root_dir, bin) or { bin, "--stdio" }
-    return vim.lsp.rpc.start(cmd, dispatchers)
+    return M.start(cmd, dispatchers, config)
   end
 end
 

@@ -5,28 +5,55 @@ local function is_dir(path)
 end
 
 local resolve = require("lsp.resolve")
-local workspace_bin_cmd = resolve.workspace
-local resolve_cmd = resolve.cmd
-
-local function resolve_typescript_relative_to(bin_path)
-  local pkg_root = vim.fn.fnamemodify(bin_path, ":h:h")
-  local ts_glob = vim.fn.glob(pkg_root .. "/lib/**/typescript/lib", true)
-  if ts_glob == "" then
-    return nil
-  end
-  local candidate = vim.split(ts_glob, "\n")[1]
-  if not is_dir(candidate) then
-    return nil
-  end
-  return candidate
+local function workspace_package(root, package)
+  return resolve.walk_ancestors(root, function(dir)
+    local path = dir .. "/node_modules/" .. package
+    return is_dir(path), path
+  end)
 end
 
-local function resolve_typescript_lib_from_bin(bin)
-  local server_bin = vim.fn.exepath(bin)
-  if server_bin == "" then
-    return nil
+local function typescript_package(pkg_root)
+  local bundled = pkg_root .. "/node_modules/typescript/lib"
+  if is_dir(bundled) then
+    return bundled
   end
-  return resolve_typescript_relative_to(server_bin)
+  for _, path in ipairs(vim.fn.glob(pkg_root .. "/lib/**/typescript/lib", true, true)) do
+    if is_dir(path) then
+      return path
+    end
+  end
+end
+
+local function vue_package(pkg_root)
+  if vim.endswith(pkg_root, "/@vue/language-server") and is_dir(pkg_root) then
+    return pkg_root
+  end
+  local path = pkg_root .. "/lib/language-tools/packages/language-server"
+  return is_dir(path) and path or nil
+end
+
+local function path_cmd(_, bin)
+  local path = vim.fn.exepath(bin)
+  return path ~= "" and { path } or nil
+end
+
+-- Inspect both physical and profile locations: symlinks describe package identity,
+-- while a profile may also expose supporting files beside its executable.
+local function package_from_commands(root, bins, sources, find_package)
+  for _, source in ipairs(sources) do
+    for _, bin in ipairs(bins) do
+      local cmd = source(root, bin)
+      if cmd then
+        local physical = vim.uv.fs_realpath(cmd[1]) or cmd[1]
+        for _, path in ipairs({ physical, cmd[1] }) do
+          local package = find_package(vim.fn.fnamemodify(path, ":h:h"))
+          if package then
+            return package
+          end
+        end
+      end
+    end
+  end
 end
 
 M.node_root_dir = function(bufnr)
@@ -48,91 +75,18 @@ M.node_root_dir = function(bufnr)
   return project_root or vim.fn.getcwd()
 end
 
-M.workspace_tsdk = function(root_dir)
-  if not root_dir or root_dir == "" then
-    return nil
-  end
-
-  local candidate = root_dir .. "/node_modules/typescript/lib"
-  if vim.fn.isdirectory(candidate) == 1 then
-    return candidate
-  end
-
-  return nil
-end
-
-M.workspace_vue_ls_cmd = function(root_dir)
-  return workspace_bin_cmd(root_dir, "vue-language-server")
-end
-
-M.resolve_vue_ls_cmd = function(root_dir)
-  return resolve_cmd(root_dir, "vue-language-server")
-end
-
-M.workspace_vtsls_cmd = function(root_dir)
-  return workspace_bin_cmd(root_dir, "vtsls")
-end
-
-M.workspace_ts_ls_cmd = function(root_dir)
-  return workspace_bin_cmd(root_dir, "typescript-language-server")
-end
-
-M.resolve_vtsls_cmd = function(root_dir)
-  return resolve_cmd(root_dir, "vtsls")
-end
-
-M.resolve_ts_ls_cmd = function(root_dir)
-  return resolve_cmd(root_dir, "typescript-language-server")
-end
-
-M.has_vtsls = function(root_dir)
-  return M.resolve_vtsls_cmd(root_dir) ~= nil
-end
-
-M.workspace_vue_language_server_path = function(root_dir)
-  if not root_dir or root_dir == "" then
-    return nil
-  end
-
-  local candidate = root_dir .. "/node_modules/@vue/language-server"
-  if vim.fn.isdirectory(candidate) == 1 then
-    return candidate
-  end
-
-  return nil
-end
-
+-- Supporting packages may come from different installations. Workspace packages
+-- win; try project-owned executable layouts, then Mason (off Nix), then PATH.
 M.resolve_paths = function(root_dir)
-  local vue_language_server_path, tsdk
+  local vue_bins = { "vue-language-server" }
+  local ts_bins = { "vtsls", "typescript-language-server" }
+  local sources = { resolve.workspace, resolve.devenv }
+  local vue_language_server_path = workspace_package(root_dir, "@vue/language-server")
+    or package_from_commands(root_dir, vue_bins, sources, vue_package)
+  local tsdk = workspace_package(root_dir, "typescript/lib")
+    or package_from_commands(root_dir, ts_bins, sources, typescript_package)
 
-  vue_language_server_path = M.workspace_vue_language_server_path(root_dir)
-  tsdk = M.workspace_tsdk(root_dir)
-
-  if vue_language_server_path and tsdk then
-    return vue_language_server_path, tsdk
-  end
-
-  if vim.g.is_nixos then
-    local vue_ls_cmd = M.resolve_vue_ls_cmd(root_dir)
-      or (vim.fn.executable("vue-language-server") == 1 and { vim.fn.exepath("vue-language-server") })
-    if vue_ls_cmd then
-      local vue_ls_pkg = vim.fn.fnamemodify(vue_ls_cmd[1], ":h:h")
-      local nix_vue_path = vue_ls_pkg .. "/lib/language-tools/packages/language-server"
-      if is_dir(nix_vue_path) then
-        vue_language_server_path = vue_language_server_path or nix_vue_path
-      end
-    end
-
-    if not tsdk then
-      local vtsls_cmd = M.resolve_vtsls_cmd(root_dir)
-        or (vim.fn.executable("vtsls") == 1 and { vim.fn.exepath("vtsls") })
-      tsdk = tsdk or (vtsls_cmd and resolve_typescript_relative_to(vtsls_cmd[1]))
-
-      local ts_cmd = M.resolve_ts_ls_cmd(root_dir)
-        or (vim.fn.executable("typescript-language-server") == 1 and { vim.fn.exepath("typescript-language-server") })
-      tsdk = tsdk or (ts_cmd and resolve_typescript_relative_to(ts_cmd[1]))
-    end
-  else
+  if not vim.g.is_nixos and (not vue_language_server_path or not tsdk) then
     local mason_packages = vim.env.MASON and (vim.env.MASON .. "/packages")
       or (vim.fn.stdpath("data") .. "/mason/packages")
 
@@ -145,11 +99,10 @@ M.resolve_paths = function(root_dir)
     if is_dir(mason_tsdk) then
       tsdk = tsdk or mason_tsdk
     end
-
-    tsdk = tsdk or resolve_typescript_lib_from_bin("vtsls")
-    tsdk = tsdk or resolve_typescript_lib_from_bin("typescript-language-server")
   end
-
+  vue_language_server_path = vue_language_server_path
+    or package_from_commands(root_dir, vue_bins, { path_cmd }, vue_package)
+  tsdk = tsdk or package_from_commands(root_dir, ts_bins, { path_cmd }, typescript_package)
   return vue_language_server_path, tsdk
 end
 

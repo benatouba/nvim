@@ -7,8 +7,7 @@ return {
   },
   filetypes = { "typescript", "javascript", "javascriptreact", "typescriptreact" },
   before_init = function(init_params, config)
-    local _, fallback_tsdk = vue.resolve_paths(config.root_dir)
-    local tsdk = vue.workspace_tsdk(config.root_dir) or fallback_tsdk
+    local _, tsdk = vue.resolve_paths(config.root_dir)
     if tsdk then
       init_params.initializationOptions =
         vim.tbl_deep_extend("force", init_params.initializationOptions or {}, { typescript = { tsdk = tsdk } })

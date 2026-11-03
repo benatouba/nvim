@@ -27,7 +27,7 @@ function M.rpc(bin)
   return function(dispatchers, config)
     local path = M.executable(config.root_dir, bin)
     assert(path, bin .. " is unavailable; provision it with uv or the project Nix environment")
-    return vim.lsp.rpc.start({ path, "server" }, dispatchers)
+    return require("lsp.resolve").start({ path, "server" }, dispatchers, config)
   end
 end
 
