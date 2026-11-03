@@ -40,3 +40,17 @@
 - `commitlint.config.js` and `.gitlint` enforce conventional commit titles with an emoji after
   the colon. Allowed types: build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test.
 - Headers at most 100 chars, lowercase type, subject must not end with `.`.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs live in GitHub Issues for `benatouba/nvim`. Before tracker operations, read `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five canonical triage roles use their default label names. Before applying triage labels, read `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: root `GLOSSARY.md` and `docs/adr/`. Before exploring the codebase, read `docs/agents/domain.md`.
