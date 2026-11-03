@@ -26,6 +26,9 @@ second tool for an owned layer without reopening the owning ticket.
 
 REPL evaluation belongs to iron even when the terminal underneath is toggleterm's.
 
+Task discovery, environments, manual-only lifecycle and shortcuts are documented
+in [Project tasks](tasks.md).
+
 ## LSP UI (core workflow)
 
 Native LSP is the default; lspsaga is kept for its selector, finder,

@@ -190,11 +190,50 @@ return {
     cmd = { "OverseerRun", "OverseerToggle", "OverseerOpen", "OverseerInfo", "OverseerBuild" },
     keys = {
       { "<leader>Ot", "<cmd>OverseerToggle<cr>", desc = "Tasks (toggle)" },
-      { "<leader>Or", "<cmd>OverseerRun<cr>", desc = "Tasks (run)" },
+      {
+        "<leader>Or",
+        function()
+          require("plugins.configs.overseer").run()
+        end,
+        desc = "Tasks (discover/run)",
+      },
+      {
+        "<leader>Ol",
+        function()
+          require("plugins.configs.overseer").rerun()
+        end,
+        desc = "Task (run last)",
+      },
+      {
+        "<leader>Os",
+        function()
+          require("plugins.configs.overseer").stop()
+        end,
+        desc = "Task (stop)",
+      },
+      {
+        "<leader>Oc",
+        function()
+          require("plugins.configs.overseer").run("CHECK")
+        end,
+        desc = "Tasks (check)",
+      },
+      {
+        "<leader>Ob",
+        function()
+          require("plugins.configs.overseer").run("BUILD")
+        end,
+        desc = "Tasks (build)",
+      },
     },
     ---@module 'overseer'
     ---@type overseer.SetupOpts
-    opts = { dap = false },
+    opts = function()
+      return require("plugins.configs.overseer").opts()
+    end,
+    config = function(_, opts)
+      require("plugins.configs.overseer").setup(opts)
+    end,
   },
   {
     -- Terminals: toggleterm owns interactive shells, LazyGit fallback, and the
