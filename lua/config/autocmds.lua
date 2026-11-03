@@ -10,7 +10,6 @@ vim.filetype.add({
   extension = {
     pro = "idlang",
     ipynb = "ipynb",
-    sls = "sls",
     R = "r",
     r = "r",
     Rmd = "rmd",
