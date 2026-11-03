@@ -241,6 +241,8 @@ M.opts = {
       ripgrep = {
         module = "blink-ripgrep",
         name = "Ripgrep",
+        -- Never hold up LSP/path/snippet results while scanning the project.
+        async = true,
         -- the options below are optional, some default values are shown
         ---@module "blink-ripgrep"
         ---@type blink-ripgrep.Options
@@ -251,8 +253,11 @@ M.opts = {
             context_size = 5,
             ripgrep = {
               search_casing = "--smart-case",
-              max_filesize = "5M",
-              project_root_fallback = true,
+              max_filesize = "256K",
+              -- An unrooted buffer must not trigger a scan of an unrelated cwd.
+              project_root_fallback = false,
+              -- Bound repeated matches within a file (not total project results).
+              additional_rg_options = { "--max-count=20" },
             },
           },
           debug = false,
