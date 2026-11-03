@@ -57,8 +57,10 @@ return {
       vim.api.nvim_create_autocmd("FileType", {
         group = group,
         callback = function(args)
-          pcall(vim.treesitter.start, args.buf)
-          vim.opt_local.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+          -- Salt uses mixed YAML/Jinja syntax and predictable autoindent.
+          if args.match ~= "sls" and pcall(vim.treesitter.start, args.buf) then
+            vim.bo[args.buf].indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+          end
         end,
       })
       -- Install a missing parser the first time its filetype is opened.

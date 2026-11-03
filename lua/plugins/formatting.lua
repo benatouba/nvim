@@ -29,7 +29,7 @@ return {
       {
         "<leader>lf",
         function()
-          require("conform").format({ lsp_format = "fallback", timeout_ms = 5000 })
+          require("conform").format({ timeout_ms = 5000 })
         end,
         desc = "Format",
       },
@@ -51,7 +51,14 @@ return {
         "force",
         ruff_formatter("ruff_organize_imports"),
         ruff_formatter("ruff_fix"),
-        ruff_formatter("ruff_format")
+        ruff_formatter("ruff_format"),
+        {
+          yamlfmt = {
+            command = function(_, ctx)
+              return require("util.python").executable(ctx.dirname, "yamlfmt") or "yamlfmt"
+            end,
+          },
+        }
       ),
       formatters_by_ft = {
         css = { "oxfmt" },
@@ -70,6 +77,8 @@ return {
         r = { "air", stop_after_first = true },
         rmd = { "injected" },
         scss = { "oxfmt" },
+        -- Nonempty options suppress the generic trim_whitespace fallback too.
+        sls = { lsp_format = "never" },
         tex = { "latexindent", stop_after_first = true },
         typescript = { "oxfmt" },
         typescriptreact = { "oxfmt" },
@@ -79,7 +88,6 @@ return {
         xml = { "lsp" },
         yaml = { "yamlfmt", stop_after_first = true },
         ["yaml.docker-compose"] = { "yamlfmt", stop_after_first = true },
-        ["*"] = { "codespell" },
         ["_"] = { "trim_whitespace" },
       },
       default_format_opts = { lsp_format = "fallback" },

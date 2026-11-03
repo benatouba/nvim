@@ -1,0 +1,52 @@
+{
+  "Salt package": {
+    "prefix": "spkg",
+    "body": ["${1:package}:", "  pkg.installed:", "    - name: ${2:$1}", "$0"],
+    "description": "Install a package"
+  },
+  "Salt managed file": {
+    "prefix": "sfile",
+    "body": ["${1:/etc/example.conf}:", "  file.managed:", "    - source: salt://${2:example/files/example.conf}", "    - template: jinja", "    - user: root", "    - group: root", "    - mode: '0644'", "$0"],
+    "description": "Manage a non-secret configuration file"
+  },
+  "Salt service": {
+    "prefix": "ssvc",
+    "body": ["${1:service}:", "  service.running:", "    - enable: true", "    - require:", "      - pkg: ${2:package}", "    - watch:", "      - file: ${3:/etc/example.conf}", "$0"],
+    "description": "Run a service after installing its package"
+  },
+  "Salt requisite": {
+    "prefix": "sreq",
+    "body": ["- ${1|require,watch,onchanges,require_in,watch_in|}:", "  - ${2|pkg,file,service,cmd|}: ${3:state_id}", "$0"],
+    "description": "State requisite (use at an argument's indentation)"
+  },
+  "Salt include": {
+    "prefix": "sinclude",
+    "body": ["include:", "  - ${1:formula}", "$0"],
+    "description": "Include another SLS"
+  },
+  "Salt map import": {
+    "prefix": "smap",
+    "body": ["{% from \"${1:formula}/map.jinja\" import ${2:config} with context %}", "$0"],
+    "description": "Import a formula map"
+  },
+  "Salt pillar lookup": {
+    "prefix": "spillar",
+    "body": ["{{ salt['pillar.get']('${1:formula:key}', ${2:none}) }}$0"],
+    "description": "Pillar lookup with a default"
+  },
+  "Salt grains lookup": {
+    "prefix": "sgrains",
+    "body": ["{{ grains.get('${1:os_family}', ${2:''}) }}$0"],
+    "description": "Grain lookup with a default"
+  },
+  "Jinja conditional": {
+    "prefix": "sif",
+    "body": ["{% if ${1:condition} %}", "$0", "{% endif %}"],
+    "description": "Jinja conditional without changing YAML indentation"
+  },
+  "Jinja loop": {
+    "prefix": "sfor",
+    "body": ["{% for ${1:item} in ${2:items} %}", "$0", "{% endfor %}"],
+    "description": "Jinja loop without changing YAML indentation"
+  }
+}

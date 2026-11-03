@@ -14,13 +14,22 @@ return {
         htmldjango = { "djlint" },
         jinja = { "djlint" },
         nix = { "statix" },
+        sls = { "saltlint" },
         tex = { "proselint" },
+        yaml = { "yamllint" },
         zsh = { "zsh" },
       },
     },
     config = function(_, opts)
       local lint = require("lint")
       lint.linters_by_ft = opts.linters_by_ft
+      -- Resolve project devenv tools when invoked, even when Neovim was started
+      -- outside the shell. Never send raw SLS templates to yamllint.
+      for name, bin in pairs({ saltlint = "salt-lint", yamllint = "yamllint" }) do
+        lint.linters[name].cmd = function()
+          return require("util.python").executable(vim.fn.expand("%:p:h"), bin) or bin
+        end
+      end
 
       -- commitlint diagnostics update while typing
       vim.diagnostic.config(
@@ -32,7 +41,17 @@ return {
       vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
         group = group,
         callback = function()
-          lint.try_lint()
+          local ft = vim.bo.filetype
+          local bin = ft == "sls" and "salt-lint" or (ft:match("^yaml") and "yamllint")
+          if bin then
+            local dir = vim.fn.expand("%:p:h")
+            if require("util.python").executable(dir, bin) then
+              -- salt-lint looks for .salt-lint in cwd, not beside the file.
+              lint.try_lint(nil, { cwd = vim.fs.root(dir, { ".salt-lint", "devenv.nix", ".git" }) or dir })
+            end
+          else
+            lint.try_lint()
+          end
         end,
       })
       vim.api.nvim_create_autocmd("BufWritePost", {

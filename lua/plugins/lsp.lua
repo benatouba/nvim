@@ -49,7 +49,6 @@ return {
     opts = {
       ensure_installed = {
         "air",
-        "codespell",
         "commitlint",
         "djlint",
         "editorconfig-checker",
@@ -62,7 +61,6 @@ return {
         "statix",
         "stylua",
         "typstyle",
-        "yamlfmt",
       },
     },
     enabled = not vim.g.is_nixos,

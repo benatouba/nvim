@@ -19,6 +19,10 @@
           "NeogitCommitMessage"
         ],
         "path": "./gitcommit.json"
+      },
+      {
+        "language": ["sls"],
+        "path": "./salt.json"
       }
     ]
   }

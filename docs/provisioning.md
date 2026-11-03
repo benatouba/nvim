@@ -13,7 +13,8 @@ are disabled. Language intelligence resolves through:
    `node_modules/.bin` → `.devenv/profile/bin` → `$PATH`.
 3. Ruff and ty resolve per project at launch: ancestor `.venv/bin` →
    `.devenv/profile/bin` → non-Mason `$PATH`. Conform uses the same resolver
-   for all three Ruff steps. Other formatters/linters use `$PATH`.
+   for all three Ruff steps, salt-lint, yamllint and yamlfmt. Other
+   formatters/linters use `$PATH`.
 
 ## Other Linux
 
@@ -26,12 +27,24 @@ Mason provisions with no manual steps after first file interaction:
 - Debug adapters: `mason-nvim-dap` installs the `js` adapter (package
   `js-debug-adapter`), the only adapter this config consumes.
 - Editor-level formatter/linter binaries: `mason-tool-installer` installs
-  the list in its spec (stylua, codespell, jq, yamlfmt, markdownlint,
+   the list in its spec (stylua, jq, markdownlint,
   markdownlint-cli2, latexindent, typstyle, djlint, proselint, commitlint,
   editorconfig-checker, air, statix, nixfmt).
 
 ## Project-owned tools (never Mason-managed)
 
+- Salt (`salt-lint`, `yamllint`, `yamlfmt`): provided by the Salt checkout's
+  `devenv.nix`, not installed globally. Enter `devenv shell` once to build its
+  `.devenv/profile`; tools then resolve from that profile even outside the shell.
+  SLS buffers use salt-lint and YAML/Jinja syntax; plain YAML uses yamllint and
+  manual yamlfmt. SLS formatting and codespell are disabled.
+  Salt snippets start with `s` (e.g. `spkg`, `sfile`, `ssvc`, `smap`).
+  In the Salt checkout, `<leader>Or` offers lint, fixture render/compile,
+  behavioral tests and the existing isolated VM integration test. File lint
+  tasks require saved buffers. Render/compile tasks deliberately accept only
+  the allowlisted synthetic fixture, not arbitrary production states: Salt
+  renderers execute code, and `test=True` is not isolation. The experimental
+  sibling salt-lsp checkout is not automatically installed or enabled.
 - Python (`ruff`, `ty`): owned by uv per project (e.g. `uv add --dev ruff ty`
   followed by `uv sync`). Both are excluded from Mason provisioning, and
   the shared executable resolver ignores old Mason installations on PATH.
@@ -39,6 +52,12 @@ Mason provisions with no manual steps after first file interaction:
   before `$PATH` (see `lua/lsp/resolve.lua` and conform's oxfmt definition).
 - Not in the Mason registry, install from the system instead:
   `markdownfmt`, `commitmsgfmt`.
+
+## Project tasks
+
+Project-task commands use their project environment rather than provisioning
+another global toolchain; see [Project tasks](tasks.md). Discovering commands is
+separate from choosing an install/build/check task.
 
 ## Notebook runtime
 
