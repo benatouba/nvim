@@ -233,10 +233,10 @@ return {
     dependencies = "nvim-treesitter/nvim-treesitter",
     event = "InsertEnter",
     keys = {
-      { "<leader>nn", "<cmd>lua require('neogen').generate()<CR>", desc = "Auto" },
-      { "<leader>nc", "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", desc = "Class" },
-      { "<leader>nf", "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", desc = "Function" },
-      { "<leader>nt", "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", desc = "Type" },
+      { "<leader>Nn", "<cmd>lua require('neogen').generate()<CR>", desc = "Auto" },
+      { "<leader>Nc", "<cmd>lua require('neogen').generate({ type = 'class'})<CR>", desc = "Class" },
+      { "<leader>Nf", "<cmd>lua require('neogen').generate({ type = 'func'})<CR>", desc = "Function" },
+      { "<leader>Nt", "<cmd>lua require('neogen').generate({ type = 'type'})<CR>", desc = "Type" },
     },
   },
   {

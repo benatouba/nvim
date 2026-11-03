@@ -186,7 +186,7 @@ return {
         { "<leader>m", group = "+Marks", icon = { icon = " ", color = "red" } },
         { "<leader>M", group = "+Music", icon = { icon = "󰎈 ", color = "orange" } },
         { "<leader>O", group = "+Tasks", icon = { icon = "󰒓 ", color = "green" } },
-        { "<leader>n", group = "+Annotations", icon = { icon = "󰍕 ", color = "orange" } },
+        { "<leader>N", group = "+Annotations", icon = { icon = "󰍕 ", color = "orange" } },
         { "<leader>o", group = "+Org", icon = { icon = " ", color = "cyan" } },
         { "<leader>p", group = "+Plugins", icon = { icon = " ", color = "blue" } },
         { "<leader>R", group = "+REST", icon = { icon = "󰖟 ", color = "green" } },
@@ -207,7 +207,8 @@ return {
           group = "+SearchReplace",
           icon = { icon = "󰛔 ", color = "azure" },
         },
-        { "<localleader>o", group = "+Obsidian", icon = { icon = "󰇈 ", color = "purple" }, mode = { "n", "x" } },
+        { "<localleader>n", group = "+Obsidian", icon = { icon = "󰇈 ", color = "purple" }, mode = { "n", "x" } },
+        { "<leader>n", group = "+Notes", icon = { icon = "󰇈 ", color = "magenta" } },
         -- Singleton leaves: no rhs here (the mapping lives in its plugin's
         -- `keys`); these entries only lend them an icon in the menu.
         { "<leader>b", desc = "Buffers", icon = { icon = "󰓩 ", color = "blue" } },
