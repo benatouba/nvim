@@ -1,8 +1,8 @@
 {
   "LuaSnip": { "branch": "master", "commit": "642b0c595e11608b4c18219e93b88d7637af27bc" },
   "R.nvim": { "branch": "main", "commit": "0cfd62ac84505cd33b96949d083214f30cd040e3" },
-  "SchemaStore.nvim": { "branch": "main", "commit": "073910e2521e23681c44a8b1355e91765a60cbaa" },
-  "async.nvim": { "branch": "main", "commit": "734e3386dbdf8b60492c16d488bc4e372fdd658c" },
+  "SchemaStore.nvim": { "branch": "main", "commit": "a7a40007c34b784585811dace3b7e1cc16669228" },
+  "async.nvim": { "branch": "main", "commit": "028d843a892b4920d8306216369aeee9fbcebae5" },
   "barbar.nvim": { "branch": "master", "commit": "337ecfadb8bf005050990bf2f624dc4fc828dabd" },
   "blink-calc": { "branch": "main", "commit": "1b75c20cbb21c95bf08694eed605fa0bdbbe5ca2" },
   "blink-cmp-conventional-commits": { "branch": "main", "commit": "28f46593ef5e03ba7525bdf6075be0c56c6ceb55" },
@@ -85,6 +85,7 @@
   "refactoring.nvim": { "branch": "master", "commit": "ea18f97c58276e213736c9f0193f7aa4c690693e" },
   "render-markdown.nvim": { "branch": "main", "commit": "8e8795368391036643b622875a6da6a51bcd33f4" },
   "rose-pine": { "branch": "main", "commit": "ff483051a47e27d84bdef47703538df1ed9f4a47" },
+  "salt-vim": { "branch": "master", "commit": "dcb335e8e07889274bc1120b138153a7b80d40c5" },
   "scnvim": { "branch": "main", "commit": "876732590ef3f409c9705f3659fa1061db2dc7bf" },
   "shelter.nvim": { "branch": "main", "commit": "604e983cc48b7dbe73e7d8ead79aee60f9ad4a62" },
   "sidekick.nvim": { "branch": "main", "commit": "3d80a47e6375f6d647c9695d3afea6fa1b3275df" },

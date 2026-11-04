@@ -7,11 +7,15 @@
 - `lua/config/` owns startup-facing modules. There is no global feature-flag table any more:
   a plugin is on or off through `enabled =` on its spec, and `vim.g.is_nixos` (set in
   `config/options.lua`) is the only environment switch.
-- lazy.nvim is bootstrapped in `lua/config/lazy.lua` with `spec = { import = "plugins" }` and
-  `defaults.lazy = true`. Every file in `lua/plugins/*.lua` is a spec bucket; each spec carries
+- lazy.nvim is bootstrapped in `lua/config/lazy.lua` with `spec = require("config.groups").spec()`
+  and `defaults.lazy = true`. `lua/plugins/core/` is always loaded; every `lua/plugins/<name>.lua`
+  is an optional group. All groups load unless `NVIM_GROUPS` or a `groups.local` file in the
+  config dir lists the ones to keep (e.g. `git,lang`; empty means core only). Unselected groups
+  are never imported or installed. Do not rely on `import = "plugins"`: lazy does not recurse
+  into `core/`. Each spec carries
   its own `opts`, trigger (`event`/`cmd`/`ft`/`keys`) and keymaps. Configs too large to inline
   live in `lua/plugins/configs/<plugin>.lua` and are consumed through `opts = function()`.
-- which-key group names are declared in the which-key spec in `lua/plugins/editor.lua`; do not
+- which-key group names are declared in the which-key spec in `lua/plugins/core/editor.lua`; do not
   put `group =` or rhs-less entries inside a lazy `keys` list (lazy turns them into bare load
   triggers).
 - `lua/lsp/` is LSP core only (attach keymaps, diagnostics, commands, server list, binary

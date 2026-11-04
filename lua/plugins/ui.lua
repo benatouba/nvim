@@ -120,31 +120,6 @@ return {
     },
   },
   {
-    "nvim-tree/nvim-web-devicons",
-    lazy = true,
-    opts = {
-      override = {
-        nvim = { icon = "", color = "#67B25E", cterm_color = "83", name = "Neovim" },
-      },
-    },
-  },
-  {
-    "nvim-lualine/lualine.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-      {
-        "AndreM222/copilot-lualine",
-        enabled = function()
-          return vim.fn.executable("node") == 1
-        end,
-      },
-    },
-    opts = function()
-      return require("plugins.configs.lualine").opts()
-    end,
-  },
-  {
     "romgrk/barbar.nvim",
     event = "VeryLazy",
     -- <C-l>/<C-h> in config/keymaps.lua go through these commands too.

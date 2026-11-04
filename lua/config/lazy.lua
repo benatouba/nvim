@@ -36,7 +36,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  spec = { { import = "plugins" } },
+  spec = require("config.groups").spec(),
   defaults = { lazy = true }, -- every spec declares its own trigger; start plugins say lazy = false
   install = { colorscheme = { "catppuccin-mocha", "habamax" } },
   checker = { enabled = true, notify = false }, -- check for updates quietly; see :Lazy
