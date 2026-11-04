@@ -3,8 +3,6 @@
 return {
   {
     "benatouba/salt-vim",
-    -- Use the maintained checkout at ~/projects/salt-vim until it is published.
-    dev = true,
     -- Detection (Saltfile and Python renderers) must run before BufRead.
     lazy = false,
   },
