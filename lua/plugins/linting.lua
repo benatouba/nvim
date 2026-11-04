@@ -14,7 +14,8 @@ return {
         htmldjango = { "djlint" },
         jinja = { "djlint" },
         nix = { "statix" },
-        sls = { "saltlint" },
+        salt = { "saltlint" },
+        sls = { "saltlint" }, -- legacy salt-vim filetype
         tex = { "proselint" },
         yaml = { "yamllint" },
         zsh = { "zsh" },
@@ -42,7 +43,7 @@ return {
         group = group,
         callback = function()
           local ft = vim.bo.filetype
-          local bin = ft == "sls" and "salt-lint" or (ft:match("^yaml") and "yamllint")
+          local bin = (ft == "salt" or ft == "sls") and "salt-lint" or (ft:match("^yaml") and "yamllint")
           if bin then
             local dir = vim.fn.expand("%:p:h")
             if require("util.python").executable(dir, bin) then

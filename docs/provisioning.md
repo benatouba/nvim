@@ -36,7 +36,7 @@ Mason provisions with no manual steps after first file interaction:
 - Salt (`salt-lint`, `yamllint`, `yamlfmt`): provided by the Salt checkout's
   `devenv.nix`, not installed globally. Enter `devenv shell` once to build its
   `.devenv/profile`; tools then resolve from that profile even outside the shell.
-  SLS buffers use salt-lint and YAML/Jinja syntax; plain YAML uses yamllint and
+  SLS buffers use the canonical `salt` filetype and salt-lint; plain YAML uses yamllint and
   manual yamlfmt. SLS formatting and codespell are disabled.
   Salt snippets start with `s` (e.g. `spkg`, `sfile`, `ssvc`, `smap`).
   In the Salt checkout, `<leader>Or` offers lint, fixture render/compile,
@@ -45,6 +45,14 @@ Mason provisions with no manual steps after first file interaction:
   the allowlisted synthetic fixture, not arbitrary production states: Salt
   renderers execute code, and `test=True` is not isolation. The experimental
   sibling salt-lsp checkout is not automatically installed or enabled.
+
+  Syntax, detection and basic buffer defaults come from `benatouba/salt-vim`.
+  It currently runs eagerly as a lazy.nvim development plugin from
+  `~/projects/salt-vim` (the sibling checkout), because the continuation is
+  not yet pushed. Clone that checkout before starting Neovim; this is not yet
+  a portable remote-only install. Local policy retains safe indentation and
+  folding, snippets, lint/task integration and formatting protection; legacy
+  `sls` tooling aliases remain supported.
 - Python (`ruff`, `ty`): owned by uv per project (e.g. `uv add --dev ruff ty`
   followed by `uv sync`). Both are excluded from Mason provisioning, and
   the shared executable resolver ignores old Mason installations on PATH.

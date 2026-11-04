@@ -1,4 +1,9 @@
 -- AI: copilot ghost text (accepted via <C-a>/<C-s>/<C-d>) and sidekick (NES + CLI agents).
+local function salt_suggestions()
+  -- Keep user-related Salt files out of suggestions for both filetype names.
+  return not vim.fs.basename(vim.api.nvim_buf_get_name(0)):match(".*user.*")
+end
+
 return {
   {
     "zbirenbaum/copilot.lua",
@@ -61,13 +66,8 @@ return {
         svn = false,
         cvs = false,
         TelescopePrompt = false,
-        sls = function()
-          if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), ".*user.*") then
-            -- disable for user files
-            return false
-          end
-          return true
-        end,
+        salt = salt_suggestions,
+        sls = salt_suggestions,
 
         sh = function()
           if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
