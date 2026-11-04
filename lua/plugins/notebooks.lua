@@ -18,7 +18,6 @@ return {
   },
   {
     "goerz/jupytext.nvim",
-    version = "0.2.0",
     -- must be loaded before an .ipynb buffer is read
     event = { { event = "BufReadCmd", pattern = "*.ipynb" } },
     opts = {},
