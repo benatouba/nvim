@@ -1,3 +1,4 @@
+docs/
 plugin/*
 **/packer_compiled.lua
 **/secrets.lua
