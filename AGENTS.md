@@ -15,6 +15,10 @@
   into `core/`. Each spec carries
   its own `opts`, trigger (`event`/`cmd`/`ft`/`keys`) and keymaps. Configs too large to inline
   live in `lua/plugins/configs/<plugin>.lua` and are consumed through `opts = function()`.
+- Optional groups extend core plugin `opts` for their integrations (completion sources,
+  statusline components, picker/explorer actions). Keep core usable without any groups.
+  `provisioning` owns automatic Mason installs, parser installs/updates and native build hooks;
+  without it, existing tools/parsers still work and Telescope uses its Lua sorter.
 - which-key group names are declared in the which-key spec in `lua/plugins/core/editor.lua`; do not
   put `group =` or rhs-less entries inside a lazy `keys` list (lazy turns them into bare load
   triggers).
@@ -37,6 +41,8 @@
   stylua, editorconfig-checker, commitlint.
 - Smoke-test startup with `nvim --headless -u init.lua +qa` (must be silent).
 - Format/check Lua with `stylua --check lua after init.lua`.
+- Check group selection and isolation with `nvim --headless -u NONE -l tests/groups.lua`
+  (installed plugins required; uses temporary lockfiles and installs nothing).
 - There is no repo-level test runner; neotest is an editor plugin with keys in `lua/plugins/test.lua`.
 - Treat `lazy-lock.json` as lazy.nvim-managed state; use `:Lazy sync`/`:Lazy restore`.
 

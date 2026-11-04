@@ -1,6 +1,20 @@
 -- Pickers, projects, diagnostics list, marks, tasks, terminals, HTTP client, env masking.
 return {
   {
+    "nvim-telescope/telescope.nvim",
+    opts = function(_, opts)
+      local trouble = require("trouble.sources.telescope")
+      opts.defaults.mappings.i["<c-t>"] = trouble.open
+      opts.defaults.mappings.n["<c-t>"] = trouble.open
+    end,
+  },
+  {
+    "nvim-lualine/lualine.nvim",
+    opts = function(_, opts)
+      table.insert(opts.sections.lualine_x, 1, "overseer")
+    end,
+  },
+  {
     "DrKJeff16/project.nvim",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = { "nvim-telescope/telescope.nvim" },

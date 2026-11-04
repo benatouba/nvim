@@ -35,7 +35,7 @@ return {
     -- Project-owned Python servers are enabled separately, never installed by Mason.
     opts = function()
       return {
-        ensure_installed = require("lsp.servers").mason_servers(),
+        ensure_installed = {},
         automatic_enable = require("lsp.servers").mason_servers(),
       }
     end,

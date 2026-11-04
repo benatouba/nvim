@@ -5,7 +5,6 @@ M.opts = function()
   local actions = require("telescope.actions")
   local sorters = require("telescope.sorters")
   local previewers = require("telescope.previewers")
-  local trouble = require("trouble.sources.telescope")
   return {
     defaults = {
       find_command = { "rg", "--hidden", "--line-number", "--column", "--smart-case", "--color" },
@@ -42,14 +41,12 @@ M.opts = function()
           ["<C-k>"] = actions.move_selection_previous,
           ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
           ["<c-h>"] = actions.which_key,
-          ["<c-t>"] = trouble.open,
           ["<CR>"] = actions.select_default + actions.center,
         },
         n = {
           ["<C-j>"] = actions.move_selection_next,
           ["<C-k>"] = actions.move_selection_previous,
           ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
-          ["<c-t>"] = trouble.open,
         },
       },
     },
@@ -59,11 +56,6 @@ M.opts = function()
     extensions = {
       projects = {
         detection_methods = { "lsp", "pattern", ".git", "Makefile", "*.sln", "build/env.sh" },
-      },
-      fzf = {
-        override_generic_sorter = true,
-        override_file_sorter = true,
-        case_mode = "smart_case",
       },
     },
   }

@@ -1,9 +1,14 @@
 -- nvim --headless -u NONE -l tests/salt.lua
 local config = vim.fn.getcwd()
-local salt_spec = dofile("lua/plugins/lang.lua")[1]
-assert(salt_spec[1] == "benatouba/salt-vim" and salt_spec.dev and salt_spec.lazy == false)
-local salt_dir = vim.fn.expand("~/projects/salt-vim")
-assert(vim.fn.filereadable(salt_dir .. "/syntax/salt.vim") == 1, "Salt development checkout is missing")
+local salt_spec
+for _, spec in ipairs(dofile("lua/plugins/lang.lua")) do
+  if spec[1] == "benatouba/salt-vim" then
+    salt_spec = spec
+  end
+end
+assert(salt_spec and salt_spec.lazy == false)
+local salt_dir = vim.fn.stdpath("data") .. "/lazy/salt-vim"
+assert(vim.fn.filereadable(salt_dir .. "/syntax/salt.vim") == 1, "Installed salt-vim is missing")
 -- The machine's config path may already be a symlink to this checkout.
 -- Avoid discovering every template twice when adding the checkout explicitly.
 vim.opt.rtp:remove(vim.fn.stdpath("config"))
@@ -43,7 +48,8 @@ local ok, err = pcall(function()
   vim.cmd("filetype plugin indent on")
   vim.cmd("syntax on")
   require("config.autocmds")
-  dofile("lua/plugins/treesitter.lua")[1].config()
+  local treesitter = dofile("lua/plugins/core/treesitter.lua")[1]
+  treesitter.config(nil, treesitter.opts)
   local salt_parser_attempted = false
   vim.treesitter.start = function(buf)
     salt_parser_attempted = salt_parser_attempted or vim.bo[buf].filetype == "salt" or vim.bo[buf].filetype == "sls"
@@ -67,7 +73,7 @@ local ok, err = pcall(function()
   assert(syntax(5, 5) == "jinjaComment", syntax(5, 5))
 
   local conform = require("conform")
-  conform.setup(dofile("lua/plugins/formatting.lua")[1].opts)
+  conform.setup(dofile("lua/plugins/core/formatting.lua")[1].opts)
   assert(#conform.list_formatters_for_buffer(0) == 0, "SLS must have no generic or YAML formatter")
   local before = vim.api.nvim_buf_get_lines(0, 0, -1, false)
   conform.format({ timeout_ms = 1000 })
@@ -76,7 +82,7 @@ local ok, err = pcall(function()
   assert(conform.formatters_by_ft.salt.lsp_format == "never")
 
   local lint = require("lint")
-  local spec = dofile("lua/plugins/linting.lua")[1]
+  local spec = dofile("lua/plugins/core/linting.lua")[1]
   spec.config(nil, spec.opts)
   assert(vim.deep_equal(lint.linters_by_ft.salt, { "saltlint" }))
   assert(vim.deep_equal(lint.linters_by_ft.yaml, { "yamllint" }))

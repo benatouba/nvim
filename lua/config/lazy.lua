@@ -1,4 +1,4 @@
--- Bootstrap lazy.nvim and load every spec under lua/plugins/.
+-- Bootstrap lazy.nvim and load core plus the selected optional groups.
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
   local out = vim.fn.system({

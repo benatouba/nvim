@@ -15,8 +15,8 @@ map("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 map("t", "<Esc>", "<C-\\><C-n>", { desc = "Terminal normal mode" })
 map("t", "<C-j>", "<C-\\><C-n><C-w>j", { desc = "Window down" })
 map("t", "<C-k>", "<C-\\><C-n><C-w>k", { desc = "Window up" })
-map("t", "<C-l>", "<C-\\><C-n><cmd>BufferNext<CR>", { desc = "Next buffer" })
-map("t", "<C-h>", "<C-\\><C-n><cmd>BufferPrevious<CR>", { desc = "Previous buffer" })
+map("t", "<C-l>", "<C-\\><C-n><cmd>bnext<CR>", { desc = "Next buffer" })
+map("t", "<C-h>", "<C-\\><C-n><cmd>bprevious<CR>", { desc = "Previous buffer" })
 
 -- Resize windows
 map("n", "<C-Up>", "<cmd>resize +2<CR>", { desc = "Taller" })

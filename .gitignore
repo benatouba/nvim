@@ -31,3 +31,6 @@ devenv.local.yaml
 
 # runtime artifacts
 nvim.log
+
+# Machine-local plugin group selection
+groups.local

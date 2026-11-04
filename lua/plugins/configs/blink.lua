@@ -118,16 +118,7 @@ M.opts = {
       end
     end,
     per_filetype = {
-      sonicpi = { "sonicpi", inherit_defaults = true },
       gitcommit = { "conventional_commits", "lsp", "git", "snippets", "emoji", "calc", "path" },
-      lua = function()
-        if string.find(vim.fn.getcwd(), "nvim") then
-          return { "lazydev", inherit_defaults = true }
-        else
-          return { inherit_defaults = true }
-        end
-      end,
-      python = { "jupynium", inherit_defaults = true },
       markdown = function()
         if string.find(vim.fn.getcwd(), "vivere") then
           return { "lsp", "path", "snippets", "emoji", "calc" }
@@ -137,30 +128,11 @@ M.opts = {
       end,
       json = { "npm", inherit_defaults = true },
       octo = { "lsp", "git", "emoji", "calc" },
-      org = { "lsp", "orgmode", "path", "snippets", "ripgrep", "emoji", "calc" },
-      sql = { "lsp", "dadbod", "snippets" },
+      org = { "lsp", "path", "snippets", "ripgrep", "emoji", "calc" },
+      sql = { "lsp", "snippets" },
       terminal = { "path" },
-      ["dap-repl"] = { "dap" },
-      ["dapui_watches"] = { "dap" },
-      ["dapui_hover"] = { "dap" },
     },
     providers = {
-      jupynium = {
-        name = "Jupynium",
-        module = "jupynium.blink_cmp",
-        -- Consider higher priority than LSP
-        score_offset = 100,
-      },
-      sonicpi = {
-        name = "sonicpi",
-        module = "blink.compat.source",
-        score_offset = 5,
-      },
-      orgmode = {
-        name = "Orgmode",
-        module = "orgmode.org.autocompletion.blink",
-        fallbacks = { "buffer" },
-      },
       buffer = {
         opts = {
           enable_in_ex_commands = true,
@@ -169,10 +141,6 @@ M.opts = {
       calc = {
         name = "Calc",
         module = "blink-calc",
-      },
-      dap = {
-        name = "dap",
-        module = "blink-cmp-dap",
       },
       conventional_commits = {
         name = "Conventional Commits",
@@ -199,12 +167,6 @@ M.opts = {
             return vim.fn.getcwd()
           end,
         },
-      },
-      dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
-      lazydev = {
-        name = "LazyDev",
-        module = "lazydev.integrations.blink",
-        score_offset = 100,
       },
       npm = {
         name = "npm",

@@ -12,6 +12,16 @@ local find_org_files = telescope_pick("find_files", { cwd = vim.fn.expand("~/doc
 local find_config_files = telescope_pick("find_files", { cwd = vim.fn.stdpath("config") })
 return {
   {
+    "nvim-lualine/lualine.nvim",
+    opts = function(_, opts)
+      table.insert(opts.sections.lualine_y, {
+        require("noice").api.status.mode.get,
+        cond = require("noice").api.status.mode.has,
+        color = { fg = "#ff9e64" },
+      })
+    end,
+  },
+  {
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,

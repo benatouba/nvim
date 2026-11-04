@@ -1,6 +1,15 @@
 -- Databases: dadbod UI with SQL completion (blink's dadbod source).
 return {
   {
+    "saghen/blink.cmp",
+    opts = {
+      sources = {
+        per_filetype = { sql = { "lsp", "dadbod", "snippets" } },
+        providers = { dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" } },
+      },
+    },
+  },
+  {
     "kristijanhusak/vim-dadbod-ui",
     ft = { "sql", "mysql", "plsql" },
     dependencies = {

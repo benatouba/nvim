@@ -1,6 +1,17 @@
 -- Notes: obsidian vaults (markdown) and orgmode.
 return {
   {
+    "saghen/blink.cmp",
+    opts = function(_, opts)
+      table.insert(opts.sources.per_filetype.org, 2, "orgmode")
+      opts.sources.providers.orgmode = {
+        name = "Orgmode",
+        module = "orgmode.org.autocompletion.blink",
+        fallbacks = { "buffer" },
+      }
+    end,
+  },
+  {
     "obsidian-nvim/obsidian.nvim",
     version = "*",
     cmd = "Obsidian",

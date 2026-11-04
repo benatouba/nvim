@@ -1,6 +1,17 @@
 -- Notebooks and REPLs: jupynium (Jupyter sync), jupytext (.ipynb as text), iron (REPL).
 return {
   {
+    "saghen/blink.cmp",
+    opts = {
+      sources = {
+        per_filetype = { python = { "jupynium", inherit_defaults = true } },
+        providers = {
+          jupynium = { name = "Jupynium", module = "jupynium.blink_cmp", score_offset = 100 },
+        },
+      },
+    },
+  },
+  {
     "kiyoon/jupynium.nvim",
     -- Python/browser runtime is provisioned separately; see docs/provisioning.md.
     ft = "python",

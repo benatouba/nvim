@@ -5,10 +5,6 @@ return {
     cmd = "Telescope",
     dependencies = {
       "nvim-lua/plenary.nvim",
-      {
-        "nvim-telescope/telescope-fzf-native.nvim",
-        build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
-      },
     },
     keys = {
       { "<leader>b", "<cmd>Telescope buffers theme=dropdown<cr>", desc = "Buffers" },
@@ -31,7 +27,9 @@ return {
     config = function(_, opts)
       local telescope = require("telescope")
       telescope.setup(opts)
-      telescope.load_extension("fzf")
+      if opts.extensions and opts.extensions.fzf then
+        telescope.load_extension("fzf")
+      end
       vim.api.nvim_create_autocmd("User", {
         group = vim.api.nvim_create_augroup("ben_telescope", { clear = true }),
         pattern = "TelescopePreviewerLoaded",

@@ -1,6 +1,20 @@
 -- Debugging: nvim-dap with UI, virtual text, telescope pickers and python/JS adapters.
 return {
   {
+    "saghen/blink.cmp",
+    dependencies = { "mayromr/blink-cmp-dap" },
+    opts = {
+      sources = {
+        per_filetype = {
+          ["dap-repl"] = { "dap" },
+          dapui_watches = { "dap" },
+          dapui_hover = { "dap" },
+        },
+        providers = { dap = { name = "dap", module = "blink-cmp-dap" } },
+      },
+    },
+  },
+  {
     "mfussenegger/nvim-dap",
     keys = {
       {
@@ -240,9 +254,8 @@ return {
     event = "VeryLazy",
     dependencies = { "mason-org/mason.nvim" },
     opts = {
-      -- The only adapter this config consumes off NixOS
-      -- (see plugins/configs/dap.lua); install it with no manual step.
-      ensure_installed = { "js" }, -- mason-nvim-dap identifier; package is js-debug-adapter
+      -- Provisioning opts in to installing js-debug-adapter.
+      ensure_installed = {},
       handlers = {},
       automatic_installation = false,
     },

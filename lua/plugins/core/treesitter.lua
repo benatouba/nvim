@@ -4,13 +4,13 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "main",
-    build = ":TSUpdate",
     -- Upstream `main` does not support lazy-loading: load eager.
     lazy = false,
     dependencies = {
       { "LiadOz/nvim-dap-repl-highlights", opts = {} },
     },
-    config = function()
+    opts = { auto_install = false },
+    config = function(_, opts)
       require("nvim-treesitter").setup()
       vim.treesitter.language.register("markdown", "octo")
 
@@ -25,7 +25,10 @@ return {
           end
         end,
       })
-      -- Install a missing parser the first time its filetype is opened.
+      if not opts.auto_install then
+        return
+      end
+      -- Provisioning opts in to installing a missing parser on first use.
       local available_parsers = nil
       vim.api.nvim_create_autocmd("FileType", {
         group = group,

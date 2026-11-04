@@ -1,5 +1,24 @@
 return {
   {
+    "saghen/blink.cmp",
+    opts = function(_, opts)
+      -- Respect the LazyDev spec's own enabled switch as well as group selection.
+      if require("lazy.core.config").plugins["lazydev.nvim"] then
+        opts.sources.per_filetype.lua = function()
+          if string.find(vim.fn.getcwd(), "nvim") then
+            return { "lazydev", inherit_defaults = true }
+          end
+          return { inherit_defaults = true }
+        end
+        opts.sources.providers.lazydev = {
+          name = "LazyDev",
+          module = "lazydev.integrations.blink",
+          score_offset = 100,
+        }
+      end
+    end,
+  },
+  {
     "nvimdev/lspsaga.nvim",
     event = { "LspAttach", "InsertEnter", "CmdlineEnter" },
     dependencies = { "nvim-tree/nvim-web-devicons", "nvim-treesitter/nvim-treesitter" },

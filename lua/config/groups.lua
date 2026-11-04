@@ -18,8 +18,10 @@ local function all_groups()
 end
 
 local function requested()
-  if vim.env.NVIM_GROUPS then
-    return vim.env.NVIM_GROUPS
+  -- vim.env normalizes an empty value to nil; an explicitly empty list is core only.
+  local env = vim.uv.os_getenv("NVIM_GROUPS")
+  if env ~= nil then
+    return env
   end
   local file = vim.fs.joinpath(vim.fn.stdpath("config"), "groups.local")
   if vim.uv.fs_stat(file) then

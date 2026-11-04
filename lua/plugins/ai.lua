@@ -6,6 +6,32 @@ end
 
 return {
   {
+    "nvim-lualine/lualine.nvim",
+    dependencies = {
+      {
+        "AndreM222/copilot-lualine",
+        enabled = function()
+          return vim.fn.executable("node") == 1
+        end,
+      },
+    },
+    opts = function(_, opts)
+      if vim.fn.executable("node") == 1 then
+        table.insert(opts.sections.lualine_x, { "copilot", show_colors = true })
+      end
+      table.insert(opts.sections.lualine_x, {
+        function()
+          local sessions = require("sidekick.status").cli()
+          return " " .. (#sessions > 1 and #sessions or "")
+        end,
+        cond = function()
+          return #require("sidekick.status").cli() > 0
+        end,
+        color = "Special",
+      })
+    end,
+  },
+  {
     "zbirenbaum/copilot.lua",
     enabled = function()
       return vim.fn.executable("node") == 1

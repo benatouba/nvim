@@ -2,6 +2,16 @@
 -- ledger, package.json, annotations, refactoring.
 return {
   {
+    "saghen/blink.cmp",
+    opts = {
+      sources = {
+        per_filetype = { sonicpi = { "sonicpi", inherit_defaults = true } },
+        providers = { sonicpi = { name = "sonicpi", module = "blink.compat.source", score_offset = 5 } },
+      },
+    },
+  },
+  { "saghen/blink.compat", version = "*", lazy = true, opts = { impersonate_nvim_cmp = false } },
+  {
     "benatouba/salt-vim",
     -- Detection (Saltfile and Python renderers) must run before BufRead.
     lazy = false,
